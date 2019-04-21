@@ -29,7 +29,7 @@ public class LoginPresenter {
 
 
     public void forgotPassword(){
-        Toast.makeText(context, "Fuck, password forgotten!!", Toast.LENGTH_SHORT).show();
+        view.showMessage("Ups, forgotten password!!");
     }
 
 
@@ -47,6 +47,16 @@ public class LoginPresenter {
          * Finish current activity
          */
         void finishView();
+
+        /**
+         * Show loading icon
+         */
+        void showLoading();
+
+        /**
+         * Hide loading icon
+         */
+        void hideLoadingIcon();
     }
 
 }

@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".mvp.view.activity.login.LoginActivity"
-    android:background="@mipmap/login_wallpaper"
-    >
+    android:background="@mipmap/login_wallpaper">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:src="@mipmap/fss_white"/>
-
     </LinearLayout>
 
 
@@ -38,68 +36,87 @@
             android:padding="32dp"
             android:background="@drawable/activity_login_rounded_background">
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login_activity_login"
                 android:layout_gravity="center_horizontal"
                 android:textSize="20sp"
-                android:layout_marginBottom="40dp"
-                />
+                android:layout_marginBottom="40dp"/>
 
-            <LinearLayout
+            <ProgressBar
+                android:id="@+id/loading_status"
+                style="?android:attr/progressBarStyleLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
+                android:visibility="gone"/>
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_mail_black"/>
+            <LinearLayout
+                android:id="@+id/login_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/login_mail"
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:hint="@string/login_activity_mail"/>
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_mail_black"/>
+
+
+                    <EditText
+                        android:id="@+id/login_mail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:textSize="16sp"
+                        android:hint="@string/login_activity_mail"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_lock_black"/>
+
+                    <EditText
+                        android:id="@+id/login_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:inputType="textPassword"
+                        android:hint="@string/login_activity_password"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/login_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/activity_login_rounded_button"
+                    android:text="@string/login_activity_login"/>
+
 
             </LinearLayout>
 
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_lock_black"/>
-
-
-                <EditText
-                    android:id="@+id/login_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:hint="@string/login_activity_password"/>
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@drawable/activity_login_rounded_button"
-                android:text="@string/login_activity_login"/>
 
 
         </LinearLayout>

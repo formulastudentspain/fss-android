@@ -1,10 +1,14 @@
 package es.formulastudent.app.mvp.view.activity.login;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -24,10 +28,12 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
     LoginPresenter presenter;
 
     //View components
-    EditText mailEditText;
-    EditText passwordEditText;
-    Button loginButton;
-    TextView forgotPasswordTextView;
+    private EditText mailEditText;
+    private EditText passwordEditText;
+    private Button loginButton;
+    private TextView forgotPasswordTextView;
+    private ProgressBar loadingProgressBar;
+    private LinearLayout loginLayout;
 
 
     @Override
@@ -53,7 +59,6 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
                 .inject(this);
     }
 
-
     @Override
     protected void onResume(){
         super.onResume();
@@ -69,20 +74,29 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
 
     private void initViews(){
 
+        //Login params
         mailEditText = findViewById(R.id.login_mail);
         passwordEditText = findViewById(R.id.login_password);
+
+        //Login button
         loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(this);
+
+        //Forgot password text
         forgotPasswordTextView = findViewById(R.id.login_forgot_password);
         forgotPasswordTextView.setOnClickListener(this);
 
+        //Loading icon
+        loadingProgressBar = findViewById(R.id.loading_status);
 
+        //Login layout
+        loginLayout = findViewById(R.id.login_layout);
     }
 
 
     @Override
     public void showMessage(String message) {
-
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -91,14 +105,36 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
     }
 
     @Override
+    public void showLoading() {
+        loadingProgressBar.setVisibility(View.VISIBLE);
+        loginLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideLoadingIcon() {
+        loadingProgressBar.setVisibility(View.GONE);
+        loginLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onClick(View view) {
 
         if(view.getId() == R.id.login_button){
-            presenter.loginSuccess(); //TODO cambiar
+
+            showLoading();
+
+            //TODO borrar
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    presenter.loginSuccess(); //TODO cambiar
+                    finish(); //kill current activity
+                }
+            }, 1000);
 
         }else if(view.getId() == R.id.login_forgot_password){
             presenter.forgotPassword();
-
         }
 
     }

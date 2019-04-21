@@ -1,12 +1,15 @@
 package es.formulastudent.app.mvp.view.activity.fssinformation;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.view.activity.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 
 
-public class FssInformationActivity extends GeneralActivity {
+public class FssInformationActivity extends NFCReaderActivity {
 
 
     @Override
@@ -26,7 +29,17 @@ public class FssInformationActivity extends GeneralActivity {
     private void initViews(){
         //Add drawer
         addDrawer();
+
+        //Add toolbar title
+        setToolbarTitle("eeeeiiiii");
     }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        Log.i("Foreground dispatch", "Discovered tag with intent: " + intent);
+       // Toast.makeText(this, "Discovered tag " + ++mCount + " with intent: " + intent, Toast.LENGTH_SHORT).show();
+    }
+
 
 
 }

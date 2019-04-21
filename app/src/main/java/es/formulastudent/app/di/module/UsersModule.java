@@ -7,8 +7,6 @@ import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.mvp.data.api.UserDataManager;
 import es.formulastudent.app.mvp.data.api.greendao.UserDataManagerGreenDAO;
-import es.formulastudent.app.mvp.data.api.retrofit.UserDataManagerRetrofit;
-import es.formulastudent.app.mvp.data.api.retrofit.UsersApi;
 import es.formulastudent.app.mvp.data.model.DaoSession;
 
 
@@ -23,12 +21,5 @@ public class UsersModule {
         return new UserDataManagerGreenDAO(userDataManager, daoSession);
     }
 
-
-    @Provides
-    @Named("online")
-    @Singleton
-    UserDataManager provideUserDataManagerOnline(UsersApi usersApi){
-        return new UserDataManagerRetrofit(usersApi);
-    }
 
 }
