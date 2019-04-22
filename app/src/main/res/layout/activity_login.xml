@@ -112,12 +112,7 @@
                     android:layout_gravity="bottom"
                     android:background="@drawable/activity_login_rounded_button"
                     android:text="@string/login_activity_login"/>
-
-
             </LinearLayout>
-
-
-
 
         </LinearLayout>
 

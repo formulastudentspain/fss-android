@@ -1,82 +1,111 @@
 package es.formulastudent.app.mvp.view.activity;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
-import android.nfc.tech.NfcF;
+import android.nfc.Tag;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
+import es.formulastudent.app.R;
 
 
 public class NFCReaderActivity extends GeneralActivity {
 
     private NfcAdapter mAdapter;
-    private PendingIntent mPendingIntent = null;
-    private IntentFilter[] mFilters;
-    private String[][] mTechLists;
-    private int mCount = 0;
 
+    //public static final String MIME_TEXT_PLAIN = "text/plain";
+    //public static final String TAG = "NfcDemo";
+    final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(Bundle savedState) {
+        setContentView(R.layout.activity_fss_information);
+        super.onCreate(savedState);
 
         mAdapter = NfcAdapter.getDefaultAdapter(this);
-
-        // Create a generic PendingIntent that will be deliver to this activity. The NFC stack
-        // will fill in the intent with the details of the discovered tag before delivering to
-        // this activity.
-        mPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-
-
-        // Setup an intent filter for all MIME based dispatches
-        IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-        try {
-            ndef.addDataType("*/*");
-        } catch (IntentFilter.MalformedMimeTypeException e) {
-            throw new RuntimeException("fail", e);
-        }
-
-        mFilters = new IntentFilter[] {
-                ndef,
-        };
-
-        // Setup a tech list for all NfcF tags
-        mTechLists = new String[][] { new String[] { NfcF.class.getName() } };
-
+        handleIntent(getIntent());
     }
 
-
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
+        setupForegroundDispatch(this, mAdapter);
+    }
 
-        if (mAdapter != null){
-            mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mTechLists);
+    @Override
+    protected void onPause() {
+        stopForegroundDispatch(this, mAdapter);
+        super.onPause();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+
+    public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+        final Intent intent = new Intent(activity, activity.getClass());
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
+        adapter.enableForegroundDispatch(activity, pendingIntent, null, null);
+    }
+
+    public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+        adapter.disableForegroundDispatch(activity);
+    }
+
+
+    protected void handleIntent(Intent intent) {
+        String action = intent.getAction();
+
+
+       /* if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+
+            String type = intent.getType();
+            if (MIME_TEXT_PLAIN.equals(type)) {
+
+                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                //new AsyncNdefReaderTask().execute(tag);
+
+            } else {
+                Log.d(TAG, "Wrong mime type: " + type);
+            }
+        } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
+
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            String[] techList = tag.getTechList();
+            String searchedTech = Ndef.class.getName();
+
+            for (String tech : techList) {
+                if (searchedTech.equals(tech)) {
+                    // new AsyncNdefReaderTask().execute(tag);
+                    break;
+                }
+            }
+        }else */
+        if(NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            String tagHex = bytesToHexString(tag.getId());
+            handleReadTAG(tagHex);
         }
     }
 
 
-    @Override
-    protected void onStart(){
-        super.onStart();
+    private String bytesToHexString(byte[] src) {
+        char[] hexChars = new char[src.length * 2];
+        for ( int j = 0; j < src.length; j++ ) {
+            int v = src[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 
-    @Override
-    public void onNewIntent(Intent intent) {
-        Log.i("Foreground dispatch", "Discovered tag with intent: " + intent);
-        Toast.makeText(this, "Discovered tag " + ++mCount + " with intent: " + intent, Toast.LENGTH_SHORT).show();
+    protected void handleReadTAG(String tag){
+        //To be overwritten for other activities
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mAdapter != null) mAdapter.disableForegroundDispatch(this);
-    }
-
-
 }
+
+

@@ -29,6 +29,7 @@
             android:name=".mvp.view.activity.fssinformation.FssInformationActivity"
             android:label="Formula Student Spain"
             android:launchMode="singleTop">
+
         </activity>
 
     </application>
