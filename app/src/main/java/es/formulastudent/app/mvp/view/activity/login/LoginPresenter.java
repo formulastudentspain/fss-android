@@ -39,10 +39,29 @@ public class LoginPresenter {
     }
 
 
-    public void forgotPassword(){
-        view.showMessage("Ups, forgotten password!!");
+    /**
+     * Get an email with the steps to reset your password
+     * @param mail
+     */
+    public void forgotPassword(String mail){
+        mAuth.setLanguageCode("en");
+        mAuth.sendPasswordResetEmail(mail).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    view.showMessage("Mail Sent."); //TODO Mirar la opcion de plantillas de correo electronico: https://support.google.com/firebase/answer/7000714?hl=es
+                }
+            }
+        });
+        //view.showMessage("Ups, forgotten password!!");
     }
 
+    /**
+     * Sign in with mail and password
+     * @param mail
+     * @param password
+     * @return
+     */
     public UserDTO startSignIn(String mail, String password){
 
         final UserDTO[] userDTO = {new UserDTO()};
@@ -75,6 +94,11 @@ public class LoginPresenter {
         return userDTO[0];
     }
 
+    /**
+     * Create Account by Mail and Password
+     * @param mail
+     * @param password
+     */
     public void createAccount(String mail, String password){
 
         //show progress dialog
@@ -101,6 +125,11 @@ public class LoginPresenter {
 
     }
 
+    /**
+     * Convert FirebaseUser to User DTO
+     * @param user
+     * @return
+     */
     private UserDTO getUserDTObyFirebaseUser(FirebaseUser user){
         UserDTO userDTO = new UserDTO();
 
@@ -112,6 +141,8 @@ public class LoginPresenter {
 
         return userDTO;
     }
+
+
 
 
 
