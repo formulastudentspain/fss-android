@@ -46,12 +46,15 @@ dependencies {
 
     //Test Libraries
     testImplementation 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:2.18.3"
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    testImplementation "org.mockito:mockito-core:2.18.3"
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     //Material Drawer
     implementation "com.mikepenz:materialdrawer:6.1.2"
+
+    //Firebase
+    implementation "com.google.firebase:firebase-auth:16.2.1"
 
 
 }
