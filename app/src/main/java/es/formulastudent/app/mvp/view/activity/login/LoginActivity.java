@@ -10,6 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import javax.inject.Inject;
 
 import es.formulastudent.app.FSSApp;
@@ -34,6 +37,7 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
     private TextView forgotPasswordTextView;
     private ProgressBar loadingProgressBar;
     private LinearLayout loginLayout;
+    FirebaseAuth mAuth;
 
 
     @Override
@@ -41,6 +45,7 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
         setupComponent(FSSApp.getApp().component());
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
         initViews();
     }
 
@@ -68,8 +73,15 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
     @Override
     protected void onStart(){
         super.onStart();
+        //Check if user is still logged in
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            //Correct login
+        } else{
+            //failed Login
+            //TODO redirigir directamente a la activity principal
+        }
 
-        //TODO comprobar si la sesión del usuario sigue abierta, si sigue, redirigir directamente a la activity principal
     }
 
     private void initViews(){
@@ -128,13 +140,16 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    presenter.startSignIn(mailEditText.getText().toString(), passwordEditText.getText().toString());
                     presenter.loginSuccess(); //TODO cambiar
                     finish(); //kill current activity
                 }
             }, 1000);
 
+
         }else if(view.getId() == R.id.login_forgot_password){
             presenter.forgotPassword();
+
         }
 
     }
