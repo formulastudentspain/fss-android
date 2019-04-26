@@ -8,12 +8,11 @@
     tools:context=".mvp.view.activity.fssinformation.FssInformationActivity"
     >
 
-    <include layout="@layout/activity_toolbar" />
-
-    <Button
-        android:id="@+id/readNFCButton"
+    <TextView
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Leer NFC"/>
+        android:textSize="30sp"
+        android:text="Acerca un TAG NFC"/>
 
 </LinearLayout>

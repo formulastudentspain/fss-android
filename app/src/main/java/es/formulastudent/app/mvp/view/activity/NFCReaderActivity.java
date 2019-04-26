@@ -20,7 +20,7 @@ public class NFCReaderActivity extends GeneralActivity {
 
     @Override
     public void onCreate(Bundle savedState) {
-        setContentView(R.layout.activity_fss_information);
+        setContentView(R.layout.activity_nfc_reader);
         super.onCreate(savedState);
 
         mAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -104,7 +104,10 @@ public class NFCReaderActivity extends GeneralActivity {
     }
 
     protected void handleReadTAG(String tag){
-        //To be overwritten for other activities
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("result", tag);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 }
 
