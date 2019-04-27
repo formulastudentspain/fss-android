@@ -143,7 +143,7 @@ public class GeneralActivity extends AppCompatActivity {
         SecondaryDrawerItem generalInformation = new SecondaryDrawerItem()
                 .withIdentifier(30003)
                 .withLevel(2)
-                .withName(R.string.drawer_menu_common_general_information)
+                .withName(R.string.drawer_menu_common_timeline)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
 
         //Rankings

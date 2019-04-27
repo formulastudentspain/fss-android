@@ -140,7 +140,7 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    presenter.startSignIn(mailEditText.getText().toString(), passwordEditText.getText().toString());
+                   // presenter.startSignIn(mailEditText.getText().toString(), passwordEditText.getText().toString());
                     presenter.loginSuccess(); //TODO cambiar
                     finish(); //kill current activity
                 }
@@ -148,7 +148,7 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
 
 
         }else if(view.getId() == R.id.login_forgot_password){
-            presenter.forgotPassword();
+            presenter.forgotPassword("");
 
         }
 

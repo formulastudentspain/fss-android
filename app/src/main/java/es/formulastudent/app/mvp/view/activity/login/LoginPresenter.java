@@ -2,8 +2,9 @@ package es.formulastudent.app.mvp.view.activity.login;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -16,6 +17,7 @@ import java.util.concurrent.Executor;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.dto.UserDTO;
 import es.formulastudent.app.mvp.view.activity.fssinformation.FssInformationActivity;
+import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 
 
 public class LoginPresenter {
@@ -33,7 +35,7 @@ public class LoginPresenter {
     }
 
     public void loginSuccess(){
-        Intent myIntent = new Intent(context, FssInformationActivity.class);
+        Intent myIntent = new Intent(context, TimelineActivity.class);
         //myIntent.putExtra("key", value); //Optional parameters
         context.startActivity(myIntent);
     }
