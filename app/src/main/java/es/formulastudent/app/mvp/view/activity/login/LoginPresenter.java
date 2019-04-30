@@ -35,7 +35,8 @@ public class LoginPresenter {
     }
 
     public void loginSuccess(){
-        Intent myIntent = new Intent(context, TimelineActivity.class);
+        Intent myIntent = new Intent(context, FssInformationActivity.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         //myIntent.putExtra("key", value); //Optional parameters
         context.startActivity(myIntent);
     }

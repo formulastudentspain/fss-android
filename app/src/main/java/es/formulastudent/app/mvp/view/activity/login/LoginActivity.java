@@ -148,7 +148,7 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
 
 
         }else if(view.getId() == R.id.login_forgot_password){
-            presenter.forgotPassword("");
+            presenter.forgotPassword(mailEditText.getText().toString());
 
         }
 

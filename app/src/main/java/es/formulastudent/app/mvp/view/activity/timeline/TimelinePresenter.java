@@ -105,6 +105,7 @@ public class TimelinePresenter implements View.OnClickListener {
         TimelineItem item = timelineItemList.get(itemPosition);
 
         Intent intent = new Intent(context, TimelineDetailActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("timelineItem", item);
         context.startActivity(intent);
 
