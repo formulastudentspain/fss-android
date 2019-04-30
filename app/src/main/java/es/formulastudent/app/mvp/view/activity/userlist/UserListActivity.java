@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.timeline;
+package es.formulastudent.app.mvp.view.activity.userlist;
 
 import android.os.Bundle;
 import android.view.View;
@@ -13,31 +13,33 @@ import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerTimelineComponent;
+import es.formulastudent.app.di.component.DaggerUserListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.TimelineModule;
+import es.formulastudent.app.di.module.UserListModule;
 import es.formulastudent.app.mvp.view.activity.GeneralActivity;
-import es.formulastudent.app.mvp.view.activity.timeline.recyclerview.TimelineAdapter;
+import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.UserListAdapter;
 
 
-public class TimelineActivity extends GeneralActivity implements TimelinePresenter.View, View.OnClickListener{
+public class UserListActivity extends GeneralActivity implements UserListPresenter.View, View.OnClickListener{
 
 
     @Inject
-    TimelinePresenter presenter;
+    UserListPresenter presenter;
 
     //View components
     private RecyclerView recyclerView;
-    private TimelineAdapter timeLineAdapter;
+    private UserListAdapter userListAdapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_timeline);
+        setContentView(R.layout.activity_user_list);
         super.onCreate(savedInstanceState);
 
         initViews();
-        presenter.getTimelineItems();
+        presenter.getUserList();
     }
 
 
@@ -47,10 +49,10 @@ public class TimelineActivity extends GeneralActivity implements TimelinePresent
      */
     protected void setupComponent(AppComponent appComponent) {
 
-        DaggerTimelineComponent.builder()
+        DaggerUserListComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(this))
-                .timelineModule(new TimelineModule(this, new TimelineHelper()))
+                .userListModule(new UserListModule(this))
                 .build()
                 .inject(this);
     }
@@ -58,12 +60,14 @@ public class TimelineActivity extends GeneralActivity implements TimelinePresent
     @Override
     protected void onResume(){
         super.onResume();
+
     }
 
 
     @Override
     protected void onStart(){
         super.onStart();
+        drawer.setSelection(10003L, false);
     }
 
 
@@ -71,24 +75,25 @@ public class TimelineActivity extends GeneralActivity implements TimelinePresent
 
         //Add drawer
         addDrawer();
-        mDrawerIdentifier = 30003L;
+        mDrawerIdentifier = 10003L;
+
 
         //Recycler view
         recyclerView = findViewById(R.id.recyclerView);
-        timeLineAdapter = new TimelineAdapter(presenter.getTimelineItemList(), this, presenter);
-        recyclerView.setAdapter(timeLineAdapter);
+        userListAdapter = new UserListAdapter(presenter.getUserList(), this);
+        recyclerView.setAdapter(userListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         presenter.setRecyclerView(recyclerView);
 
         //Add toolbar title
-        setToolbarTitle(getString(R.string.drawer_menu_common_timeline));
+        setToolbarTitle(getString(R.string.activity_user_list_label));
     }
 
 
     @Override
-    public void refreshTimelineItems() {
-        timeLineAdapter.notifyDataSetChanged();
+    public void refreshUserItems() {
+        userListAdapter.notifyDataSetChanged();
     }
 
     @Override

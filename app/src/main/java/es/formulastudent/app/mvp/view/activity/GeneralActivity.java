@@ -1,5 +1,6 @@
 package es.formulastudent.app.mvp.view.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -17,9 +18,12 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
+import es.formulastudent.app.mvp.view.activity.timelinedetail.TimelineDetailActivity;
+import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
 
 
-public class GeneralActivity extends AppCompatActivity {
+public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
 
     //Drawer colors
     private static final String SELECTED_DRAWER_ITEM_COLOR = "#e6e6e6";
@@ -28,6 +32,7 @@ public class GeneralActivity extends AppCompatActivity {
     //Common elements
     protected Toolbar toolbar;
     protected Drawer drawer;
+    protected Long mDrawerIdentifier = 0L;
 
 
     @Override
@@ -48,7 +53,7 @@ public class GeneralActivity extends AppCompatActivity {
         super.onStart();
 
         if(drawer!=null){
-            drawer.setSelection(30003);
+            drawer.setSelection(30003, false);
         }
 
     }
@@ -61,7 +66,7 @@ public class GeneralActivity extends AppCompatActivity {
     protected void addDrawer(){
 
         //TODO eliminar
-        String userRole = "participant";
+        String userRole = "staff";
 
         //Create account header
         AccountHeader accountHeader = this.createDrawerHeader();
@@ -80,26 +85,35 @@ public class GeneralActivity extends AppCompatActivity {
 
 
         /*
-         * Menu options for Stuff
+         * Menu options for Staff
          */
 
-        //Stuff
-        PrimaryDrawerItem stuff = new PrimaryDrawerItem()
+        //Staff
+        PrimaryDrawerItem staff = new PrimaryDrawerItem()
                 .withIdentifier(10001)
-                .withName(R.string.drawer_menu_stuff)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
+                .withEnabled(false)
+                .withName(R.string.drawer_menu_staff)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
 
-        //Stuff: Scrutineering
-        SecondaryDrawerItem stuffScrutineering = new SecondaryDrawerItem()
+
+        //Staff: Scrutineering
+        SecondaryDrawerItem staffScrutineering = new SecondaryDrawerItem()
                 .withIdentifier(10002)
-                .withName(R.string.drawer_menu_stuff_strutineering)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_strutineering)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+        ;
 
-        //Stuff: Users management
-        SecondaryDrawerItem stuffUserManagement = new SecondaryDrawerItem()
+        //Staff: Users management
+        SecondaryDrawerItem staffUserManagement = new SecondaryDrawerItem()
                 .withIdentifier(10003)
-                .withName(R.string.drawer_menu_stuff_users_management)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_users_management)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
 
         /*
          * Menu options for participants
@@ -111,21 +125,24 @@ public class GeneralActivity extends AppCompatActivity {
                 .withEnabled(false)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withName(R.string.drawer_menu_participant_myTeam)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
 
         //Team: Members
         SecondaryDrawerItem teamMembers = new SecondaryDrawerItem()
                 .withIdentifier(20002)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_participant_teamMembers)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
 
         //Team: Status
         SecondaryDrawerItem teamStatus = new SecondaryDrawerItem()
                 .withIdentifier(20003)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_participant_status)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
 
         /*
          * Menu options for everybody
@@ -137,45 +154,50 @@ public class GeneralActivity extends AppCompatActivity {
                 .withEnabled(false)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withName(R.string.drawer_menu_common_fss_status)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
 
         //General information
         SecondaryDrawerItem generalInformation = new SecondaryDrawerItem()
                 .withIdentifier(30003)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_common_timeline)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
 
         //Rankings
         SecondaryDrawerItem rankings = new SecondaryDrawerItem()
                 .withIdentifier(30004)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_common_ranking)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
 
 
         //Settings
         PrimaryDrawerItem settings = new PrimaryDrawerItem()
                 .withIdentifier(30005)
                 .withName(R.string.drawer_menu_common_settings)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
 
         //Logout
         PrimaryDrawerItem logout = new PrimaryDrawerItem()
                 .withIdentifier(30006)
                 .withName(R.string.drawer_menu_common_logout)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR));
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
 
 
         switch(userRole) {
-            case "stuff": //TODO if userRole == Stuff
+            case "staff": //TODO if userRole == Staff
                 builder.addDrawerItems(
                         fss_status,
                         generalInformation,
                         rankings,
-                        stuff,
-                        stuffScrutineering,
-                        stuffUserManagement,
+                        staff,
+                        staffScrutineering,
+                        staffUserManagement,
                         new DividerDrawerItem(),
                         settings,
                         logout
@@ -222,4 +244,25 @@ public class GeneralActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+
+        if(mDrawerIdentifier == drawerItem.getIdentifier()){
+            return false;
+        }
+
+
+        if(drawerItem.getIdentifier() == 10003){ //User management
+            Intent intent = new Intent(this, UserListActivity.class);
+            this.startActivity(intent);
+            finish();
+
+        }else if(drawerItem.getIdentifier() == 30003){ //Timeline
+            Intent intent = new Intent(this, TimelineActivity.class);
+            this.startActivity(intent);
+            finish();
+        }
+
+        return false;
+    }
 }

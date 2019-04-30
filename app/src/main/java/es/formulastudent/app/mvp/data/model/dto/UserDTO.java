@@ -2,7 +2,9 @@ package es.formulastudent.app.mvp.data.model.dto;
 
 import android.net.Uri;
 
-public class UserDTO {
+import java.io.Serializable;
+
+public class UserDTO implements Serializable {
 
     private String uid;
     private String name;

@@ -13,12 +13,14 @@
     <string name="activity_user_detail_location_not_found">User location not found</string>
     <string name="activity_user_detail_delete_fail">Unable to delete user</string>
     <string name="activity_timeline_detail_label">Timeline detail</string>
+    <string name="activity_user_list_label">User list</string>
+
 
 
     <!-- Drawer menu options -->
-    <string name="drawer_menu_stuff">Stuff</string>
-    <string name="drawer_menu_stuff_strutineering">Scrutineering</string>
-    <string name="drawer_menu_stuff_users_management">User management</string>
+    <string name="drawer_menu_staff">Staff</string>
+    <string name="drawer_menu_staff_strutineering">Scrutineering</string>
+    <string name="drawer_menu_staff_users_management">User management</string>
     <string name="drawer_menu_participant_myTeam">My team</string>
     <string name="drawer_menu_participant_teamMembers">Team members</string>
     <string name="drawer_menu_participant_status">Status</string>
