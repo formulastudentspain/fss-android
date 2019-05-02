@@ -11,9 +11,11 @@ public class UserDTO implements Serializable {
     private String photoUrl;
     private String phoneNumber;
     private String NFCTag;
+    private boolean preScrutinering;
 
 
-    public UserDTO(String uid, String name, String mail, boolean mailVerified, String photoUrl, String phoneNumber, String NFCTag) {
+    public UserDTO(String uid, String name, String mail, boolean mailVerified, String photoUrl,
+                   String phoneNumber, String NFCTag, boolean preScrutinering) {
         this.uid = uid;
         this.name = name;
         this.mail = mail;
@@ -21,6 +23,7 @@ public class UserDTO implements Serializable {
         this.photoUrl = photoUrl;
         this.phoneNumber = phoneNumber;
         this.NFCTag = NFCTag;
+        this.preScrutinering = preScrutinering;
     }
 
     public UserDTO() {}
@@ -79,5 +82,13 @@ public class UserDTO implements Serializable {
 
     public void setNFCTag(String NFCTag) {
         this.NFCTag = NFCTag;
+    }
+
+    public boolean isPreScrutinering() {
+        return preScrutinering;
+    }
+
+    public void setPreScrutinering(boolean preScrutinering) {
+        this.preScrutinering = preScrutinering;
     }
 }
