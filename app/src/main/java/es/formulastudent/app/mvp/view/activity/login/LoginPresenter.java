@@ -1,7 +1,10 @@
 package es.formulastudent.app.mvp.view.activity.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +27,7 @@ public class LoginPresenter {
     //Dependencies
     private View view;
     private Context context;
+    InputMethodManager imm;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private User currentUser;
@@ -33,7 +37,8 @@ public class LoginPresenter {
         this.context = context;
     }
 
-    public void loginSuccess(){
+
+    private void loginSuccess(){
         Intent myIntent = new Intent(context, TimelineActivity.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(myIntent);
@@ -68,19 +73,22 @@ public class LoginPresenter {
         final UserDTO[] userDTO = {new UserDTO()};
 
         //show dialog bar
-
+        this.hideKeyboard();
         mAuth.signInWithEmailAndPassword(mail, password)
-                .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(view.getActivity(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     //Sign in success, update UI with the signed-in user's information
                     FirebaseUser user = mAuth.getCurrentUser();
                     userDTO[0] = getUserDTObyFirebaseUser(user);
+                    Toast.makeText(context, "Correct Login", Toast.LENGTH_SHORT).show();
+                    loginSuccess();
                     //updateUI(user);
                 } else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(context, "Auth Failed", Toast.LENGTH_SHORT).show();
+                    view.hideLoadingIcon();
                 }
 
                 //START EXCLUDE
@@ -108,7 +116,6 @@ public class LoginPresenter {
                 .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     FirebaseUser user = mAuth.getCurrentUser();
@@ -143,9 +150,14 @@ public class LoginPresenter {
         return userDTO;
     }
 
-
-
-
+    public void hideKeyboard(){
+        imm = (InputMethodManager) view.getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        android.view.View focus = view.getActivity().getCurrentFocus();
+        if(focus == null){
+            focus = new android.view.View(view.getActivity());
+        }
+        imm.hideSoftInputFromWindow(focus.getWindowToken(), 0);
+    }
 
 
     public interface View {
@@ -170,6 +182,8 @@ public class LoginPresenter {
          * Hide loading icon
          */
         void hideLoadingIcon();
+
+        Activity getActivity();
     }
 
 }
