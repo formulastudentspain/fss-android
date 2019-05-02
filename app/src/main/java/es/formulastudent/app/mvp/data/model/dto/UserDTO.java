@@ -1,7 +1,5 @@
 package es.formulastudent.app.mvp.data.model.dto;
 
-import android.net.Uri;
-
 import java.io.Serializable;
 
 public class UserDTO implements Serializable {
@@ -10,9 +8,22 @@ public class UserDTO implements Serializable {
     private String name;
     private String mail;
     private boolean mailVerified;
-    private Uri photoUrl;
+    private String photoUrl;
     private String phoneNumber;
+    private String NFCTag;
 
+
+    public UserDTO(String uid, String name, String mail, boolean mailVerified, String photoUrl, String phoneNumber, String NFCTag) {
+        this.uid = uid;
+        this.name = name;
+        this.mail = mail;
+        this.mailVerified = mailVerified;
+        this.photoUrl = photoUrl;
+        this.phoneNumber = phoneNumber;
+        this.NFCTag = NFCTag;
+    }
+
+    public UserDTO() {}
 
     public String getUid() {
         return uid;
@@ -46,11 +57,11 @@ public class UserDTO implements Serializable {
         this.mailVerified = mailVerified;
     }
 
-    public Uri getPhotoUrl() {
+    public String getPhotoUrl() {
         return photoUrl;
     }
 
-    public void setPhotoUrl(Uri photoUrl) {
+    public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
 
@@ -60,5 +71,13 @@ public class UserDTO implements Serializable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getNFCTag() {
+        return NFCTag;
+    }
+
+    public void setNFCTag(String NFCTag) {
+        this.NFCTag = NFCTag;
     }
 }

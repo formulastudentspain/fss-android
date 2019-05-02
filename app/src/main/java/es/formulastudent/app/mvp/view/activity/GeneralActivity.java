@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
-import es.formulastudent.app.mvp.view.activity.timelinedetail.TimelineDetailActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
 
 

@@ -77,10 +77,9 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
         addDrawer();
         mDrawerIdentifier = 10003L;
 
-
         //Recycler view
         recyclerView = findViewById(R.id.recyclerView);
-        userListAdapter = new UserListAdapter(presenter.getUserList(), this);
+        userListAdapter = new UserListAdapter(presenter.getUserItemList(), this, presenter);
         recyclerView.setAdapter(userListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);

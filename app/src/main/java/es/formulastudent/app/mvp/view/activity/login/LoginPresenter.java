@@ -16,7 +16,6 @@ import java.util.concurrent.Executor;
 
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.dto.UserDTO;
-import es.formulastudent.app.mvp.view.activity.fssinformation.FssInformationActivity;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 
 
@@ -35,9 +34,8 @@ public class LoginPresenter {
     }
 
     public void loginSuccess(){
-        Intent myIntent = new Intent(context, FssInformationActivity.class);
+        Intent myIntent = new Intent(context, TimelineActivity.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //myIntent.putExtra("key", value); //Optional parameters
         context.startActivity(myIntent);
     }
 

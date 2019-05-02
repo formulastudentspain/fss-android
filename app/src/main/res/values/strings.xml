@@ -14,6 +14,7 @@
     <string name="activity_user_detail_delete_fail">Unable to delete user</string>
     <string name="activity_timeline_detail_label">Timeline detail</string>
     <string name="activity_user_list_label">User list</string>
+    <string name="activity_user_detail_label">User detail</string>
 
 
 

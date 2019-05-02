@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".mvp.view.activity.timeline.TimelineActivity"
+    >
+
+    <include layout="@layout/activity_toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/user_detail_background"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/drawer_background"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_detail_profile_image"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="95dp"
+            app:civ_border_color="@color/md_white_1000"
+            app:civ_border_width="2dp"
+            android:src="@mipmap/drawer_background" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/user_detail_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:text="David Pérez"
+        android:textColor="@color/accent"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/user_detail_team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Euskal Herriko Scuderia"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="bottom|center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/user_detail_nfc_image"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_user_nfc_not_registered"/>
+
+        <TextView
+            android:id="@+id/user_detail_nfc_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Not registered"/>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

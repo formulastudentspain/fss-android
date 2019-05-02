@@ -2,28 +2,38 @@ package es.formulastudent.app.mvp.view.activity.userlist.recyclerview;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
-
 import es.formulastudent.app.R;
 
-public class UserListViewHolder extends RecyclerView.ViewHolder {
+public class UserListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-    TextView title;
-    TextView time;
-    ImageView icon;
-    ImageView photo;
-    MaterialButton button;
+    ImageView profileImage;
+    TextView userName;
+    TextView userTeam;
+    ImageView roleImage;
+    ImageView registeredImage;
+    LinearLayout rowContent;
+    RecyclerViewClickListener itemListener;
 
-    public UserListViewHolder(View itemView, int type) {
+
+    public UserListViewHolder(View itemView, RecyclerViewClickListener itemListener) {
         super(itemView);
-        title =  itemView.findViewById(R.id.timelineTitleValue);
-        time =  itemView.findViewById(R.id.timelineTimeValue);
-        icon =  itemView.findViewById(R.id.timelineIcon);
-        photo =  itemView.findViewById(R.id.timeline_photo);
-        button = itemView.findViewById(R.id.timelineReadMore);
+        profileImage =  itemView.findViewById(R.id.user_profile_image);
+        userName =  itemView.findViewById(R.id.user_name);
+        userTeam =  itemView.findViewById(R.id.user_team);
+        roleImage =  itemView.findViewById(R.id.user_role_image);
+        registeredImage = itemView.findViewById(R.id.user_registered_image);
+        rowContent = itemView.findViewById(R.id.user_row_container);
+        this.itemListener = itemListener;
+        itemView.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        itemListener.recyclerViewListClicked(view, this.getLayoutPosition());
     }
 }

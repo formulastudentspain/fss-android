@@ -8,11 +8,36 @@
     tools:context=".mvp.view.activity.fssinformation.FssInformationActivity"
     >
 
-    <TextView
-        android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="Acerca un TAG NFC"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="Reading NFC"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:indeterminate="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"/>
+
+        <ImageView
+            android:layout_width="320dp"
+            android:layout_height="320dp"
+            android:src="@drawable/ic_user_nfc_not_registered"/>
+
+    </LinearLayout>
+
+
 
 </LinearLayout>
