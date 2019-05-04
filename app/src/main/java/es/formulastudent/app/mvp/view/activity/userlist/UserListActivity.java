@@ -1,7 +1,10 @@
 package es.formulastudent.app.mvp.view.activity.userlist;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
@@ -23,7 +26,7 @@ import es.formulastudent.app.mvp.view.activity.userlist.dialog.CreateUserDialog;
 import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.UserListAdapter;
 
 
-public class UserListActivity extends GeneralActivity implements UserListPresenter.View, View.OnClickListener{
+public class UserListActivity extends GeneralActivity implements UserListPresenter.View, View.OnClickListener, TextWatcher {
 
 
     @Inject
@@ -33,6 +36,7 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
     private RecyclerView recyclerView;
     private UserListAdapter userListAdapter;
     private FloatingActionButton buttonAddUser;
+    private EditText searchUser;
 
 
     @Override
@@ -92,6 +96,10 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
         buttonAddUser = findViewById(R.id.button_add_user);
         buttonAddUser.setOnClickListener(this);
 
+        //Search user edit text
+        searchUser = findViewById(R.id.search_user_field);
+        searchUser.addTextChangedListener(this);
+
         //Add toolbar title
         setToolbarTitle(getString(R.string.activity_user_list_label));
     }
@@ -124,16 +132,25 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
 
     @Override
     public void onClick(View view) {
-
         if(view.getId() == R.id.button_add_user){
-            showEditDialog();
+            showCreateUserDialog();
         }
-
     }
 
-    private void showEditDialog() {
+    private void showCreateUserDialog() {
         FragmentManager fm = getSupportFragmentManager();
         CreateUserDialog createUserDialog = CreateUserDialog.newInstance(presenter);
         createUserDialog.show(fm, "fragment_edit_name");
     }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+        presenter.filterUsers(charSequence.toString());
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {}
 }

@@ -21,7 +21,9 @@ public class UserListPresenter implements RecyclerViewClickListener {
     private Context context;
 
     //Data
-    private List<UserDTO> userList = new ArrayList<>();
+    private List<UserDTO> allUserList = new ArrayList<>();
+    private List<UserDTO> filteredUserList = new ArrayList<>();
+
     private RecyclerView recyclerView;
 
 
@@ -32,8 +34,12 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
 
     private void updateUserListItems(List<UserDTO> newItems){
-        this.userList.clear();
-        this.userList.addAll(newItems);
+        //Update all-user-list
+        this.allUserList.addAll(newItems);
+
+        //Update and refresh filtered-user-list
+        this.filteredUserList.clear();
+        this.filteredUserList.addAll(newItems);
         this.view.refreshUserItems();
     }
 
@@ -45,12 +51,12 @@ public class UserListPresenter implements RecyclerViewClickListener {
         //Update the itemList
         this.updateUserListItems(items);
 
-        return userList;
+        return filteredUserList;
     }
 
 
     public List<UserDTO> getUserItemList() {
-        return userList;
+        return filteredUserList;
     }
 
 
@@ -172,10 +178,27 @@ public class UserListPresenter implements RecyclerViewClickListener {
     }
 
 
+    public void filterUsers(String query){
+
+        //Clear the list
+        filteredUserList.clear();
+
+        //Add results
+        for(UserDTO user: allUserList){
+            if(user.getName().toLowerCase().contains(query.toLowerCase())){
+                filteredUserList.add(user);
+            }
+        }
+
+        //Refresh list
+        this.view.refreshUserItems();
+    }
+
+
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
 
-        UserDTO selectedUser = userList.get(position);
+        UserDTO selectedUser = filteredUserList.get(position);
 
         Intent intent = new Intent(context, UserDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
