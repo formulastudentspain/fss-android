@@ -46,5 +46,19 @@
     <string name="login_activity_password">Password</string>
     <string name="login_activity_login">LOGIN</string>
 
+    <!-- Create user dialog -->
+    <string name="dialog_create_user_title">Create user</string>
+    <string name="dialog_create_user_button_create">Create</string>
+    <string name="dialog_create_user_button_cancel">Cancel</string>
+    <string name="dialog_create_user_field_name">Name</string>
+    <string name="dialog_create_user_field_surname">Surname</string>
+    <string name="dialog_create_user_field_team">Team</string>
+    <string name="dialog_create_user_field_role">Role</string>
+
+
+
+
+
+
 
 </resources>

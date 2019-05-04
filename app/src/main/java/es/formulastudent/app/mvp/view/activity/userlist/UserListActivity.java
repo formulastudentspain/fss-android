@@ -4,20 +4,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import javax.inject.Inject;
 
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
-import es.formulastudent.app.di.component.DaggerTimelineComponent;
 import es.formulastudent.app.di.component.DaggerUserListComponent;
 import es.formulastudent.app.di.module.ContextModule;
-import es.formulastudent.app.di.module.TimelineModule;
 import es.formulastudent.app.di.module.UserListModule;
 import es.formulastudent.app.mvp.view.activity.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.userlist.dialog.CreateUserDialog;
 import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.UserListAdapter;
 
 
@@ -30,6 +32,7 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
     //View components
     private RecyclerView recyclerView;
     private UserListAdapter userListAdapter;
+    private FloatingActionButton buttonAddUser;
 
 
     @Override
@@ -85,6 +88,10 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
         recyclerView.setHasFixedSize(true);
         presenter.setRecyclerView(recyclerView);
 
+        //Add user button
+        buttonAddUser = findViewById(R.id.button_add_user);
+        buttonAddUser.setOnClickListener(this);
+
         //Add toolbar title
         setToolbarTitle(getString(R.string.activity_user_list_label));
     }
@@ -118,6 +125,15 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
     @Override
     public void onClick(View view) {
 
+        if(view.getId() == R.id.button_add_user){
+            showEditDialog();
+        }
 
+    }
+
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        CreateUserDialog createUserDialog = CreateUserDialog.newInstance(presenter);
+        createUserDialog.show(fm, "fragment_edit_name");
     }
 }
