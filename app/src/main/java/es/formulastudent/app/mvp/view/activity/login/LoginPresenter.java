@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.concurrent.Executor;
 
-import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.dto.UserDTO;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 
@@ -28,8 +27,6 @@ public class LoginPresenter {
     private Context context;
     InputMethodManager imm;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-    private User currentUser;
 
     public LoginPresenter(LoginPresenter.View view, Context context) {
         this.view = view;
