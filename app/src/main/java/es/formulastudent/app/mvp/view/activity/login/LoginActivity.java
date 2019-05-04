@@ -90,6 +90,8 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
         //Login params
         mailEditText = findViewById(R.id.login_mail);
         passwordEditText = findViewById(R.id.login_password);
+        mailEditText.setText("dpconde.me@gmail.com");
+        passwordEditText.setText("dpc1234");
 
         //Login button
         loginButton = findViewById(R.id.login_button);

@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -15,8 +18,6 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
@@ -87,8 +88,8 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
          * Menu options for Staff
          */
 
-        //Staff
-        PrimaryDrawerItem staff = new PrimaryDrawerItem()
+        //Event control
+        PrimaryDrawerItem eventControl = new PrimaryDrawerItem()
                 .withIdentifier(10001)
                 .withEnabled(false)
                 .withName(R.string.drawer_menu_staff)
@@ -97,22 +98,84 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
 
-        //Staff: Scrutineering
-        SecondaryDrawerItem staffScrutineering = new SecondaryDrawerItem()
+        //Staff: Briefing
+        SecondaryDrawerItem briefing = new SecondaryDrawerItem()
                 .withIdentifier(10002)
                 .withLevel(2)
-                .withName(R.string.drawer_menu_staff_strutineering)
+                .withName(R.string.drawer_menu_staff_briefing)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
-        ;
+
+        //Staff: Pre-Scrutineering
+        SecondaryDrawerItem preScrutineering = new SecondaryDrawerItem()
+                .withIdentifier(10002)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_pre_scrutineering)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
 
         //Staff: Users management
-        SecondaryDrawerItem staffUserManagement = new SecondaryDrawerItem()
+        PrimaryDrawerItem staffUserManagement = new PrimaryDrawerItem()
                 .withIdentifier(10003)
-                .withLevel(2)
                 .withName(R.string.drawer_menu_staff_users_management)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
+
+
+        //Staff: Practice track
+        SecondaryDrawerItem practiceTrack = new SecondaryDrawerItem()
+                .withIdentifier(10011)
+                .withLevel(3)
+                .withName(R.string.drawer_menu_staff_practice_track)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Staff: Skidpad
+        SecondaryDrawerItem skidpad = new SecondaryDrawerItem()
+                .withIdentifier(10012)
+                .withLevel(3)
+                .withName(R.string.drawer_menu_staff_skidpad)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Staff: Acceleration
+        SecondaryDrawerItem acceleration = new SecondaryDrawerItem()
+                .withIdentifier(10013)
+                .withLevel(3)
+                .withName(R.string.drawer_menu_staff_acceleration)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Staff: Autocross
+        SecondaryDrawerItem autocross = new SecondaryDrawerItem()
+                .withIdentifier(10014)
+                .withLevel(3)
+                .withName(R.string.drawer_menu_staff_autocross)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Staff: Endurance & Efficiency
+        SecondaryDrawerItem enduranceEfficiency = new SecondaryDrawerItem()
+                .withIdentifier(10015)
+                .withLevel(3)
+                .withName(R.string.drawer_menu_staff_endurance_efficiency)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Staff: Dynamic events
+        SecondaryDrawerItem dynamicEvents = new SecondaryDrawerItem()
+                .withIdentifier(10010)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_dynamic_events)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this)
+                .withSubItems(practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency);
 
         /*
          * Menu options for participants
@@ -156,19 +219,19 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-        //General information
-        SecondaryDrawerItem generalInformation = new SecondaryDrawerItem()
+        //Timeline
+        SecondaryDrawerItem timeline = new SecondaryDrawerItem()
                 .withIdentifier(30003)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_common_timeline)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-        //Rankings
-        SecondaryDrawerItem rankings = new SecondaryDrawerItem()
+        //Scoring
+        SecondaryDrawerItem scoring = new SecondaryDrawerItem()
                 .withIdentifier(30004)
                 .withLevel(2)
-                .withName(R.string.drawer_menu_common_ranking)
+                .withName(R.string.drawer_menu_common_scoring)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
@@ -192,12 +255,15 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             case "staff": //TODO if userRole == Staff
                 builder.addDrawerItems(
                         fss_status,
-                        generalInformation,
-                        rankings,
-                        staff,
-                        staffScrutineering,
-                        staffUserManagement,
+                        timeline,
+                        scoring,
                         new DividerDrawerItem(),
+                        eventControl,
+                        briefing,
+                        preScrutineering,
+                        dynamicEvents,
+                        new DividerDrawerItem(),
+                        staffUserManagement,
                         settings,
                         logout
                 );
@@ -206,8 +272,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             case "participant": //TODO if userRole == Participant
                 builder.addDrawerItems(
                         fss_status,
-                        generalInformation,
-                        rankings,
+                        timeline,
                         myTeam,
                         teamMembers,
                         teamStatus,
