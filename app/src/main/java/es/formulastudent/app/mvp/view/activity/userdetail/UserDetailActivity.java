@@ -2,7 +2,9 @@ package es.formulastudent.app.mvp.view.activity.userdetail;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +28,8 @@ import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 public class UserDetailActivity extends GeneralActivity implements UserDetailPresenter.View, View.OnClickListener {
 
     private static final int NFC_REQUEST_CODE = 101;
+    private static final int REQUEST_IMAGE_CAPTURE = 102;
+
 
     @Inject
     UserDetailPresenter presenter;
@@ -79,6 +83,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         //Instantiate vies components
         userName = findViewById(R.id.user_detail_name);
         userProfilePhoto = findViewById(R.id.user_detail_profile_image);
+        userProfilePhoto.setOnClickListener(this);
         userNFCTag = findViewById(R.id.user_detail_nfc_tag);
         userNFCImage = findViewById(R.id.user_detail_nfc_image);
         userNFCImage.setOnClickListener(this);
@@ -86,6 +91,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         //Set data
         userName.setText(user.getName());
         Picasso.get().load(user.getPhotoUrl()).into(userProfilePhoto);
+
 
         if(user.getNFCTag()!=null && !user.getNFCTag().isEmpty()){
             userNFCImage.setImageResource(R.drawable.ic_user_nfc_registered);
@@ -130,12 +136,15 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         if(view.getId() == R.id.user_detail_nfc_image){
             Intent i = new Intent(this, NFCReaderActivity.class);
             startActivityForResult(i, NFC_REQUEST_CODE);
+        }else if(view.getId() == R.id.user_detail_profile_image){
+            dispatchTakePictureIntent();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        //NFC reader
         if (requestCode == NFC_REQUEST_CODE) {
             if(resultCode == Activity.RESULT_OK){
                 String result = data.getStringExtra("result");
@@ -145,11 +154,31 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
                 //Write your code if there's no result
             }
         }
-    }//onActivityResult
+
+        //Camera image
+        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            presenter.uploadProfilePicture(imageBitmap);
+        }
+    }
+
+    @Override
+    public void updateProfilePicture(Bitmap imageBitmap){
+        userProfilePhoto.setImageBitmap(imageBitmap);
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
 }

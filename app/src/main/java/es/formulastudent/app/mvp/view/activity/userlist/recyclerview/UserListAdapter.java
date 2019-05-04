@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,6 +52,10 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         userListViewHolder.userName.setText(user.getName());
         userListViewHolder.userTeam.setText("Team");
         Picasso.get().load(user.getPhotoUrl()).into(userListViewHolder.profileImage);
+
+        if(true){ //user.getRole()==driver
+            userListViewHolder.roleImage.setImageResource(R.drawable.ic_user_role_driver);
+        }
 
         if(user.getNFCTag()==null || user.getNFCTag().isEmpty()){
             userListViewHolder.registeredImage.setImageResource(R.drawable.ic_user_not_registered);

@@ -3,7 +3,6 @@ package es.formulastudent.app.mvp.view.activity.login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 

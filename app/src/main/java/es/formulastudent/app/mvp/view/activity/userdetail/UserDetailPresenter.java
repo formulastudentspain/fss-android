@@ -1,12 +1,9 @@
 package es.formulastudent.app.mvp.view.activity.userdetail;
 
 import android.content.Context;
-import android.content.Intent;
-import android.view.View;
-import android.widget.Toast;
+import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -16,29 +13,28 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import es.formulastudent.app.mvp.data.model.dto.UserDTO;
-import es.formulastudent.app.mvp.view.activity.timelinedetail.TimelineDetailActivity;
-import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.RecyclerViewClickListener;
 
 public class UserDetailPresenter {
 
     //Dependencies
     private View view;
     private Context context;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private StorageReference mStorageRef;
 
     public UserDetailPresenter(UserDetailPresenter.View view, Context context) {
         this.view = view;
         this.context = context;
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
     }
 
 
@@ -94,6 +90,19 @@ public class UserDetailPresenter {
     }
 
 
+    protected void uploadProfilePicture(Bitmap bitmap){
+
+        //TODO guardar la imagen en el storage
+        //TODO en el onsuccess, recuperar la URL de descarga y enchufarla al usuario y además
+        // llamar a view.updateProfilePicture(Bitmap imageBitmap) para actualizar la imagen
+
+        view.updateProfilePicture(bitmap);
+
+    }
+
+
+
+
 
 
 
@@ -124,6 +133,12 @@ public class UserDetailPresenter {
          * Update user NFC infomation
          */
         void updateNFCInformation(String TAG);
+
+        /**
+         * Update the user profile imageView
+         * @param imageBitmap
+         */
+        void updateProfilePicture(Bitmap imageBitmap);
     }
 
 }
