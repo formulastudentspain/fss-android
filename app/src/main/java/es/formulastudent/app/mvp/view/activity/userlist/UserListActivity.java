@@ -74,7 +74,7 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
     @Override
     protected void onStart(){
         super.onStart();
-        drawer.setSelection(10003L, false);
+        drawer.setSelection(mDrawerIdentifier, false);
     }
 
 

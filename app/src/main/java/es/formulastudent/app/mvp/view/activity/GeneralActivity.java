@@ -19,6 +19,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
 
@@ -90,7 +91,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         //Event control
         PrimaryDrawerItem eventControl = new PrimaryDrawerItem()
-                .withIdentifier(10001)
                 .withEnabled(false)
                 .withName(R.string.drawer_menu_staff)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
@@ -100,7 +100,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         //Staff: Briefing
         SecondaryDrawerItem briefing = new SecondaryDrawerItem()
-                .withIdentifier(10002)
+                .withIdentifier(10001)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_staff_briefing)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
@@ -323,6 +323,10 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         }else if(drawerItem.getIdentifier() == 30003){ //Timeline
             Intent intent = new Intent(this, TimelineActivity.class);
+            this.startActivity(intent);
+            finish();
+        }else if(drawerItem.getIdentifier() == 10001){ //Briefing
+            Intent intent = new Intent(this, BriefingActivity.class);
             this.startActivity(intent);
             finish();
         }

@@ -64,6 +64,7 @@ public class TimelineActivity extends GeneralActivity implements TimelinePresent
     @Override
     protected void onStart(){
         super.onStart();
+        drawer.setSelection(mDrawerIdentifier, false);
     }
 
 

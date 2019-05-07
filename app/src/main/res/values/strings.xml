@@ -55,7 +55,10 @@
     <string name="dialog_create_user_field_team">Team</string>
     <string name="dialog_create_user_field_role">Role</string>
 
-
+    <!-- Briefing activity -->
+    <string name="briefing_activity_title">Briefing control</string>
+    <string name="briefing_activity_teams_label">Teams</string>
+    <string name="briefing_activity_dialog_confirm_register_title">User confirmation</string>
 
 
 

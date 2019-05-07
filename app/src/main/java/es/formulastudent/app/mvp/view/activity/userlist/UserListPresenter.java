@@ -35,6 +35,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
     private void updateUserListItems(List<UserDTO> newItems){
         //Update all-user-list
+        this.allUserList.clear();
         this.allUserList.addAll(newItems);
 
         //Update and refresh filtered-user-list
@@ -53,12 +54,6 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
         return filteredUserList;
     }
-
-
-    public List<UserDTO> getUserItemList() {
-        return filteredUserList;
-    }
-
 
 
     //TODO borrar
@@ -205,6 +200,10 @@ public class UserListPresenter implements RecyclerViewClickListener {
         intent.putExtra("selectedUser", selectedUser);
         context.startActivity(intent);
 
+    }
+
+    public List<UserDTO> getUserItemList() {
+        return filteredUserList;
     }
 
 

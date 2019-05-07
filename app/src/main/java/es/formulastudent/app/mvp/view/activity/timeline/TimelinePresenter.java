@@ -3,7 +3,6 @@ package es.formulastudent.app.mvp.view.activity.timeline;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +15,6 @@ import java.util.Locale;
 
 import es.formulastudent.app.mvp.data.model.TimelineItem;
 import es.formulastudent.app.mvp.data.model.TimelineItemType;
-import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.timelinedetail.TimelineDetailActivity;
 
 public class TimelinePresenter implements View.OnClickListener {

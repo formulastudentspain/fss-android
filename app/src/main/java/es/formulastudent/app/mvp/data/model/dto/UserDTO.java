@@ -1,6 +1,9 @@
 package es.formulastudent.app.mvp.data.model.dto;
 
 import java.io.Serializable;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class UserDTO implements Serializable {
 
@@ -90,5 +93,18 @@ public class UserDTO implements Serializable {
 
     public void setPreScrutinering(boolean preScrutinering) {
         this.preScrutinering = preScrutinering;
+    }
+
+    public static UserDTO createRandomUser(){
+        UserDTO user = new UserDTO();
+        int randomInt = ThreadLocalRandom.current().nextInt(0, 50);
+        user.setName("User Name " + randomInt);
+        user.setPhotoUrl("https://randomuser.me/api/portraits/men/"+randomInt+".jpg");
+        user.setUid(UUID.randomUUID().toString());
+        user.setNFCTag(UUID.randomUUID().toString());
+        user.setPreScrutinering(new Random().nextBoolean());
+        user.setMailVerified(new Random().nextBoolean());
+        user.setMail("userName"+randomInt+"@gmail.com");
+        return user;
     }
 }

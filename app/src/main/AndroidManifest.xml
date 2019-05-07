@@ -53,6 +53,11 @@
         </activity>
 
         <activity
+            android:name=".mvp.view.activity.briefing.BriefingActivity"
+            android:launchMode="singleTop">
+        </activity>
+
+        <activity
             android:name=".mvp.view.activity.userdetail.UserDetailActivity"
             android:label="User detail"
             android:launchMode="singleTop">
