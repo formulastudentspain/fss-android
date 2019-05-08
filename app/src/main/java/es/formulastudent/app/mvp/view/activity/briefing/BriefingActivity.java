@@ -51,6 +51,10 @@ public class BriefingActivity extends GeneralActivity implements BriefingPresent
         presenter.retrieveBriefingRegisterList();
     }
 
+    @Override
+    public Activity getActivity(){
+        return this;
+    }
 
     /**
      * Inject dependencies method

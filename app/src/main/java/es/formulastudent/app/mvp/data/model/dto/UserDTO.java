@@ -1,5 +1,8 @@
 package es.formulastudent.app.mvp.data.model.dto;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.io.Serializable;
 import java.util.Random;
 import java.util.UUID;
@@ -27,6 +30,14 @@ public class UserDTO implements Serializable {
         this.phoneNumber = phoneNumber;
         this.NFCTag = NFCTag;
         this.preScrutinering = preScrutinering;
+    }
+
+    public void fromDocumentSnapshot(DocumentSnapshot object){
+        this.uid = (String) object.get("uid");
+        this.name = (String) object.get("name");
+        this.preScrutinering = (boolean) object.get("preScrutineering");
+        this.NFCTag = (String) object.get("tagNFC");
+        this.mail = (String) object.get("mail");
     }
 
     public UserDTO() {}

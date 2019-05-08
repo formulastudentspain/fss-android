@@ -1,17 +1,36 @@
 package es.formulastudent.app.mvp.view.activity.briefing;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.dto.UserDTO;
 import es.formulastudent.app.mvp.view.activity.briefing.dialog.ConfirmBriefingRegisterDialog;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 public class BriefingPresenter {
@@ -19,6 +38,7 @@ public class BriefingPresenter {
     //Dependencies
     private View view;
     private Context context;
+    private FirebaseFirestore db;
 
 
     //Data
@@ -29,17 +49,39 @@ public class BriefingPresenter {
     public BriefingPresenter(BriefingPresenter.View view, Context context) {
         this.view = view;
         this.context = context;
+        db = FirebaseFirestore.getInstance();
     }
 
 
 
     public void createRegistry(UserDTO user){
-
         BriefingRegister newRegister = new BriefingRegister(UUID.randomUUID(), Calendar.getInstance().getTime(),user);
         filteredBriefingRegisterList.add(newRegister); //quizas no cumpla el filtro y no hay que añadirlo
         allBriefingRegisterList.add(newRegister);
 
-        //TODO guardar el registro del usuario en la BBDD
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("mail", user.getMail());
+        docData.put("name", user.getName());
+        docData.put("preScrutineering", false);
+        docData.put("role", "default");
+        docData.put("tagNFC", user.getNFCTag());
+
+        db.collection("UserInfo").document(user.getUid())
+                .set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        //success
+                        view.showMessage("User registered successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //fail
+                        view.showMessage("Failed to save data to db");
+                    }
+                });
 
         //Update the list with the new registry
         updateBriefingRegisters(filteredBriefingRegisterList);
@@ -48,27 +90,29 @@ public class BriefingPresenter {
 
 
     public List<BriefingRegister> retrieveBriefingRegisterList() {
-
-        //TODO business operation to get the users
-        List<BriefingRegister> items = setUserList();
-
-        //Update the itemList
-        this.updateBriefingRegisters(items);
-
+        final List<BriefingRegister> items = new ArrayList<>();
+        db.collection("UserInfo").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            //List<BriefingRegister> items = new ArrayList<>();
+                            UserDTO userDTO;
+                            BriefingRegister briefingRegister;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                userDTO = new UserDTO();
+                                userDTO.fromDocumentSnapshot(document);
+                                briefingRegister = new BriefingRegister(UUID.randomUUID(), Calendar.getInstance().getTime(),userDTO);
+                                items.add(briefingRegister);
+                            }
+                            updateBriefingRegisters(items);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+            //TODO don't exit until finish
         return items;
-    }
-
-
-    //TODO borrar
-    private List<BriefingRegister> setUserList(){
-
-        List<BriefingRegister> list = new ArrayList<>();
-
-        for(int x = 0; x<50; x++){
-            list.add(new BriefingRegister(UUID.randomUUID(), Calendar.getInstance().getTime(), UserDTO.createRandomUser()));
-        }
-
-        return list;
     }
 
 
@@ -87,19 +131,23 @@ public class BriefingPresenter {
 
     public void onNFCTagDetected(String tag){
         final String tagNFC = tag;
-
-        //TODO buscar usuario por el TAG NFC
-
-        //TODO BORRAR ESTO
-        UserDTO user = UserDTO.createRandomUser();
-        //TODO BORRAR ESTO
-
-
-        //Open confirm user dialog
-        FragmentManager fm = ((BriefingActivity)context).getSupportFragmentManager();
-        ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog.newInstance(this, user);
-        createUserDialog.show(fm, "fragment_briefing_confirm");
-
+        view.showLoading();
+        CollectionReference userRef = db.collection("UserInfo");
+        Query userFromNFC = userRef.whereEqualTo("tagNFC", tagNFC);
+        userFromNFC.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                //success
+                if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                    UserDTO user = new UserDTO();
+                    user.fromDocumentSnapshot(queryDocumentSnapshots.getDocuments().get(0));
+                    FragmentManager fm = ((BriefingActivity)view.getActivity()).getSupportFragmentManager();
+                    ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog.newInstance(BriefingPresenter.this, user);
+                    createUserDialog.show(fm, "fragment_briefing_confirm");
+                    view.hideLoadingIcon();
+                }
+            }
+        });
     }
 
 
@@ -109,6 +157,8 @@ public class BriefingPresenter {
 
 
     public interface View {
+
+        Activity getActivity();
 
         /**
          * Show message to user
