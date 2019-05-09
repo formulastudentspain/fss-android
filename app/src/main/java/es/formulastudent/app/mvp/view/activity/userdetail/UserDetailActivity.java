@@ -159,7 +159,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            presenter.uploadProfilePicture(imageBitmap);
+            presenter.uploadProfilePicture(imageBitmap, userNFCTag.getText().toString());
         }
     }
 

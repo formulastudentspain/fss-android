@@ -1,5 +1,7 @@
 package es.formulastudent.app.mvp.data.model.dto;
 
+import android.net.Uri;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -14,13 +16,13 @@ public class UserDTO implements Serializable {
     private String name;
     private String mail;
     private boolean mailVerified;
-    private String photoUrl;
+    private Uri photoUrl;
     private String phoneNumber;
     private String NFCTag;
     private boolean preScrutinering;
 
 
-    public UserDTO(String uid, String name, String mail, boolean mailVerified, String photoUrl,
+    public UserDTO(String uid, String name, String mail, boolean mailVerified, Uri photoUrl,
                    String phoneNumber, String NFCTag, boolean preScrutinering) {
         this.uid = uid;
         this.name = name;
@@ -74,11 +76,11 @@ public class UserDTO implements Serializable {
         this.mailVerified = mailVerified;
     }
 
-    public String getPhotoUrl() {
+    public Uri getPhotoUrl() {
         return photoUrl;
     }
 
-    public void setPhotoUrl(String photoUrl) {
+    public void setPhotoUrl(Uri photoUrl) {
         this.photoUrl = photoUrl;
     }
 
@@ -110,7 +112,7 @@ public class UserDTO implements Serializable {
         UserDTO user = new UserDTO();
         int randomInt = ThreadLocalRandom.current().nextInt(0, 50);
         user.setName("User Name " + randomInt);
-        user.setPhotoUrl("https://randomuser.me/api/portraits/men/"+randomInt+".jpg");
+        user.setPhotoUrl(Uri.parse("https://randomuser.me/api/portraits/men/"+randomInt+".jpg"));
         user.setUid(UUID.randomUUID().toString());
         user.setNFCTag(UUID.randomUUID().toString());
         user.setPreScrutinering(new Random().nextBoolean());

@@ -2,6 +2,7 @@ package es.formulastudent.app.mvp.view.activity.userdetail;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
@@ -15,7 +16,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +43,7 @@ public class UserDetailPresenter {
 
     public void onNFCTagDetected(String tag){
         final String tagNFC = tag;
-
+        //TODO cambiar mAuth.getUid por la id que vayamos a usar
         final DocumentReference userRef = db.collection("UserInfo").document(mAuth.getUid());
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -90,13 +93,48 @@ public class UserDetailPresenter {
     }
 
 
-    protected void uploadProfilePicture(Bitmap bitmap){
+    protected void uploadProfilePicture(Bitmap bitmap, String nfcTAG){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        final Bitmap profileImage = bitmap;
+
+        StorageReference storageReference = storage.getReference();
+        StorageReference userProfile = storageReference.child(nfcTAG+"_ProfilePhoto.jpg");
+
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = userProfile.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //on failure
+                String exception = e.toString();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                //success
+                taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful()){
+                            Uri path = task.getResult();
+                            view.updateProfilePicture(profileImage);
+                        } else {
+                            //Failure
+                        }
+                    }
+                });
+            }
+        });
 
         //TODO guardar la imagen en el storage
         //TODO en el onsuccess, recuperar la URL de descarga y enchufarla al usuario y además
         // llamar a view.updateProfilePicture(Bitmap imageBitmap) para actualizar la imagen
 
-        view.updateProfilePicture(bitmap);
+
 
     }
 

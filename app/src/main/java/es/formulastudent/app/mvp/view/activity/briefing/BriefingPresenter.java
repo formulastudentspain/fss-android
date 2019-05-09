@@ -90,6 +90,7 @@ public class BriefingPresenter {
 
 
     public List<BriefingRegister> retrieveBriefingRegisterList() {
+        //TODO mirar que hayan sido registrados
         final List<BriefingRegister> items = new ArrayList<>();
         db.collection("UserInfo").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
