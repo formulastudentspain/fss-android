@@ -21,7 +21,7 @@ import es.formulastudent.app.di.component.DaggerUserDetailComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.UserDetailModule;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.activity.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 
 

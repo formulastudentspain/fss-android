@@ -21,7 +21,7 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerBriefingComponent;
 import es.formulastudent.app.di.module.BriefingModule;
 import es.formulastudent.app.di.module.ContextModule;
-import es.formulastudent.app.mvp.view.activity.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.briefing.recyclerview.BriefingRegistersAdapter;
 
@@ -115,23 +115,25 @@ public class BriefingActivity extends GeneralActivity implements BriefingPresent
 
     @Override
     public void showLoading() {
-
+        super.showLoadingDialog();
     }
 
     @Override
-    public void hideLoadingIcon() {
-
+    public void hideLoading() {
+        super.hideLoadingDialog();
     }
 
     @Override
     public void refreshBriefingRegisterItems() {
         adapter.notifyDataSetChanged();
+        this.hideLoading();
     }
 
 
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_add_briefing_register){
+            showLoading();
             Intent i = new Intent(this, NFCReaderActivity.class);
             startActivityForResult(i, NFC_REQUEST_CODE);
         }

@@ -13,7 +13,7 @@ import java.util.Locale;
 import es.formulastudent.app.R;
 
 import es.formulastudent.app.mvp.data.model.TimelineItem;
-import es.formulastudent.app.mvp.view.activity.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
 
 public class TimelineDetailActivity extends GeneralActivity {

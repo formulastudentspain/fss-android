@@ -55,8 +55,10 @@ public class BriefingPresenter {
         //Get current date
         Date registerDate = Calendar.getInstance().getTime();
 
-        final BriefingRegister briefingRegister = new BriefingRegister(user, registerDate);
+        //Show loading before asynchronous call
+        view.showLoading();
 
+        final BriefingRegister briefingRegister = new BriefingRegister(user, registerDate);
         db.collection(BriefingRegister.COLLECTION_ID)
                 .document(briefingRegister.getID())
                 .set(briefingRegister.toObjectData())
@@ -66,8 +68,8 @@ public class BriefingPresenter {
                         //success
                         view.showMessage("User registered successfully!");
 
-                        filteredBriefingRegisterList.add(briefingRegister);
-                        allBriefingRegisterList.add(briefingRegister);
+                        //Retrieve again the list to see updated results
+                        retrieveBriefingRegisterList();
 
                     }
                 })
@@ -78,37 +80,38 @@ public class BriefingPresenter {
                         view.showMessage("Failed to save data to db");
                     }
                 });
-
-        //Update the list with the new registry
-        updateBriefingRegisters(filteredBriefingRegisterList);
     }
 
 
 
     public List<BriefingRegister> retrieveBriefingRegisterList() {
-        //TODO mirar que hayan sido registrados
+
+        //Result list
         final List<BriefingRegister> items = new ArrayList<>();
-        db.collection("EVENT_CONTROL_BRIEFING").get()
+
+        view.showLoading();
+
+        //Firebase call to retrieve Briefing registers
+        db.collection(BriefingRegister.COLLECTION_ID).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            //List<BriefingRegister> items = new ArrayList<>();
-                            //final User userDTO;
-                            BriefingRegister briefingRegister;
-                            for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                //userDTO = new User(document);
-                                //briefingRegister = new BriefingRegister(UUID.randomUUID(), Calendar.getInstance().getTime(),userDTO);
-                                //items.add(briefingRegister);
+                            //Add results to list
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                BriefingRegister briefingRegister = new BriefingRegister(document);
+                                items.add(briefingRegister);
                             }
-                            //updateBriefingRegisters(items);
+
+                            //Update view with new results
+                            updateBriefingRegisters(items);
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-            //TODO don't exit until finish
         return items;
     }
 
@@ -128,7 +131,6 @@ public class BriefingPresenter {
 
     public void onNFCTagDetected(String tag){
         final String tagNFC = tag;
-        view.showLoading();
         CollectionReference userRef = db.collection(User.COLLECTION_ID);
         Query userFromNFC = userRef.whereEqualTo(User.TAG_NFC, tagNFC);
         userFromNFC.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -140,7 +142,6 @@ public class BriefingPresenter {
                     FragmentManager fm = ((BriefingActivity)view.getActivity()).getSupportFragmentManager();
                     ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog.newInstance(BriefingPresenter.this, user);
                     createUserDialog.show(fm, "fragment_briefing_confirm");
-                    view.hideLoadingIcon();
                 }
             }
         });
@@ -175,7 +176,7 @@ public class BriefingPresenter {
         /**
          * Hide loading icon
          */
-        void hideLoadingIcon();
+        void hideLoading();
 
         /**
          * Refresh items in list

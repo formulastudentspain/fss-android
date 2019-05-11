@@ -1,5 +1,8 @@
 package es.formulastudent.app.mvp.data.model;
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,9 +49,20 @@ public abstract class EventRegister implements Serializable {
         docData.put(EventRegister.TEAM, this.team);
         docData.put(EventRegister.TEAM_ID, this.teamID);
         docData.put(EventRegister.USER_IMAGE, this.userImage);
-        docData.put(EventRegister.DATE, this.date.getTime());
+        docData.put(EventRegister.DATE, new Timestamp(this.date));
 
         return docData;
+    }
+
+    public EventRegister(DocumentSnapshot object){
+
+        this.date = object.getDate(EventRegister.DATE);
+        this.userImage = object.getString(EventRegister.USER_IMAGE);
+        this.user = object.getString(EventRegister.USER);
+        this.userID = object.getString(EventRegister.USER_ID);
+        this.team = object.getString(EventRegister.TEAM);
+        this.teamID = object.getString(EventRegister.TEAM_ID);
+
     }
 
 

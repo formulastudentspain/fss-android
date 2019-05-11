@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
@@ -34,7 +37,7 @@ public class BriefingRegistersAdapter extends RecyclerView.Adapter<RecyclerView.
 
         View view;
 
-        view = mLayoutInflater.inflate(R.layout.activity_user_list_item, parent, false);
+        view = mLayoutInflater.inflate(R.layout.activity_briefing_list_item, parent, false);
         return new BriefingRegistersViewHolder(view);
 
     }
@@ -44,9 +47,13 @@ public class BriefingRegistersAdapter extends RecyclerView.Adapter<RecyclerView.
 
         BriefingRegister register = briefingRegisterList.get(position);
 
+        DateFormat sdf = new SimpleDateFormat("EEE, dd MMM 'at' HH:mm", Locale.US);
+
         BriefingRegistersViewHolder briefingRegistersViewHolder = (BriefingRegistersViewHolder)holder;
         briefingRegistersViewHolder.userName.setText(register.getUser());
-        briefingRegistersViewHolder.userTeam.setText("Team");
+        briefingRegistersViewHolder.userTeam.setText(register.getTeam());
+        briefingRegistersViewHolder.registerDate.setText(sdf.format(register.getDate()));
+
         Picasso.get().load(register.getUserImage()).into(briefingRegistersViewHolder.profileImage);
 
     }

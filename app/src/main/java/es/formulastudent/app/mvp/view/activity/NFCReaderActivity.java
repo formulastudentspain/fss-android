@@ -8,6 +8,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
 
 public class NFCReaderActivity extends GeneralActivity {

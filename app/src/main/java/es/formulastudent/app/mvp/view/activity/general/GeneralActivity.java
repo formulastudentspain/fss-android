@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity;
+package es.formulastudent.app.mvp.view.activity.general;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -7,6 +7,9 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -20,6 +23,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
+import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
 
@@ -35,6 +39,9 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
     protected Drawer drawer;
     protected Long mDrawerIdentifier = 0L;
 
+    //Loading dialog
+    GeneralActivityLoadingDialog loadingDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,10 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         //Get toolbar component
         toolbar = findViewById(R.id.my_toolbar);
+
+        //loading dialog
+        loadingDialog = GeneralActivityLoadingDialog.newInstance();
+
     }
 
     @Override
@@ -333,4 +344,26 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         return false;
     }
+
+    public void showLoadingDialog(){
+        FragmentManager fm = getSupportFragmentManager();
+
+        FragmentTransaction ft = fm.beginTransaction();
+
+        //Only show loading if it not already on screen
+        Fragment fragment = fm.findFragmentByTag("loading_dialog");
+        if(fragment == null){
+            ft.add(loadingDialog, "loading_dialog");
+            ft.commitAllowingStateLoss();
+        }
+
+    }
+
+    public void hideLoadingDialog(){
+       if(loadingDialog!=null){
+            loadingDialog.dismiss();
+        }
+    }
+
+
 }

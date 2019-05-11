@@ -13,11 +13,13 @@ public class BriefingRegistersViewHolder extends RecyclerView.ViewHolder{
     ImageView profileImage;
     TextView userName;
     TextView userTeam;
+    TextView registerDate;
 
     public BriefingRegistersViewHolder(View itemView) {
         super(itemView);
         profileImage =  itemView.findViewById(R.id.user_profile_image);
-        userName =  itemView.findViewById(R.id.user_name);
-        userTeam =  itemView.findViewById(R.id.user_team);
+        userName =  itemView.findViewById(R.id.briefing_item_user);
+        userTeam =  itemView.findViewById(R.id.briefing_item_team);
+        registerDate = itemView.findViewById(R.id.briefing_item_date);
     }
 }

@@ -15,7 +15,7 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerTimelineComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.TimelineModule;
-import es.formulastudent.app.mvp.view.activity.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.timeline.recyclerview.TimelineAdapter;
 
 

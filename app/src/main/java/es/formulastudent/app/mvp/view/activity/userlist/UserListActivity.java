@@ -21,7 +21,7 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerUserListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.UserListModule;
-import es.formulastudent.app.mvp.view.activity.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.dialog.CreateUserDialog;
 import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.UserListAdapter;
 
