@@ -13,10 +13,13 @@ import androidx.fragment.app.DialogFragment;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.dto.UserDTO;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingPresenter;
 
 public class ConfirmBriefingRegisterDialog extends DialogFragment {
@@ -30,11 +33,11 @@ public class ConfirmBriefingRegisterDialog extends DialogFragment {
     private BriefingPresenter presenter;
 
     //Detected user
-    private UserDTO user;
+    private User user;
 
     public ConfirmBriefingRegisterDialog() {}
 
-    public static ConfirmBriefingRegisterDialog newInstance(BriefingPresenter presenter, UserDTO user) {
+    public static ConfirmBriefingRegisterDialog newInstance(BriefingPresenter presenter, User user) {
         ConfirmBriefingRegisterDialog frag = new ConfirmBriefingRegisterDialog();
         frag.setPresenter(presenter);
         frag.setUser(user);
@@ -44,6 +47,7 @@ public class ConfirmBriefingRegisterDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        DateFormat sdf = new SimpleDateFormat("EEE, dd MMM 'at' HH:mm", Locale.US);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -57,8 +61,8 @@ public class ConfirmBriefingRegisterDialog extends DialogFragment {
 
         //Set values
         userName.setText(user.getName());
-        userTeam.setText("Applus+ IDIADA");
-        registerDate.setText(Calendar.getInstance().getTime().toString());
+        userTeam.setText(user.getTeam());
+        registerDate.setText(sdf.format(Calendar.getInstance().getTime()));
         Picasso.get().load(user.getPhotoUrl()).into(userPhoto);
 
 
@@ -67,13 +71,13 @@ public class ConfirmBriefingRegisterDialog extends DialogFragment {
                 .setTitle(R.string.briefing_activity_dialog_confirm_register_title)
 
                 //Action buttons
-                .setPositiveButton(R.string.dialog_create_user_button_create, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.briefing_activity_dialog_confirm_button_confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         presenter.createRegistry(user);
                     }
                 })
-                .setNegativeButton(R.string.dialog_create_user_button_cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.briefing_activity_dialog_confirm_button_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         ConfirmBriefingRegisterDialog.this.getDialog().cancel();
                     }
@@ -86,7 +90,7 @@ public class ConfirmBriefingRegisterDialog extends DialogFragment {
         this.presenter = presenter;
     }
 
-    public void setUser(UserDTO user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

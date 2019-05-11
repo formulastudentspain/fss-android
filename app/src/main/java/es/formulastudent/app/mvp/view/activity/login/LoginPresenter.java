@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.concurrent.Executor;
 
-import es.formulastudent.app.mvp.data.model.dto.UserDTO;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 
 
@@ -64,9 +64,9 @@ public class LoginPresenter {
      * @param password
      * @return
      */
-    public UserDTO startSignIn(String mail, String password){
+    public User startSignIn(String mail, String password){
 
-        final UserDTO[] userDTO = {new UserDTO()};
+        final User[] userDTO = {new User()};
 
         //show dialog bar
         this.hideKeyboard();
@@ -134,14 +134,11 @@ public class LoginPresenter {
      * @param user
      * @return
      */
-    private UserDTO getUserDTObyFirebaseUser(FirebaseUser user){
-        UserDTO userDTO = new UserDTO();
+    private User getUserDTObyFirebaseUser(FirebaseUser user){
+        User userDTO = new User();
 
         userDTO.setName(user.getDisplayName());
         userDTO.setMail(user.getEmail());
-        userDTO.setMailVerified(user.isEmailVerified());
-        userDTO.setUid(user.getUid());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
 
         return userDTO;
     }

@@ -20,7 +20,7 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerUserDetailComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.UserDetailModule;
-import es.formulastudent.app.mvp.data.model.dto.UserDTO;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 
@@ -41,7 +41,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     private TextView userNFCTag;
 
     //Selected user
-    UserDTO user;
+    User user;
 
 
     @Override
@@ -50,7 +50,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         setContentView(R.layout.activity_user_detail);
         super.onCreate(savedInstanceState);
 
-        user = (UserDTO) getIntent().getSerializableExtra("selectedUser");
+        user = (User) getIntent().getSerializableExtra("selectedUser");
 
         initViews();
     }

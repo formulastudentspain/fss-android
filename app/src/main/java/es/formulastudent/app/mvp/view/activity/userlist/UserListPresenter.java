@@ -8,9 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.UUID;
-
-import es.formulastudent.app.mvp.data.model.dto.UserDTO;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.RecyclerViewClickListener;
 
@@ -21,8 +19,8 @@ public class UserListPresenter implements RecyclerViewClickListener {
     private Context context;
 
     //Data
-    private List<UserDTO> allUserList = new ArrayList<>();
-    private List<UserDTO> filteredUserList = new ArrayList<>();
+    private List<User> allUserList = new ArrayList<>();
+    private List<User> filteredUserList = new ArrayList<>();
 
     private RecyclerView recyclerView;
 
@@ -33,7 +31,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
     }
 
 
-    private void updateUserListItems(List<UserDTO> newItems){
+    private void updateUserListItems(List<User> newItems){
         //Update all-user-list
         this.allUserList.clear();
         this.allUserList.addAll(newItems);
@@ -44,10 +42,10 @@ public class UserListPresenter implements RecyclerViewClickListener {
         this.view.refreshUserItems();
     }
 
-    public List<UserDTO> getUserList() {
+    public List<User> getUserList() {
 
         //TODO business operation to get the users
-        List<UserDTO> items = setUserList();
+        List<User> items = setUserList();
 
         //Update the itemList
         this.updateUserListItems(items);
@@ -57,114 +55,14 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
 
     //TODO borrar
-    private List<UserDTO> setUserList(){
+    private List<User> setUserList(){
 
-        List<UserDTO> list = new ArrayList<>();
+        List<User> list = new ArrayList<>();
 
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Pérez", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/1.jpg", null, "1", true));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Gerard Martí", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/2.jpg", null, null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Pere Torres", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/3.jpg", null, "",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Salvado", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/4.jpg", null, "3",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Oriol Soler", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/5.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Andrés Romero", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/6.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Antonio David Llorca", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/7.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Guerra", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/8.jpg", null,"12",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Miguel Calderón", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/9.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Mateu", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/10.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Raúl Gracia", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/11.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Diego Caudillo", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/12.jpg", null,"6",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Agnes Creus", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/13.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Josep María Pons", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/14.jpg", null,"3",true));
+        for(int i=0; i<250; i++){
+            list.add(User.createRandomUser());
+        }
 
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Pérez", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/1.jpg", null, "1", true));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Gerard Martí", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/2.jpg", null, null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Pere Torres", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/3.jpg", null, "",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Salvado", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/4.jpg", null, "3",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Oriol Soler", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/5.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Andrés Romero", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/6.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Antonio David Llorca", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/7.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Guerra", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/8.jpg", null,"12",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Miguel Calderón", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/9.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Mateu", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/10.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Raúl Gracia", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/11.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Diego Caudillo", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/12.jpg", null,"6",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Agnes Creus", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/13.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Josep María Pons", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/14.jpg", null,"3",true));
-
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Pérez", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/1.jpg", null, "1", true));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Gerard Martí", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/2.jpg", null, null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Pere Torres", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/3.jpg", null, "",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Salvado", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/4.jpg", null, "3",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Oriol Soler", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/5.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Andrés Romero", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/6.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Antonio David Llorca", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/7.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Guerra", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/8.jpg", null,"12",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Miguel Calderón", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/9.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Mateu", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/10.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Raúl Gracia", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/11.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Diego Caudillo", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/12.jpg", null,"6",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Agnes Creus", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/13.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Josep María Pons", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/14.jpg", null,"3",true));
-
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Pérez", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/1.jpg", null, "1", true));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Gerard Martí", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/2.jpg", null, null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Pere Torres", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/3.jpg", null, "",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Salvado", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/4.jpg", null, "3",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Oriol Soler", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/5.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Andrés Romero", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/6.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Antonio David Llorca", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/7.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Guerra", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/8.jpg", null,"12",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Miguel Calderón", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/9.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Mateu", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/10.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Raúl Gracia", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/11.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Diego Caudillo", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/12.jpg", null,"6",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Agnes Creus", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/13.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Josep María Pons", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/14.jpg", null,"3",true));
-
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Pérez", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/1.jpg", null, "1", true));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Gerard Martí", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/2.jpg", null, null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Pere Torres", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/3.jpg", null, "",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Salvado", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/4.jpg", null, "3",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Oriol Soler", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/5.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Andrés Romero", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/6.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Antonio David Llorca", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/7.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Guerra", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/8.jpg", null,"12",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Miguel Calderón", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/9.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Mateu", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/10.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Raúl Gracia", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/11.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Diego Caudillo", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/12.jpg", null,"6",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Agnes Creus", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/13.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Josep María Pons", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/14.jpg", null,"3",true));
-
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Pérez", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/1.jpg", null, "1", true));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Gerard Martí", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/2.jpg", null, null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Pere Torres", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/3.jpg", null, "",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Salvado", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/4.jpg", null, "3",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Oriol Soler", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/5.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Andrés Romero", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/6.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Antonio David Llorca", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/7.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Guerra", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/8.jpg", null,"12",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Miguel Calderón", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/9.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Mateu", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/10.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Raúl Gracia", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/11.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Diego Caudillo", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/12.jpg", null,"6",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Agnes Creus", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/13.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Josep María Pons", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/14.jpg", null,"3",true));
-
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Pérez", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/1.jpg", null, "1", true));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Gerard Martí", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/2.jpg", null, null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Pere Torres", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/3.jpg", null, "",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Salvado", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/4.jpg", null, "3",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Oriol Soler", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/5.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Andrés Romero", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/6.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Antonio David Llorca", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/7.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "David Guerra", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/8.jpg", null,"12",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Miguel Calderón", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/9.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Marc Mateu", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/10.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Raúl Gracia", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/11.jpg", null,"",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Diego Caudillo", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/12.jpg", null,"6",false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Agnes Creus", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/13.jpg", null,null,false));
-        list.add(new UserDTO(UUID.randomUUID().toString(), "Josep María Pons", "email@gmail.com",true,"https://randomuser.me/api/portraits/men/14.jpg", null,"3",true));
         return list;
     }
 
@@ -179,7 +77,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
         filteredUserList.clear();
 
         //Add results
-        for(UserDTO user: allUserList){
+        for(User user: allUserList){
             if(user.getName().toLowerCase().contains(query.toLowerCase())){
                 filteredUserList.add(user);
             }
@@ -193,7 +91,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
 
-        UserDTO selectedUser = filteredUserList.get(position);
+        User selectedUser = filteredUserList.get(position);
 
         Intent intent = new Intent(context, UserDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -202,9 +100,46 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
     }
 
-    public List<UserDTO> getUserItemList() {
+    public List<User> getUserItemList() {
         return filteredUserList;
     }
+
+
+//TODO este método estaba en el presenter del Briefing, en verdad está creando en "UserInfo"
+/*
+    public void createRegistry(User user){
+        BriefingRegister newRegister = new BriefingRegister(UUID.randomUUID(), Calendar.getInstance().getTime(),user);
+        filteredBriefingRegisterList.add(newRegister); //quizas no cumpla el filtro y no hay que añadirlo
+        allBriefingRegisterList.add(newRegister);
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("mail", user.getMail());
+        docData.put("name", user.getName());
+        docData.put("preScrutineering", false);
+        docData.put("role", "default");
+        docData.put("tagNFC", user.getNFCTag());
+
+        db.collection("UserInfo").document(user.getUid())
+                .set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        //success
+                        view.showMessage("User registered successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //fail
+                        view.showMessage("Failed to save data to db");
+                    }
+                });
+
+        //Update the list with the new registry
+        updateBriefingRegisters(filteredBriefingRegisterList);
+    }
+*/
 
 
     public interface View {

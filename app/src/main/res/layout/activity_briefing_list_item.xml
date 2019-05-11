@@ -7,7 +7,5 @@
     android:layout_height="match_parent"
     tools:context=".mvp.view.activity.timeline.TimelineActivity">
 
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

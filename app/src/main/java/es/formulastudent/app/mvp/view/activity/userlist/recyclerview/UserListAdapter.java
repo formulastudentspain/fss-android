@@ -12,20 +12,20 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.dto.UserDTO;
+import es.formulastudent.app.mvp.data.model.User;
 
 
 public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-    private List<UserDTO> timelineItemList;
+    private List<User> timelineItemList;
     private Context context;
     private LayoutInflater mLayoutInflater;
     private RecyclerViewClickListener clickListener;
 
 
 
-    public UserListAdapter(List<UserDTO> timelineItemList, Context context, RecyclerViewClickListener clickListener) {
+    public UserListAdapter(List<User> timelineItemList, Context context, RecyclerViewClickListener clickListener) {
         this.timelineItemList = timelineItemList;
         this.context = context;
         this.clickListener = clickListener;
@@ -46,7 +46,7 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        UserDTO user = timelineItemList.get(position);
+        User user = timelineItemList.get(position);
 
         UserListViewHolder userListViewHolder = (UserListViewHolder)holder;
         userListViewHolder.userName.setText(user.getName());

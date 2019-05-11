@@ -12,22 +12,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
-import es.formulastudent.app.mvp.data.model.dto.UserDTO;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.briefing.dialog.ConfirmBriefingRegisterDialog;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -54,25 +50,25 @@ public class BriefingPresenter {
 
 
 
-    public void createRegistry(UserDTO user){
-        BriefingRegister newRegister = new BriefingRegister(UUID.randomUUID(), Calendar.getInstance().getTime(),user);
-        filteredBriefingRegisterList.add(newRegister); //quizas no cumpla el filtro y no hay que añadirlo
-        allBriefingRegisterList.add(newRegister);
+    public void createRegistry(User user){
 
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("mail", user.getMail());
-        docData.put("name", user.getName());
-        docData.put("preScrutineering", false);
-        docData.put("role", "default");
-        docData.put("tagNFC", user.getNFCTag());
+        //Get current date
+        Date registerDate = Calendar.getInstance().getTime();
 
-        db.collection("UserInfo").document(user.getUid())
-                .set(docData)
+        final BriefingRegister briefingRegister = new BriefingRegister(user, registerDate);
+
+        db.collection(BriefingRegister.COLLECTION_ID)
+                .document(briefingRegister.getID())
+                .set(briefingRegister.toObjectData())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         //success
                         view.showMessage("User registered successfully!");
+
+                        filteredBriefingRegisterList.add(briefingRegister);
+                        allBriefingRegisterList.add(briefingRegister);
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -92,21 +88,21 @@ public class BriefingPresenter {
     public List<BriefingRegister> retrieveBriefingRegisterList() {
         //TODO mirar que hayan sido registrados
         final List<BriefingRegister> items = new ArrayList<>();
-        db.collection("UserInfo").get()
+        db.collection("EVENT_CONTROL_BRIEFING").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             //List<BriefingRegister> items = new ArrayList<>();
-                            UserDTO userDTO;
+                            //final User userDTO;
                             BriefingRegister briefingRegister;
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                userDTO = new UserDTO();
-                                userDTO.fromDocumentSnapshot(document);
-                                briefingRegister = new BriefingRegister(UUID.randomUUID(), Calendar.getInstance().getTime(),userDTO);
-                                items.add(briefingRegister);
+
+                                //userDTO = new User(document);
+                                //briefingRegister = new BriefingRegister(UUID.randomUUID(), Calendar.getInstance().getTime(),userDTO);
+                                //items.add(briefingRegister);
                             }
-                            updateBriefingRegisters(items);
+                            //updateBriefingRegisters(items);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -133,15 +129,14 @@ public class BriefingPresenter {
     public void onNFCTagDetected(String tag){
         final String tagNFC = tag;
         view.showLoading();
-        CollectionReference userRef = db.collection("UserInfo");
-        Query userFromNFC = userRef.whereEqualTo("tagNFC", tagNFC);
+        CollectionReference userRef = db.collection(User.COLLECTION_ID);
+        Query userFromNFC = userRef.whereEqualTo(User.TAG_NFC, tagNFC);
         userFromNFC.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 //success
                 if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                    UserDTO user = new UserDTO();
-                    user.fromDocumentSnapshot(queryDocumentSnapshots.getDocuments().get(0));
+                    User user = new User(queryDocumentSnapshots.getDocuments().get(0));
                     FragmentManager fm = ((BriefingActivity)view.getActivity()).getSupportFragmentManager();
                     ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog.newInstance(BriefingPresenter.this, user);
                     createUserDialog.show(fm, "fragment_briefing_confirm");

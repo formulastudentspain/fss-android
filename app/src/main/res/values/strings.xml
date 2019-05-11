@@ -59,9 +59,8 @@
     <string name="briefing_activity_title">Briefing control</string>
     <string name="briefing_activity_teams_label">Teams</string>
     <string name="briefing_activity_dialog_confirm_register_title">User confirmation</string>
-
-
-
+    <string name="briefing_activity_dialog_confirm_button_confirm">Confirm</string>
+    <string name="briefing_activity_dialog_confirm_button_cancel">Cancel</string>
 
 
 </resources>

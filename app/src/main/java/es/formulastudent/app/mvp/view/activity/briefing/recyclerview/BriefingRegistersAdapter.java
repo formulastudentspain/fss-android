@@ -45,9 +45,9 @@ public class BriefingRegistersAdapter extends RecyclerView.Adapter<RecyclerView.
         BriefingRegister register = briefingRegisterList.get(position);
 
         BriefingRegistersViewHolder briefingRegistersViewHolder = (BriefingRegistersViewHolder)holder;
-        briefingRegistersViewHolder.userName.setText(register.getUser().getName());
+        briefingRegistersViewHolder.userName.setText(register.getUser());
         briefingRegistersViewHolder.userTeam.setText("Team");
-        Picasso.get().load(register.getUser().getPhotoUrl()).into(briefingRegistersViewHolder.profileImage);
+        Picasso.get().load(register.getUserImage()).into(briefingRegistersViewHolder.profileImage);
 
     }
 

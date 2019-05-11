@@ -2,15 +2,24 @@ package es.formulastudent.app.mvp.data.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
-
-import es.formulastudent.app.mvp.data.model.dto.UserDTO;
+import java.util.Map;
 
 public class BriefingRegister extends EventRegister implements Serializable {
 
-    public BriefingRegister(UUID ID, Date date, UserDTO userDTO) {
-        super(ID, date, userDTO);
-        super.setType(EventType.BRIEFING);
+    public static String COLLECTION_ID = "EVENT_CONTROL_BRIEFING";
+
+    public BriefingRegister(String teamID, String team, String userID, String user, String userImage, Date date) {
+        super(teamID, team, userID, user, userImage, date);
+        setType(EventType.BRIEFING);
+    }
+
+    public BriefingRegister(User user, Date date) {
+        super(user.getTeamID(), user.getTeam(), user.getID(), user.getName(), user.getPhotoUrl(), date);
+        setType(EventType.BRIEFING);
+    }
+
+    public Map<String, Object> toObjectData(){
+        return super.toObjectData();
     }
 
 }
