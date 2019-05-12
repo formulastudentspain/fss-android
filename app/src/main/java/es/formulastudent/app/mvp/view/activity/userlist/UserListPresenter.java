@@ -3,7 +3,16 @@ package es.formulastudent.app.mvp.view.activity.userlist;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +30,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
     //Data
     private List<User> allUserList = new ArrayList<>();
     private List<User> filteredUserList = new ArrayList<>();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private RecyclerView recyclerView;
 
@@ -43,27 +53,24 @@ public class UserListPresenter implements RecyclerViewClickListener {
     }
 
     public List<User> getUserList() {
-
-        //TODO business operation to get the users
-        List<User> items = setUserList();
-
-        //Update the itemList
-        this.updateUserListItems(items);
-
+        final List<User> items = new ArrayList<>();
+        db.collection("UserInfo").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                                items.add(new User(document));
+                                //Update the itemList
+                                updateUserListItems(items);
+                            }
+                        } else {
+                            view.showMessage("Error on loading user List");
+                        }
+                    }
+                });
         return filteredUserList;
-    }
-
-
-    //TODO borrar
-    private List<User> setUserList(){
-
-        List<User> list = new ArrayList<>();
-
-        for(int i=0; i<250; i++){
-            list.add(User.createRandomUser());
-        }
-
-        return list;
     }
 
     public void setRecyclerView(RecyclerView recyclerView){

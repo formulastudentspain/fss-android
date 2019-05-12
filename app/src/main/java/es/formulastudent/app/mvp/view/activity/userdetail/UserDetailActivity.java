@@ -148,7 +148,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         if (requestCode == NFC_REQUEST_CODE) {
             if(resultCode == Activity.RESULT_OK){
                 String result = data.getStringExtra("result");
-                presenter.onNFCTagDetected(result);
+                presenter.onNFCTagDetected(user,result);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
@@ -159,7 +159,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            presenter.uploadProfilePicture(imageBitmap, userNFCTag.getText().toString());
+            presenter.uploadProfilePicture(imageBitmap, user);
         }
     }
 

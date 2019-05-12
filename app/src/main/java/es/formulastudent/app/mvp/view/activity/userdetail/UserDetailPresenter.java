@@ -22,6 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.formulastudent.app.mvp.data.model.User;
+
 
 public class UserDetailPresenter {
 
@@ -41,10 +43,9 @@ public class UserDetailPresenter {
     }
 
 
-    public void onNFCTagDetected(String tag){
+    public void onNFCTagDetected(User user, String tag){
         final String tagNFC = tag;
-        //TODO cambiar mAuth.getUid por la id que vayamos a usar
-        final DocumentReference userRef = db.collection("UserInfo").document(mAuth.getUid());
+        final DocumentReference userRef = db.collection("UserInfo").document(user.getID());
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -93,15 +94,16 @@ public class UserDetailPresenter {
     }
 
 
-    protected void uploadProfilePicture(Bitmap bitmap, String nfcTAG){
+    protected void uploadProfilePicture(Bitmap bitmap, User user){
+        final User actualUser = user;
         FirebaseStorage storage = FirebaseStorage.getInstance();
         final Bitmap profileImage = bitmap;
-
         StorageReference storageReference = storage.getReference();
-        StorageReference userProfile = storageReference.child(nfcTAG+"_ProfilePhoto.jpg");
-
-
+        final StorageReference userProfile = storageReference.child(user.getID()+"_ProfilePhoto.jpg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        view.showLoading();
+
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
@@ -110,7 +112,8 @@ public class UserDetailPresenter {
             @Override
             public void onFailure(@NonNull Exception e) {
                 //on failure
-                String exception = e.toString();
+                view.hideLoadingIcon();
+                view.showMessage("Error uploading profile picture");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -121,27 +124,24 @@ public class UserDetailPresenter {
                     public void onComplete(@NonNull Task<Uri> task) {
                         if(task.isSuccessful()){
                             Uri path = task.getResult();
+                            updatePhotoUrl(actualUser, path);
                             view.updateProfilePicture(profileImage);
+                            //TODO update User List
                         } else {
-                            //Failure
+                            view.showMessage("Error updating profile picture.");
                         }
+                        view.hideLoadingIcon();
                     }
                 });
             }
         });
-
-        //TODO guardar la imagen en el storage
-        //TODO en el onsuccess, recuperar la URL de descarga y enchufarla al usuario y además
-        // llamar a view.updateProfilePicture(Bitmap imageBitmap) para actualizar la imagen
-
-
-
     }
 
-
-
-
-
+    private void updatePhotoUrl(User actualUser, Uri path) {
+        db.collection("UserInfo").document(actualUser.getID()).update(
+                User.USER_IMAGE, path.toString()
+        );
+    }
 
 
     public interface View {

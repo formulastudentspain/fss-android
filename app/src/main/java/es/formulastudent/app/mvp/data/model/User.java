@@ -40,6 +40,7 @@ public class User implements Serializable {
     }
 
     public User(DocumentSnapshot object){
+        this.ID = object.getId();
         this.name = (String) object.get(User.NAME);
         this.NFCTag = (String) object.get(User.TAG_NFC);
         this.mail = (String) object.get(User.MAIL);
