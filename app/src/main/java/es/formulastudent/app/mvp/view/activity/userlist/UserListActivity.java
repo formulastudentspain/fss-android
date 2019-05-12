@@ -117,17 +117,17 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
 
     @Override
     public void finishView() {
-
+        this.finish();
     }
 
     @Override
     public void showLoading() {
-
+        super.showLoadingDialog();
     }
 
     @Override
-    public void hideLoadingIcon() {
-
+    public void hideLoading() {
+        super.hideLoadingDialog();
     }
 
     @Override

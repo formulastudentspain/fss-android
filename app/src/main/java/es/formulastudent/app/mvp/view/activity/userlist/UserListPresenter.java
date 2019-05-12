@@ -161,14 +161,14 @@ public class UserListPresenter implements RecyclerViewClickListener {
         void finishView();
 
         /**
-         * Show loading icon
+         * Show loading
          */
         void showLoading();
 
         /**
-         * Hide loading icon
+         * Hide loading
          */
-        void hideLoadingIcon();
+        void hideLoading();
     }
 
 }
