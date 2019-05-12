@@ -3,8 +3,8 @@ package es.formulastudent.app.mvp.data.model;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
-import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.HashMap;
+import java.util.Map;
 
 public class User implements Serializable {
 
@@ -18,6 +18,7 @@ public class User implements Serializable {
     public static final String TAG_NFC = "tagNFC";
     public static final String MAIL = "mail";
     public static final String ROLE = "role";
+    public static final String ROLE_ID = "roleID";
 
 
     private String ID;
@@ -28,25 +29,44 @@ public class User implements Serializable {
     private String team;
     private String teamID;
     private String role;
+    private String roleID;
 
 
-    public User(String ID, String name, String mail, String photoUrl, String NFCTag, String role) {
+    public User(String ID, String name, String mail, String photoUrl, String NFCTag, String role, String roleID) {
         this.ID = ID;
         this.name = name;
         this.mail = mail;
         this.photoUrl = photoUrl;
         this.NFCTag = NFCTag;
         this.role = role;
+        this.roleID = roleID;
     }
 
     public User(DocumentSnapshot object){
-        this.name = (String) object.get(User.NAME);
-        this.NFCTag = (String) object.get(User.TAG_NFC);
-        this.mail = (String) object.get(User.MAIL);
-        this.photoUrl = (String) object.get(User.USER_IMAGE);
-        this.team = (String) object.get(User.TEAM);
-        this.teamID = (String) object.get(User.TEAM_ID);
-        this.role = (String) object.get(User.ROLE);
+        //this.ID =
+        this.name = object.getString(User.NAME);
+        this.NFCTag = object.getString(User.TAG_NFC);
+        this.mail = object.getString(User.MAIL);
+        this.photoUrl = object.getString(User.USER_IMAGE);
+        this.team = object.getString(User.TEAM);
+        this.teamID = object.getString(User.TEAM_ID);
+        this.role = object.getString(User.ROLE);
+        this.roleID = object.getString(User.ROLE_ID);
+    }
+
+    public Map<String, Object> toDocumentData(){
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put(User.NAME, this.getName());
+        docData.put(User.MAIL, this.getMail());
+        docData.put(User.ROLE, this.getRole());
+        docData.put(User.ROLE_ID, this.getRoleID());
+        docData.put(User.TEAM, this.getTeam());
+        docData.put(User.TEAM_ID, this.getTeamID());
+        docData.put(User.USER_IMAGE, this.getPhotoUrl());
+        docData.put(User.TAG_NFC, this.getNFCTag());
+
+        return docData;
     }
 
     public User() {
@@ -84,17 +104,6 @@ public class User implements Serializable {
         this.NFCTag = NFCTag;
     }
 
-    public static User createRandomUser(){
-        User user = new User();
-        int randomInt = ThreadLocalRandom.current().nextInt(0, 50);
-        user.setName("User Name " + randomInt);
-        user.setPhotoUrl("https://randomuser.me/api/portraits/men/"+randomInt+".jpg");
-        user.setNFCTag(UUID.randomUUID().toString());
-        user.setMail("userName"+randomInt+"@gmail.com");
-        return user;
-    }
-
-
     public String getTeam() {
         return team;
     }
@@ -125,5 +134,13 @@ public class User implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getRoleID() {
+        return roleID;
+    }
+
+    public void setRoleID(String roleID) {
+        this.roleID = roleID;
     }
 }

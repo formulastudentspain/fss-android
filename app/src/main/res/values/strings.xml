@@ -42,9 +42,12 @@
     <string name="dialog_create_user_button_create">Create</string>
     <string name="dialog_create_user_button_cancel">Cancel</string>
     <string name="dialog_create_user_field_name">Name</string>
-    <string name="dialog_create_user_field_surname">Surname</string>
+    <string name="dialog_create_user_field_mail">Mail</string>
     <string name="dialog_create_user_field_team">Team</string>
     <string name="dialog_create_user_field_role">Role</string>
+    <string name="dialog_create_user_error_field">Mandatory field</string>
+
+
 
     <!-- Briefing activity -->
     <string name="briefing_activity_title">Briefing control</string>
@@ -62,6 +65,9 @@
     <string name="competition_day_fri">23/09/2019</string>
     <string name="competition_day_sat">11/05/2019</string>
     <string name="competition_day_sun">12/05/2019</string>
+
+    <!-- Default profile image -->
+    <string name="default_image_url">https://lh3.googleusercontent.com/-cXXaVVq8nMM/AAAAAAAAAAI/AAAAAAAAAKI/_Y1WfBiSnRI/photo.jpg?sz=150</string>
 
 
 

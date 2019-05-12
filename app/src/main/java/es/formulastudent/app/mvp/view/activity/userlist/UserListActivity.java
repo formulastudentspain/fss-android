@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import es.formulastudent.app.FSSApp;
@@ -21,6 +23,8 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerUserListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.UserListModule;
+import es.formulastudent.app.mvp.data.model.Team;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.dialog.CreateUserDialog;
 import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.UserListAdapter;
@@ -46,7 +50,7 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
         super.onCreate(savedInstanceState);
 
         initViews();
-        presenter.getUserList();
+        presenter.retrieveUsers();
     }
 
 
@@ -108,6 +112,7 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
     @Override
     public void refreshUserItems() {
         userListAdapter.notifyDataSetChanged();
+        this.hideLoading();
     }
 
     @Override
@@ -133,13 +138,15 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_add_user){
-            showCreateUserDialog();
+            presenter.retrieveCreateUserDialogData();
         }
     }
 
-    private void showCreateUserDialog() {
+
+    @Override
+    public void showCreateUserDialog(List<Team> teams, List<UserRole> roles) {
         FragmentManager fm = getSupportFragmentManager();
-        CreateUserDialog createUserDialog = CreateUserDialog.newInstance(presenter);
+        CreateUserDialog createUserDialog = CreateUserDialog.newInstance(presenter, this, teams, roles);
         createUserDialog.show(fm, "fragment_edit_name");
     }
 

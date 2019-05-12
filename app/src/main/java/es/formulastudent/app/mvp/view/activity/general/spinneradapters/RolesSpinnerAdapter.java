@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.briefing.spinner;
+package es.formulastudent.app.mvp.view.activity.general.spinneradapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,29 +14,29 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.Team;
+import es.formulastudent.app.mvp.data.model.UserRole;
 
-public class TeamsSpinnerAdapter extends ArrayAdapter<Team> {
+public class RolesSpinnerAdapter extends ArrayAdapter<UserRole> {
 
     private Context context;
-    private List<Team> teams;
+    private List<UserRole> roles;
     private LayoutInflater inflater;
 
-    public TeamsSpinnerAdapter(Context context, int textViewResourceId, List<Team> teams) {
-        super(context, textViewResourceId, teams);
+    public RolesSpinnerAdapter(Context context, int textViewResourceId, List<UserRole> roles) {
+        super(context, textViewResourceId, roles);
         this.context = context;
-        this.teams = teams;
+        this.roles = roles;
         this.inflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount(){
-        return teams.size();
+        return roles.size();
     }
 
     @Override
-    public Team getItem(int position){
-        return teams.get(position);
+    public UserRole getItem(int position){
+        return roles.get(position);
     }
 
     @Override
@@ -56,11 +56,11 @@ public class TeamsSpinnerAdapter extends ArrayAdapter<Team> {
     }
 
     private View createItemView(int position, View convertView, ViewGroup parent) {
-        final View view = inflater.inflate(R.layout.activity_briefing_spiner_team_item, parent, false);
+        final View view = inflater.inflate(R.layout.activity_general_spinner, parent, false);
 
-        Team team = teams.get(position);
+        UserRole team = roles.get(position);
 
-        TextView teamName = view.findViewById(R.id.spinner_team_name);
+        TextView teamName = view.findViewById(R.id.spinner_value);
         teamName.setText(team.getName());
 
         return view;

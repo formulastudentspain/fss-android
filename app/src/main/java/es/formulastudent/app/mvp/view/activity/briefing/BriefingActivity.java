@@ -33,7 +33,7 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.briefing.recyclerview.BriefingRegistersAdapter;
-import es.formulastudent.app.mvp.view.activity.briefing.spinner.TeamsSpinnerAdapter;
+import es.formulastudent.app.mvp.view.activity.general.spinneradapters.TeamsSpinnerAdapter;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
 

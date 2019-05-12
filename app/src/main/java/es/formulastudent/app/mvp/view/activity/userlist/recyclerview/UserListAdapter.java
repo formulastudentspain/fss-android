@@ -50,7 +50,7 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         UserListViewHolder userListViewHolder = (UserListViewHolder)holder;
         userListViewHolder.userName.setText(user.getName());
-        userListViewHolder.userTeam.setText("Team");
+        userListViewHolder.userTeam.setText(user.getTeam());
         Picasso.get().load(user.getPhotoUrl()).into(userListViewHolder.profileImage);
 
         if(true){ //user.getRole()==driver

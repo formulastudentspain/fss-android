@@ -40,10 +40,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:textStyle="bold"
-        android:text="@string/dialog_create_user_field_surname"/>
+        android:text="@string/dialog_create_user_field_mail"/>
 
     <EditText
-        android:id="@+id/create_user_surname"
+        android:id="@+id/create_user_mail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -55,7 +55,7 @@
         android:paddingStart="16dp"
         android:maxLines="1"
         android:inputType="textPersonName"
-        android:hint="Type surname"
+        android:hint="Type mail"
         android:background="@drawable/activity_user_list_filter_input"/>
 
     <TextView
