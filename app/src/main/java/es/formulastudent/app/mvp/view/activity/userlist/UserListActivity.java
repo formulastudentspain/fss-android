@@ -49,7 +49,6 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
         presenter.getUserList();
     }
 
-
     /**
      * Inject dependencies method
      * @param appComponent
@@ -67,6 +66,7 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
     @Override
     protected void onResume(){
         super.onResume();
+        presenter.getUserList();
 
     }
 
