@@ -2,24 +2,31 @@ package es.formulastudent.app.mvp.view.activity.userlist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.RecyclerViewClickListener;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class UserListPresenter implements RecyclerViewClickListener {
 
@@ -30,14 +37,17 @@ public class UserListPresenter implements RecyclerViewClickListener {
     //Data
     private List<User> allUserList = new ArrayList<>();
     private List<User> filteredUserList = new ArrayList<>();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private RecyclerView recyclerView;
+
+    private FirebaseFirestore db;
+
 
 
     public UserListPresenter(UserListPresenter.View view, Context context) {
         this.view = view;
         this.context = context;
+        db = FirebaseFirestore.getInstance();
     }
 
 
@@ -52,30 +62,43 @@ public class UserListPresenter implements RecyclerViewClickListener {
         this.view.refreshUserItems();
     }
 
-    public List<User> getUserList() {
+
+
+    public List<User> retrieveUsers(){
+       //Result list
         final List<User> items = new ArrayList<>();
-        db.collection("UserInfo").get()
+
+        view.showLoading();
+
+        Query query = db.collection(User.COLLECTION_ID);
+
+        query.orderBy(User.NAME, Query.Direction.ASCENDING)
+                .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+
+                            //Add results to list
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Log.d(TAG, document.getId() + " => " + document.getData());
-                                items.add(new User(document));
-                                //Update the itemList
-                                updateUserListItems(items);
+                                User user = new User(document);
+                                items.add(user);
                             }
+
+                            //Update view with new results
+                            updateUserListItems(items);
+
                         } else {
-                            view.showMessage("Error on loading user List");
+                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-        return filteredUserList;
+
+
+        return items;
     }
 
-    public void setRecyclerView(RecyclerView recyclerView){
-        this.recyclerView = recyclerView;
-    }
+
 
 
     public void filterUsers(String query){
@@ -107,31 +130,19 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
     }
 
-    public List<User> getUserItemList() {
-        return filteredUserList;
-    }
 
+    public void createUser(User user){
 
-//TODO este método estaba en el presenter del Briefing, en verdad está creando en "UserInfo"
-/*
-    public void createRegistry(User user){
-        BriefingRegister newRegister = new BriefingRegister(UUID.randomUUID(), Calendar.getInstance().getTime(),user);
-        filteredBriefingRegisterList.add(newRegister); //quizas no cumpla el filtro y no hay que añadirlo
-        allBriefingRegisterList.add(newRegister);
+        Map<String, Object> docData = user.toDocumentData();
 
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("mail", user.getMail());
-        docData.put("name", user.getName());
-        docData.put("preScrutineering", false);
-        docData.put("role", "default");
-        docData.put("tagNFC", user.getNFCTag());
-
-        db.collection("UserInfo").document(user.getUid())
+        db.collection(User.COLLECTION_ID)
+                .document(user.getID())
                 .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        //success
+                        //Update list
+                        retrieveUsers();
                         view.showMessage("User registered successfully!");
                     }
                 })
@@ -142,11 +153,80 @@ public class UserListPresenter implements RecyclerViewClickListener {
                         view.showMessage("Failed to save data to db");
                     }
                 });
-
-        //Update the list with the new registry
-        updateBriefingRegisters(filteredBriefingRegisterList);
     }
-*/
+
+
+
+    public List<User> getUserItemList() {
+        return filteredUserList;
+    }
+
+    public void setRecyclerView(RecyclerView recyclerView){
+        this.recyclerView = recyclerView;
+    }
+
+
+    public void retrieveCreateUserDialogData() {
+        //First retrieve roles, then retrieve teams
+        retrieveRoles();
+    }
+
+    private void retrieveRoles(){
+        view.showLoading();
+
+        db.collection(UserRole.COLLECTION_ID)
+                .orderBy(UserRole.NAME, Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            List<UserRole> roles = new ArrayList<>();
+
+                            //Add results to list
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                UserRole role = new UserRole(document);
+                                roles.add(role);
+                            }
+
+                            //Retrieve Teams now
+                            retrieveTeams(roles);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void retrieveTeams(final List<UserRole> roles){
+        view.showLoading();
+
+        db.collection(Team.COLLECTION_ID)
+                .orderBy(Team.NAME, Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            List<Team> teams = new ArrayList<>();
+
+                            //Add results to list
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Team team = new Team(document);
+                                teams.add(team);
+                            }
+
+                            view.showCreateUserDialog(teams, roles);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
 
 
     public interface View {
@@ -176,6 +256,13 @@ public class UserListPresenter implements RecyclerViewClickListener {
          * Hide loading
          */
         void hideLoading();
+
+        /**
+         * Show create user dialog
+         * @param teams
+         * @param roles
+         */
+        void showCreateUserDialog(List<Team> teams, List<UserRole> roles);
     }
 
 }

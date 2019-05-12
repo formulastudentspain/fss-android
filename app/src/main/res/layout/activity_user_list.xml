@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
-            app:singleSelection="true">
+            app:singleSelection="true"
+            android:visibility="gone">
 
             <com.google.android.material.chip.Chip
                 style="@style/Widget.MaterialComponents.Chip.Choice"

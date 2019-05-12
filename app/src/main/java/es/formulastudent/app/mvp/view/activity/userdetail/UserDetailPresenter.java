@@ -102,7 +102,6 @@ public class UserDetailPresenter {
         final StorageReference userProfile = storageReference.child(user.getID()+"_ProfilePhoto.jpg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        view.showLoading();
 
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -112,7 +111,6 @@ public class UserDetailPresenter {
             @Override
             public void onFailure(@NonNull Exception e) {
                 //on failure
-                view.hideLoadingIcon();
                 view.showMessage("Error uploading profile picture");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -126,11 +124,9 @@ public class UserDetailPresenter {
                             Uri path = task.getResult();
                             updatePhotoUrl(actualUser, path);
                             view.updateProfilePicture(profileImage);
-                            //TODO update User List
                         } else {
                             view.showMessage("Error updating profile picture.");
                         }
-                        view.hideLoadingIcon();
                     }
                 });
             }

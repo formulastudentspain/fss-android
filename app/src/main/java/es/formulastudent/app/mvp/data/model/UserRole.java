@@ -1,30 +1,45 @@
 package es.formulastudent.app.mvp.data.model;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.io.Serializable;
 
-public enum UserRole implements Serializable {
+public class UserRole implements Serializable {
 
-        DRIVER ("Driver", 1),
-        STAFF ("Staff", 2);
+        public static String COLLECTION_ID = "USER_ROLE";
 
-        private final String value;
-        private final int code;
+        //Database constants
+        public static final String NAME = "name";
 
-        UserRole(String value, int code) {
-                this.value = value;
-                this.code = code;
+        private String ID;
+        private String name;
+
+
+        public UserRole(String ID, String name) {
+                this.ID = ID;
+                this.name = name;
         }
 
-        public String getValue() {
-                return value;
+        public UserRole(DocumentSnapshot object){
+                this.name = object.getString(User.NAME);
         }
 
-        public int getCode() {
-                return code;
+        public UserRole() {
         }
 
-        @Override
-        public String toString(){
-                return getValue();
+        public String getID() {
+                return ID;
+        }
+
+        public void setID(String ID) {
+                this.ID = ID;
+        }
+
+        public String getName() {
+                return name;
+        }
+
+        public void setName(String name) {
+                this.name = name;
         }
 }

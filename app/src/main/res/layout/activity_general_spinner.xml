@@ -9,12 +9,12 @@
 
 
     <TextView
-        android:id="@+id/spinner_team_name"
+        android:id="@+id/spinner_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:textSize="18sp"
-        android:text="Team name"
+        android:text="Name"
         />
 
 </LinearLayout>
