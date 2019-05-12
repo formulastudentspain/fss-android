@@ -34,6 +34,7 @@
         </Spinner>
 
         <com.google.android.material.chip.ChipGroup
+            android:id="@+id/briefing_chip_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -41,6 +42,7 @@
             app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/briefing_chip_wed"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,6 +50,7 @@
                 android:text="Wednesday"/>
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/briefing_chip_thu"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -55,6 +58,7 @@
                 android:text="Thursday"/>
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/briefing_chip_fri"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,6 +66,7 @@
                 android:text="Friday"/>
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/briefing_chip_sat"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,6 +74,7 @@
                 android:text="Saturday"/>
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/briefing_chip_sun"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,6 +82,7 @@
                 android:text="Sunday"/>
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/briefing_chip_all"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

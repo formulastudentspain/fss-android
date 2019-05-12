@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
+import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.briefing.dialog.ConfirmBriefingRegisterDialog;
 
@@ -41,13 +42,19 @@ public class BriefingPresenter {
     List<BriefingRegister> allBriefingRegisterList = new ArrayList<>();
     List<BriefingRegister> filteredBriefingRegisterList = new ArrayList<>();
 
+    //Selected chip to filter
+    private Date selectedDateFrom;
+    private Date selectedDateTo;
+
+    //Team
+    private String selectedTeamID;
+
 
     public BriefingPresenter(BriefingPresenter.View view, Context context) {
         this.view = view;
         this.context = context;
         db = FirebaseFirestore.getInstance();
     }
-
 
 
     public void createRegistry(User user){
@@ -91,8 +98,22 @@ public class BriefingPresenter {
 
         view.showLoading();
 
-        //Firebase call to retrieve Briefing registers
-        db.collection(BriefingRegister.COLLECTION_ID).get()
+        Query query = db.collection(BriefingRegister.COLLECTION_ID);
+
+        //Competition day filter
+        if(selectedDateFrom != null && selectedDateTo != null){
+            query = query.whereLessThanOrEqualTo(BriefingRegister.DATE, selectedDateTo);
+            query = query.whereGreaterThan(BriefingRegister.DATE, selectedDateFrom);
+        }
+
+        //Teams filter
+        if(selectedTeamID != null && !selectedTeamID.equals("-1")){
+            query = query.whereEqualTo(BriefingRegister.TEAM_ID, selectedTeamID);
+        }
+
+
+        query.orderBy(BriefingRegister.DATE, Query.Direction.DESCENDING)
+                .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -112,6 +133,8 @@ public class BriefingPresenter {
                         }
                     }
                 });
+
+
         return items;
     }
 
@@ -147,11 +170,70 @@ public class BriefingPresenter {
         });
     }
 
+    public List<Team> retrieveTeams(){
+
+        //Result list
+        final List<Team> teams = new ArrayList<>();
+
+        view.showLoading();
+
+        db.collection(Team.COLLECTION_ID)
+                .orderBy(Team.NAME, Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            //Add All option
+                            Team teamAll = new Team("-1", "All");
+                            teams.add(teamAll);
+
+                            //Add results to list
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Team team = new Team(document);
+                                teams.add(team);
+                            }
+
+                            view.initializeTeamsSpinner(teams);
+
+                        } else {
+                            Log.d(TAG, "Error getting teams: ", task.getException());
+                        }
+                    }
+                });
+
+        return teams;
+    }
+
 
     public List<BriefingRegister> getBriefingRegisterList() {
         return filteredBriefingRegisterList;
     }
 
+    public Date getSelectedDateFrom() {
+        return selectedDateFrom;
+    }
+
+    public void setSelectedDateFrom(Date selectedDateFrom) {
+        this.selectedDateFrom = selectedDateFrom;
+    }
+
+    public Date getSelectedDateTo() {
+        return selectedDateTo;
+    }
+
+    public void setSelectedDateTo(Date selectedDateTo) {
+        this.selectedDateTo = selectedDateTo;
+    }
+
+    public String getSelectedTeamID() {
+        return selectedTeamID;
+    }
+
+    public void setSelectedTeamID(String selectedTeamID) {
+        this.selectedTeamID = selectedTeamID;
+    }
 
     public interface View {
 
@@ -182,6 +264,11 @@ public class BriefingPresenter {
          * Refresh items in list
          */
         void refreshBriefingRegisterItems();
+
+        /**
+         * Initialize teams spinner
+         */
+        void initializeTeamsSpinner(List<Team> teams);
     }
 
 }

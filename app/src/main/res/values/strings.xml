@@ -56,5 +56,14 @@
     <!-- General activity -->
     <string name="general_activity_dialog_loading_title">Loading...</string>
 
+    <!-- Competition days -->
+    <string name="competition_day_wed">21/09/2019</string>
+    <string name="competition_day_thu">22/09/2019</string>
+    <string name="competition_day_fri">23/09/2019</string>
+    <string name="competition_day_sat">11/05/2019</string>
+    <string name="competition_day_sun">12/05/2019</string>
+
+
+
 
 </resources>

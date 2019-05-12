@@ -7,7 +7,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -41,6 +40,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
     //Loading dialog
     GeneralActivityLoadingDialog loadingDialog;
+    boolean isLoadingDisplayed = false;
 
 
     @Override
@@ -351,17 +351,18 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         FragmentTransaction ft = fm.beginTransaction();
 
         //Only show loading if it not already on screen
-        Fragment fragment = fm.findFragmentByTag("loading_dialog");
-        if(fragment == null){
+        if(!isLoadingDisplayed){
             ft.add(loadingDialog, "loading_dialog");
             ft.commitAllowingStateLoss();
+            isLoadingDisplayed = true;
         }
 
     }
 
     public void hideLoadingDialog(){
-       if(loadingDialog!=null){
+       if(loadingDialog != null){
             loadingDialog.dismiss();
+            isLoadingDisplayed = false;
         }
     }
 
