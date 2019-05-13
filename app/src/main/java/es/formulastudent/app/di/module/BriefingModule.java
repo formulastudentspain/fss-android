@@ -4,9 +4,13 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import es.formulastudent.app.di.module.business.BusinessModule;
+import es.formulastudent.app.mvp.data.api.briefing.BriefingBO;
+import es.formulastudent.app.mvp.data.api.team.TeamBO;
+import es.formulastudent.app.mvp.data.api.user.UserBO;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingPresenter;
 
-@Module(includes = {ContextModule.class})
+@Module(includes = {ContextModule.class, BusinessModule.class})
 public class BriefingModule {
 
     private BriefingPresenter.View view;
@@ -21,8 +25,9 @@ public class BriefingModule {
     }
 
     @Provides
-    public BriefingPresenter providePresenter(BriefingPresenter.View categoryView, Context context) {
-        return new BriefingPresenter(categoryView, context);
+    public BriefingPresenter providePresenter(BriefingPresenter.View categoryView, Context context,
+                                              TeamBO teamBO, BriefingBO briefingBO, UserBO userBO) {
+        return new BriefingPresenter(categoryView, context, teamBO, briefingBO, userBO);
     }
 
 

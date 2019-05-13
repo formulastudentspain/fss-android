@@ -2,32 +2,22 @@ package es.formulastudent.app.mvp.view.activity.briefing;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import es.formulastudent.app.mvp.data.api.BusinessCallback;
+import es.formulastudent.app.mvp.data.api.ResponseDTO;
+import es.formulastudent.app.mvp.data.api.briefing.BriefingBO;
+import es.formulastudent.app.mvp.data.api.team.TeamBO;
+import es.formulastudent.app.mvp.data.api.user.UserBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.briefing.dialog.ConfirmBriefingRegisterDialog;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 public class BriefingPresenter {
@@ -35,7 +25,9 @@ public class BriefingPresenter {
     //Dependencies
     private View view;
     private Context context;
-    private FirebaseFirestore db;
+    private TeamBO teamBO;
+    private BriefingBO briefingBO;
+    private UserBO userBO;
 
 
     //Data
@@ -50,92 +42,59 @@ public class BriefingPresenter {
     private String selectedTeamID;
 
 
-    public BriefingPresenter(BriefingPresenter.View view, Context context) {
+    public BriefingPresenter(BriefingPresenter.View view, Context context, TeamBO teamBO, BriefingBO briefingBO, UserBO userBO) {
         this.view = view;
         this.context = context;
-        db = FirebaseFirestore.getInstance();
+        this.teamBO = teamBO;
+        this.briefingBO = briefingBO;
+        this.userBO = userBO;
+    }
+
+    /**
+     * Create Briefing registry
+     * @param user
+     */
+     public void createRegistry(User user){
+
+        //Show loading
+        view.showLoading();
+
+        briefingBO.createBriefingRegistry(user, new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                retrieveBriefingRegisterList();
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO mostrar errores
+            }
+        });
     }
 
 
-    public void createRegistry(User user){
+    /**
+     * Retrieve Briefing registers
+     */
+     void retrieveBriefingRegisterList() {
 
-        //Get current date
-        Date registerDate = Calendar.getInstance().getTime();
-
-        //Show loading before asynchronous call
+        //Show loading
         view.showLoading();
 
-        final BriefingRegister briefingRegister = new BriefingRegister(user, registerDate);
-        db.collection(BriefingRegister.COLLECTION_ID)
-                .document(briefingRegister.getID())
-                .set(briefingRegister.toObjectData())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        //success
-                        view.showMessage("User registered successfully!");
+        //Call Briefing business
+         briefingBO.retrieveBriefingRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, new BusinessCallback() {
 
-                        //Retrieve again the list to see updated results
-                        retrieveBriefingRegisterList();
+             @Override
+             public void onSuccess(ResponseDTO responseDTO) {
+                     List<BriefingRegister> results = (List<BriefingRegister>) responseDTO.getData();
+                     updateBriefingRegisters(results);
+             }
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //fail
-                        view.showMessage("Failed to save data to db");
-                    }
-                });
-    }
-
-
-
-    public List<BriefingRegister> retrieveBriefingRegisterList() {
-
-        //Result list
-        final List<BriefingRegister> items = new ArrayList<>();
-
-        view.showLoading();
-
-        Query query = db.collection(BriefingRegister.COLLECTION_ID);
-
-        //Competition day filter
-        if(selectedDateFrom != null && selectedDateTo != null){
-            query = query.whereLessThanOrEqualTo(BriefingRegister.DATE, selectedDateTo);
-            query = query.whereGreaterThan(BriefingRegister.DATE, selectedDateFrom);
-        }
-
-        //Teams filter
-        if(selectedTeamID != null && !selectedTeamID.equals("-1")){
-            query = query.whereEqualTo(BriefingRegister.TEAM_ID, selectedTeamID);
-        }
-
-
-        query.orderBy(BriefingRegister.DATE, Query.Direction.DESCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            //Add results to list
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                BriefingRegister briefingRegister = new BriefingRegister(document);
-                                items.add(briefingRegister);
-                            }
-
-                            //Update view with new results
-                            updateBriefingRegisters(items);
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-
-        return items;
+             @Override
+             public void onFailure(ResponseDTO responseDTO) {
+                //TODO mostrar mensajes
+             }
+         });
     }
 
 
@@ -151,59 +110,58 @@ public class BriefingPresenter {
     }
 
 
+    /**
+     * Retrieve user by NFC tag after read
+     * @param tag
+     */
+    void onNFCTagDetected(String tag){
 
-    public void onNFCTagDetected(String tag){
-        final String tagNFC = tag;
-        CollectionReference userRef = db.collection(User.COLLECTION_ID);
-        Query userFromNFC = userRef.whereEqualTo(User.TAG_NFC, tagNFC);
-        userFromNFC.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        userBO.retrieveUserByNFCTag(tag, new BusinessCallback() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                //success
-                if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                    User user = new User(queryDocumentSnapshots.getDocuments().get(0));
-                    FragmentManager fm = ((BriefingActivity)view.getActivity()).getSupportFragmentManager();
-                    ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog.newInstance(BriefingPresenter.this, user);
-                    createUserDialog.show(fm, "fragment_briefing_confirm");
-                }
+            public void onSuccess(ResponseDTO responseDTO) {
+                User user = (User)responseDTO.getData();
+
+                FragmentManager fm = ((BriefingActivity)view.getActivity()).getSupportFragmentManager();
+                ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog.newInstance(BriefingPresenter.this, user);
+                createUserDialog.show(fm, "fragment_briefing_confirm");
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO mostrar mensajes
             }
         });
     }
 
-    public List<Team> retrieveTeams(){
 
-        //Result list
-        final List<Team> teams = new ArrayList<>();
+    /**
+     * Retrieve teams from database
+     */
+    void retrieveTeams(){
 
+        //Show loading
         view.showLoading();
 
-        db.collection(Team.COLLECTION_ID)
-                .orderBy(Team.NAME, Query.Direction.ASCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
+        //Call business to retrieve teams
+        teamBO.retrieveAllTeams(new BusinessCallback() {
 
-                            //Add All option
-                            Team teamAll = new Team("-1", "All");
-                            teams.add(teamAll);
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                List<Team> teams = (List<Team>)responseDTO.getData();
 
-                            //Add results to list
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Team team = new Team(document);
-                                teams.add(team);
-                            }
+                //Add All option
+                Team teamAll = new Team("-1", "All");
+                teams.add(0, teamAll);
 
-                            view.initializeTeamsSpinner(teams);
+                view.initializeTeamsSpinner(teams);
+            }
 
-                        } else {
-                            Log.d(TAG, "Error getting teams: ", task.getException());
-                        }
-                    }
-                });
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO mostrar mensajes de error
+            }
 
-        return teams;
+        });
     }
 
 

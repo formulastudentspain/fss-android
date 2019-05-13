@@ -33,8 +33,8 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.briefing.recyclerview.BriefingRegistersAdapter;
-import es.formulastudent.app.mvp.view.activity.general.spinneradapters.TeamsSpinnerAdapter;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.general.spinneradapters.TeamsSpinnerAdapter;
 
 
 public class BriefingActivity extends GeneralActivity implements ChipGroup.OnCheckedChangeListener, BriefingPresenter.View, View.OnClickListener {
