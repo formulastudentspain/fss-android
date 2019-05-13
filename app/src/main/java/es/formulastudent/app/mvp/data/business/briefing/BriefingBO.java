@@ -1,8 +1,8 @@
-package es.formulastudent.app.mvp.data.api.briefing;
+package es.formulastudent.app.mvp.data.business.briefing;
 
 import java.util.Date;
 
-import es.formulastudent.app.mvp.data.api.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.model.User;
 
 public interface BriefingBO {

@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import es.formulastudent.app.mvp.data.api.BusinessCallback;
-import es.formulastudent.app.mvp.data.api.ResponseDTO;
-import es.formulastudent.app.mvp.data.api.briefing.BriefingBO;
-import es.formulastudent.app.mvp.data.api.team.TeamBO;
-import es.formulastudent.app.mvp.data.api.user.UserBO;
+import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
+import es.formulastudent.app.mvp.data.business.team.TeamBO;
+import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;

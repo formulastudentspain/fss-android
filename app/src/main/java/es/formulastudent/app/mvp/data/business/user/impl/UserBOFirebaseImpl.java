@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.data.api.user.impl;
+package es.formulastudent.app.mvp.data.business.user.impl;
 
 import androidx.annotation.NonNull;
 
@@ -7,9 +7,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import es.formulastudent.app.mvp.data.api.BusinessCallback;
-import es.formulastudent.app.mvp.data.api.ResponseDTO;
-import es.formulastudent.app.mvp.data.api.user.UserBO;
+import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 
 public class UserBOFirebaseImpl implements UserBO {

@@ -1,6 +1,6 @@
-package es.formulastudent.app.mvp.data.api.user;
+package es.formulastudent.app.mvp.data.business.user;
 
-import es.formulastudent.app.mvp.data.api.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.BusinessCallback;
 
 public interface UserBO {
 

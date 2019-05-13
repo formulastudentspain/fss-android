@@ -1,6 +1,6 @@
-package es.formulastudent.app.mvp.data.api.team;
+package es.formulastudent.app.mvp.data.business.team;
 
-import es.formulastudent.app.mvp.data.api.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.BusinessCallback;
 
 public interface TeamBO {
 

@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.data.api.team.impl;
+package es.formulastudent.app.mvp.data.business.team.impl;
 
 import androidx.annotation.NonNull;
 
@@ -12,9 +12,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.formulastudent.app.mvp.data.api.BusinessCallback;
-import es.formulastudent.app.mvp.data.api.ResponseDTO;
-import es.formulastudent.app.mvp.data.api.team.TeamBO;
+import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Team;
 
 public class TeamBOFirebaseImpl implements TeamBO {
