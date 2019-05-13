@@ -28,7 +28,7 @@ import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerBriefingComponent;
-import es.formulastudent.app.di.module.BriefingModule;
+import es.formulastudent.app.di.module.activity.BriefingModule;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;

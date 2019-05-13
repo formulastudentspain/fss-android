@@ -3,7 +3,7 @@ package es.formulastudent.app.di.component;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import es.formulastudent.app.di.module.BriefingModule;
+import es.formulastudent.app.di.module.activity.BriefingModule;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingPresenter;
 

@@ -21,7 +21,7 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerLoginComponent;
 import es.formulastudent.app.di.module.ContextModule;
-import es.formulastudent.app.di.module.LoginModule;
+import es.formulastudent.app.di.module.activity.LoginModule;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
 

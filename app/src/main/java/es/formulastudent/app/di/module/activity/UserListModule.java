@@ -1,9 +1,10 @@
-package es.formulastudent.app.di.module;
+package es.formulastudent.app.di.module.activity;
 
 import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineHelper;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelinePresenter;
 import es.formulastudent.app.mvp.view.activity.userlist.UserListPresenter;

@@ -22,7 +22,7 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerUserListComponent;
 import es.formulastudent.app.di.module.ContextModule;
-import es.formulastudent.app.di.module.UserListModule;
+import es.formulastudent.app.di.module.activity.UserListModule;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
