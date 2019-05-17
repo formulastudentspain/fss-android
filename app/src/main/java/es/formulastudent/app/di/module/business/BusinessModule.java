@@ -10,6 +10,8 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.team.impl.TeamBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.business.user.impl.UserBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
+import es.formulastudent.app.mvp.data.business.userrole.impl.UserRoleBOFirebaseImpl;
 
 @Module(includes = {FirebaseModule.class})
 public class BusinessModule {
@@ -46,5 +48,14 @@ public class BusinessModule {
         return new UserBOFirebaseImpl(firebaseFirestore);
     }
 
+    /**
+     * Provide User Role business
+     * @param firebaseFirestore
+     * @return
+     */
+    @Provides
+    public UserRoleBO provideUserRoleBO(FirebaseFirestore firebaseFirestore) {
+        return new UserRoleBOFirebaseImpl(firebaseFirestore);
+    }
 
 }

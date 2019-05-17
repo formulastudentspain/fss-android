@@ -178,7 +178,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
     public List<User> getUserItemList() {
         return filteredUserList;
     }
-    
+
     public void retrieveCreateUserDialogData() {
         //First retrieve roles, then retrieve teams
         retrieveRoles();
