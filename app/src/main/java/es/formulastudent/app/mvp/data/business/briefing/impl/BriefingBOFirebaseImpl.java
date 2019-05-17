@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
@@ -33,7 +34,7 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
     @Override
     public void retrieveBriefingRegisters(Date from, Date to, String teamID, final BusinessCallback callback) {
 
-        Query query = firebaseFirestore.collection(BriefingRegister.COLLECTION_ID);
+        Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_BRIEFING);
 
         //Competition day filter
         if(from != null && to != null){
@@ -84,7 +85,7 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
         Date registerDate = Calendar.getInstance().getTime();
         BriefingRegister briefingRegister = new BriefingRegister(user, registerDate);
 
-        firebaseFirestore.collection(BriefingRegister.COLLECTION_ID)
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_BRIEFING)
                 .document(briefingRegister.getID())
                 .set(briefingRegister.toObjectData())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

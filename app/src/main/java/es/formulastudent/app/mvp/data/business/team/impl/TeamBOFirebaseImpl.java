@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Team;
@@ -28,7 +29,7 @@ public class TeamBOFirebaseImpl implements TeamBO {
     @Override
     public void retrieveAllTeams(final BusinessCallback callback) {
 
-        firebaseFirestore.collection(Team.COLLECTION_ID)
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
                 .orderBy(Team.NAME, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

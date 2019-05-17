@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
@@ -25,7 +26,7 @@ public class UserBOFirebaseImpl implements UserBO {
 
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        firebaseFirestore.collection(User.COLLECTION_ID)
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
                 .whereEqualTo(User.TAG_NFC, tag)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

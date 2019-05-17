@@ -10,6 +10,7 @@ public class User implements Serializable {
 
     public static String COLLECTION_ID = "UserInfo";
 
+
     //Database constants
     public static final String TEAM_ID = "teamID";
     public static final String TEAM = "team";
