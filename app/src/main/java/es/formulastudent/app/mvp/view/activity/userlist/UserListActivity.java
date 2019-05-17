@@ -94,7 +94,6 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
         recyclerView.setAdapter(userListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        presenter.setRecyclerView(recyclerView);
 
         //Add user button
         buttonAddUser = findViewById(R.id.button_add_user);

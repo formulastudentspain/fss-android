@@ -2,52 +2,42 @@ package es.formulastudent.app.mvp.view.activity.userlist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.team.TeamBO;
+import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.RecyclerViewClickListener;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 public class UserListPresenter implements RecyclerViewClickListener {
 
     //Dependencies
     private View view;
     private Context context;
+    private UserBO userBO;
+    private TeamBO teamBO;
+    private UserRoleBO userRoleBO;
 
     //Data
     private List<User> allUserList = new ArrayList<>();
     private List<User> filteredUserList = new ArrayList<>();
 
-    private RecyclerView recyclerView;
-
-    private FirebaseFirestore db;
 
 
-
-    public UserListPresenter(UserListPresenter.View view, Context context) {
+    public UserListPresenter(UserListPresenter.View view, Context context, UserBO userBO, TeamBO teamBO, UserRoleBO userRoleBO) {
         this.view = view;
         this.context = context;
-        db = FirebaseFirestore.getInstance();
+        this.userBO = userBO;
+        this.teamBO = teamBO;
+        this.userRoleBO = userRoleBO;
     }
 
 
@@ -64,38 +54,27 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
 
 
-    public List<User> retrieveUsers(){
-       //Result list
-        final List<User> items = new ArrayList<>();
+    void retrieveUsers(){
 
+        //show loading
         view.showLoading();
 
-        Query query = db.collection(User.COLLECTION_ID);
+        //call business to retrieve users
+        userBO.retrieveUsers(new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
 
-        query.orderBy(User.NAME, Query.Direction.ASCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
+                List<User> users = (List<User>) responseDTO.getData();
 
-                            //Add results to list
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                User user = new User(document);
-                                items.add(user);
-                            }
+                //Update view with new results
+                updateUserListItems(users);
+            }
 
-                            //Update view with new results
-                            updateUserListItems(items);
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-
-        return items;
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO
+            }
+        });
     }
 
 
@@ -133,99 +112,76 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
     public void createUser(User user){
 
-        Map<String, Object> docData = user.toDocumentData();
+        userBO.createUser(user, new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                //Update list
+                retrieveUsers();
+                view.showMessage("User registered successfully!");
+            }
 
-        db.collection(User.COLLECTION_ID)
-                .document(user.getID())
-                .set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        //Update list
-                        retrieveUsers();
-                        view.showMessage("User registered successfully!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //fail
-                        view.showMessage("Failed to save data to db");
-                    }
-                });
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+               //TODO
+            }
+        });
     }
 
+
+    private void retrieveRoles(){
+
+        //Show loading
+        view.showLoading();
+
+        //Call business to retrieve user roles
+        userRoleBO.retrieveUserRoles(new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+
+                List<UserRole> roles = (List<UserRole>) responseDTO.getData();
+
+                //Retrieve Teams now
+                retrieveTeams(roles);
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO
+            }
+        });
+    }
+
+
+
+    private void retrieveTeams(final List<UserRole> roles){
+
+        //Show loading
+        view.showLoading();
+
+        //Call business to retrieve teams
+        teamBO.retrieveAllTeams(new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+
+                List<Team> teams = (List<Team>) responseDTO.getData();
+                view.showCreateUserDialog(teams, roles);
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO
+            }
+        });
+    }
 
 
     public List<User> getUserItemList() {
         return filteredUserList;
     }
-
-    public void setRecyclerView(RecyclerView recyclerView){
-        this.recyclerView = recyclerView;
-    }
-
-
+    
     public void retrieveCreateUserDialogData() {
         //First retrieve roles, then retrieve teams
         retrieveRoles();
-    }
-
-    private void retrieveRoles(){
-        view.showLoading();
-
-        db.collection(UserRole.COLLECTION_ID)
-                .orderBy(UserRole.NAME, Query.Direction.ASCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            List<UserRole> roles = new ArrayList<>();
-
-                            //Add results to list
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                UserRole role = new UserRole(document);
-                                roles.add(role);
-                            }
-
-                            //Retrieve Teams now
-                            retrieveTeams(roles);
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
-
-    private void retrieveTeams(final List<UserRole> roles){
-        view.showLoading();
-
-        db.collection(Team.COLLECTION_ID)
-                .orderBy(Team.NAME, Query.Direction.ASCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            List<Team> teams = new ArrayList<>();
-
-                            //Add results to list
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Team team = new Team(document);
-                                teams.add(team);
-                            }
-
-                            view.showCreateUserDialog(teams, roles);
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
     }
 
 
