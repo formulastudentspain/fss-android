@@ -75,5 +75,12 @@
     <string name="acceleration_activity_dialog_confirm_button_confirm">Confirm</string>
     <string name="acceleration_activity_dialog_confirm_button_cancel">Cancel</string>
 
+    <!-- Exit dialog -->
+    <string name="exit_dialog_title">Exit</string>
+    <string name="exit_dialog_message">Are you sure you want to exit?</string>
+    <string name="exit_dialog_positive_button">Exit</string>
+
+
+
 
 </resources>
