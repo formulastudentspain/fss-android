@@ -77,9 +77,9 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             //Correct login
+            createMessage("Correct Login");
         } else{
-            //failed Login
-            //TODO redirigir directamente a la activity principal
+            //No User Logged
         }
 
     }
