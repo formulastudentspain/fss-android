@@ -8,7 +8,6 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -104,11 +103,6 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
 
 
     @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void finishView() {
 
     }
@@ -127,7 +121,6 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     public void updateNFCInformation(String TAG) {
         userNFCImage.setImageResource(R.drawable.ic_user_nfc_registered);
         userNFCTag.setText(TAG);
-        Toast.makeText(this, "User successfully registered", Toast.LENGTH_SHORT).show();
     }
 
 

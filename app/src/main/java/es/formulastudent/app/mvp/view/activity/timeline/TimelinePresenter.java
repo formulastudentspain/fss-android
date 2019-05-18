@@ -125,7 +125,7 @@ public class TimelinePresenter implements View.OnClickListener {
          * Show message to user
          * @param message
          */
-        void showMessage(String message);
+        void createMessage(String message);
 
         /**
          * Finish current activity

@@ -78,12 +78,12 @@ public class LoginPresenter {
         authBO.resetPassword(mail, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                view.showMessage("Mail Sent."); //TODO Mirar la opcion de plantillas de correo electronico: https://support.google.com/firebase/answer/7000714?hl=es
+                view.createMessage("Mail Sent."); //TODO Mirar la opcion de plantillas de correo electronico: https://support.google.com/firebase/answer/7000714?hl=es
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO
+                //TODO failure Message
             }
         });
     }
@@ -131,10 +131,10 @@ public class LoginPresenter {
     public interface View {
 
         /**
-         * Show message to user
+         * Create Snackbar Message
          * @param message
          */
-        void showMessage(String message);
+        void createMessage(String message);
 
         /**
          * Finish current activity

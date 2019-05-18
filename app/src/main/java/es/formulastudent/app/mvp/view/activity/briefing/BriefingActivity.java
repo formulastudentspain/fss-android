@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -137,12 +136,6 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
         drawer.setSelection(mDrawerIdentifier, false);
     }
 
-
-    @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void finishView() {
 
@@ -236,7 +229,7 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
                 presenter.setSelectedDateTo(calTo.getTime());
 
             }catch (ParseException pe){
-                showMessage("Error parsing dates");
+                createMessage("Error parsing dates");
             }
         }
 
