@@ -51,7 +51,7 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View rootView = inflater.inflate(R.layout.dialog_briefing_confirmation, null);
+        View rootView = inflater.inflate(R.layout.dialog_acceleration_confirmation, null);
 
         // Get view components
         userName = rootView.findViewById(R.id.user_name);

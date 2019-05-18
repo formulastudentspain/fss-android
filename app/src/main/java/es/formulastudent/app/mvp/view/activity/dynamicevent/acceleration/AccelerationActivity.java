@@ -56,11 +56,11 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_briefing);
+        setContentView(R.layout.activity_acceleration);
         super.onCreate(savedInstanceState);
 
         initViews();
-        presenter.retrieveBriefingRegisterList();
+        presenter.retrieveAccelerationRegisterList();
     }
 
     @Override
@@ -90,21 +90,21 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
 
         //Recycler view
         recyclerView = findViewById(R.id.recyclerView);
-        registersAdapter = new AccelerationRegistersAdapter(presenter.getBriefingRegisterList(), this);
+        registersAdapter = new AccelerationRegistersAdapter(presenter.getAccelerationRegisterList(), this);
         recyclerView.setAdapter(registersAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        //Add briefing register button
-        buttonAddRegister = findViewById(R.id.button_add_briefing_register);
+        //Add acceleration register button
+        buttonAddRegister = findViewById(R.id.button_add_acceleration_register);
         buttonAddRegister.setOnClickListener(this);
 
         //Teams Spinner
-        teamsSpinner = findViewById(R.id.briefing_team_spinner);
+        teamsSpinner = findViewById(R.id.acceleration_team_spinner);
         presenter.retrieveTeams();
 
         //Chip Group
-        dayListGroup = findViewById(R.id.briefing_chip_group);
+        dayListGroup = findViewById(R.id.acceleration_chip_group);
         dayListGroup.setOnCheckedChangeListener(this);
 
         //Add toolbar title
@@ -122,7 +122,7 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 Team team = teamsAdapter.getItem(position);
                 presenter.setSelectedTeamID(team.getID());
-                presenter.retrieveBriefingRegisterList();
+                presenter.retrieveAccelerationRegisterList();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapter) {  }
@@ -159,7 +159,7 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
     }
 
     @Override
-    public void refreshBriefingRegisterItems() {
+    public void refreshAccelerationRegisterItems() {
         registersAdapter.notifyDataSetChanged();
         this.hideLoading();
     }
@@ -167,7 +167,7 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.button_add_briefing_register){
+        if(view.getId() == R.id.button_add_acceleration_register){
             showLoading();
             Intent i = new Intent(this, NFCReaderActivity.class);
             startActivityForResult(i, NFC_REQUEST_CODE);
@@ -195,15 +195,15 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
         DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         String competitionDayStr = null;
 
-        if(selectedChipId == R.id.briefing_chip_wed){
+        if(selectedChipId == R.id.acceleration_chip_wed){
             competitionDayStr = getString(R.string.competition_day_wed);
-        }else if(selectedChipId == R.id.briefing_chip_thu){
+        }else if(selectedChipId == R.id.acceleration_chip_thu){
             competitionDayStr = getString(R.string.competition_day_thu);
-        }else if(selectedChipId == R.id.briefing_chip_fri){
+        }else if(selectedChipId == R.id.acceleration_chip_fri){
             competitionDayStr = getString(R.string.competition_day_fri);
-        }else if(selectedChipId == R.id.briefing_chip_sat){
+        }else if(selectedChipId == R.id.acceleration_chip_sat){
             competitionDayStr = getString(R.string.competition_day_sat);
-        }else if(selectedChipId == R.id.briefing_chip_sun){
+        }else if(selectedChipId == R.id.acceleration_chip_sun){
             competitionDayStr = getString(R.string.competition_day_sun);
         }else{ //all
             presenter.setSelectedDateFrom(null);
@@ -241,7 +241,7 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
         }
 
         //Update list
-        presenter.retrieveBriefingRegisterList();
+        presenter.retrieveAccelerationRegisterList();
 
     }
 }

@@ -15,18 +15,18 @@ import java.util.List;
 import java.util.Locale;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.BriefingRegister;
+import es.formulastudent.app.mvp.data.model.AccelerationRegister;
 
 
 public class AccelerationRegistersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<BriefingRegister> briefingRegisterList;
+    private List<AccelerationRegister> accelerationRegisterList;
     private Context context;
     private LayoutInflater mLayoutInflater;
 
 
-    public AccelerationRegistersAdapter(List<BriefingRegister> briefingRegisterList, Context context) {
-        this.briefingRegisterList = briefingRegisterList;
+    public AccelerationRegistersAdapter(List<AccelerationRegister> accelerationRegisterList, Context context) {
+        this.accelerationRegisterList = accelerationRegisterList;
         this.context = context;
     }
 
@@ -37,7 +37,7 @@ public class AccelerationRegistersAdapter extends RecyclerView.Adapter<RecyclerV
 
         View view;
 
-        view = mLayoutInflater.inflate(R.layout.activity_briefing_list_item, parent, false);
+        view = mLayoutInflater.inflate(R.layout.activity_acceleration_list_item, parent, false);
         return new AccelerationRegistersViewHolder(view);
 
     }
@@ -45,7 +45,7 @@ public class AccelerationRegistersAdapter extends RecyclerView.Adapter<RecyclerV
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        BriefingRegister register = briefingRegisterList.get(position);
+        AccelerationRegister register = accelerationRegisterList.get(position);
 
         DateFormat sdf = new SimpleDateFormat("EEE, dd MMM 'at' HH:mm", Locale.US);
 
@@ -60,7 +60,7 @@ public class AccelerationRegistersAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public int getItemCount() {
-        return briefingRegisterList.size();
+        return accelerationRegisterList.size();
     }
 
 }

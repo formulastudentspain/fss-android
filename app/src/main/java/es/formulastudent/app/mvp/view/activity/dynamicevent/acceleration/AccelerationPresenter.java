@@ -14,7 +14,7 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.acceleration.AccelerationBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
-import es.formulastudent.app.mvp.data.model.BriefingRegister;
+import es.formulastudent.app.mvp.data.model.AccelerationRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.dialog.ConfirmAccelerationRegisterDialog;
@@ -31,8 +31,8 @@ public class AccelerationPresenter {
 
 
     //Data
-    List<BriefingRegister> allBriefingRegisterList = new ArrayList<>();
-    List<BriefingRegister> filteredBriefingRegisterList = new ArrayList<>();
+    List<AccelerationRegister> allAccelerationRegisterList = new ArrayList<>();
+    List<AccelerationRegister> filteredAccelerationRegisterList = new ArrayList<>();
 
     //Selected chip to filter
     private Date selectedDateFrom;
@@ -51,7 +51,7 @@ public class AccelerationPresenter {
     }
 
     /**
-     * Create Briefing registry
+     * Create Acceleration registry
      * @param user
      */
      public void createRegistry(User user){
@@ -62,7 +62,7 @@ public class AccelerationPresenter {
         accelerationBO.createAccelerationRegistry(user, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                retrieveBriefingRegisterList();
+                retrieveAccelerationRegisterList();
             }
 
             @Override
@@ -74,20 +74,20 @@ public class AccelerationPresenter {
 
 
     /**
-     * Retrieve Briefing registers
+     * Retrieve Acceleration registers
      */
-     void retrieveBriefingRegisterList() {
+     void retrieveAccelerationRegisterList() {
 
         //Show loading
         view.showLoading();
 
-        //Call Briefing business
+        //Call Acceleration business
          accelerationBO.retrieveAccelerationRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, new BusinessCallback() {
 
              @Override
              public void onSuccess(ResponseDTO responseDTO) {
-                     List<BriefingRegister> results = (List<BriefingRegister>) responseDTO.getData();
-                     updateBriefingRegisters(results);
+                     List<AccelerationRegister> results = (List<AccelerationRegister>) responseDTO.getData();
+                     updateAccelerationRegisters(results);
              }
 
              @Override
@@ -98,15 +98,15 @@ public class AccelerationPresenter {
     }
 
 
-    public void updateBriefingRegisters(List<BriefingRegister> items){
+    public void updateAccelerationRegisters(List<AccelerationRegister> items){
         //Update all-register-list
-        this.allBriefingRegisterList.clear();
-        this.allBriefingRegisterList.addAll(items);
+        this.allAccelerationRegisterList.clear();
+        this.allAccelerationRegisterList.addAll(items);
 
         //Update and refresh filtered-register-list
-        this.filteredBriefingRegisterList.clear();
-        this.filteredBriefingRegisterList.addAll(items);
-        this.view.refreshBriefingRegisterItems();
+        this.filteredAccelerationRegisterList.clear();
+        this.filteredAccelerationRegisterList.addAll(items);
+        this.view.refreshAccelerationRegisterItems();
     }
 
 
@@ -123,7 +123,7 @@ public class AccelerationPresenter {
 
                 FragmentManager fm = ((AccelerationActivity)view.getActivity()).getSupportFragmentManager();
                 ConfirmAccelerationRegisterDialog createUserDialog = ConfirmAccelerationRegisterDialog.newInstance(AccelerationPresenter.this, user);
-                createUserDialog.show(fm, "fragment_briefing_confirm");
+                createUserDialog.show(fm, "fragment_acceleration_confirm");
             }
 
             @Override
@@ -165,8 +165,8 @@ public class AccelerationPresenter {
     }
 
 
-    public List<BriefingRegister> getBriefingRegisterList() {
-        return filteredBriefingRegisterList;
+    public List<AccelerationRegister> getAccelerationRegisterList() {
+        return filteredAccelerationRegisterList;
     }
 
     public Date getSelectedDateFrom() {
@@ -221,7 +221,7 @@ public class AccelerationPresenter {
         /**
          * Refresh items in list
          */
-        void refreshBriefingRegisterItems();
+        void refreshAccelerationRegisterItems();
 
         /**
          * Initialize teams spinner
