@@ -55,12 +55,12 @@ public class UserDetailPresenter {
                         userRef.update("tagNFC", tagNFC).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                view.showMessage("tag NFC updated Correctly");
+                                view.createMessage("User successfully registered");
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                view.showMessage("error on update NFC Tag");
+                                view.createMessage("Error on update NFC Tag");
                             }
                         });
                     } else {
@@ -83,7 +83,7 @@ public class UserDetailPresenter {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         //fail
-                                        view.showMessage("Failed to save data to db");
+                                        view.createMessage("Failed to save data to db");
                                     }
                                 });
                     }
@@ -111,7 +111,7 @@ public class UserDetailPresenter {
             @Override
             public void onFailure(@NonNull Exception e) {
                 //on failure
-                view.showMessage("Error uploading profile picture");
+                view.createMessage("Error uploading profile picture");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -125,7 +125,7 @@ public class UserDetailPresenter {
                             updatePhotoUrl(actualUser, path);
                             view.updateProfilePicture(profileImage);
                         } else {
-                            view.showMessage("Error updating profile picture.");
+                            view.createMessage("Error updating profile picture.");
                         }
                     }
                 });
@@ -146,7 +146,7 @@ public class UserDetailPresenter {
          * Show message to user
          * @param message
          */
-        void showMessage(String message);
+        void createMessage(String message);
 
         /**
          * Finish current activity

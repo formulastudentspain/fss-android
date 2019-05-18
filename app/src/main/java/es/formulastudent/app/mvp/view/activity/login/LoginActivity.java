@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -106,12 +105,6 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
 
         //Login layout
         loginLayout = findViewById(R.id.login_layout);
-    }
-
-
-    @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

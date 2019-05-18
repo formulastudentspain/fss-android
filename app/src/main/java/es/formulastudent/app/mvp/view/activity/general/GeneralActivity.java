@@ -1,5 +1,6 @@
 package es.formulastudent.app.mvp.view.activity.general;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -376,6 +378,15 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }
 
         return false;
+    }
+
+    /**
+     * Create a Snackbar Message
+     * @param message
+     */
+    public void createMessage(String message){
+        View rootView = this.getWindow().getDecorView().findViewById(android.R.id.content);
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show();
     }
 
     public void showLoadingDialog(){

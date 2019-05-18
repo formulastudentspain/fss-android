@@ -2,7 +2,6 @@ package es.formulastudent.app.mvp.view.activity.timeline;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -90,11 +89,6 @@ public class TimelineActivity extends GeneralActivity implements TimelinePresent
     @Override
     public void refreshTimelineItems() {
         timeLineAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
