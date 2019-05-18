@@ -1,6 +1,7 @@
 package es.formulastudent.app.mvp.view.activity.general;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -60,6 +61,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //Get toolbar component
         toolbar = findViewById(R.id.my_toolbar);
