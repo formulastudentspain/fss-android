@@ -42,8 +42,8 @@ public class UserBOFirebaseImpl implements UserBO {
                         if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                             User user = new User(queryDocumentSnapshots.getDocuments().get(0));
                             responseDTO.setData(user);
-                            callback.onSuccess(responseDTO);
                         }
+                        callback.onSuccess(responseDTO);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -108,6 +108,58 @@ public class UserBOFirebaseImpl implements UserBO {
                     @Override
                     public void onSuccess(Void aVoid) {
                         callback.onSuccess(responseDTO);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //TODO añadir mensaje de error
+                        responseDTO.getErrors().add("");
+                        callback.onFailure(responseDTO);
+                    }
+                });
+    }
+
+    @Override
+    public void retrieveUserByMail(String mail, final BusinessCallback callback) {
+        final ResponseDTO responseDTO = new ResponseDTO();
+
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
+                .whereEqualTo(User.MAIL, mail)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        //success
+                        if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                            User user = new User(queryDocumentSnapshots.getDocuments().get(0));
+                            responseDTO.setData(user);
+                        }
+                        callback.onSuccess(responseDTO);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //TODO añadir mensaje de error
+                        responseDTO.getErrors().add("");
+                        callback.onFailure(responseDTO);
+                    }
+                });
+    }
+
+    @Override
+    public void retrieveUserById(String id, final BusinessCallback callback) {
+        final ResponseDTO responseDTO = new ResponseDTO();
+
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
+                .document(id)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

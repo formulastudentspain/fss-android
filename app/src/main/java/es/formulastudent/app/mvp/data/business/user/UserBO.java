@@ -13,6 +13,7 @@ public interface UserBO {
      */
     void retrieveUserByNFCTag(String tag, BusinessCallback callback);
 
+
     /**
      * Retrieve all users
      * @param callback
@@ -26,5 +27,21 @@ public interface UserBO {
      * @param callback
      */
     void createUser(User user, BusinessCallback callback);
+
+
+    /**
+     * Method to retrieve user by mail
+     * @param mail
+     * @param callback
+     */
+    void retrieveUserByMail(String mail, BusinessCallback callback);
+
+
+    /**
+     * Method to retrieve user by id
+     * @param id
+     * @param callback
+     */
+    void retrieveUserById(String id, BusinessCallback callback);
 
 }

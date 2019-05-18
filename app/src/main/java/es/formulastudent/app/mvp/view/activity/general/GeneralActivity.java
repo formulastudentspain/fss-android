@@ -2,8 +2,11 @@ package es.formulastudent.app.mvp.view.activity.general;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,8 +22,14 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerImageLoader;
+import com.squareup.picasso.Picasso;
+
+import javax.inject.Inject;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
@@ -28,6 +37,10 @@ import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
 
 
 public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
+
+
+    @Inject
+    User loggedUser;
 
     //Drawer colors
     private static final String SELECTED_DRAWER_ITEM_COLOR = "#e6e6e6";
@@ -307,16 +320,27 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
      */
     private AccountHeader createDrawerHeader(){
 
+        //Change the way the images are loaded
+        DrawerImageLoader.init(new AbstractDrawerImageLoader() {
+            @Override
+            public void set(ImageView imageView, Uri uri, Drawable placeholder) {
+                Picasso.get().load(uri).into(imageView);
+            }
+
+            @Override
+            public void cancel(ImageView imageView) {}
+        });
+
+
         return new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.mipmap.drawer_background)
                 .addProfiles(
                         new ProfileDrawerItem()
-                                .withName("John Doe")
-                                .withEmail("john.doe@gmail.com")
-                                .withIcon(getResources().getDrawable(R.mipmap.drawer_profile_image))
+                                .withName(loggedUser.getName())
+                                .withEmail(loggedUser.getMail())
+                                .withIcon(loggedUser.getPhotoUrl())
                 ).build();
-
     }
 
     @Override

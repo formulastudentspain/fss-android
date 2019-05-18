@@ -3,13 +3,17 @@ package es.formulastudent.app.mvp.view.activity.login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
 
+import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
+import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 
@@ -20,19 +24,47 @@ public class LoginPresenter {
     private View view;
     private Context context;
     private AuthBO authBO;
+    private UserBO userBO;
+    private SharedPreferences sharedPreferences;
     private InputMethodManager imm;
 
-    public LoginPresenter(LoginPresenter.View view, Context context, AuthBO authBO) {
+    public LoginPresenter(LoginPresenter.View view, Context context, AuthBO authBO, UserBO userBO,
+                          SharedPreferences sharedPreferences) {
         this.view = view;
         this.context = context;
         this.authBO = authBO;
+        this.userBO = userBO;
+        this.sharedPreferences = sharedPreferences;
     }
 
 
-    private void loginSuccess(){
-        Intent myIntent = new Intent(context, TimelineActivity.class);
-        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(myIntent);
+    private void loginSuccess(User user){
+
+        userBO.retrieveUserByMail(user.getMail(), new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                if(responseDTO.getData()!=null){
+
+                    //If user exists in database, we store it in local storage
+                    User user = (User) responseDTO.getData();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(SharedPreferencesModule.PREFS_CURRENT_USER, new Gson().toJson(user));
+                    editor.commit();
+
+                    //Start Timeline activity
+                    Intent myIntent = new Intent(context, TimelineActivity.class);
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(myIntent);
+                }
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO error obteniendo usuario por email
+            }
+        });
+
+
     }
 
 
@@ -72,7 +104,7 @@ public class LoginPresenter {
             public void onSuccess(ResponseDTO responseDTO) {
                 FirebaseUser firebaseUser = (FirebaseUser) responseDTO.getData();
                 User user = new User(firebaseUser);
-                loginSuccess();
+                loginSuccess(user);
             }
 
             @Override
