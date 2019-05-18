@@ -5,6 +5,7 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
+import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.view.activity.login.LoginPresenter;
 
 @Module(includes = {ContextModule.class})
@@ -22,8 +23,8 @@ public class LoginModule {
     }
 
     @Provides
-    public LoginPresenter providePresenter(LoginPresenter.View categoryView, Context context) {
-        return new LoginPresenter(categoryView, context);
+    public LoginPresenter providePresenter(LoginPresenter.View categoryView, Context context, AuthBO authBO) {
+        return new LoginPresenter(categoryView, context, authBO);
     }
 
 }

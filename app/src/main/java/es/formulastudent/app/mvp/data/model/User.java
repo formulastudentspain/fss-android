@@ -1,5 +1,6 @@
 package es.formulastudent.app.mvp.data.model;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
@@ -70,7 +71,13 @@ public class User implements Serializable {
         return docData;
     }
 
+
     public User() {
+    }
+
+    public User (FirebaseUser firebaseUser){
+        this.name = firebaseUser.getDisplayName();
+        this.mail = firebaseUser.getEmail();
     }
 
     public String getID() {

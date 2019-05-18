@@ -4,18 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.concurrent.Executor;
-
+import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 
@@ -25,12 +19,13 @@ public class LoginPresenter {
     //Dependencies
     private View view;
     private Context context;
-    InputMethodManager imm;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private AuthBO authBO;
+    private InputMethodManager imm;
 
-    public LoginPresenter(LoginPresenter.View view, Context context) {
+    public LoginPresenter(LoginPresenter.View view, Context context, AuthBO authBO) {
         this.view = view;
         this.context = context;
+        this.authBO = authBO;
     }
 
 
@@ -46,102 +41,49 @@ public class LoginPresenter {
      * @param mail
      */
     public void forgotPassword(String mail){
-        mAuth.setLanguageCode("en");
-        mAuth.sendPasswordResetEmail(mail).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+        authBO.resetPassword(mail, new BusinessCallback() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    view.showMessage("Mail Sent."); //TODO Mirar la opcion de plantillas de correo electronico: https://support.google.com/firebase/answer/7000714?hl=es
-                }
+            public void onSuccess(ResponseDTO responseDTO) {
+                view.showMessage("Mail Sent."); //TODO Mirar la opcion de plantillas de correo electronico: https://support.google.com/firebase/answer/7000714?hl=es
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO
             }
         });
-        //view.showMessage("Ups, forgotten password!!");
     }
 
     /**
-     * Sign in with mail and password
+     * Log in with mail and password
      * @param mail
      * @param password
      * @return
      */
-    public User startSignIn(String mail, String password){
+    void doLogin(String mail, String password){
 
-        final User[] userDTO = {new User()};
-
-        //show dialog bar
+        //Hide keyboard
         this.hideKeyboard();
-        mAuth.signInWithEmailAndPassword(mail, password)
-                .addOnCompleteListener(view.getActivity(), new OnCompleteListener<AuthResult>() {
+
+        //Call business to auth user
+        authBO.doLoginWithMail(mail, password, new BusinessCallback() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    //Sign in success, update UI with the signed-in user's information
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    userDTO[0] = getUserDTObyFirebaseUser(user);
-                    Toast.makeText(context, "Correct Login", Toast.LENGTH_SHORT).show();
-                    loginSuccess();
-                    //updateUI(user);
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(context, "Auth Failed", Toast.LENGTH_SHORT).show();
-                    view.hideLoadingIcon();
-                }
+            public void onSuccess(ResponseDTO responseDTO) {
+                FirebaseUser firebaseUser = (FirebaseUser) responseDTO.getData();
+                User user = new User(firebaseUser);
+                loginSuccess();
+            }
 
-                //START EXCLUDE
-                if(!task.isSuccessful()){
-                    //set status text as failed?
-                }
-
-                //hide bar dialog
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                view.hideLoadingIcon();
             }
         });
-
-        return userDTO[0];
     }
 
-    /**
-     * Create Account by Mail and Password
-     * @param mail
-     * @param password
-     */
-    public void createAccount(String mail, String password){
 
-        //show progress dialog
 
-        mAuth.createUserWithEmailAndPassword(mail, password)
-                .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    //updateUI(user);
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(context, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
-        //close progress dialog
-
-    }
-
-    /**
-     * Convert FirebaseUser to User DTO
-     * @param user
-     * @return
-     */
-    private User getUserDTObyFirebaseUser(FirebaseUser user){
-        User userDTO = new User();
-
-        userDTO.setName(user.getDisplayName());
-        userDTO.setMail(user.getEmail());
-
-        return userDTO;
-    }
 
     public void hideKeyboard(){
         imm = (InputMethodManager) view.getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);

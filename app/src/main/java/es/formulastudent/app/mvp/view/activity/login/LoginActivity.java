@@ -146,7 +146,7 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                   presenter.startSignIn(mailEditText.getText().toString(), passwordEditText.getText().toString());
+                   presenter.doLogin(mailEditText.getText().toString(), passwordEditText.getText().toString());
                 }
             }, 1000);
 

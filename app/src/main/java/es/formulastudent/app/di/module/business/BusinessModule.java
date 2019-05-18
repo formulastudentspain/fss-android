@@ -1,9 +1,12 @@
 package es.formulastudent.app.di.module.business;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import dagger.Module;
 import dagger.Provides;
+import es.formulastudent.app.mvp.data.business.auth.AuthBO;
+import es.formulastudent.app.mvp.data.business.auth.impl.AuthBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.briefing.impl.BriefingBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
@@ -56,6 +59,16 @@ public class BusinessModule {
     @Provides
     public UserRoleBO provideUserRoleBO(FirebaseFirestore firebaseFirestore) {
         return new UserRoleBOFirebaseImpl(firebaseFirestore);
+    }
+
+    /**
+     * Provide auth business
+     * @param firebaseAuth
+     * @return
+     */
+    @Provides
+    public AuthBO provideAuthBO(FirebaseAuth firebaseAuth) {
+        return new AuthBOFirebaseImpl(firebaseAuth);
     }
 
 }
