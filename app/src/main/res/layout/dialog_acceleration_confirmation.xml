@@ -37,15 +37,31 @@
         android:layout_height="wrap_content"
         android:text="Applus+ IDIADA"/>
 
-
-        <TextView
-            android:id="@+id/registration_time"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="Tuesday, 23rd August at 08:12"/>
+            android:layout_margin="32dp"
+            android:padding="8dp"
+            android:background="@drawable/dialog_confirm_register_briefing_background"
+            android:orientation="horizontal"
+            android:gravity="center_vertical|center_horizontal">
+
+
+        <ImageView
+                android:id="@+id/briefing_done_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_user_registered"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textSize="30sp"
+                android:text="Briefing"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

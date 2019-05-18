@@ -6,15 +6,18 @@ import android.content.Context;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.acceleration.AccelerationBO;
+import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.AccelerationRegister;
+import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.dialog.ConfirmAccelerationRegisterDialog;
@@ -28,6 +31,7 @@ public class AccelerationPresenter {
     private TeamBO teamBO;
     private AccelerationBO accelerationBO;
     private UserBO userBO;
+    private BriefingBO briefingBO;
 
 
     //Data
@@ -42,12 +46,14 @@ public class AccelerationPresenter {
     private String selectedTeamID;
 
 
-    public AccelerationPresenter(AccelerationPresenter.View view, Context context, TeamBO teamBO, AccelerationBO accelerationBO, UserBO userBO) {
+    public AccelerationPresenter(AccelerationPresenter.View view, Context context, TeamBO teamBO,
+                                 AccelerationBO accelerationBO, UserBO userBO, BriefingBO briefingBO) {
         this.view = view;
         this.context = context;
         this.teamBO = teamBO;
         this.accelerationBO = accelerationBO;
         this.userBO = userBO;
+        this.briefingBO = briefingBO;
     }
 
     /**
@@ -121,8 +127,38 @@ public class AccelerationPresenter {
             public void onSuccess(ResponseDTO responseDTO) {
                 User user = (User)responseDTO.getData();
 
+                //Now check if the user did the briefing today
+                getUserBriefingRegister(user);
+
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO mostrar mensajes
+            }
+        });
+    }
+
+    void getUserBriefingRegister(final User user){
+
+        Calendar cal = Calendar.getInstance();
+        Date to = cal.getTime();
+
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.HOUR_OF_DAY, 5);
+        cal.set(Calendar.SECOND, 0);
+
+        Date from = cal.getTime(); //current day at 05:00am
+
+        briefingBO.retrieveBriefingRegistersByUserAndDates(from, to, user.getID(), new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+
+                List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
+
                 FragmentManager fm = ((AccelerationActivity)view.getActivity()).getSupportFragmentManager();
-                ConfirmAccelerationRegisterDialog createUserDialog = ConfirmAccelerationRegisterDialog.newInstance(AccelerationPresenter.this, user);
+                ConfirmAccelerationRegisterDialog createUserDialog = ConfirmAccelerationRegisterDialog
+                        .newInstance(AccelerationPresenter.this, user, !briefingRegisters.isEmpty());
                 createUserDialog.show(fm, "fragment_acceleration_confirm");
             }
 

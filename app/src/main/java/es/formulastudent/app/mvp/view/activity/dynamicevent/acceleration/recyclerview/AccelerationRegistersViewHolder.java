@@ -18,8 +18,8 @@ public class AccelerationRegistersViewHolder extends RecyclerView.ViewHolder{
     public AccelerationRegistersViewHolder(View itemView) {
         super(itemView);
         profileImage =  itemView.findViewById(R.id.user_profile_image);
-        userName =  itemView.findViewById(R.id.briefing_item_user);
-        userTeam =  itemView.findViewById(R.id.briefing_item_team);
-        registerDate = itemView.findViewById(R.id.briefing_item_date);
+        userName =  itemView.findViewById(R.id.acceleration_item_user);
+        userTeam =  itemView.findViewById(R.id.acceleration_item_team);
+        registerDate = itemView.findViewById(R.id.acceleration_item_date);
     }
 }

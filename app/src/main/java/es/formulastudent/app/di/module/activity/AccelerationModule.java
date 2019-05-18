@@ -7,6 +7,7 @@ import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.acceleration.AccelerationBO;
+import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.AccelerationPresenter;
@@ -27,8 +28,8 @@ public class AccelerationModule {
 
     @Provides
     public AccelerationPresenter providePresenter(AccelerationPresenter.View categoryView, Context context,
-                                                  TeamBO teamBO, AccelerationBO accelerationBO, UserBO userBO) {
-        return new AccelerationPresenter(categoryView, context, teamBO, accelerationBO, userBO);
+                                                  TeamBO teamBO, AccelerationBO accelerationBO, UserBO userBO, BriefingBO briefingBO) {
+        return new AccelerationPresenter(categoryView, context, teamBO, accelerationBO, userBO, briefingBO);
     }
 
 

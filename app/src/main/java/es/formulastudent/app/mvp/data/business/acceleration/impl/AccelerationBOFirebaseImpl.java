@@ -20,7 +20,7 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.acceleration.AccelerationBO;
-import es.formulastudent.app.mvp.data.model.BriefingRegister;
+import es.formulastudent.app.mvp.data.model.AccelerationRegister;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.User;
 
@@ -58,12 +58,12 @@ public class AccelerationBOFirebaseImpl implements AccelerationBO {
                         ResponseDTO responseDTO = new ResponseDTO();
 
                         if (task.isSuccessful()) {
-                            List<BriefingRegister> result = new ArrayList<>();
+                            List<AccelerationRegister> result = new ArrayList<>();
 
                             //Add results to list
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                BriefingRegister briefingRegister = new BriefingRegister(document);
-                                result.add(briefingRegister);
+                                AccelerationRegister accelerationRegister = new AccelerationRegister(document);
+                                result.add(accelerationRegister);
                             }
 
                             responseDTO.setData(result);
@@ -84,11 +84,11 @@ public class AccelerationBOFirebaseImpl implements AccelerationBO {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
-        BriefingRegister briefingRegister = new BriefingRegister(user, registerDate);
+        AccelerationRegister accelerationRegister = new AccelerationRegister(user, registerDate);
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ACCELERATION)
-                .document(briefingRegister.getID())
-                .set(briefingRegister.toObjectData())
+                .document(accelerationRegister.getID())
+                .set(accelerationRegister.toObjectData())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
 
                     @Override
