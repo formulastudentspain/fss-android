@@ -28,6 +28,7 @@ android {
         }
         pro_ka {
             dimension "version"
+            applicationId "es.kartacademy"
         }
         dev_fss {
             dimension "version"

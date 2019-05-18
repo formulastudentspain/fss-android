@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
@@ -56,6 +57,10 @@ public class LoginPresenter {
                     myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(myIntent);
                     view.finishView();
+
+                }else{ //The user is created for Login, but not in users table
+                    view.hideLoadingIcon();
+                    view.createMessage(context.getString(R.string.login_activity_user_not_found));
                 }
             }
 

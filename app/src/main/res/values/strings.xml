@@ -36,6 +36,9 @@
     <string name="login_activity_mail">Mail</string>
     <string name="login_activity_password">Password</string>
     <string name="login_activity_login">LOGIN</string>
+    <string name="login_activity_user_not_found">User not found</string>
+
+
 
     <!-- Create user dialog -->
     <string name="dialog_create_user_title">Create user</string>
@@ -74,6 +77,13 @@
     <string name="acceleration_activity_dialog_confirm_register_title">User confirmation</string>
     <string name="acceleration_activity_dialog_confirm_button_confirm">Confirm</string>
     <string name="acceleration_activity_dialog_confirm_button_cancel">Cancel</string>
+
+    <!-- Endurance activity -->
+    <string name="endurance_activity_title">Endurance control</string>
+    <string name="endurance_activity_teams_label">Teams</string>
+    <string name="endurance_activity_dialog_confirm_register_title">User confirmation</string>
+    <string name="endurance_activity_dialog_confirm_button_confirm">Confirm</string>
+    <string name="endurance_activity_dialog_confirm_button_cancel">Cancel</string>
 
     <!-- Exit dialog -->
     <string name="exit_dialog_title">Exit</string>

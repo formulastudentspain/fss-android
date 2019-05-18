@@ -12,6 +12,8 @@ public class ConfigConstants {
     public static final String FIREBASE_TABLE_USER_INFO = "UserInfo";
     public static final String FIREBASE_TABLE_USER_ROLE = "USER_ROLE";
     public static final String FIREBASE_TABLE_ACCELERATION = "DEV_EVENT_CONTROL_ACCELERATION";
+    public static final String FIREBASE_TABLE_ENDURANCE = "DEV_EVENT_CONTROL_ENDURANCE";
+
 
 
 }

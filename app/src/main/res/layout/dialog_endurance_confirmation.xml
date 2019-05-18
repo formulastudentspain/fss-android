@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".mvp.view.activity.dynamicevent.endurance.EnduranceActivity">
+
+    <LinearLayout
+        android:id="@+id/user_row_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical|center_horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_profile_image"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:src="@mipmap/drawer_background"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/accent"
+            android:textSize="18sp"
+            android:text="David Perez Conde"/>
+
+        <TextView
+        android:id="@+id/user_team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Applus+ IDIADA"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:padding="8dp"
+            android:background="@drawable/dialog_confirm_register_briefing_background"
+            android:orientation="horizontal"
+            android:gravity="center_vertical|center_horizontal">
+
+
+        <ImageView
+                android:id="@+id/briefing_done_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_user_registered"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textSize="30sp"
+                android:text="Briefing"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
