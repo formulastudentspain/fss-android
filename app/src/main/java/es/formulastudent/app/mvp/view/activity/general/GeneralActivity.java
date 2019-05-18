@@ -33,6 +33,7 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.AccelerationActivity;
+import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityExitDialog;
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
@@ -400,4 +401,19 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
     }
 
 
+    @Override
+    public void onBackPressed() {
+        if(isTaskRoot()){
+
+            //Open exit dialog
+            GeneralActivityExitDialog exitDialog = GeneralActivityExitDialog.newInstance(this);
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(exitDialog, "exit_dialog");
+            ft.commitAllowingStateLoss();
+
+        }else{
+            super.onBackPressed();
+        }
+    }
 }

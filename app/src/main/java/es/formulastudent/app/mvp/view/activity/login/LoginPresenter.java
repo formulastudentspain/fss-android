@@ -55,6 +55,7 @@ public class LoginPresenter {
                     Intent myIntent = new Intent(context, TimelineActivity.class);
                     myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(myIntent);
+                    view.finishView();
                 }
             }
 

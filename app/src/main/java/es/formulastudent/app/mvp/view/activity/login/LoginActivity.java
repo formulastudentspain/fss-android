@@ -116,7 +116,7 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
 
     @Override
     public void finishView() {
-
+        this.finish();
     }
 
     @Override
