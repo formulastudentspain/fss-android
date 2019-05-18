@@ -31,6 +31,7 @@ import javax.inject.Inject;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.AccelerationActivity;
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
@@ -360,8 +361,14 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             Intent intent = new Intent(this, TimelineActivity.class);
             this.startActivity(intent);
             finish();
+
         }else if(drawerItem.getIdentifier() == 10001){ //Briefing
             Intent intent = new Intent(this, BriefingActivity.class);
+            this.startActivity(intent);
+            finish();
+
+        }else if(drawerItem.getIdentifier() == 10013){ //Acceleration
+            Intent intent = new Intent(this, AccelerationActivity.class);
             this.startActivity(intent);
             finish();
         }

@@ -67,6 +67,11 @@
                 android:value=".mvp.view.activity.timeline.TimelineActivity"/>
         </activity>
 
+        <activity
+            android:name=".mvp.view.activity.dynamicevent.acceleration.AccelerationActivity"
+            android:launchMode="singleTop">
+        </activity>
+
     </application>
 
 </manifest>

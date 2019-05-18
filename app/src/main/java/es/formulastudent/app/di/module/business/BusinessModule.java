@@ -5,6 +5,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import dagger.Module;
 import dagger.Provides;
+import es.formulastudent.app.mvp.data.business.acceleration.AccelerationBO;
+import es.formulastudent.app.mvp.data.business.acceleration.impl.AccelerationBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.auth.impl.AuthBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
@@ -51,6 +53,7 @@ public class BusinessModule {
         return new UserBOFirebaseImpl(firebaseFirestore);
     }
 
+
     /**
      * Provide User Role business
      * @param firebaseFirestore
@@ -61,6 +64,7 @@ public class BusinessModule {
         return new UserRoleBOFirebaseImpl(firebaseFirestore);
     }
 
+
     /**
      * Provide auth business
      * @param firebaseAuth
@@ -69,6 +73,17 @@ public class BusinessModule {
     @Provides
     public AuthBO provideAuthBO(FirebaseAuth firebaseAuth) {
         return new AuthBOFirebaseImpl(firebaseAuth);
+    }
+
+
+    /**
+     * Provide Acceleration business
+     * @param firebaseFirestore
+     * @return
+     */
+    @Provides
+    public AccelerationBO provideAccelerationBO(FirebaseFirestore firebaseFirestore) {
+        return new AccelerationBOFirebaseImpl(firebaseFirestore);
     }
 
 }

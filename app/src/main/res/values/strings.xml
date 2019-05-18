@@ -47,8 +47,6 @@
     <string name="dialog_create_user_field_role">Role</string>
     <string name="dialog_create_user_error_field">Mandatory field</string>
 
-
-
     <!-- Briefing activity -->
     <string name="briefing_activity_title">Briefing control</string>
     <string name="briefing_activity_teams_label">Teams</string>
@@ -70,6 +68,12 @@
     <string name="default_image_url">https://lh3.googleusercontent.com/-cXXaVVq8nMM/AAAAAAAAAAI/AAAAAAAAAKI/_Y1WfBiSnRI/photo.jpg?sz=150</string>
 
 
+    <!-- Acceleration activity -->
+    <string name="acceleration_activity_title">Acceleration control</string>
+    <string name="acceleration_activity_teams_label">Teams</string>
+    <string name="acceleration_activity_dialog_confirm_register_title">User confirmation</string>
+    <string name="acceleration_activity_dialog_confirm_button_confirm">Confirm</string>
+    <string name="acceleration_activity_dialog_confirm_button_cancel">Cancel</string>
 
 
 </resources>

@@ -6,27 +6,26 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
-public class BriefingRegister extends EventRegister implements Serializable {
+public class AccelerationRegister extends EventRegister implements Serializable {
 
 
-    public BriefingRegister(String teamID, String team, String userID, String user, String userImage, Date date) {
+    public AccelerationRegister(String teamID, String team, String userID, String user, String userImage, Date date) {
         super(teamID, team, userID, user, userImage, date);
-        setType(EventType.BRIEFING);
+        setType(EventType.ACCELERATION);
     }
 
-    public BriefingRegister(User user, Date date) {
+    public AccelerationRegister(User user, Date date) {
         super(user.getTeamID(), user.getTeam(), user.getID(), user.getName(), user.getPhotoUrl(), date);
-        setType(EventType.BRIEFING);
+        setType(EventType.ACCELERATION);
     }
 
     public Map<String, Object> toObjectData(){
         return super.toObjectData();
     }
 
-
-    public BriefingRegister(DocumentSnapshot object){
+    public AccelerationRegister(DocumentSnapshot object){
         super(object);
-        setType(EventType.BRIEFING);
+        setType(EventType.ACCELERATION);
     }
 
 
