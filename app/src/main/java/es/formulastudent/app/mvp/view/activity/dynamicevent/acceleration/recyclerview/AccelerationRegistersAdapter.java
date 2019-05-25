@@ -67,7 +67,10 @@ public class AccelerationRegistersAdapter extends RecyclerView.Adapter<RecyclerV
             case Car.CAR_TYPE_ELECTRIC:
                 accelerationRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_electric_icon);
                 break;
-            case Car.CAR_TYPE_AUTONOMOUS:
+            case Car.CAR_TYPE_AUTONOMOUS_COMBUSTION:
+                accelerationRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_steering_wheel);
+                break;
+            case Car.CAR_TYPE_AUTONOMOUS_ELECTRIC:
                 accelerationRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_steering_wheel);
                 break;
             default:

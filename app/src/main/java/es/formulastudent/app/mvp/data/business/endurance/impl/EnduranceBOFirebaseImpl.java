@@ -84,7 +84,7 @@ public class EnduranceBOFirebaseImpl implements EnduranceBO {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
-        EnduranceRegister enduranceRegister = new EnduranceRegister(user, registerDate);
+        EnduranceRegister enduranceRegister = new EnduranceRegister(user, registerDate, null, null, null);
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ENDURANCE)
                 .document(enduranceRegister.getID())

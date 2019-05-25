@@ -150,7 +150,7 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment{
             @Override
             public void onClick(View view) {
 
-                presenter.createRegistry(user, car.getNumber(), car.getType());
+                presenter.createRegistry(user, car.getNumber(), car.getType(), briefingDone);
                 dialog.dismiss();
             }
         });

@@ -78,11 +78,11 @@ public class AccelerationBOFirebaseImpl implements AccelerationBO {
 
 
     @Override
-    public void createAccelerationRegistry(User user, String carType, Long carNumber, final BusinessCallback callback) {
+    public void createAccelerationRegistry(User user, String carType, Long carNumber, Boolean briefingDone, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
-        AccelerationRegister accelerationRegister = new AccelerationRegister(user, registerDate, carType, carNumber);
+        AccelerationRegister accelerationRegister = new AccelerationRegister(user, registerDate, carType, carNumber, briefingDone);
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ACCELERATION)
                 .document(accelerationRegister.getID())

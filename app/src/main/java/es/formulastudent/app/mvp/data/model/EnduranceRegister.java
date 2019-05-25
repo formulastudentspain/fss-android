@@ -8,14 +8,9 @@ import java.util.Map;
 
 public class EnduranceRegister extends EventRegister implements Serializable {
 
-
-    public EnduranceRegister(String teamID, String team, String userID, String user, String userImage, Date date) {
-        super(teamID, team, userID, user, userImage, date);
-        setType(EventType.ENDURANCE_EFFICIENCY);
-    }
-
-    public EnduranceRegister(User user, Date date) {
-        super(user.getTeamID(), user.getTeam(), user.getID(), user.getName(), user.getPhotoUrl(), date);
+    public EnduranceRegister(User user, Date date, String carType, Long carNumber, Boolean briefingDone) {
+        super(user.getTeamID(), user.getTeam(), user.getID(), user.getName(), user.getPhotoUrl(), date,
+                carType, carNumber, briefingDone);
         setType(EventType.ENDURANCE_EFFICIENCY);
     }
 

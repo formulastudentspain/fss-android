@@ -62,7 +62,8 @@ public class CarsSpinnerAdapter extends ArrayAdapter<Car> {
         Car car = cars.get(position);
 
         String carType = "type_undefined";
-        if(Car.CAR_TYPE_AUTONOMOUS.equalsIgnoreCase(car.getType())){
+        if(Car.CAR_TYPE_AUTONOMOUS_ELECTRIC.equalsIgnoreCase(car.getType()) ||
+                Car.CAR_TYPE_AUTONOMOUS_COMBUSTION.equalsIgnoreCase(car.getType())){
             carType = context.getString(R.string.app_car_type_autonomous);
         }else if(Car.CAR_TYPE_COMBUSTION.equalsIgnoreCase(car.getType())){
             carType = context.getString(R.string.app_car_type_combustion);

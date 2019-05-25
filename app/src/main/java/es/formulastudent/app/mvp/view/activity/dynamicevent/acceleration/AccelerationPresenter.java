@@ -62,12 +62,12 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
      * Create Acceleration registry
      * @param user
      */
-     public void createRegistry(User user, Long carNumber, String carType){
+     public void createRegistry(User user, Long carNumber, String carType, Boolean briefingDone){
 
         //Show loading
         view.showLoading();
 
-        accelerationBO.createAccelerationRegistry(user, carType, carNumber, new BusinessCallback() {
+        accelerationBO.createAccelerationRegistry(user, carType, carNumber, briefingDone, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 retrieveAccelerationRegisterList();
@@ -176,12 +176,12 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
             public void onSuccess(ResponseDTO responseDTO) {
 
                 Team team = (Team) responseDTO.getData();
-                List<Car> cars = team.getCars();
+                Car car = team.getCar();
 
                 //With all the information, we open the dialog
                 FragmentManager fm = ((AccelerationActivity)view.getActivity()).getSupportFragmentManager();
                 ConfirmAccelerationRegisterDialog createUserDialog = ConfirmAccelerationRegisterDialog
-                        .newInstance(AccelerationPresenter.this, user, briefingExists, cars);
+                        .newInstance(AccelerationPresenter.this, user, briefingExists, car);
                 createUserDialog.show(fm, "fragment_acceleration_confirm");
             }
 

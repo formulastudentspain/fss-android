@@ -9,13 +9,10 @@ import java.util.Map;
 public class BriefingRegister extends EventRegister implements Serializable {
 
 
-    public BriefingRegister(String teamID, String team, String userID, String user, String userImage, Date date) {
-        super(teamID, team, userID, user, userImage, date);
-        setType(EventType.BRIEFING);
-    }
 
     public BriefingRegister(User user, Date date) {
-        super(user.getTeamID(), user.getTeam(), user.getID(), user.getName(), user.getPhotoUrl(), date);
+        super(user.getTeamID(), user.getTeam(), user.getID(), user.getName(), user.getPhotoUrl(),
+                date, null, null, null);
         setType(EventType.BRIEFING);
     }
 

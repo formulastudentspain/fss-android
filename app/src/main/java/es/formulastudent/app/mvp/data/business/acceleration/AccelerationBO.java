@@ -24,7 +24,7 @@ public interface AccelerationBO {
      * @param user
      * @param callback
      */
-    void createAccelerationRegistry(User user, String carType, Long carNumber, BusinessCallback callback);
+    void createAccelerationRegistry(User user, String carType, Long carNumber, Boolean briefingDone, BusinessCallback callback);
 
 
     /**
