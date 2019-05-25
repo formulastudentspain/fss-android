@@ -175,12 +175,12 @@ public class AccelerationPresenter {
             public void onSuccess(ResponseDTO responseDTO) {
 
                 Team team = (Team) responseDTO.getData();
-                List<Car> cars = team.getCars();
+                Car car = team.getCar();
 
                 //With all the information, we open the dialog
                 FragmentManager fm = ((AccelerationActivity)view.getActivity()).getSupportFragmentManager();
                 ConfirmAccelerationRegisterDialog createUserDialog = ConfirmAccelerationRegisterDialog
-                        .newInstance(AccelerationPresenter.this, user, briefingExists, cars);
+                        .newInstance(AccelerationPresenter.this, user, briefingExists, car);
                 createUserDialog.show(fm, "fragment_acceleration_confirm");
             }
 

@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 public class Car implements Serializable {
 
-    public static final String CAR_TYPE_COMBUSTION = "C";
-    public static final String CAR_TYPE_ELECTRIC = "E";
-    public static final String CAR_TYPE_AUTONOMOUS = "A";
+    public static final String CAR_TYPE_COMBUSTION = "Combustion";
+    public static final String CAR_TYPE_ELECTRIC = "Electric";
+    public static final String CAR_TYPE_AUTONOMOUS_ELECTRIC = "Driverless Electric";
+    public static final String CAR_TYPE_AUTONOMOUS_COMBUSTION = "Driverless Combustion";
 
     private String type;
     private Long number;

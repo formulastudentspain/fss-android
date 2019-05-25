@@ -51,18 +51,18 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
     //Detected user
     private User user;
     private boolean briefingDone;
-    private List<Car> cars;
+    private Car car;
     private Car selectedCar;
 
     public ConfirmAccelerationRegisterDialog() {}
 
     public static ConfirmAccelerationRegisterDialog newInstance(AccelerationPresenter presenter, User user,
-                                                                boolean briefingDone, List<Car> cars) {
+                                                                boolean briefingDone, Car car) {
         ConfirmAccelerationRegisterDialog frag = new ConfirmAccelerationRegisterDialog();
         frag.setPresenter(presenter);
         frag.setUser(user);
         frag.setBriefingDone(briefingDone);
-        frag.setCars(cars);
+        frag.setCar(car);
         return frag;
     }
 
@@ -109,43 +109,42 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
     private void initializeCarElements(View rootView){
 
         //Activate elements depending of team cars
-        for(Car car: cars){
-            if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_COMBUSTION)){
+        if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_COMBUSTION)){
 
-                //Instantiate elements
-                combustionContainer = rootView.findViewById(R.id.combustionContainer);
-                combustionCarNumber = rootView.findViewById(R.id.combustionNumber);
-                combustionCarIcon = rootView.findViewById(R.id.combustionIcon);
+            //Instantiate elements
+            combustionContainer = rootView.findViewById(R.id.combustionContainer);
+            combustionCarNumber = rootView.findViewById(R.id.combustionNumber);
+            combustionCarIcon = rootView.findViewById(R.id.combustionIcon);
 
-                //Set values
-                combustionCarNumber.setText(car.getNumber().toString());
-                combustionCarIcon.setImageResource(R.drawable.ic_combustion);
-                combustionContainer.setOnClickListener(this);
-            }
-            if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_ELECTRIC)){
+            //Set values
+            combustionCarNumber.setText(car.getNumber().toString());
+            combustionCarIcon.setImageResource(R.drawable.ic_combustion);
+            combustionContainer.setOnClickListener(this);
+        }
+        if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_ELECTRIC)){
 
-                //Instantiate elements
-                electricContainer = rootView.findViewById(R.id.electricContainer);
-                electricCarNumber = rootView.findViewById(R.id.electricNumber);
-                electricCarIcon = rootView.findViewById(R.id.electricIcon);
+            //Instantiate elements
+            electricContainer = rootView.findViewById(R.id.electricContainer);
+            electricCarNumber = rootView.findViewById(R.id.electricNumber);
+            electricCarIcon = rootView.findViewById(R.id.electricIcon);
 
-                //Set values
-                electricCarNumber.setText(car.getNumber().toString());
-                electricCarIcon.setImageResource(R.drawable.ic_electric_icon);
-                electricContainer.setOnClickListener(this);
-            }
-            if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS)){
+            //Set values
+            electricCarNumber.setText(car.getNumber().toString());
+            electricCarIcon.setImageResource(R.drawable.ic_electric_icon);
+            electricContainer.setOnClickListener(this);
+        }
+        if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_ELECTRIC)
+                || car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_COMBUSTION)  ){
 
-                //Instantiate elements
-                driverlessContainer = rootView.findViewById(R.id.driverlessContainer);
-                driverlessCarNumber = rootView.findViewById(R.id.driverlessNumber);
-                driverlessCarIcon = rootView.findViewById(R.id.driverlessIcon);
+            //Instantiate elements
+            driverlessContainer = rootView.findViewById(R.id.driverlessContainer);
+            driverlessCarNumber = rootView.findViewById(R.id.driverlessNumber);
+            driverlessCarIcon = rootView.findViewById(R.id.driverlessIcon);
 
-                //Set values
-                driverlessCarNumber.setText(car.getNumber().toString());
-                driverlessCarIcon.setImageResource(R.drawable.ic_steering_wheel);
-                driverlessContainer.setOnClickListener(this);
-            }
+            //Set values
+            driverlessCarNumber.setText(car.getNumber().toString());
+            driverlessCarIcon.setImageResource(R.drawable.ic_steering_wheel);
+            driverlessContainer.setOnClickListener(this);
         }
     }
 
@@ -180,8 +179,8 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
         this.briefingDone = briefingDone;
     }
 
-    public void setCars(List<Car> cars) {
-        this.cars = cars;
+    public void setCar(Car car) {
+        this.car = car;
     }
 
     @Override
@@ -197,11 +196,8 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
             driverlessContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background);
 
             //Look for the proper car
-            for(Car car: cars){
-                if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_COMBUSTION)){
-                    selectedCar = car;
-                    break;
-                }
+            if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_COMBUSTION)){
+                selectedCar = car;
             }
         }else if(view.getId() == R.id.electricContainer){
 
@@ -213,11 +209,8 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
             driverlessContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background);
 
             //Look for the proper car
-            for(Car car: cars){
-                if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_ELECTRIC)){
-                    selectedCar = car;
-                    break;
-                }
+            if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_ELECTRIC)){
+                selectedCar = car;
             }
 
         }else if(view.getId() == R.id.driverlessContainer){
@@ -230,11 +223,9 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
             electricContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background);
 
             //Look for the proper car
-            for(Car car: cars){
-                if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS)){
-                    selectedCar = car;
-                    break;
-                }
+            if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_COMBUSTION) ||
+                    car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_ELECTRIC)){
+                selectedCar = car;
             }
         }
     }

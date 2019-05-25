@@ -13,11 +13,11 @@ public class Team implements Serializable {
 
     //Database constants
     public static final String NAME = "name";
-    public static final String CARS = "cars";
+    public static final String CAR = "car";
 
     private String ID;
     private String name;
-    private List<Car> cars;
+    private Car car;
 
     public Team(String ID, String name) {
         this.ID = ID;
@@ -28,14 +28,10 @@ public class Team implements Serializable {
         this.ID = object.getReference().getId();
         this.name = object.getString(Team.NAME);
 
-        List<Map<String, Object>> cars = (ArrayList) object.getData().get(Team.CARS);
-        this.cars = new ArrayList<>();
-        for(Map<String, Object> carMap: cars){
+        Map<String, Object> carMap = (Map<String, Object>) object.getData().get(Team.CAR);
             Car car = new Car();
             car.setNumber((Long)carMap.get("number"));
             car.setType((String)carMap.get("type"));
-            this.cars.add(car);
-        }
     }
 
     public Team() { }
@@ -61,11 +57,11 @@ public class Team implements Serializable {
         return name;
     }
 
-    public List<Car> getCars() {
-        return cars;
+    public Car getCar() {
+        return car;
     }
 
-    public void setCars(List<Car> cars) {
-        this.cars = cars;
+    public void setCar(Car car) {
+        this.car = car;
     }
 }
