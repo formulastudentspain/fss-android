@@ -75,7 +75,7 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar errores
+                view.createMessage("Couldn't not create the acceleration registry");
             }
         });
     }
@@ -100,7 +100,7 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
 
              @Override
              public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
+                view.createMessage("Couldn't get the acceleration register");
              }
          });
     }
@@ -131,12 +131,10 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
 
                 //Now check if the user did the briefing today
                 getUserBriefingRegister(user);
-
             }
-
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
+                view.createMessage("Couldn't get the user by this Tag");
             }
         });
     }
@@ -192,7 +190,7 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
+                view.createMessage("Couldn't get the team from this user");
             }
         });
     }
