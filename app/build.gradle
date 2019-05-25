@@ -65,6 +65,9 @@ dependencies {
     testImplementation "org.mockito:mockito-core:2.18.3"
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    //implementation 'org.apache.poi:poi:3.17' //import excel data
+    //implementation 'org.apache.poi:poi-ooxml:3.17' //import excel data
+    implementation "com.github.SUPERCILEX.poi-android:poi:3.17"
 
     //Material Drawer
     implementation "com.mikepenz:materialdrawer:6.1.2"
