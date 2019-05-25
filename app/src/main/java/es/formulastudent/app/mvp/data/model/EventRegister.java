@@ -19,6 +19,8 @@ public abstract class EventRegister implements Serializable {
     public static final String USER = "userName";
     public static final String DATE = "date";
     public static final String USER_IMAGE = "userImage";
+    public static final String CAR_TYPE = "carType";
+    public static final String CAR_NUMBER = "carNumber";
 
     private String ID;
     private String teamID;
@@ -28,6 +30,8 @@ public abstract class EventRegister implements Serializable {
     private String userImage;
     private EventType type;
     private Date date;
+    private String carType;
+    private Long carNumber;
 
 
     public EventRegister(String teamID, String team, String userID, String user, String userImage, Date date) {
@@ -50,6 +54,8 @@ public abstract class EventRegister implements Serializable {
         docData.put(EventRegister.TEAM_ID, this.teamID);
         docData.put(EventRegister.USER_IMAGE, this.userImage);
         docData.put(EventRegister.DATE, new Timestamp(this.date));
+        docData.put(EventRegister.CAR_NUMBER, this.carNumber);
+        docData.put(EventRegister.CAR_TYPE, this.carType);
 
         return docData;
     }
@@ -62,7 +68,8 @@ public abstract class EventRegister implements Serializable {
         this.userID = object.getString(EventRegister.USER_ID);
         this.team = object.getString(EventRegister.TEAM);
         this.teamID = object.getString(EventRegister.TEAM_ID);
-
+        this.carNumber = object.getLong(EventRegister.CAR_NUMBER);
+        this.carType = object.getString(EventRegister.CAR_TYPE);
     }
 
 
@@ -128,5 +135,21 @@ public abstract class EventRegister implements Serializable {
 
     public void setUserImage(String userImage) {
         this.userImage = userImage;
+    }
+
+    public String getCarType() {
+        return carType;
+    }
+
+    public void setCarType(String carType) {
+        this.carType = carType;
+    }
+
+    public Long getCarNumber() {
+        return carNumber;
+    }
+
+    public void setCarNumber(Long carNumber) {
+        this.carNumber = carNumber;
     }
 }

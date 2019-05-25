@@ -2,10 +2,8 @@ package es.formulastudent.app.mvp.data.business.acceleration.impl;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -48,43 +46,45 @@ public class AccelerationBOFirebaseImpl implements AccelerationBO {
             query = query.whereEqualTo(EventRegister.TEAM_ID, teamID);
         }
 
+        final ResponseDTO responseDTO = new ResponseDTO();
         query.orderBy(EventRegister.DATE, Query.Direction.DESCENDING)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
                         //Response object
                         ResponseDTO responseDTO = new ResponseDTO();
 
-                        if (task.isSuccessful()) {
-                            List<AccelerationRegister> result = new ArrayList<>();
-
-                            //Add results to list
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                AccelerationRegister accelerationRegister = new AccelerationRegister(document);
-                                result.add(accelerationRegister);
-                            }
-
-                            responseDTO.setData(result);
-
-                        } else {
-                            //TODO añadir mensaje de error
-                            //responseDTO.getErrors().add(R.string.mensajedeerror);
+                        //Add results to list
+                        List<AccelerationRegister> result = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            AccelerationRegister accelerationRegister = new AccelerationRegister(document);
+                            result.add(accelerationRegister);
                         }
 
+                        responseDTO.setData(result);
                         callback.onSuccess(responseDTO);
+
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //TODO add messages
+                        callback.onFailure(responseDTO);
+                    }
+                 });
     }
 
 
     @Override
-    public void createAccelerationRegistry(User user, final BusinessCallback callback) {
+    public void createAccelerationRegistry(User user, String carType, Long carNumber, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
         AccelerationRegister accelerationRegister = new AccelerationRegister(user, registerDate);
+        accelerationRegister.setCarNumber(carNumber);
+        accelerationRegister.setCarType(carType);
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ACCELERATION)
                 .document(accelerationRegister.getID())

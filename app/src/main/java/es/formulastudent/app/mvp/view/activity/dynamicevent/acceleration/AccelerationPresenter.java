@@ -18,6 +18,7 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.AccelerationRegister;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
+import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.dialog.ConfirmAccelerationRegisterDialog;
@@ -60,12 +61,12 @@ public class AccelerationPresenter {
      * Create Acceleration registry
      * @param user
      */
-     public void createRegistry(User user){
+     public void createRegistry(User user, Long carNumber, String carType){
 
         //Show loading
         view.showLoading();
 
-        accelerationBO.createAccelerationRegistry(user, new BusinessCallback() {
+        accelerationBO.createAccelerationRegistry(user, carType, carNumber, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 retrieveAccelerationRegisterList();
@@ -93,7 +94,7 @@ public class AccelerationPresenter {
              @Override
              public void onSuccess(ResponseDTO responseDTO) {
                      List<AccelerationRegister> results = (List<AccelerationRegister>) responseDTO.getData();
-                     updateAccelerationRegisters(results);
+                     updateAccelerationRegisters(results==null ? new ArrayList<AccelerationRegister>() : results);
              }
 
              @Override
@@ -156,9 +157,30 @@ public class AccelerationPresenter {
 
                 List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
 
+                //Get now cars
+                getCarsByUserId(user, !briefingRegisters.isEmpty());
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO mostrar mensajes
+            }
+        });
+    }
+
+    void getCarsByUserId(final User user, final boolean briefingExists){
+
+        teamBO.retrieveTeamById(user.getTeamID(), new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+
+                Team team = (Team) responseDTO.getData();
+                List<Car> cars = team.getCars();
+
+                //With all the information, we open the dialog
                 FragmentManager fm = ((AccelerationActivity)view.getActivity()).getSupportFragmentManager();
                 ConfirmAccelerationRegisterDialog createUserDialog = ConfirmAccelerationRegisterDialog
-                        .newInstance(AccelerationPresenter.this, user, !briefingRegisters.isEmpty());
+                        .newInstance(AccelerationPresenter.this, user, briefingExists, cars);
                 createUserDialog.show(fm, "fragment_acceleration_confirm");
             }
 
@@ -198,6 +220,10 @@ public class AccelerationPresenter {
             }
 
         });
+    }
+
+    public void createMessage(String message){
+        view.createMessage(message);
     }
 
 

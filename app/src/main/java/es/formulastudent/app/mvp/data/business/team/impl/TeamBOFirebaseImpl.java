@@ -3,7 +3,10 @@ package es.formulastudent.app.mvp.data.business.team.impl;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -58,7 +61,33 @@ public class TeamBOFirebaseImpl implements TeamBO {
                         }
                     }
                 });
-
     }
 
+    @Override
+    public void retrieveTeamById(String id, final BusinessCallback callback) {
+
+        //Response object
+        final ResponseDTO responseDTO = new ResponseDTO();
+
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
+                .document(id)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Team team = new Team(documentSnapshot);
+                        responseDTO.setData(team);
+                        callback.onSuccess(responseDTO);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //TODO añadir mensaje de error
+                        //responseDTO.getErrors().add(R.string.mensajedeerror);
+                        callback.onFailure(responseDTO);
+                    }
+                });
+    }
 }

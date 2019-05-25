@@ -18,8 +18,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_profile_image"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:src="@mipmap/drawer_background"
             android:layout_marginBottom="16dp"/>
 
@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:text="Applus+ IDIADA"/>
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,8 +50,8 @@
 
         <ImageView
                 android:id="@+id/briefing_done_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_user_registered"/>
 
@@ -58,8 +59,110 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:text="Briefing"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select a car:"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/combustionContainer"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/dialog_confirm_register_briefing_background"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/combustionNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="24sp"
+                    android:text="-"/>
+
+                <ImageView
+                    android:id="@+id/combustionIcon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_combustion_disabled"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/electricContainer"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/dialog_confirm_register_briefing_background"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/electricNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="24sp"
+                    android:text="-"/>
+
+                <ImageView
+                    android:id="@+id/electricIcon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_electric_disabled"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/driverlessContainer"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/dialog_confirm_register_briefing_background"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/driverlessNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="24sp"
+                    android:text="-"/>
+
+                <ImageView
+                    android:id="@+id/driverlessIcon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_steering_wheel_disabled"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

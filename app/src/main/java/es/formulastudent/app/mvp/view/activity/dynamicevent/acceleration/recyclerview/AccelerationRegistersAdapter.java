@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.AccelerationRegister;
+import es.formulastudent.app.mvp.data.model.Car;
 
 
 public class AccelerationRegistersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -53,9 +54,23 @@ public class AccelerationRegistersAdapter extends RecyclerView.Adapter<RecyclerV
         accelerationRegistersViewHolder.userName.setText(register.getUser());
         accelerationRegistersViewHolder.userTeam.setText(register.getTeam());
         accelerationRegistersViewHolder.registerDate.setText(sdf.format(register.getDate()));
+        accelerationRegistersViewHolder.carNumber.setText(register.getCarNumber().toString());
 
         Picasso.get().load(register.getUserImage()).into(accelerationRegistersViewHolder.profileImage);
 
+        switch(register.getCarType()) {
+            case Car.CAR_TYPE_COMBUSTION:
+                accelerationRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_combustion);
+            break;
+            case Car.CAR_TYPE_ELECTRIC:
+                accelerationRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_electric_icon);
+                break;
+            case Car.CAR_TYPE_AUTONOMOUS:
+                accelerationRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_steering_wheel);
+                break;
+            default:
+                // code block
+        }
     }
 
     @Override

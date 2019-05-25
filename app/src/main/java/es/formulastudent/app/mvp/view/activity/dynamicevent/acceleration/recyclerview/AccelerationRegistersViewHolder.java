@@ -14,6 +14,8 @@ public class AccelerationRegistersViewHolder extends RecyclerView.ViewHolder{
     TextView userName;
     TextView userTeam;
     TextView registerDate;
+    ImageView carTypeIcon;
+    TextView carNumber;
 
     public AccelerationRegistersViewHolder(View itemView) {
         super(itemView);
@@ -21,5 +23,7 @@ public class AccelerationRegistersViewHolder extends RecyclerView.ViewHolder{
         userName =  itemView.findViewById(R.id.acceleration_item_user);
         userTeam =  itemView.findViewById(R.id.acceleration_item_team);
         registerDate = itemView.findViewById(R.id.acceleration_item_date);
+        carTypeIcon = itemView.findViewById(R.id.carTypeIcon);
+        carNumber = itemView.findViewById(R.id.carNumber);
     }
 }

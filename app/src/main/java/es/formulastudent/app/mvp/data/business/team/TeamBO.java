@@ -9,4 +9,12 @@ public interface TeamBO {
      * @param callback
      */
     void retrieveAllTeams(BusinessCallback callback);
+
+
+    /**
+     * Method to retrieve a team by ID
+     * @param id
+     * @param callback
+     */
+    void retrieveTeamById(String id, BusinessCallback callback);
 }
