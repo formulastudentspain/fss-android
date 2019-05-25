@@ -29,9 +29,10 @@ public class Team implements Serializable {
         this.name = object.getString(Team.NAME);
 
         Map<String, Object> carMap = (Map<String, Object>) object.getData().get(Team.CAR);
-            Car car = new Car();
-            car.setNumber((Long)carMap.get("number"));
-            car.setType((String)carMap.get("type"));
+        Car car = new Car();
+        car.setNumber((Long)carMap.get("number"));
+        car.setType((String)carMap.get("type"));
+        this.car = car;
     }
 
     public Team() { }

@@ -74,9 +74,6 @@ public class ImportTeamsToFirebaseFromExcel {
         }
     }
 
-
-
-
     @Test
     public void deleteAllTeams() throws Exception {
         Context appContext = InstrumentationRegistry.getTargetContext();

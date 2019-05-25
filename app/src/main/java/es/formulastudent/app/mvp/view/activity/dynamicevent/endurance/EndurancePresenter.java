@@ -149,24 +149,28 @@ public class EndurancePresenter {
         cal.set(Calendar.SECOND, 0);
 
         Date from = cal.getTime(); //current day at 05:00am
+        if(user != null && user.getID() != null) {
+            briefingBO.retrieveBriefingRegistersByUserAndDates(from, to, user.getID(), new BusinessCallback() {
+                @Override
+                public void onSuccess(ResponseDTO responseDTO) {
 
-        briefingBO.retrieveBriefingRegistersByUserAndDates(from, to, user.getID(), new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
+                    List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
 
-                List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
+                    FragmentManager fm = ((EnduranceActivity) view.getActivity()).getSupportFragmentManager();
+                    ConfirmEnduranceRegisterDialog createUserDialog = ConfirmEnduranceRegisterDialog
+                            .newInstance(EndurancePresenter.this, user, !briefingRegisters.isEmpty());
+                    createUserDialog.show(fm, "fragment_endurance_confirm");
+                }
 
-                FragmentManager fm = ((EnduranceActivity)view.getActivity()).getSupportFragmentManager();
-                ConfirmEnduranceRegisterDialog createUserDialog = ConfirmEnduranceRegisterDialog
-                        .newInstance(EndurancePresenter.this, user, !briefingRegisters.isEmpty());
-                createUserDialog.show(fm, "fragment_endurance_confirm");
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
-            }
-        });
+                @Override
+                public void onFailure(ResponseDTO responseDTO) {
+                    //TODO mostrar mensajes
+                }
+            });
+        } else {
+            view.hideLoading();
+            view.createMessage("User does not exist");
+        }
     }
 
 
