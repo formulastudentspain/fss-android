@@ -75,7 +75,7 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar errores
+                view.createMessage("Couldn't not create the acceleration registry");
             }
         });
     }
@@ -100,7 +100,7 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
 
              @Override
              public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
+                view.createMessage("Couldn't get the acceleration register");
              }
          });
     }
@@ -131,12 +131,10 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
 
                 //Now check if the user did the briefing today
                 getUserBriefingRegister(user);
-
             }
-
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
+                view.createMessage("Couldn't get the user by this Tag");
             }
         });
     }
@@ -152,21 +150,26 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
 
         Date from = cal.getTime(); //current day at 05:00am
 
-        briefingBO.retrieveBriefingRegistersByUserAndDates(from, to, user.getID(), new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
+        if(user != null && user.getID() != null) {
+            briefingBO.retrieveBriefingRegistersByUserAndDates(from, to, user.getID(), new BusinessCallback() {
+                @Override
+                public void onSuccess(ResponseDTO responseDTO) {
 
-                List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
+                    List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
 
-                //Get now cars
-                getCarsByUserId(user, !briefingRegisters.isEmpty());
-            }
+                    //Get now cars
+                    getCarsByUserId(user, !briefingRegisters.isEmpty());
+                }
 
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
-            }
-        });
+                @Override
+                public void onFailure(ResponseDTO responseDTO) {
+                    //TODO mostrar mensajes
+                }
+            });
+        } else {
+            view.hideLoading();
+            view.createMessage("User does not exist");
+        }
     }
 
     void getCarsByUserId(final User user, final boolean briefingExists){
@@ -187,7 +190,7 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
+                view.createMessage("Couldn't get the team from this user");
             }
         });
     }
