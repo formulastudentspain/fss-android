@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import es.formulastudent.app.R;
 
-public class AccelerationRegistersViewHolder extends RecyclerView.ViewHolder{
+public class AccelerationRegistersViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
     ImageView profileImage;
     TextView userName;
@@ -16,8 +16,9 @@ public class AccelerationRegistersViewHolder extends RecyclerView.ViewHolder{
     TextView registerDate;
     ImageView carTypeIcon;
     TextView carNumber;
+    RecyclerViewLongClickedListener longPressedListener;
 
-    public AccelerationRegistersViewHolder(View itemView) {
+    public AccelerationRegistersViewHolder(View itemView, RecyclerViewLongClickedListener longPressedListener) {
         super(itemView);
         profileImage =  itemView.findViewById(R.id.user_profile_image);
         userName =  itemView.findViewById(R.id.acceleration_item_user);
@@ -25,5 +26,14 @@ public class AccelerationRegistersViewHolder extends RecyclerView.ViewHolder{
         registerDate = itemView.findViewById(R.id.acceleration_item_date);
         carTypeIcon = itemView.findViewById(R.id.carTypeIcon);
         carNumber = itemView.findViewById(R.id.carNumber);
+        this.longPressedListener = longPressedListener;
+        itemView.setOnLongClickListener(this);
+
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        longPressedListener.recyclerViewListLongClicked(view, this.getLayoutPosition());
+        return true;
     }
 }

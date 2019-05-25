@@ -3,6 +3,7 @@ package es.formulastudent.app.mvp.data.business.acceleration;
 import java.util.Date;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.model.AccelerationRegister;
 import es.formulastudent.app.mvp.data.model.User;
 
 public interface AccelerationBO {
@@ -24,4 +25,12 @@ public interface AccelerationBO {
      * @param callback
      */
     void createAccelerationRegistry(User user, String carType, Long carNumber, BusinessCallback callback);
+
+
+    /**
+     * Method to create an Acceleration registry from another registry, basically, clone it
+     * @param register
+     * @param callback
+     */
+    void createAccelerationRegistry(AccelerationRegister register, BusinessCallback callback);
 }

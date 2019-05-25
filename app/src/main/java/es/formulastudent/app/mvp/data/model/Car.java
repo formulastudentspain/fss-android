@@ -6,7 +6,8 @@ public class Car implements Serializable {
 
     public static final String CAR_TYPE_COMBUSTION = "C";
     public static final String CAR_TYPE_ELECTRIC = "E";
-    public static final String CAR_TYPE_AUTONOMOUS = "A";
+    public static final String CAR_TYPE_AUTONOMOUS_ELECTRIC = "A";
+    public static final String CAR_TYPE_AUTONOMOUS_COMBUSTION = "A";
 
     private String type;
     private Long number;

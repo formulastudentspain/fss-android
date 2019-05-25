@@ -82,9 +82,36 @@ public class AccelerationBOFirebaseImpl implements AccelerationBO {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
-        AccelerationRegister accelerationRegister = new AccelerationRegister(user, registerDate);
-        accelerationRegister.setCarNumber(carNumber);
-        accelerationRegister.setCarType(carType);
+        AccelerationRegister accelerationRegister = new AccelerationRegister(user, registerDate, carType, carNumber);
+
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ACCELERATION)
+                .document(accelerationRegister.getID())
+                .set(accelerationRegister.toObjectData())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        callback.onSuccess(responseDTO);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //TODO añadir mensaje de error
+                        responseDTO.getErrors().add("");
+                        callback.onFailure(responseDTO);
+                    }
+                });
+    }
+
+
+    @Override
+    public void createAccelerationRegistry(AccelerationRegister register, final BusinessCallback callback) {
+
+        final ResponseDTO responseDTO = new ResponseDTO();
+        Date registerDate = Calendar.getInstance().getTime();
+        AccelerationRegister accelerationRegister = new AccelerationRegister(register, registerDate);
+
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ACCELERATION)
                 .document(accelerationRegister.getID())
