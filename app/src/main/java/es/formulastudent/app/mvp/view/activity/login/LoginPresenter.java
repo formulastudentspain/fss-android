@@ -39,7 +39,7 @@ public class LoginPresenter {
     }
 
 
-    private void loginSuccess(User user){
+    public void loginSuccess(User user){
 
         userBO.retrieveUserByMail(user.getMail(), new BusinessCallback() {
             @Override
