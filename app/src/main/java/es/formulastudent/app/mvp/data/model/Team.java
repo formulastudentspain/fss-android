@@ -3,8 +3,6 @@ package es.formulastudent.app.mvp.data.model;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class Team implements Serializable {

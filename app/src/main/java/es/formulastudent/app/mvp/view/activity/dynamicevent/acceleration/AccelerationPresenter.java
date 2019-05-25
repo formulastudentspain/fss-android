@@ -22,9 +22,10 @@ import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.dialog.ConfirmAccelerationRegisterDialog;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.recyclerview.RecyclerViewLongClickedListener;
 
 
-public class AccelerationPresenter {
+public class AccelerationPresenter implements RecyclerViewLongClickedListener {
 
     //Dependencies
     private View view;
@@ -61,12 +62,12 @@ public class AccelerationPresenter {
      * Create Acceleration registry
      * @param user
      */
-     public void createRegistry(User user, Long carNumber, String carType){
+     public void createRegistry(User user, Long carNumber, String carType, Boolean briefingDone){
 
         //Show loading
         view.showLoading();
 
-        accelerationBO.createAccelerationRegistry(user, carType, carNumber, new BusinessCallback() {
+        accelerationBO.createAccelerationRegistry(user, carType, carNumber, briefingDone, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 retrieveAccelerationRegisterList();
@@ -227,6 +228,20 @@ public class AccelerationPresenter {
         });
     }
 
+
+
+    @Override
+    public void recyclerViewListLongClicked(android.view.View v, int position) {
+        AccelerationRegister selectedRegister = filteredAccelerationRegisterList.get(position);
+
+        //With all the information, we open the dialog
+        FragmentManager fm = ((AccelerationActivity)view.getActivity()).getSupportFragmentManager();
+        ConfirmAccelerationRegisterDialog createUserDialog = ConfirmAccelerationRegisterDialog
+                .newInstance(AccelerationPresenter.this, selectedRegister);
+        createUserDialog.show(fm, "fragment_acceleration_confirm");
+
+    }
+
     public void createMessage(String message){
         view.createMessage(message);
     }
@@ -259,6 +274,8 @@ public class AccelerationPresenter {
     public void setSelectedTeamID(String selectedTeamID) {
         this.selectedTeamID = selectedTeamID;
     }
+
+
 
     public interface View {
 

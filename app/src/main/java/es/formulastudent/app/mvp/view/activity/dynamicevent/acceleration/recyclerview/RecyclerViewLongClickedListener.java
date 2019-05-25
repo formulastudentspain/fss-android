@@ -2,8 +2,8 @@ package es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.recycl
 
 import android.view.View;
 
-public interface RecyclerViewClickListener {
-    void recyclerViewListClicked(View v, int position);
+public interface RecyclerViewLongClickedListener {
+    void recyclerViewListLongClicked(View v, int position);
 }
 
 

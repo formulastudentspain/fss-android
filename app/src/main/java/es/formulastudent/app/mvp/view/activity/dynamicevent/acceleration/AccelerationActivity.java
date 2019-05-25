@@ -89,7 +89,7 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
 
         //Recycler view
         recyclerView = findViewById(R.id.recyclerView);
-        registersAdapter = new AccelerationRegistersAdapter(presenter.getAccelerationRegisterList(), this);
+        registersAdapter = new AccelerationRegistersAdapter(presenter.getAccelerationRegisterList(), this, presenter);
         recyclerView.setAdapter(registersAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);

@@ -21,6 +21,9 @@ public abstract class EventRegister implements Serializable {
     public static final String USER_IMAGE = "userImage";
     public static final String CAR_TYPE = "carType";
     public static final String CAR_NUMBER = "carNumber";
+    public static final String BRIEFING_DONE = "briefingDone";
+
+
 
     private String ID;
     private String teamID;
@@ -32,9 +35,11 @@ public abstract class EventRegister implements Serializable {
     private Date date;
     private String carType;
     private Long carNumber;
+    private Boolean briefingDone;
 
 
-    public EventRegister(String teamID, String team, String userID, String user, String userImage, Date date) {
+    public EventRegister(String teamID, String team, String userID, String user, String userImage,
+                         Date date, String carType, Long carNumber, Boolean briefingDone) {
         this.teamID = teamID;
         this.team = team;
         this.userID = userID;
@@ -43,6 +48,9 @@ public abstract class EventRegister implements Serializable {
         this.userImage = userImage;
         this.date = Calendar.getInstance().getTime();
         this.ID = UUID.randomUUID().toString();
+        this.carType = carType;
+        this.carNumber = carNumber;
+        this.briefingDone = briefingDone;
     }
 
     public Map<String, Object> toObjectData(){
@@ -56,6 +64,7 @@ public abstract class EventRegister implements Serializable {
         docData.put(EventRegister.DATE, new Timestamp(this.date));
         docData.put(EventRegister.CAR_NUMBER, this.carNumber);
         docData.put(EventRegister.CAR_TYPE, this.carType);
+        docData.put(EventRegister.BRIEFING_DONE, this.briefingDone);
 
         return docData;
     }
@@ -70,6 +79,9 @@ public abstract class EventRegister implements Serializable {
         this.teamID = object.getString(EventRegister.TEAM_ID);
         this.carNumber = object.getLong(EventRegister.CAR_NUMBER);
         this.carType = object.getString(EventRegister.CAR_TYPE);
+        this.briefingDone = object.getBoolean(EventRegister.BRIEFING_DONE);
+
+
     }
 
 
@@ -151,5 +163,13 @@ public abstract class EventRegister implements Serializable {
 
     public void setCarNumber(Long carNumber) {
         this.carNumber = carNumber;
+    }
+
+    public Boolean getBriefingDone() {
+        return briefingDone;
+    }
+
+    public void setBriefingDone(Boolean briefingDone) {
+        this.briefingDone = briefingDone;
     }
 }

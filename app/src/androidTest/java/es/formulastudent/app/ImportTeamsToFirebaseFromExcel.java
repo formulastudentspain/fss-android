@@ -1,12 +1,10 @@
 package es.formulastudent.app;
 
 import android.content.Context;
-import android.provider.SyncStateContract;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;

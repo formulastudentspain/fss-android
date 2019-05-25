@@ -24,10 +24,12 @@ public class AccelerationRegistersAdapter extends RecyclerView.Adapter<RecyclerV
     private List<AccelerationRegister> accelerationRegisterList;
     private Context context;
     private LayoutInflater mLayoutInflater;
+    private RecyclerViewLongClickedListener longClickedListener;
 
 
-    public AccelerationRegistersAdapter(List<AccelerationRegister> accelerationRegisterList, Context context) {
+    public AccelerationRegistersAdapter(List<AccelerationRegister> accelerationRegisterList, Context context, RecyclerViewLongClickedListener longClickedListener) {
         this.accelerationRegisterList = accelerationRegisterList;
+        this.longClickedListener = longClickedListener;
         this.context = context;
     }
 
@@ -39,7 +41,7 @@ public class AccelerationRegistersAdapter extends RecyclerView.Adapter<RecyclerV
         View view;
 
         view = mLayoutInflater.inflate(R.layout.activity_acceleration_list_item, parent, false);
-        return new AccelerationRegistersViewHolder(view);
+        return new AccelerationRegistersViewHolder(view, longClickedListener);
 
     }
 

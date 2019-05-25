@@ -8,14 +8,22 @@ import java.util.Map;
 
 public class AccelerationRegister extends EventRegister implements Serializable {
 
-
+/*
     public AccelerationRegister(String teamID, String team, String userID, String user, String userImage, Date date) {
         super(teamID, team, userID, user, userImage, date);
         setType(EventType.ACCELERATION);
     }
+    */
 
-    public AccelerationRegister(User user, Date date) {
-        super(user.getTeamID(), user.getTeam(), user.getID(), user.getName(), user.getPhotoUrl(), date);
+    public AccelerationRegister(User user, Date date, String carType, Long carNumber, Boolean briefingDone) {
+        super(user.getTeamID(), user.getTeam(), user.getID(), user.getName(), user.getPhotoUrl(),
+                date, carType, carNumber, briefingDone);
+        setType(EventType.ACCELERATION);
+    }
+
+    public AccelerationRegister(AccelerationRegister register, Date date) {
+        super(register.getTeamID(), register.getTeam(), register.getID(), register.getUser(),
+                register.getUserImage(), date, register.getCarType(), register.getCarNumber(), register.getBriefingDone());
         setType(EventType.ACCELERATION);
     }
 

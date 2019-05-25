@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
@@ -16,15 +15,15 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.model.AccelerationRegister;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.AccelerationPresenter;
 
-public class ConfirmAccelerationRegisterDialog extends DialogFragment implements View.OnClickListener {
+public class ConfirmAccelerationRegisterDialog extends DialogFragment{
 
     private AlertDialog dialog;
 
@@ -34,16 +33,8 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
     private ImageView briefingDoneIcon;
 
     //Car elements
-    private LinearLayout combustionContainer;
-    private LinearLayout electricContainer;
-    private LinearLayout driverlessContainer;
-    private TextView combustionCarNumber;
-    private TextView electricCarNumber;
-    private TextView driverlessCarNumber;
-    private ImageView combustionCarIcon;
-    private ImageView electricCarIcon;
-    private ImageView driverlessCarIcon;
-
+    private TextView carNumber;
+    private ImageView carTypeIcon;
 
     //Presenter
     private AccelerationPresenter presenter;
@@ -52,7 +43,6 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
     private User user;
     private boolean briefingDone;
     private Car car;
-    private Car selectedCar;
 
     public ConfirmAccelerationRegisterDialog() {}
 
@@ -63,6 +53,28 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
         frag.setUser(user);
         frag.setBriefingDone(briefingDone);
         frag.setCar(car);
+        return frag;
+    }
+
+    public static ConfirmAccelerationRegisterDialog newInstance(AccelerationPresenter presenter, AccelerationRegister register) {
+        ConfirmAccelerationRegisterDialog frag = new ConfirmAccelerationRegisterDialog();
+        frag.setPresenter(presenter);
+
+        //Create user to show
+        User user = new User();
+        user.setPhotoUrl(register.getUserImage());
+        user.setName(register.getUser());
+        user.setID(register.getID());
+
+        frag.setUser(user);
+        frag.setBriefingDone(register.getBriefingDone());
+
+        //Create car to show
+        Car car = new Car();
+        car.setNumber(register.getCarNumber());
+        car.setType(register.getCarType());
+        frag.setCar(car);
+
         return frag;
     }
 
@@ -108,43 +120,24 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
 
     private void initializeCarElements(View rootView){
 
-        //Activate elements depending of team cars
+        carNumber = rootView.findViewById(R.id.carNumber);
+        carTypeIcon = rootView.findViewById(R.id.carTypeIcon);
+
         if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_COMBUSTION)){
 
-            //Instantiate elements
-            combustionContainer = rootView.findViewById(R.id.combustionContainer);
-            combustionCarNumber = rootView.findViewById(R.id.combustionNumber);
-            combustionCarIcon = rootView.findViewById(R.id.combustionIcon);
+            carNumber.setText(car.getNumber().toString());
+            carTypeIcon.setImageResource(R.drawable.ic_combustion);
 
-            //Set values
-            combustionCarNumber.setText(car.getNumber().toString());
-            combustionCarIcon.setImageResource(R.drawable.ic_combustion);
-            combustionContainer.setOnClickListener(this);
-        }
-        if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_ELECTRIC)){
+        }else if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_ELECTRIC)){
 
-            //Instantiate elements
-            electricContainer = rootView.findViewById(R.id.electricContainer);
-            electricCarNumber = rootView.findViewById(R.id.electricNumber);
-            electricCarIcon = rootView.findViewById(R.id.electricIcon);
+            carNumber.setText(car.getNumber().toString());
+            carTypeIcon.setImageResource(R.drawable.ic_electric_icon);
 
-            //Set values
-            electricCarNumber.setText(car.getNumber().toString());
-            electricCarIcon.setImageResource(R.drawable.ic_electric_icon);
-            electricContainer.setOnClickListener(this);
-        }
-        if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_ELECTRIC)
-                || car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_COMBUSTION)  ){
+        }else if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_COMBUSTION)
+                || car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_ELECTRIC)){
 
-            //Instantiate elements
-            driverlessContainer = rootView.findViewById(R.id.driverlessContainer);
-            driverlessCarNumber = rootView.findViewById(R.id.driverlessNumber);
-            driverlessCarIcon = rootView.findViewById(R.id.driverlessIcon);
-
-            //Set values
-            driverlessCarNumber.setText(car.getNumber().toString());
-            driverlessCarIcon.setImageResource(R.drawable.ic_steering_wheel);
-            driverlessContainer.setOnClickListener(this);
+            carNumber.setText(car.getNumber().toString());
+            carTypeIcon.setImageResource(R.drawable.ic_steering_wheel);
         }
     }
 
@@ -157,12 +150,8 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
             @Override
             public void onClick(View view) {
 
-                if(selectedCar == null){
-                    presenter.createMessage(getContext().getString(R.string.acceleration_activity_dialog_confirm_error_car));
-                }else{
-                    presenter.createRegistry(user, selectedCar.getNumber(), selectedCar.getType());
-                    dialog.dismiss();
-                }
+                presenter.createRegistry(user, car.getNumber(), car.getType(), briefingDone);
+                dialog.dismiss();
             }
         });
     }
@@ -183,51 +172,5 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment implements
         this.car = car;
     }
 
-    @Override
-    public void onClick(View view) {
-
-        if(view.getId() == R.id.combustionContainer){
-
-            //Set selected background
-            combustionContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background_selected);
-
-            //Set others unselected
-            electricContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background);
-            driverlessContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background);
-
-            //Look for the proper car
-            if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_COMBUSTION)){
-                selectedCar = car;
-            }
-        }else if(view.getId() == R.id.electricContainer){
-
-            //Set selected background
-            electricContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background_selected);
-
-            //Set others unselected
-            combustionContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background);
-            driverlessContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background);
-
-            //Look for the proper car
-            if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_ELECTRIC)){
-                selectedCar = car;
-            }
-
-        }else if(view.getId() == R.id.driverlessContainer){
-
-            //Set selected background
-            driverlessContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background_selected);
-
-            //Set others unselected
-            combustionContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background);
-            electricContainer.setBackgroundResource(R.drawable.dialog_confirm_register_briefing_background);
-
-            //Look for the proper car
-            if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_COMBUSTION) ||
-                    car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_ELECTRIC)){
-                selectedCar = car;
-            }
-        }
-    }
 }
 
