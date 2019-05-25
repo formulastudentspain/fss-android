@@ -21,6 +21,7 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerLoginComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.LoginModule;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
 
@@ -46,7 +47,20 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
-        initViews();
+
+        //Check if user is still logged in
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            //Correct login
+            User user = new User(currentUser);
+            presenter.loginSuccess(user);
+            createMessage("Correct Login");
+        } else{
+            //No User Logged
+            initViews();
+        }
+
+
     }
 
 
@@ -67,21 +81,6 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
     @Override
     protected void onResume(){
         super.onResume();
-    }
-
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        //Check if user is still logged in
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            //Correct login
-            createMessage("Correct Login");
-        } else{
-            //No User Logged
-        }
-
     }
 
     private void initViews(){
