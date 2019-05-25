@@ -65,6 +65,8 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment{
         user.setPhotoUrl(register.getUserImage());
         user.setName(register.getUser());
         user.setID(register.getID());
+        user.setTeam(register.getTeam());
+        user.setTeamID(register.getTeamID());
 
         frag.setUser(user);
         frag.setBriefingDone(register.getBriefingDone());
