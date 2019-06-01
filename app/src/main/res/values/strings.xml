@@ -73,7 +73,7 @@
 
     <!-- Acceleration activity -->
     <string name="acceleration_activity_title">Acceleration control</string>
-    <string name="acceleration_activity_teams_label">Teams</string>
+    <string name="acceleration_activity_teams_label">Team</string>
     <string name="acceleration_activity_dialog_confirm_register_title">User confirmation</string>
     <string name="acceleration_activity_dialog_confirm_button_confirm">Confirm</string>
     <string name="acceleration_activity_dialog_confirm_button_cancel">Cancel</string>
@@ -100,5 +100,10 @@
     <string name="app_car_type_combustion">Combustion</string>
     <string name="app_car_type_autonomous">Autonomous</string>
 
+
+    <!-- Dynamic Events Filtering Dialog -->
+    <string name="dynamic_event_filtering_dialog_title">Filter results</string>
+    <string name="dynamic_event_filtering_dialog_filter_button">Filter</string>
+    <string name="dynamic_event_filtering_dialog_cancel_button">Cancel</string>
 
 </resources>

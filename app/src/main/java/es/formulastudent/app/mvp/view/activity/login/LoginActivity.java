@@ -54,7 +54,6 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
             //Correct login
             User user = new User(currentUser);
             presenter.loginSuccess(user);
-            createMessage("Correct Login");
         } else{
             //No User Logged
             initViews();
@@ -104,6 +103,9 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
 
         //Login layout
         loginLayout = findViewById(R.id.login_layout);
+
+        //Show fields
+        this.hideLoadingIcon();
     }
 
     @Override

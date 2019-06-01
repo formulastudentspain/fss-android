@@ -31,7 +31,7 @@ public class AccelerationBOFirebaseImpl implements AccelerationBO {
     }
 
     @Override
-    public void retrieveAccelerationRegisters(Date from, Date to, String teamID, final BusinessCallback callback) {
+    public void retrieveAccelerationRegisters(Date from, Date to, String teamID, Long carNumber, final BusinessCallback callback) {
 
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ACCELERATION);
 
@@ -44,6 +44,11 @@ public class AccelerationBOFirebaseImpl implements AccelerationBO {
         //Teams filter
         if(teamID != null && !teamID.equals("-1")){
             query = query.whereEqualTo(EventRegister.TEAM_ID, teamID);
+        }
+
+        //Car number filter
+        if(carNumber != null){
+            query = query.whereEqualTo(EventRegister.CAR_NUMBER, carNumber);
         }
 
         final ResponseDTO responseDTO = new ResponseDTO();

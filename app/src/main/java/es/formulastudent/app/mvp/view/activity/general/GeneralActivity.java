@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -439,6 +440,22 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         }else{
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            openCloseDrawer();
+        }
+        return true;
+    }
+
+    protected void openCloseDrawer(){
+        if(drawer.isDrawerOpen()){
+            drawer.closeDrawer();
+        }else{
+            drawer.openDrawer();
         }
     }
 }

@@ -63,7 +63,7 @@ public class AccelerationRegistersAdapter extends RecyclerView.Adapter<RecyclerV
         switch(register.getCarType()) {
             case Car.CAR_TYPE_COMBUSTION:
                 accelerationRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_combustion);
-            break;
+                break;
             case Car.CAR_TYPE_ELECTRIC:
                 accelerationRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_electric_icon);
                 break;

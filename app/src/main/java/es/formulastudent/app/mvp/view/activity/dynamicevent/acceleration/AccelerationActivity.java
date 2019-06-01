@@ -3,23 +3,15 @@ package es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Spinner;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -29,14 +21,13 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerAccelerationComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.AccelerationModule;
-import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.recyclerview.AccelerationRegistersAdapter;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
-import es.formulastudent.app.mvp.view.activity.general.spinneradapters.TeamsSpinnerAdapter;
 
 
-public class AccelerationActivity extends GeneralActivity implements ChipGroup.OnCheckedChangeListener, AccelerationPresenter.View, View.OnClickListener {
+public class AccelerationActivity extends GeneralActivity implements
+        AccelerationPresenter.View, View.OnClickListener {
 
     private static final int NFC_REQUEST_CODE = 101;
 
@@ -46,10 +37,8 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
     //View components
     private RecyclerView recyclerView;
     private AccelerationRegistersAdapter registersAdapter;
-    private TeamsSpinnerAdapter teamsAdapter;
     private FloatingActionButton buttonAddRegister;
-    private Spinner teamsSpinner;
-    private ChipGroup dayListGroup;
+    private MenuItem filterItem;
 
 
     @Override
@@ -59,6 +48,8 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
         super.onCreate(savedInstanceState);
 
         initViews();
+        //Toolbar
+        setSupportActionBar(toolbar);
         presenter.retrieveAccelerationRegisterList();
     }
 
@@ -98,34 +89,9 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
         buttonAddRegister = findViewById(R.id.button_add_acceleration_register);
         buttonAddRegister.setOnClickListener(this);
 
-        //Teams Spinner
-        teamsSpinner = findViewById(R.id.acceleration_team_spinner);
-        presenter.retrieveTeams();
-
-        //Chip Group
-        dayListGroup = findViewById(R.id.acceleration_chip_group);
-        dayListGroup.setOnCheckedChangeListener(this);
-
         //Add toolbar title
         setToolbarTitle(getString(R.string.acceleration_activity_title));
 
-    }
-
-
-    public void initializeTeamsSpinner(List<Team> teams){
-        teamsAdapter = new TeamsSpinnerAdapter(this, android.R.layout.simple_spinner_item, teams);
-        teamsSpinner.setAdapter(teamsAdapter);
-        teamsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                Team team = teamsAdapter.getItem(position);
-                presenter.setSelectedTeamID(team.getID());
-                presenter.retrieveAccelerationRegisterList();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapter) {  }
-        });
     }
 
 
@@ -158,6 +124,15 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
         this.hideLoading();
     }
 
+    @Override
+    public void filtersActivated(Boolean activated) {
+        if(activated){
+            filterItem.setIcon(R.drawable.ic_filter_active);
+        }else{
+            filterItem.setIcon(R.drawable.ic_filter_inactive);
+        }
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -183,59 +158,23 @@ public class AccelerationActivity extends GeneralActivity implements ChipGroup.O
         }
     }
 
+
     @Override
-    public void onCheckedChanged(ChipGroup chipGroup, int selectedChipId) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_dynamic_event, menu);
 
-        DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        String competitionDayStr = null;
-
-        if(selectedChipId == R.id.acceleration_chip_wed){
-            competitionDayStr = getString(R.string.competition_day_wed);
-        }else if(selectedChipId == R.id.acceleration_chip_thu){
-            competitionDayStr = getString(R.string.competition_day_thu);
-        }else if(selectedChipId == R.id.acceleration_chip_fri){
-            competitionDayStr = getString(R.string.competition_day_fri);
-        }else if(selectedChipId == R.id.acceleration_chip_sat){
-            competitionDayStr = getString(R.string.competition_day_sat);
-        }else if(selectedChipId == R.id.acceleration_chip_sun){
-            competitionDayStr = getString(R.string.competition_day_sun);
-        }else{ //all
-            presenter.setSelectedDateFrom(null);
-            presenter.setSelectedDateTo(null);
-        }
-
-        //Get From and To dates
-        if(competitionDayStr != null){
-
-            try{
-
-                Date competitionDate = sdf.parse(competitionDayStr);
-
-                //From
-                Calendar calFrom = Calendar.getInstance();
-                calFrom.setTime(competitionDate);
-                calFrom.set(Calendar.HOUR_OF_DAY, 0);
-                calFrom.set(Calendar.MINUTE, 0);
-                calFrom.set(Calendar.SECOND, 0);
-
-                //To
-                Calendar calTo = Calendar.getInstance();
-                calTo.setTime(competitionDate);
-                calTo.set(Calendar.HOUR_OF_DAY, 23);
-                calTo.set(Calendar.MINUTE, 59);
-                calTo.set(Calendar.SECOND, 59);
-
-                //Update From and To values
-                presenter.setSelectedDateFrom(calFrom.getTime());
-                presenter.setSelectedDateTo(calTo.getTime());
-
-            }catch (ParseException pe){
-                createMessage("Error parsing dates");
+        //Search menu item
+        filterItem = menu.findItem(R.id.filter_results);
+        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                presenter.filterIconClicked();
+                return false;
             }
-        }
+        });
 
-        //Update list
-        presenter.retrieveAccelerationRegisterList();
-
+        return true;
     }
+
 }

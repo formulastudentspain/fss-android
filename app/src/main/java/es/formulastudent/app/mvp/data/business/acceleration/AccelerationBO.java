@@ -14,9 +14,10 @@ public interface AccelerationBO {
      * @param from:    From date
      * @param to:      To date
      * @param teamID:    Selected teamID
+     * @param carNumber:    Selected car number
      * @param callback
      */
-    void retrieveAccelerationRegisters(Date from, Date to, String teamID, BusinessCallback callback);
+    void retrieveAccelerationRegisters(Date from, Date to, String teamID, Long carNumber, BusinessCallback callback);
 
 
     /**
