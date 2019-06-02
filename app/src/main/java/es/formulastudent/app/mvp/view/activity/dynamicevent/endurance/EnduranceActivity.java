@@ -78,7 +78,7 @@ public class EnduranceActivity extends GeneralActivity implements EndurancePrese
 
         //Recycler view
         recyclerView = findViewById(R.id.recyclerView);
-        registersAdapter = new EnduranceRegistersAdapter(presenter.getEnduranceRegisterList(), this);
+        registersAdapter = new EnduranceRegistersAdapter(presenter.getEnduranceRegisterList(), this, presenter);
         recyclerView.setAdapter(registersAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);

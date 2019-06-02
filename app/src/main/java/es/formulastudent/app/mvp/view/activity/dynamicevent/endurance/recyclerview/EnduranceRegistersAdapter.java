@@ -17,6 +17,7 @@ import java.util.Locale;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.EnduranceRegister;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.recyclerview.RecyclerViewLongClickedListener;
 
 
 public class EnduranceRegistersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -24,11 +25,16 @@ public class EnduranceRegistersAdapter extends RecyclerView.Adapter<RecyclerView
     private List<EnduranceRegister> enduranceRegisterList;
     private Context context;
     private LayoutInflater mLayoutInflater;
+    private RecyclerViewLongClickedListener longClickedListener;
 
 
-    public EnduranceRegistersAdapter(List<EnduranceRegister> enduranceRegisterList, Context context) {
+
+    public EnduranceRegistersAdapter(List<EnduranceRegister> enduranceRegisterList, Context context,
+                                     RecyclerViewLongClickedListener longClickedListener) {
         this.enduranceRegisterList = enduranceRegisterList;
+        this.longClickedListener = longClickedListener;
         this.context = context;
+
     }
 
     @Override
@@ -39,7 +45,7 @@ public class EnduranceRegistersAdapter extends RecyclerView.Adapter<RecyclerView
         View view;
 
         view = mLayoutInflater.inflate(R.layout.activity_endurance_list_item, parent, false);
-        return new EnduranceRegistersViewHolder(view);
+        return new EnduranceRegistersViewHolder(view, longClickedListener);
 
     }
 
