@@ -13,20 +13,24 @@ import androidx.fragment.app.DialogFragment;
 
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.model.Car;
+import es.formulastudent.app.mvp.data.model.EnduranceRegister;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.endurance.EndurancePresenter;
 
 public class ConfirmEnduranceRegisterDialog extends DialogFragment {
 
+    private AlertDialog dialog;
+
     private ImageView userPhoto;
     private TextView userName;
     private TextView userTeam;
     private ImageView briefingDoneIcon;
+
+    //Car elements
+    private TextView carNumber;
+    private ImageView carTypeIcon;
 
     //Presenter
     private EndurancePresenter presenter;
@@ -34,21 +38,49 @@ public class ConfirmEnduranceRegisterDialog extends DialogFragment {
     //Detected user
     private User user;
     private boolean briefingDone;
+    private Car car;
+
 
     public ConfirmEnduranceRegisterDialog() {}
 
-    public static ConfirmEnduranceRegisterDialog newInstance(EndurancePresenter presenter, User user, boolean briefingDone) {
+    public static ConfirmEnduranceRegisterDialog newInstance(EndurancePresenter presenter, User user, boolean briefingDone, Car car) {
         ConfirmEnduranceRegisterDialog frag = new ConfirmEnduranceRegisterDialog();
         frag.setPresenter(presenter);
         frag.setUser(user);
         frag.setBriefingDone(briefingDone);
+        frag.setCar(car);
         return frag;
     }
+
+
+    public static ConfirmEnduranceRegisterDialog newInstance(EndurancePresenter presenter, EnduranceRegister register) {
+        ConfirmEnduranceRegisterDialog frag = new ConfirmEnduranceRegisterDialog();
+        frag.setPresenter(presenter);
+
+        //Create user to show
+        User user = new User();
+        user.setPhotoUrl(register.getUserImage());
+        user.setName(register.getUser());
+        user.setID(register.getID());
+        user.setTeam(register.getTeam());
+        user.setTeamID(register.getTeamID());
+
+        frag.setUser(user);
+        frag.setBriefingDone(register.getBriefingDone());
+
+        //Create car to show
+        Car car = new Car();
+        car.setNumber(register.getCarNumber());
+        car.setType(register.getCarType());
+        frag.setCar(car);
+
+        return frag;
+    }
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        DateFormat sdf = new SimpleDateFormat("EEE, dd MMM 'at' HH:mm", Locale.US);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -59,6 +91,7 @@ public class ConfirmEnduranceRegisterDialog extends DialogFragment {
         userTeam = rootView.findViewById(R.id.user_team);
         userPhoto = rootView.findViewById(R.id.user_profile_image);
         briefingDoneIcon = rootView.findViewById(R.id.briefing_done_icon);
+        this.initializeCarElements(rootView);
 
         //Set values
         userName.setText(user.getName());
@@ -71,34 +104,55 @@ public class ConfirmEnduranceRegisterDialog extends DialogFragment {
             briefingDoneIcon.setImageResource(R.drawable.ic_red_cross);
         }
 
+        builder.setView(rootView)
+                .setTitle(R.string.acceleration_activity_dialog_confirm_register_title)
+                .setPositiveButton(R.string.acceleration_activity_dialog_confirm_button_confirm,null)
+                .setNegativeButton(R.string.acceleration_activity_dialog_confirm_button_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        ConfirmEnduranceRegisterDialog.this.getDialog().cancel();
+                    }
+                });
 
+        dialog = builder.create();
+        return dialog;
+    }
 
-        if(briefingDone){
-            builder.setView(rootView)
-                    .setTitle(R.string.endurance_activity_dialog_confirm_register_title)
-                    .setPositiveButton(R.string.endurance_activity_dialog_confirm_button_confirm, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            presenter.createRegistry(user);
-                        }
-                    })
-                    .setNegativeButton(R.string.endurance_activity_dialog_confirm_button_cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            ConfirmEnduranceRegisterDialog.this.getDialog().cancel();
-                        }
-                    });
-        }else{
-            builder.setView(rootView)
-                    .setTitle(R.string.endurance_activity_dialog_confirm_register_title)
-                    .setNegativeButton(R.string.endurance_activity_dialog_confirm_button_cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            ConfirmEnduranceRegisterDialog.this.getDialog().cancel();
-                        }
-                    });
+    private void initializeCarElements(View rootView){
+
+        carNumber = rootView.findViewById(R.id.carNumber);
+        carTypeIcon = rootView.findViewById(R.id.carTypeIcon);
+
+        if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_COMBUSTION)){
+
+            carNumber.setText(car.getNumber().toString());
+            carTypeIcon.setImageResource(R.drawable.ic_combustion);
+
+        }else if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_ELECTRIC)){
+
+            carNumber.setText(car.getNumber().toString());
+            carTypeIcon.setImageResource(R.drawable.ic_electric_icon);
+
+        }else if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_COMBUSTION)
+                || car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_ELECTRIC)){
+
+            carNumber.setText(car.getNumber().toString());
+            carTypeIcon.setImageResource(R.drawable.ic_steering_wheel);
         }
+    }
 
 
-        return builder.create();
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                presenter.createRegistry(user, car.getNumber(), car.getType(), briefingDone);
+                dialog.dismiss();
+            }
+        });
     }
 
     public void setPresenter(EndurancePresenter presenter) {
@@ -112,5 +166,8 @@ public class ConfirmEnduranceRegisterDialog extends DialogFragment {
     public void setBriefingDone(boolean briefingDone) {
         this.briefingDone = briefingDone;
     }
-}
 
+    public void setCar(Car car) {
+        this.car = car;
+    }
+}

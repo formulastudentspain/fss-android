@@ -33,7 +33,7 @@ public class EnduranceBOFirebaseImpl implements EnduranceBO {
     }
 
     @Override
-    public void retrieveEnduranceRegisters(Date from, Date to, String teamID, final BusinessCallback callback) {
+    public void retrieveEnduranceRegisters(Date from, Date to, String teamID, Long carNumber, final BusinessCallback callback) {
 
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ENDURANCE);
 
@@ -46,6 +46,11 @@ public class EnduranceBOFirebaseImpl implements EnduranceBO {
         //Teams filter
         if(teamID != null && !teamID.equals("-1")){
             query = query.whereEqualTo(EventRegister.TEAM_ID, teamID);
+        }
+
+        //Car number filter
+        if(carNumber != null){
+            query = query.whereEqualTo(EventRegister.CAR_NUMBER, carNumber);
         }
 
         query.orderBy(EventRegister.DATE, Query.Direction.DESCENDING)
@@ -80,11 +85,11 @@ public class EnduranceBOFirebaseImpl implements EnduranceBO {
 
 
     @Override
-    public void createEnduranceRegistry(User user, final BusinessCallback callback) {
+    public void createEnduranceRegistry(User user, String carType, Long carNumber, Boolean briefingDone, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
-        EnduranceRegister enduranceRegister = new EnduranceRegister(user, registerDate, null, null, null);
+        EnduranceRegister enduranceRegister = new EnduranceRegister(user, registerDate, carType, carNumber, briefingDone);
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ENDURANCE)
                 .document(enduranceRegister.getID())
@@ -97,6 +102,7 @@ public class EnduranceBOFirebaseImpl implements EnduranceBO {
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
+
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         //TODO añadir mensaje de error

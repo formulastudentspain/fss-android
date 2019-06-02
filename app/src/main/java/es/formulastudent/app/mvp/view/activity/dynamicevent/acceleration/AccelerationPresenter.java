@@ -21,12 +21,13 @@ import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventPresenter;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.dialog.ConfirmAccelerationRegisterDialog;
-import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.dialog.FilteringRegistersDialog;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.FilteringRegistersDialog;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.recyclerview.RecyclerViewLongClickedListener;
 
 
-public class AccelerationPresenter implements RecyclerViewLongClickedListener {
+public class AccelerationPresenter implements DynamicEventPresenter, RecyclerViewLongClickedListener {
 
     //Dependencies
     private View view;
@@ -74,7 +75,7 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
         accelerationBO.createAccelerationRegistry(user, carType, carNumber, briefingDone, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                retrieveAccelerationRegisterList();
+                retrieveRegisterList();
             }
 
             @Override
@@ -88,7 +89,8 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
     /**
      * Retrieve Acceleration registers
      */
-     public void retrieveAccelerationRegisterList() {
+    @Override
+     public void retrieveRegisterList() {
 
         //Show loading
         view.showLoading();
@@ -270,6 +272,20 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
         }
     }
 
+    public void setFilteringValues(Date selectedDateFrom, Date selectedDateTo, String selectedDay, String selectedTeamID, Long selectedCarNumber){
+        this.selectedDateFrom = selectedDateFrom;
+        this.selectedDateTo = selectedDateTo;
+        this.selectedTeamID = selectedTeamID;
+        this.selectedDay = selectedDay;
+        this.selectedCarNumber = selectedCarNumber;
+
+        view.filtersActivated(
+                selectedDay!=null
+                        || selectedCarNumber != null
+                        || (selectedTeamID != null && !selectedTeamID.equals("-1"))
+        );
+    }
+
     public void createMessage(String message){
         view.createMessage(message);
     }
@@ -283,19 +299,7 @@ public class AccelerationPresenter implements RecyclerViewLongClickedListener {
         this.selectedTeamID = selectedTeamID;
     }
 
-    public void setFilteringValues(Date selectedDateFrom, Date selectedDateTo, String selectedDay, String selectedTeamID, Long selectedCarNumber){
-        this.selectedDateFrom = selectedDateFrom;
-        this.selectedDateTo = selectedDateTo;
-        this.selectedTeamID = selectedTeamID;
-        this.selectedDay = selectedDay;
-        this.selectedCarNumber = selectedCarNumber;
 
-        view.filtersActivated(
-                selectedDay!=null
-                || selectedCarNumber != null
-                || (selectedTeamID != null && !selectedTeamID.equals("-1"))
-        );
-    }
 
 
 

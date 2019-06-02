@@ -48,9 +48,8 @@ public class AccelerationActivity extends GeneralActivity implements
         super.onCreate(savedInstanceState);
 
         initViews();
-        //Toolbar
         setSupportActionBar(toolbar);
-        presenter.retrieveAccelerationRegisterList();
+        presenter.retrieveRegisterList();
     }
 
     @Override

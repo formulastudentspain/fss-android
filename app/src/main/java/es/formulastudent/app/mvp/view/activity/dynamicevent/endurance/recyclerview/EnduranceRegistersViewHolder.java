@@ -14,6 +14,8 @@ public class EnduranceRegistersViewHolder extends RecyclerView.ViewHolder{
     TextView userName;
     TextView userTeam;
     TextView registerDate;
+    TextView carNumber;
+    ImageView carTypeIcon;
 
     public EnduranceRegistersViewHolder(View itemView) {
         super(itemView);
@@ -21,5 +23,7 @@ public class EnduranceRegistersViewHolder extends RecyclerView.ViewHolder{
         userName =  itemView.findViewById(R.id.endurance_item_user);
         userTeam =  itemView.findViewById(R.id.endurance_item_team);
         registerDate = itemView.findViewById(R.id.endurance_item_date);
+        carNumber = itemView.findViewById(R.id.carNumber);
+        carTypeIcon = itemView.findViewById(R.id.carTypeIcon);
     }
 }

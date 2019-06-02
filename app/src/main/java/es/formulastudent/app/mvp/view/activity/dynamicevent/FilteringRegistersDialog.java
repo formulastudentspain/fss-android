@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.dialog;
+package es.formulastudent.app.mvp.view.activity.dynamicevent;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -25,7 +25,6 @@ import java.util.Locale;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.AccelerationPresenter;
 import es.formulastudent.app.mvp.view.activity.general.spinneradapters.TeamsSpinnerAdapter;
 
 public class FilteringRegistersDialog extends DialogFragment implements ChipGroup.OnCheckedChangeListener{
@@ -48,11 +47,11 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
     private Date selectedDateTo;
 
     //Presenter
-    private AccelerationPresenter presenter;
+    private DynamicEventPresenter presenter;
 
     public FilteringRegistersDialog() {}
 
-    public static FilteringRegistersDialog newInstance(AccelerationPresenter presenter, List<Team> teams,
+    public static FilteringRegistersDialog newInstance(DynamicEventPresenter presenter, List<Team> teams,
                                                        String selectedTeamID, Long selectedCarNumber, String selectedDay) {
         FilteringRegistersDialog frag = new FilteringRegistersDialog();
         frag.setTeams(teams);
@@ -177,7 +176,7 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
                     presenter.setFilteringValues(selectedDateFrom, selectedDateTo, selectedDay, selectedTeamID, selectedCarNumber);
 
                     //Do filter
-                    presenter.retrieveAccelerationRegisterList();
+                    presenter.retrieveRegisterList();
 
                     //Close dialog
                     dialog.dismiss();
@@ -251,7 +250,7 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
 
     }
 
-    public void setPresenter(AccelerationPresenter presenter) {
+    public void setPresenter(DynamicEventPresenter presenter) {
         this.presenter = presenter;
     }
 

@@ -36,18 +36,18 @@ public class AccelerationBOFirebaseImpl implements AccelerationBO {
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ACCELERATION);
 
         //Competition day filter
-        if(from != null && to != null){
+        if (from != null && to != null) {
             query = query.whereLessThanOrEqualTo(EventRegister.DATE, to);
             query = query.whereGreaterThan(EventRegister.DATE, from);
         }
 
         //Teams filter
-        if(teamID != null && !teamID.equals("-1")){
+        if (teamID != null && !teamID.equals("-1")) {
             query = query.whereEqualTo(EventRegister.TEAM_ID, teamID);
         }
 
         //Car number filter
-        if(carNumber != null){
+        if (carNumber != null) {
             query = query.whereEqualTo(EventRegister.CAR_NUMBER, carNumber);
         }
 
@@ -73,12 +73,12 @@ public class AccelerationBOFirebaseImpl implements AccelerationBO {
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //TODO add messages
-                        callback.onFailure(responseDTO);
-                    }
-                 });
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //TODO add messages
+                callback.onFailure(responseDTO);
+            }
+        });
     }
 
 
@@ -109,32 +109,4 @@ public class AccelerationBOFirebaseImpl implements AccelerationBO {
                 });
     }
 
-
-    @Override
-    public void createAccelerationRegistry(AccelerationRegister register, final BusinessCallback callback) {
-
-        final ResponseDTO responseDTO = new ResponseDTO();
-        Date registerDate = Calendar.getInstance().getTime();
-        AccelerationRegister accelerationRegister = new AccelerationRegister(register, registerDate);
-
-
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ACCELERATION)
-                .document(accelerationRegister.getID())
-                .set(accelerationRegister.toObjectData())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        callback.onSuccess(responseDTO);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
-                        callback.onFailure(responseDTO);
-                    }
-                });
-    }
 }

@@ -1,6 +1,7 @@
 package es.formulastudent.app.mvp.view.activity.timelinedetail;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import es.formulastudent.app.R;
-
 import es.formulastudent.app.mvp.data.model.TimelineItem;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
@@ -62,6 +62,12 @@ public class TimelineDetailActivity extends GeneralActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return true;
     }

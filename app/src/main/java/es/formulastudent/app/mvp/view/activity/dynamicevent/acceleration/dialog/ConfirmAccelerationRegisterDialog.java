@@ -13,10 +13,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.AccelerationRegister;
 import es.formulastudent.app.mvp.data.model.Car;
@@ -83,7 +79,6 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        DateFormat sdf = new SimpleDateFormat("EEE, dd MMM 'at' HH:mm", Locale.US);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 

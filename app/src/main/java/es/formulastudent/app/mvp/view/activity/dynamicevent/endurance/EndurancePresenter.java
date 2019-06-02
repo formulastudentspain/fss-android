@@ -12,18 +12,22 @@ import java.util.List;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
-import es.formulastudent.app.mvp.data.business.endurance.EnduranceBO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
+import es.formulastudent.app.mvp.data.business.endurance.EnduranceBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
-import es.formulastudent.app.mvp.data.model.EnduranceRegister;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
+import es.formulastudent.app.mvp.data.model.Car;
+import es.formulastudent.app.mvp.data.model.EnduranceRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventPresenter;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.FilteringRegistersDialog;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.recyclerview.RecyclerViewLongClickedListener;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.endurance.dialog.ConfirmEnduranceRegisterDialog;
 
 
-public class EndurancePresenter {
+public class EndurancePresenter implements DynamicEventPresenter, RecyclerViewLongClickedListener {
 
     //Dependencies
     private View view;
@@ -38,12 +42,15 @@ public class EndurancePresenter {
     List<EnduranceRegister> allEnduranceRegisterList = new ArrayList<>();
     List<EnduranceRegister> filteredEnduranceRegisterList = new ArrayList<>();
 
+    //Filtering values
+    List<Team> teams;
+    String selectedTeamID;
+    String selectedDay;
+    Long selectedCarNumber;
+
     //Selected chip to filter
     private Date selectedDateFrom;
     private Date selectedDateTo;
-
-    //Team
-    private String selectedTeamID;
 
 
     public EndurancePresenter(EndurancePresenter.View view, Context context, TeamBO teamBO,
@@ -60,20 +67,20 @@ public class EndurancePresenter {
      * Create Endurance registry
      * @param user
      */
-     public void createRegistry(User user){
+     public void createRegistry(User user, Long carNumber, String carType, Boolean briefingDone){
 
         //Show loading
         view.showLoading();
 
-        enduranceBO.createEnduranceRegistry(user, new BusinessCallback() {
+        enduranceBO.createEnduranceRegistry(user, carType, carNumber, briefingDone, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                retrieveEnduranceRegisterList();
+                retrieveRegisterList();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar errores
+                view.createMessage("Couldn't not create the endurance registry");
             }
         });
     }
@@ -82,23 +89,24 @@ public class EndurancePresenter {
     /**
      * Retrieve Endurance registers
      */
-     void retrieveEnduranceRegisterList() {
+    @Override
+     public void retrieveRegisterList() {
 
         //Show loading
         view.showLoading();
 
         //Call Endurance business
-         enduranceBO.retrieveEnduranceRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, new BusinessCallback() {
+         enduranceBO.retrieveEnduranceRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, selectedCarNumber, new BusinessCallback() {
 
              @Override
              public void onSuccess(ResponseDTO responseDTO) {
                      List<EnduranceRegister> results = (List<EnduranceRegister>) responseDTO.getData();
-                     updateEnduranceRegisters(results);
+                     updateEnduranceRegisters(results==null ? new ArrayList<EnduranceRegister>() : results);
              }
 
              @Override
              public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
+                 view.createMessage("Couldn't get the endurance register");
              }
          });
     }
@@ -156,10 +164,8 @@ public class EndurancePresenter {
 
                     List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
 
-                    FragmentManager fm = ((EnduranceActivity) view.getActivity()).getSupportFragmentManager();
-                    ConfirmEnduranceRegisterDialog createUserDialog = ConfirmEnduranceRegisterDialog
-                            .newInstance(EndurancePresenter.this, user, !briefingRegisters.isEmpty());
-                    createUserDialog.show(fm, "fragment_endurance_confirm");
+                    //Get now cars
+                    getCarsByUserId(user, !briefingRegisters.isEmpty());
                 }
 
                 @Override
@@ -171,6 +177,30 @@ public class EndurancePresenter {
             view.hideLoading();
             view.createMessage("User does not exist");
         }
+    }
+
+
+    void getCarsByUserId(final User user, final boolean briefingExists){
+
+        teamBO.retrieveTeamById(user.getTeamID(), new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+
+                Team team = (Team) responseDTO.getData();
+                Car car = team.getCar();
+
+                //With all the information, we open the dialog
+                FragmentManager fm = ((EnduranceActivity)view.getActivity()).getSupportFragmentManager();
+                ConfirmEnduranceRegisterDialog createUserDialog = ConfirmEnduranceRegisterDialog
+                        .newInstance(EndurancePresenter.this, user, briefingExists, car);
+                createUserDialog.show(fm, "fragment_endurance_confirm");
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                view.createMessage("Couldn't get the team from this user");
+            }
+        });
     }
 
 
@@ -193,7 +223,8 @@ public class EndurancePresenter {
                 Team teamAll = new Team("-1", "All");
                 teams.add(0, teamAll);
 
-                view.initializeTeamsSpinner(teams);
+                openFilteringDialog(teams);
+
             }
 
             @Override
@@ -205,33 +236,69 @@ public class EndurancePresenter {
     }
 
 
+    @Override
+    public void recyclerViewListLongClicked(android.view.View v, int position) {
+        EnduranceRegister selectedRegister = filteredEnduranceRegisterList.get(position);
+
+        //With all the information, we open the dialog
+        FragmentManager fm = ((EnduranceActivity)view.getActivity()).getSupportFragmentManager();
+        ConfirmEnduranceRegisterDialog createUserDialog = ConfirmEnduranceRegisterDialog
+                .newInstance(EndurancePresenter.this, selectedRegister);
+        createUserDialog.show(fm, "fragment_acceleration_confirm");
+
+    }
+
+    public void openFilteringDialog(List<Team> teams){
+        this.teams = teams;
+
+        //With all the information, we open the dialog
+        FragmentManager fm = ((EnduranceActivity)view.getActivity()).getSupportFragmentManager();
+        FilteringRegistersDialog createUserDialog = FilteringRegistersDialog
+                .newInstance(this, teams, selectedTeamID, selectedCarNumber, selectedDay);
+        createUserDialog.show(fm, "fragment_acceleration_confirm");
+
+        //Hide loading right after showing the filtering dialog
+        view.hideLoading();
+    }
+
+
+    void filterIconClicked(){
+
+        //Go retrieve teams if we have not yet
+        if(teams == null){
+            retrieveTeams();
+        }else{
+            openFilteringDialog(teams);
+        }
+    }
+
+
+    public void setFilteringValues(Date selectedDateFrom, Date selectedDateTo, String selectedDay, String selectedTeamID, Long selectedCarNumber){
+        this.selectedDateFrom = selectedDateFrom;
+        this.selectedDateTo = selectedDateTo;
+        this.selectedTeamID = selectedTeamID;
+        this.selectedDay = selectedDay;
+        this.selectedCarNumber = selectedCarNumber;
+
+        view.filtersActivated(
+                selectedDay!=null
+                        || selectedCarNumber != null
+                        || (selectedTeamID != null && !selectedTeamID.equals("-1"))
+        );
+    }
+
+
+    @Override
+    public void createMessage(String message) {
+        view.createMessage(message);
+    }
+
+
     public List<EnduranceRegister> getEnduranceRegisterList() {
         return filteredEnduranceRegisterList;
     }
 
-    public Date getSelectedDateFrom() {
-        return selectedDateFrom;
-    }
 
-    public void setSelectedDateFrom(Date selectedDateFrom) {
-        this.selectedDateFrom = selectedDateFrom;
-    }
-
-    public Date getSelectedDateTo() {
-        return selectedDateTo;
-    }
-
-    public void setSelectedDateTo(Date selectedDateTo) {
-        this.selectedDateTo = selectedDateTo;
-    }
-
-    public String getSelectedTeamID() {
-        return selectedTeamID;
-    }
-
-    public void setSelectedTeamID(String selectedTeamID) {
-        this.selectedTeamID = selectedTeamID;
-    }
 
     public interface View {
 
@@ -263,10 +330,7 @@ public class EndurancePresenter {
          */
         void refreshEnduranceRegisterItems();
 
-        /**
-         * Initialize teams spinner
-         */
-        void initializeTeamsSpinner(List<Team> teams);
+        void filtersActivated(Boolean activated);
     }
 
 }

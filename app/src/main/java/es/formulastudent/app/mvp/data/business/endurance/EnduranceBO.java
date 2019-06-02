@@ -15,13 +15,16 @@ public interface EnduranceBO {
      * @param teamID:    Selected teamID
      * @param callback
      */
-    void retrieveEnduranceRegisters(Date from, Date to, String teamID, BusinessCallback callback);
+    void retrieveEnduranceRegisters(Date from, Date to, String teamID, Long carNumber, BusinessCallback callback);
 
 
     /**
      * Method to create an Endurance registry
      * @param user
+     * @param carType
+     * @param carNumber
+     * @param briefingDone
      * @param callback
      */
-    void createEnduranceRegistry(User user, BusinessCallback callback);
+    void createEnduranceRegistry(User user, String carType, Long carNumber, Boolean briefingDone, BusinessCallback callback);
 }

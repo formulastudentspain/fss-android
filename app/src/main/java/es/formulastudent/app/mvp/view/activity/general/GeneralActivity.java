@@ -452,10 +452,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
     }
 
     protected void openCloseDrawer(){
-        if(drawer.isDrawerOpen()){
-            drawer.closeDrawer();
-        }else{
-            drawer.openDrawer();
+        if(drawer != null){
+            if(drawer.isDrawerOpen()){
+                drawer.closeDrawer();
+            }else{
+                drawer.openDrawer();
+            }
         }
     }
 }

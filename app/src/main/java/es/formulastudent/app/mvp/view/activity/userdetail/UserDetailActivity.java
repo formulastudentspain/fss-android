@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,8 +21,8 @@ import es.formulastudent.app.di.component.DaggerUserDetailComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.UserDetailModule;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
+import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
 
 public class UserDetailActivity extends GeneralActivity implements UserDetailPresenter.View, View.OnClickListener {
@@ -172,6 +173,12 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
     }
 
 }
