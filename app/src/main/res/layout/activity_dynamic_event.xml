@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mvp.view.activity.dynamicevent.endurance.EnduranceActivity"
+    tools:context=".mvp.view.activity.dynamicevent.DynamicEventActivity"
     >
 
     <LinearLayout
@@ -24,7 +24,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_add_endurance_register"
+        android:id="@+id/button_add_acceleration_register"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="bottom|end"

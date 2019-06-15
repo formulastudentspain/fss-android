@@ -68,7 +68,7 @@
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.dynamicevent.acceleration.AccelerationActivity"
+            android:name=".mvp.view.activity.dynamicevent.DynamicEventActivity"
             android:launchMode="singleTop">
         </activity>
 

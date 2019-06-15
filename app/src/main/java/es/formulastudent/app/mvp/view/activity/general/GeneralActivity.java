@@ -33,10 +33,10 @@ import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
-import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.AccelerationActivity;
-import es.formulastudent.app.mvp.view.activity.dynamicevent.endurance.EnduranceActivity;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventActivity;
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityExitDialog;
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.activity.login.LoginActivity;
@@ -376,13 +376,15 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             finish();
 
         }else if(drawerItem.getIdentifier() == 10013){ //Acceleration
-            Intent intent = new Intent(this, AccelerationActivity.class);
+            Intent intent = new Intent(this, DynamicEventActivity.class);
+            intent.putExtra("eventType", EventType.ACCELERATION);
             this.startActivity(intent);
             finish();
 
         }else if(drawerItem.getIdentifier() == 10015){ //Endurance
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(this, EnduranceActivity.class);
+            Intent intent = new Intent(this, DynamicEventActivity.class);
+            intent.putExtra("eventType", EventType.ENDURANCE_EFFICIENCY);
             this.startActivity(intent);
             finish();
 

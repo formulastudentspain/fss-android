@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.dialog;
+package es.formulastudent.app.mvp.view.activity.dynamicevent.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,12 +14,12 @@ import androidx.fragment.app.DialogFragment;
 import com.squareup.picasso.Picasso;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.AccelerationRegister;
 import es.formulastudent.app.mvp.data.model.Car;
+import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.AccelerationPresenter;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventPresenter;
 
-public class ConfirmAccelerationRegisterDialog extends DialogFragment{
+public class ConfirmEventRegisterDialog extends DialogFragment{
 
     private AlertDialog dialog;
 
@@ -33,18 +33,18 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment{
     private ImageView carTypeIcon;
 
     //Presenter
-    private AccelerationPresenter presenter;
+    private DynamicEventPresenter presenter;
 
     //Detected user
     private User user;
     private boolean briefingDone;
     private Car car;
 
-    public ConfirmAccelerationRegisterDialog() {}
+    public ConfirmEventRegisterDialog() {}
 
-    public static ConfirmAccelerationRegisterDialog newInstance(AccelerationPresenter presenter, User user,
-                                                                boolean briefingDone, Car car) {
-        ConfirmAccelerationRegisterDialog frag = new ConfirmAccelerationRegisterDialog();
+    public static ConfirmEventRegisterDialog newInstance(DynamicEventPresenter presenter, User user,
+                                                         boolean briefingDone, Car car) {
+        ConfirmEventRegisterDialog frag = new ConfirmEventRegisterDialog();
         frag.setPresenter(presenter);
         frag.setUser(user);
         frag.setBriefingDone(briefingDone);
@@ -52,8 +52,8 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment{
         return frag;
     }
 
-    public static ConfirmAccelerationRegisterDialog newInstance(AccelerationPresenter presenter, AccelerationRegister register) {
-        ConfirmAccelerationRegisterDialog frag = new ConfirmAccelerationRegisterDialog();
+    public static ConfirmEventRegisterDialog newInstance(DynamicEventPresenter presenter, EventRegister register) {
+        ConfirmEventRegisterDialog frag = new ConfirmEventRegisterDialog();
         frag.setPresenter(presenter);
 
         //Create user to show
@@ -82,7 +82,7 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment{
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View rootView = inflater.inflate(R.layout.dialog_acceleration_confirmation, null);
+        View rootView = inflater.inflate(R.layout.dialog_dynamic_event_confirmation, null);
 
         // Get view components
         userName = rootView.findViewById(R.id.user_name);
@@ -107,7 +107,7 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment{
                     .setPositiveButton(R.string.acceleration_activity_dialog_confirm_button_confirm,null)
                     .setNegativeButton(R.string.acceleration_activity_dialog_confirm_button_cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            ConfirmAccelerationRegisterDialog.this.getDialog().cancel();
+                            ConfirmEventRegisterDialog.this.getDialog().cancel();
                         }
                     });
 
@@ -153,7 +153,7 @@ public class ConfirmAccelerationRegisterDialog extends DialogFragment{
         });
     }
 
-    public void setPresenter(AccelerationPresenter presenter) {
+    public void setPresenter(DynamicEventPresenter presenter) {
         this.presenter = presenter;
     }
 

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public abstract class EventRegister implements Serializable {
+public class EventRegister implements Serializable {
 
     //Database constants
     public static final String TEAM_ID = "teamID";
@@ -39,7 +39,7 @@ public abstract class EventRegister implements Serializable {
 
 
     public EventRegister(String teamID, String team, String userID, String user, String userImage,
-                         Date date, String carType, Long carNumber, Boolean briefingDone) {
+                         Date date, String carType, Long carNumber, Boolean briefingDone, EventType type) {
         this.teamID = teamID;
         this.team = team;
         this.userID = userID;
@@ -51,6 +51,7 @@ public abstract class EventRegister implements Serializable {
         this.carType = carType;
         this.carNumber = carNumber;
         this.briefingDone = briefingDone;
+        this.type = type;
     }
 
     public Map<String, Object> toObjectData(){
@@ -69,7 +70,7 @@ public abstract class EventRegister implements Serializable {
         return docData;
     }
 
-    public EventRegister(DocumentSnapshot object){
+    public EventRegister(DocumentSnapshot object, EventType type){
 
         this.date = object.getDate(EventRegister.DATE);
         this.userImage = object.getString(EventRegister.USER_IMAGE);
@@ -80,6 +81,7 @@ public abstract class EventRegister implements Serializable {
         this.carNumber = object.getLong(EventRegister.CAR_NUMBER);
         this.carType = object.getString(EventRegister.CAR_TYPE);
         this.briefingDone = object.getBoolean(EventRegister.BRIEFING_DONE);
+        this.type = type;
 
 
     }

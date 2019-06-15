@@ -12,18 +12,15 @@ public class BriefingRegister extends EventRegister implements Serializable {
 
     public BriefingRegister(User user, Date date) {
         super(user.getTeamID(), user.getTeam(), user.getID(), user.getName(), user.getPhotoUrl(),
-                date, null, null, null);
-        setType(EventType.BRIEFING);
+                date, null, null, null, EventType.BRIEFING);
     }
 
     public Map<String, Object> toObjectData(){
         return super.toObjectData();
     }
 
-
     public BriefingRegister(DocumentSnapshot object){
-        super(object);
-        setType(EventType.BRIEFING);
+        super(object, EventType.BRIEFING);
     }
 
 

@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration;
+package es.formulastudent.app.mvp.view.activity.dynamicevent;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,39 +13,44 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.greenrobot.greendao.annotation.NotNull;
+
 import javax.inject.Inject;
 
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
-import es.formulastudent.app.di.component.DaggerAccelerationComponent;
+import es.formulastudent.app.di.component.DaggerDynamicEventComponent;
 import es.formulastudent.app.di.module.ContextModule;
-import es.formulastudent.app.di.module.activity.AccelerationModule;
+import es.formulastudent.app.di.module.activity.DynamicEventModule;
+import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
-import es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.recyclerview.AccelerationRegistersAdapter;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.recyclerview.EventRegistersAdapter;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
 
-public class AccelerationActivity extends GeneralActivity implements
-        AccelerationPresenter.View, View.OnClickListener {
+public class DynamicEventActivity extends GeneralActivity implements
+        DynamicEventPresenter.View, View.OnClickListener {
 
     private static final int NFC_REQUEST_CODE = 101;
 
     @Inject
-    AccelerationPresenter presenter;
+    DynamicEventPresenter presenter;
 
     //View components
     private RecyclerView recyclerView;
-    private AccelerationRegistersAdapter registersAdapter;
+    private EventRegistersAdapter registersAdapter;
     private FloatingActionButton buttonAddRegister;
     private MenuItem filterItem;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_acceleration);
+        setContentView(R.layout.activity_dynamic_event);
         super.onCreate(savedInstanceState);
+
+        EventType eventType = (EventType) getIntent().getSerializableExtra("eventType");
+        setupComponent(FSSApp.getApp().component(), eventType);
 
         initViews();
         setSupportActionBar(toolbar);
@@ -61,12 +66,12 @@ public class AccelerationActivity extends GeneralActivity implements
      * Inject dependencies method
      * @param appComponent
      */
-    protected void setupComponent(AppComponent appComponent) {
+    protected void setupComponent(AppComponent appComponent, @NotNull EventType eventType) {
 
-        DaggerAccelerationComponent.builder()
+        DaggerDynamicEventComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(this))
-                .accelerationModule(new AccelerationModule(this))
+                .dynamicEventModule(new DynamicEventModule(this, eventType))
                 .build()
                 .inject(this);
     }
@@ -79,7 +84,7 @@ public class AccelerationActivity extends GeneralActivity implements
 
         //Recycler view
         recyclerView = findViewById(R.id.recyclerView);
-        registersAdapter = new AccelerationRegistersAdapter(presenter.getAccelerationRegisterList(), this, presenter);
+        registersAdapter = new EventRegistersAdapter(presenter.getEventRegisterList(), this, presenter);
         recyclerView.setAdapter(registersAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -118,7 +123,7 @@ public class AccelerationActivity extends GeneralActivity implements
     }
 
     @Override
-    public void refreshAccelerationRegisterItems() {
+    public void refreshEventRegisterItems() {
         registersAdapter.notifyDataSetChanged();
         this.hideLoading();
     }

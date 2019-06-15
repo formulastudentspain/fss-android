@@ -5,14 +5,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import dagger.Module;
 import dagger.Provides;
-import es.formulastudent.app.mvp.data.business.acceleration.AccelerationBO;
-import es.formulastudent.app.mvp.data.business.acceleration.impl.AccelerationBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.auth.impl.AuthBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.briefing.impl.BriefingBOFirebaseImpl;
-import es.formulastudent.app.mvp.data.business.endurance.EnduranceBO;
-import es.formulastudent.app.mvp.data.business.endurance.impl.EnduranceBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
+import es.formulastudent.app.mvp.data.business.dynamicevent.impl.DynamicEventBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.team.impl.TeamBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
@@ -79,23 +77,14 @@ public class BusinessModule {
 
 
     /**
-     * Provide Acceleration business
+     * Provide Dynamic event business
      * @param firebaseFirestore
      * @return
      */
     @Provides
-    public AccelerationBO provideAccelerationBO(FirebaseFirestore firebaseFirestore) {
-        return new AccelerationBOFirebaseImpl(firebaseFirestore);
+    public DynamicEventBO provideDynamicEventBO(FirebaseFirestore firebaseFirestore) {
+        return new DynamicEventBOFirebaseImpl(firebaseFirestore);
     }
 
-    /**
-     * Provide Endurance business
-     * @param firebaseFirestore
-     * @return
-     */
-    @Provides
-    public EnduranceBO provideEnduranceBO(FirebaseFirestore firebaseFirestore) {
-        return new EnduranceBOFirebaseImpl(firebaseFirestore);
-    }
 
 }

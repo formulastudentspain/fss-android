@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.dynamicevent.acceleration.recyclerview;
+package es.formulastudent.app.mvp.view.activity.dynamicevent.recyclerview;
 
 import android.view.View;
 

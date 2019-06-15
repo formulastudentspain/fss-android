@@ -1,11 +1,9 @@
-package es.formulastudent.app.mvp.data.business.endurance.impl;
+package es.formulastudent.app.mvp.data.business.dynamicevent.impl;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -17,83 +15,83 @@ import java.util.Date;
 import java.util.List;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
-import es.formulastudent.app.mvp.data.business.endurance.EnduranceBO;
-import es.formulastudent.app.mvp.data.model.EnduranceRegister;
+import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.model.EventRegister;
+import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.User;
 
-public class EnduranceBOFirebaseImpl implements EnduranceBO {
+public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
 
     private FirebaseFirestore firebaseFirestore;
 
-    public EnduranceBOFirebaseImpl(FirebaseFirestore firebaseFirestore) {
+    public DynamicEventBOFirebaseImpl(FirebaseFirestore firebaseFirestore) {
         this.firebaseFirestore = firebaseFirestore;
     }
 
     @Override
-    public void retrieveEnduranceRegisters(Date from, Date to, String teamID, Long carNumber, final BusinessCallback callback) {
+    public void retrieveRegisters(Date from, Date to, String teamID, Long carNumber, final EventType type, final BusinessCallback callback) {
 
-        Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ENDURANCE);
+        Query query = firebaseFirestore.collection(type.getFirebaseTable());
 
         //Competition day filter
-        if(from != null && to != null){
+        if (from != null && to != null) {
             query = query.whereLessThanOrEqualTo(EventRegister.DATE, to);
             query = query.whereGreaterThan(EventRegister.DATE, from);
         }
 
         //Teams filter
-        if(teamID != null && !teamID.equals("-1")){
+        if (teamID != null && !teamID.equals("-1")) {
             query = query.whereEqualTo(EventRegister.TEAM_ID, teamID);
         }
 
         //Car number filter
-        if(carNumber != null){
+        if (carNumber != null) {
             query = query.whereEqualTo(EventRegister.CAR_NUMBER, carNumber);
         }
 
+        final ResponseDTO responseDTO = new ResponseDTO();
         query.orderBy(EventRegister.DATE, Query.Direction.DESCENDING)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
                         //Response object
                         ResponseDTO responseDTO = new ResponseDTO();
 
-                        if (task.isSuccessful()) {
-                            List<EnduranceRegister> result = new ArrayList<>();
-
-                            //Add results to list
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                EnduranceRegister enduranceRegister = new EnduranceRegister(document);
-                                result.add(enduranceRegister);
-                            }
-
-                            responseDTO.setData(result);
-
-                        } else {
-                            //TODO añadir mensaje de error
-                            //responseDTO.getErrors().add(R.string.mensajedeerror);
+                        //Add results to list
+                        List<EventRegister> result = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            EventRegister register = new EventRegister(document, type);
+                            result.add(register);
                         }
 
+                        responseDTO.setData(result);
                         callback.onSuccess(responseDTO);
+
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //TODO add messages
+                callback.onFailure(responseDTO);
+            }
+        });
     }
 
 
     @Override
-    public void createEnduranceRegistry(User user, String carType, Long carNumber, Boolean briefingDone, final BusinessCallback callback) {
+    public void createRegister(User user, String carType, Long carNumber, Boolean briefingDone, EventType type, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
-        EnduranceRegister enduranceRegister = new EnduranceRegister(user, registerDate, carType, carNumber, briefingDone);
+        EventRegister register = new EventRegister(user.getTeamID(), user.getTeam(), user.getID(),
+                user.getName(), user.getPhotoUrl(), registerDate, carType, carNumber, briefingDone, type);
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ENDURANCE)
-                .document(enduranceRegister.getID())
-                .set(enduranceRegister.toObjectData())
+        firebaseFirestore.collection(type.getFirebaseTable())
+                .document(register.getID())
+                .set(register.toObjectData())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
 
                     @Override
@@ -102,7 +100,6 @@ public class EnduranceBOFirebaseImpl implements EnduranceBO {
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
-
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         //TODO añadir mensaje de error
@@ -111,4 +108,5 @@ public class EnduranceBOFirebaseImpl implements EnduranceBO {
                     }
                 });
     }
+
 }
