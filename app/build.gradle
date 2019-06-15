@@ -7,7 +7,7 @@ android {
         applicationId "es.formulastudent"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 4
+        versionCode 5
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -25,13 +25,25 @@ android {
     productFlavors {
         pro_fss {
             dimension "version"
+            resValue "string", "app_name", "Formula Student Spain"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher"
+            ]
         }
         pro_ka {
             dimension "version"
             applicationId "es.kartacademy"
+            resValue "string", "app_name", "Kart Academy"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_ka"
+            ]
         }
         dev_fss {
             dimension "version"
+            resValue "string", "app_name", "FSS_DEV"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher"
+            ]
         }
     }
 

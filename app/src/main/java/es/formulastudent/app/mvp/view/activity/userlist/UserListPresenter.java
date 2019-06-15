@@ -163,6 +163,9 @@ public class UserListPresenter implements RecyclerViewClickListener {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
+                //Hide loading
+                view.hideLoading();
+
                 List<Team> teams = (List<Team>) responseDTO.getData();
                 view.showCreateUserDialog(teams, roles);
             }

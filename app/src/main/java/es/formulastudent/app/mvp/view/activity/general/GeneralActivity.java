@@ -207,12 +207,13 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withLevel(2)
                 .withName(R.string.drawer_menu_staff_dynamic_events)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this)
-                .withSubItems(practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency);
+                .withOnDrawerItemClickListener(this);
 
-        /*
-         * Menu options for participants
-         */
+      //  if (BuildConfig.FLAVOR.equals("dev_fss") || BuildConfig.FLAVOR.equals("pro_fss")){
+      //      dynamicEvents.withSubItems(practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency);
+      //  }else if(BuildConfig.FLAVOR.equals("pro_ka")){
+            dynamicEvents.withSubItems(acceleration, enduranceEfficiency);
+     //   }
 
         //Team
         PrimaryDrawerItem myTeam = new PrimaryDrawerItem()
@@ -239,9 +240,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-        /*
-         * Menu options for everybody
-         */
 
         //FSS status
         PrimaryDrawerItem fss_status = new PrimaryDrawerItem()
@@ -284,38 +282,37 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
 
-        switch(userRole) {
-            case "staff": //TODO if userRole == Staff
-                builder.addDrawerItems(
-                        fss_status,
-                        timeline,
-                        scoring,
-                        new DividerDrawerItem(),
-                        eventControl,
-                        briefing,
-                        preScrutineering,
-                        dynamicEvents,
-                        new DividerDrawerItem(),
-                        staffUserManagement,
-                        settings,
-                        logout
-                );
-                break;
 
-            case "participant": //TODO if userRole == Participant
-                builder.addDrawerItems(
-                        fss_status,
-                        timeline,
-                        myTeam,
-                        teamMembers,
-                        teamStatus,
-                        new DividerDrawerItem(),
-                        settings,
-                        logout
-                );
-                break;
-            default:
-        }
+     //   if (BuildConfig.FLAVOR.equals("dev_fss") || BuildConfig.FLAVOR.equals("pro_fss")){
+//            builder.addDrawerItems(
+//                    fss_status,
+//                    timeline,
+//                    scoring,
+//                    new DividerDrawerItem(),
+//                    eventControl,
+//                    briefing,
+//                    preScrutineering,
+//                    dynamicEvents,
+//                    new DividerDrawerItem(),
+//                    staffUserManagement,
+//                    settings,
+//                    logout);
+
+      //  } else if(BuildConfig.FLAVOR.equals("pro_ka")){
+            builder.addDrawerItems(
+                    fss_status,
+                    timeline,
+                    //scoring,
+                    new DividerDrawerItem(),
+                    eventControl,
+                    briefing,
+                    dynamicEvents,
+                    new DividerDrawerItem(),
+                    staffUserManagement,
+                    //settings,
+                    logout);
+
+       // }
 
         //Build drawer
         drawer = builder.build();

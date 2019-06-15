@@ -34,6 +34,8 @@ public class DynamicEventActivity extends GeneralActivity implements
 
     private static final int NFC_REQUEST_CODE = 101;
 
+    EventType eventType;
+
     @Inject
     DynamicEventPresenter presenter;
 
@@ -51,6 +53,7 @@ public class DynamicEventActivity extends GeneralActivity implements
 
         EventType eventType = (EventType) getIntent().getSerializableExtra("eventType");
         setupComponent(FSSApp.getApp().component(), eventType);
+        this.eventType = eventType;
 
         initViews();
         setSupportActionBar(toolbar);
@@ -80,7 +83,7 @@ public class DynamicEventActivity extends GeneralActivity implements
 
         //Add drawer
         addDrawer();
-        mDrawerIdentifier = 10013L;
+        mDrawerIdentifier = eventType.getDrawerItemID();
 
         //Recycler view
         recyclerView = findViewById(R.id.recyclerView);
@@ -94,7 +97,7 @@ public class DynamicEventActivity extends GeneralActivity implements
         buttonAddRegister.setOnClickListener(this);
 
         //Add toolbar title
-        setToolbarTitle(getString(R.string.acceleration_activity_title));
+        setToolbarTitle(eventType.getActivityTitle());
 
     }
 
@@ -141,7 +144,6 @@ public class DynamicEventActivity extends GeneralActivity implements
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_add_acceleration_register){
-            showLoading();
             Intent i = new Intent(this, NFCReaderActivity.class);
             startActivityForResult(i, NFC_REQUEST_CODE);
         }

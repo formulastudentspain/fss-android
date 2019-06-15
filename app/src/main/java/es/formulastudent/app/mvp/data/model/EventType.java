@@ -4,39 +4,35 @@ import java.io.Serializable;
 
 public enum EventType implements Serializable {
 
-        BRIEFING ("Briefing", 1,""),
-        PRE_SCRUTINEERING ("Pre-Scrutineering", 2, ""),
-        PRACTICE_TRACK ("Practice Track", 3, ""),
-        SKIDPAD ("Skidpad", 4, ""),
-        ACCELERATION ("Acceleration", 5, "DEV_EVENT_CONTROL_ACCELERATION"),
-        AUTOCROSS ("Autocross", 6, ""),
-        ENDURANCE_EFFICIENCY ("Endurance/Efficiency", 7, "DEV_EVENT_CONTROL_ENDURANCE");
+        BRIEFING ("Briefing control", 1L,""),
+        PRE_SCRUTINEERING ("Pre-Scrutineering", 2L, ""),
+        PRACTICE_TRACK ("Practice Track control", 3L, ""),
+        SKIDPAD ("Skidpad control", 4L, ""),
+        ACCELERATION ("Acceleration control", 10013L, "DEV_EVENT_CONTROL_ACCELERATION"),
+        AUTOCROSS ("Autocross control", 6L, ""),
+        ENDURANCE_EFFICIENCY ("Endurance control", 10015L, "DEV_EVENT_CONTROL_ENDURANCE");
 
 
-        private final String value;
-        private final int code;
+        private final String activityTitle;
+        private final Long drawerItemID;
         private final String firebaseTable;
 
-        EventType(String value, int code, String firebaseTable) {
-                this.value = value;
-                this.code = code;
+        EventType(String value, Long drawerItemID, String firebaseTable) {
+                this.activityTitle = value;
+                this.drawerItemID = drawerItemID;
                 this.firebaseTable = firebaseTable;
         }
 
-        public String getValue() {
-                return value;
+        public String getActivityTitle() {
+                return activityTitle;
         }
 
-        public int getCode() {
-                return code;
+        public Long getDrawerItemID() {
+                return drawerItemID;
         }
 
         public String getFirebaseTable() {
                 return firebaseTable;
         }
 
-        @Override
-        public String toString(){
-                return getValue();
-        }
 }
