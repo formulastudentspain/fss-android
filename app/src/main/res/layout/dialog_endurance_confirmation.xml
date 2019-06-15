@@ -18,8 +18,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_profile_image"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:src="@mipmap/drawer_background"
             android:layout_marginBottom="16dp"/>
 
@@ -49,8 +49,8 @@
 
         <ImageView
                 android:id="@+id/briefing_done_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_user_registered"/>
 
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:text="Briefing"/>
 
         </LinearLayout>

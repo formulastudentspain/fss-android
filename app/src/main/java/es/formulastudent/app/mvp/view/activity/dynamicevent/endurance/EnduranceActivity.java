@@ -125,7 +125,6 @@ public class EnduranceActivity extends GeneralActivity implements EndurancePrese
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_add_endurance_register){
-            showLoading();
             Intent i = new Intent(this, NFCReaderActivity.class);
             startActivityForResult(i, NFC_REQUEST_CODE);
         }

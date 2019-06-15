@@ -1,13 +1,8 @@
 <resources>
 
-    <string name="app_name">Formula Student Spain</string>
-
     <string name="activity_timeline_detail_label">Timeline detail</string>
     <string name="activity_user_list_label">User list</string>
     <string name="activity_user_detail_label">User detail</string>
-
-
-
 
     <!-- Drawer menu options -->
     <string name="drawer_menu_staff">Event control</string>

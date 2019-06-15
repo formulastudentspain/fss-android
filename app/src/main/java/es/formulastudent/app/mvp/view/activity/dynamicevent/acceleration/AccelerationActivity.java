@@ -136,7 +136,6 @@ public class AccelerationActivity extends GeneralActivity implements
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_add_acceleration_register){
-            showLoading();
             Intent i = new Intent(this, NFCReaderActivity.class);
             startActivityForResult(i, NFC_REQUEST_CODE);
         }

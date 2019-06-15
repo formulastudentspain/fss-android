@@ -130,6 +130,9 @@ public class AccelerationPresenter implements DynamicEventPresenter, RecyclerVie
      */
     void onNFCTagDetected(String tag){
 
+        //Show loading
+        view.showLoading();
+
         userBO.retrieveUserByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
@@ -140,12 +143,18 @@ public class AccelerationPresenter implements DynamicEventPresenter, RecyclerVie
             }
             @Override
             public void onFailure(ResponseDTO responseDTO) {
+                //Hide loading
+                view.hideLoading();
+
                 view.createMessage("Couldn't get the user by this Tag");
             }
         });
     }
 
     void getUserBriefingRegister(final User user){
+
+        //Show loading
+        view.showLoading();
 
         Calendar cal = Calendar.getInstance();
         Date to = cal.getTime();
@@ -169,7 +178,11 @@ public class AccelerationPresenter implements DynamicEventPresenter, RecyclerVie
 
                 @Override
                 public void onFailure(ResponseDTO responseDTO) {
-                    //TODO mostrar mensajes
+                    //Hide loading
+                    view.hideLoading();
+
+                    view.createMessage("Couldn't get the user briefing registers");
+
                 }
             });
         } else {
@@ -184,6 +197,9 @@ public class AccelerationPresenter implements DynamicEventPresenter, RecyclerVie
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
+                //Hide loading
+                view.hideLoading();
+
                 Team team = (Team) responseDTO.getData();
                 Car car = team.getCar();
 
@@ -196,6 +212,9 @@ public class AccelerationPresenter implements DynamicEventPresenter, RecyclerVie
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
+                //Hide loading
+                view.hideLoading();
+
                 view.createMessage("Couldn't get the team from this user");
             }
         });
@@ -227,7 +246,10 @@ public class AccelerationPresenter implements DynamicEventPresenter, RecyclerVie
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes de error
+                //Hide loading
+                view.hideLoading();
+
+                view.createMessage("Couldn't get the teams");
             }
 
         });

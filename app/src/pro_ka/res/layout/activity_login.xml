@@ -19,15 +19,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/fss_white"/>
+            android:src="@mipmap/kart_academy_logo"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textSize="32sp"
-            android:textColor="@color/md_white_1000"
-            android:text="KART_ACADEMY"/>
+
     </LinearLayout>
 
 

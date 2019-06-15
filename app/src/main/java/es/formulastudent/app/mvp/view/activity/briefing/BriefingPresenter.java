@@ -67,7 +67,10 @@ public class BriefingPresenter {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar errores
+                //Hide loading
+                view.hideLoading();
+
+                view.createMessage("Error. Unable to create Briefing Registry");
             }
         });
     }
@@ -116,9 +119,16 @@ public class BriefingPresenter {
      */
     void onNFCTagDetected(String tag){
 
+        //Show loading
+        view.showLoading();
+
         userBO.retrieveUserByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
+
+                //Hide loading
+                view.hideLoading();
+
                 User user = (User)responseDTO.getData();
 
                 FragmentManager fm = ((BriefingActivity)view.getActivity()).getSupportFragmentManager();
@@ -128,7 +138,10 @@ public class BriefingPresenter {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
+                //Hide loading
+                view.hideLoading();
+
+                view.createMessage("Error. Unable to get user by NFC tag");
             }
         });
     }
