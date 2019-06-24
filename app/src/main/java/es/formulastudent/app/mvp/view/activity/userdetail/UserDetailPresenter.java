@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.model.User;
 
 
@@ -45,7 +46,7 @@ public class UserDetailPresenter {
 
     public void onNFCTagDetected(User user, String tag){
         final String tagNFC = tag;
-        final DocumentReference userRef = db.collection("UserInfo").document(user.getID());
+        final DocumentReference userRef = db.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO).document(user.getID());
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
