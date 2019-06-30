@@ -32,6 +32,7 @@ import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
+import es.formulastudent.app.BuildConfig;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.User;
@@ -209,11 +210,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-      //  if (BuildConfig.FLAVOR.equals("dev_fss") || BuildConfig.FLAVOR.equals("pro_fss")){
-      //      dynamicEvents.withSubItems(practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency);
-      //  }else if(BuildConfig.FLAVOR.equals("pro_ka")){
+        if (BuildConfig.FLAVOR.equals("dev_fss") || BuildConfig.FLAVOR.equals("pro_fss")){
+            dynamicEvents.withSubItems(practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency);
+
+        }else if(BuildConfig.FLAVOR.equals("pro_ka")){
             dynamicEvents.withSubItems(acceleration, enduranceEfficiency);
-     //   }
+        }
 
         //Team
         PrimaryDrawerItem myTeam = new PrimaryDrawerItem()
@@ -384,6 +386,28 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             intent.putExtra("eventType", EventType.ENDURANCE_EFFICIENCY);
             this.startActivity(intent);
             finish();
+
+        }else if(drawerItem.getIdentifier() == 10014){ //Autocross
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(this, DynamicEventActivity.class);
+            intent.putExtra("eventType", EventType.AUTOCROSS);
+            this.startActivity(intent);
+            finish();
+
+        }else if(drawerItem.getIdentifier() == 10012){ //SkidPad
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(this, DynamicEventActivity.class);
+            intent.putExtra("eventType", EventType.SKIDPAD);
+            this.startActivity(intent);
+            finish();
+
+        }else if(drawerItem.getIdentifier() == 10011){ //Practice Track
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(this, DynamicEventActivity.class);
+            intent.putExtra("eventType", EventType.PRACTICE_TRACK);
+            this.startActivity(intent);
+            finish();
+
 
         }else if(drawerItem.getIdentifier() == 30006){ //Logout
             FirebaseAuth.getInstance().signOut();
