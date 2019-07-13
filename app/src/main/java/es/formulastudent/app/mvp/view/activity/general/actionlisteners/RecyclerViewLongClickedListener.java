@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.dynamicevent.recyclerview;
+package es.formulastudent.app.mvp.view.activity.general.actionlisteners;
 
 import android.view.View;
 

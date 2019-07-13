@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -19,6 +21,7 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
+import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.User;
 
 public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
@@ -63,8 +66,14 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                         //Add results to list
                         List<EventRegister> result = new ArrayList<>();
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            EventRegister register = new EventRegister(document, type);
-                            result.add(register);
+                            if(type.equals(EventType.PRE_SCRUTINEERING)){
+                                PreScrutineeringRegister register = new PreScrutineeringRegister(document, type);
+                                result.add(register);
+                            }else{
+                                EventRegister register = new EventRegister(document, type);
+                                result.add(register);
+                            }
+
                         }
 
                         responseDTO.setData(result);
@@ -86,8 +95,16 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
-        EventRegister register = new EventRegister(user.getTeamID(), user.getTeam(), user.getID(),
-                user.getName(), user.getPhotoUrl(), registerDate, carType, carNumber, briefingDone, type);
+
+        EventRegister register = null;
+        if(type.equals(EventType.PRE_SCRUTINEERING)){
+            register = new PreScrutineeringRegister(user.getTeamID(), user.getTeam(), user.getID(),
+                    user.getName(), user.getPhotoUrl(), registerDate, carType, carNumber, briefingDone, type, 0L);
+        }else{
+            register = new EventRegister(user.getTeamID(), user.getTeam(), user.getID(),
+                    user.getName(), user.getPhotoUrl(), registerDate, carType, carNumber, briefingDone, type);
+        }
+
 
         firebaseFirestore.collection(type.getFirebaseTable())
                 .document(register.getID())
@@ -105,6 +122,46 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                         //TODO añadir mensaje de error
                         responseDTO.getErrors().add("");
                         callback.onFailure(responseDTO);
+                    }
+                });
+    }
+
+    @Override
+    public void updatePreScrutineeringRegister(String id, final long milliseconds, final BusinessCallback callback) {
+
+        final ResponseDTO responseDTO = new ResponseDTO();
+        final DocumentReference registerReference = firebaseFirestore.collection(EventType.PRE_SCRUTINEERING.getFirebaseTable()).document(id);
+
+        registerReference.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        registerReference.update(PreScrutineeringRegister.TIME, milliseconds)
+
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        responseDTO.getInfo().add("Chrono time updated successfully!!");
+                                        callback.onSuccess(responseDTO);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        //TODO
+                                        responseDTO.getErrors().add("");
+                                        callback.onSuccess(responseDTO);
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //TODO
+                        responseDTO.getErrors().add("");
+                        callback.onSuccess(responseDTO);
                     }
                 });
     }

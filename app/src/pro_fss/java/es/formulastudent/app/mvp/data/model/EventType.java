@@ -11,7 +11,7 @@ public enum EventType implements Serializable {
         ACCELERATION ("Acceleration control", 10013L, "FSS_EVENT_CONTROL_ACCELERATION"),
         AUTOCROSS ("Autocross control", 10014L, "FSS_EVENT_CONTROL_AUTOCROSS"),
         ENDURANCE_EFFICIENCY ("Endurance control", 10015L, "FSS_EVENT_CONTROL_ENDURANCE");
-        
+
 
         private final String activityTitle;
         private final Long drawerItemID;
@@ -34,5 +34,9 @@ public enum EventType implements Serializable {
         public String getFirebaseTable() {
                 return firebaseTable;
         }
+
+
+
+
 
 }

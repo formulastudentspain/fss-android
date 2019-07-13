@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
 public class UserListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 

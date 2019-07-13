@@ -96,6 +96,9 @@ dependencies {
     //Snackbar
     implementation 'com.android.support:design:28.2.0'
 
+    //Circular progress bar
+    implementation 'com.mikhaellopez:circularprogressbar:2.0.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

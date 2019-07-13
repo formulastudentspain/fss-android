@@ -32,7 +32,6 @@ import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
-import es.formulastudent.app.BuildConfig;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.User;
@@ -133,7 +132,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
 
         //Staff: Briefing
-        SecondaryDrawerItem briefing = new SecondaryDrawerItem()
+        PrimaryDrawerItem briefing = new PrimaryDrawerItem()
                 .withIdentifier(10001)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_staff_briefing)
@@ -141,10 +140,11 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
         //Staff: Pre-Scrutineering
-        SecondaryDrawerItem preScrutineering = new SecondaryDrawerItem()
+        PrimaryDrawerItem preScrutineering = new PrimaryDrawerItem()
                 .withIdentifier(10002)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_staff_pre_scrutineering)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
@@ -203,20 +203,21 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
 
         //Staff: Dynamic events
-        SecondaryDrawerItem dynamicEvents = new SecondaryDrawerItem()
+        PrimaryDrawerItem dynamicEvents = new PrimaryDrawerItem()
                 .withIdentifier(10010)
                 .withLevel(2)
+                .withEnabled(false)
                 .withName(R.string.drawer_menu_staff_dynamic_events)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withDisabledTextColor(Color.parseColor("#000000"))
                 .withOnDrawerItemClickListener(this);
-
+/*
         if (BuildConfig.FLAVOR.equals("dev_fss") || BuildConfig.FLAVOR.equals("pro_fss")){
             dynamicEvents.withSubItems(practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency);
 
         }else if(BuildConfig.FLAVOR.equals("pro_ka")){
             dynamicEvents.withSubItems(acceleration, enduranceEfficiency);
         }
-
+*/
         //Team
         PrimaryDrawerItem myTeam = new PrimaryDrawerItem()
                 .withIdentifier(20001)
@@ -302,13 +303,11 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
       //  } else if(BuildConfig.FLAVOR.equals("pro_ka")){
             builder.addDrawerItems(
-                    fss_status,
-                    timeline,
-                    //scoring,
-                    new DividerDrawerItem(),
                     eventControl,
                     briefing,
+                    preScrutineering,
                     dynamicEvents,
+                    practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency,
                     new DividerDrawerItem(),
                     staffUserManagement,
                     //settings,
@@ -408,6 +407,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             this.startActivity(intent);
             finish();
 
+        }else if(drawerItem.getIdentifier() == 10002){ //Pre-Scrutineering
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(this, DynamicEventActivity.class);
+            intent.putExtra("eventType", EventType.PRE_SCRUTINEERING);
+            this.startActivity(intent);
+            finish();
 
         }else if(drawerItem.getIdentifier() == 30006){ //Logout
             FirebaseAuth.getInstance().signOut();

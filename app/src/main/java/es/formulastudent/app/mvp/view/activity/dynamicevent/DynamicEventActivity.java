@@ -15,6 +15,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.greenrobot.greendao.annotation.NotNull;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 import es.formulastudent.app.FSSApp;
@@ -24,15 +26,18 @@ import es.formulastudent.app.di.component.DaggerDynamicEventComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.DynamicEventModule;
 import es.formulastudent.app.mvp.data.model.EventType;
+import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.recyclerview.EventRegistersAdapter;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.prescrutineeringdetail.PreScrutineeringDetailActivity;
 
 
 public class DynamicEventActivity extends GeneralActivity implements
         DynamicEventPresenter.View, View.OnClickListener {
 
     private static final int NFC_REQUEST_CODE = 101;
+    private static final int CHRONO_CODE = 102;
 
     EventType eventType;
 
@@ -87,7 +92,7 @@ public class DynamicEventActivity extends GeneralActivity implements
 
         //Recycler view
         recyclerView = findViewById(R.id.recyclerView);
-        registersAdapter = new EventRegistersAdapter(presenter.getEventRegisterList(), this, presenter);
+        registersAdapter = new EventRegistersAdapter(presenter.getEventRegisterList(), this, presenter, presenter);
         recyclerView.setAdapter(registersAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -140,6 +145,13 @@ public class DynamicEventActivity extends GeneralActivity implements
         }
     }
 
+    @Override
+    public void openChronoActivity(PreScrutineeringRegister register){
+        Intent intent = new Intent(this, PreScrutineeringDetailActivity.class);
+        intent.putExtra("prescrutineering_register", register);
+        startActivityForResult(intent, CHRONO_CODE);
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -160,6 +172,13 @@ public class DynamicEventActivity extends GeneralActivity implements
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
+            }
+        }else if(requestCode == CHRONO_CODE){
+            if(resultCode == Activity.RESULT_OK) {
+                ArrayList<String> result = data.getStringArrayListExtra("result");
+                Long miliseconds = Long.parseLong(result.get(0));
+                String registerID = result.get(1);
+                presenter.onChronoTimeRegistered(miliseconds, registerID);
             }
         }
     }

@@ -38,6 +38,8 @@ public class EventRegister implements Serializable {
     private Boolean briefingDone;
 
 
+    public EventRegister(){}
+
     public EventRegister(String teamID, String team, String userID, String user, String userImage,
                          Date date, String carType, Long carNumber, Boolean briefingDone, EventType type) {
         this.teamID = teamID;
@@ -72,6 +74,7 @@ public class EventRegister implements Serializable {
 
     public EventRegister(DocumentSnapshot object, EventType type){
 
+        this.ID = object.getId();
         this.date = object.getDate(EventRegister.DATE);
         this.userImage = object.getString(EventRegister.USER_IMAGE);
         this.user = object.getString(EventRegister.USER);

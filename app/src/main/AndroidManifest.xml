@@ -71,6 +71,15 @@
             android:name=".mvp.view.activity.dynamicevent.DynamicEventActivity">
         </activity>
 
+        <activity
+            android:name=".mvp.view.activity.prescrutineeringdetail.PreScrutineeringDetailActivity"
+            android:label="Egress chrono"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".mvp.view.activity.dynamicevent.DynamicEventActivity"/>
+        </activity>
+
 
     </application>
 

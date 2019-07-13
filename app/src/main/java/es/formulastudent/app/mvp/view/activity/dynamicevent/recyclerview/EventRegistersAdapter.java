@@ -17,6 +17,10 @@ import java.util.Locale;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.EventRegister;
+import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
+import es.formulastudent.app.mvp.view.Utils;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickedListener;
 
 
 public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -25,11 +29,13 @@ public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private Context context;
     private LayoutInflater mLayoutInflater;
     private RecyclerViewLongClickedListener longClickedListener;
+    private RecyclerViewClickListener clickListener;
 
 
-    public EventRegistersAdapter(List<EventRegister> eventRegisterList, Context context, RecyclerViewLongClickedListener longClickedListener) {
+    public EventRegistersAdapter(List<EventRegister> eventRegisterList, Context context, RecyclerViewLongClickedListener longClickedListener, RecyclerViewClickListener clickListener) {
         this.eventRegisterList = eventRegisterList;
         this.longClickedListener = longClickedListener;
+        this.clickListener = clickListener;
         this.context = context;
     }
 
@@ -41,7 +47,7 @@ public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         View view;
 
         view = mLayoutInflater.inflate(R.layout.activity_dynamic_event_list_item, parent, false);
-        return new EventRegistersViewHolder(view, longClickedListener);
+        return new EventRegistersViewHolder(view, longClickedListener, clickListener, viewType);
 
     }
 
@@ -76,11 +82,28 @@ public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             default:
                 // code block
         }
+
+        //Pre-scrutineering details
+        if(register instanceof PreScrutineeringRegister){
+            eventRegistersViewHolder.preScrutineeringTime.setText(Utils.chronoFormatter(((PreScrutineeringRegister) register).getTime()));
+        }
+
     }
 
     @Override
     public int getItemCount() {
         return eventRegisterList.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        EventRegister register = eventRegisterList.get(position);
+        if(register instanceof PreScrutineeringRegister){
+            return 1;
+        }
+
+        return 0;
     }
 
 }

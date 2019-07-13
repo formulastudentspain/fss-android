@@ -20,13 +20,15 @@ import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
+import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.ConfirmEventRegisterDialog;
-import es.formulastudent.app.mvp.view.activity.dynamicevent.recyclerview.RecyclerViewLongClickedListener;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickedListener;
 
 
-public class DynamicEventPresenter implements RecyclerViewLongClickedListener {
+public class DynamicEventPresenter implements RecyclerViewLongClickedListener, RecyclerViewClickListener {
 
     //DYNAMIC EVENT TYPE
     EventType eventType;
@@ -152,6 +154,35 @@ public class DynamicEventPresenter implements RecyclerViewLongClickedListener {
         });
     }
 
+
+    /**
+     * It is time to update the chrono time
+     * @param milliseconds
+     * @param registerID
+     */
+    public void onChronoTimeRegistered(Long milliseconds, String registerID) {
+
+        dynamicEventBO.updatePreScrutineeringRegister(registerID, milliseconds, new BusinessCallback() {
+
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                if(!responseDTO.getInfo().isEmpty()){
+                    view.createMessage(responseDTO.getInfo().get(0));
+                }
+
+                retrieveRegisterList();
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+
+            }
+        });
+
+    }
+
+
+
     void getUserBriefingRegister(final User user){
 
         Calendar cal = Calendar.getInstance();
@@ -255,6 +286,13 @@ public class DynamicEventPresenter implements RecyclerViewLongClickedListener {
     }
 
 
+    @Override
+    public void recyclerViewListClicked(android.view.View v, int position) {
+        PreScrutineeringRegister selectedRegister = (PreScrutineeringRegister) filteredEventRegisterList.get(position);
+        view.openChronoActivity(selectedRegister);
+    }
+
+
     public void openFilteringDialog(List<Team> teams){
         this.teams = teams;
 
@@ -309,7 +347,6 @@ public class DynamicEventPresenter implements RecyclerViewLongClickedListener {
 
 
 
-
     public interface View {
 
         Activity getActivity();
@@ -345,6 +382,12 @@ public class DynamicEventPresenter implements RecyclerViewLongClickedListener {
          * @param activated
          */
         void filtersActivated(Boolean activated);
+
+        /**
+         * Method to open the Chrono activity to get the Pre-Scrutineering time
+         * @param register
+         */
+        void openChronoActivity(PreScrutineeringRegister register);
     }
 
 }

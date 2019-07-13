@@ -10,9 +10,8 @@ public interface DynamicEventBO {
 
 
 
-
     /**
-     * Method to retrieve Acceleration registers
+     * Method to retrieve Dynamic Event registers
      * @param from
      * @param to
      * @param teamID
@@ -25,7 +24,7 @@ public interface DynamicEventBO {
 
 
     /**
-     * Method to create an Acceleration registry
+     * Method to create a Dynamic Event register
      * @param user
      * @param carType
      * @param carNumber
@@ -34,6 +33,17 @@ public interface DynamicEventBO {
      * @param callback
      */
     void createRegister(User user, String carType, Long carNumber, Boolean briefingDone, EventType type, BusinessCallback callback);
+
+
+
+
+    /**
+     * Method to update the Chrono time to the Pre-Scrutineering register
+     * @param id
+     * @param milliseconds
+     * @param callback
+     */
+    void updatePreScrutineeringRegister(String id, long milliseconds, BusinessCallback callback);
 
 
 

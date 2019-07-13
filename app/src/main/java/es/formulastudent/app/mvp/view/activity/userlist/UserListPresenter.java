@@ -15,7 +15,7 @@ import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
-import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
 public class UserListPresenter implements RecyclerViewClickListener {
 

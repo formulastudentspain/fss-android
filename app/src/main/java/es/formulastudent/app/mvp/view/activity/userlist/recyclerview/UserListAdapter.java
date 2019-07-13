@@ -13,6 +13,7 @@ import java.util.List;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
 
 public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

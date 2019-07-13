@@ -11,7 +11,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         app:cardElevation="2dp">
 
         <LinearLayout
@@ -96,8 +99,32 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/prescruti_container"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical"
+                android:visibility="gone">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="8dp"
+                    android:background="@color/colorPrimaryLight"/>
+
+                <TextView
+                    android:id="@+id/prescruti_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="25sp"
+                    android:textColor="@color/md_green_200"
+                    android:text="00:00:000"/>
+
+            </LinearLayout>
         </LinearLayout>
+
+
 
     </androidx.cardview.widget.CardView>
 
