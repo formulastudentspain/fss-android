@@ -1,6 +1,7 @@
 package es.formulastudent.app.mvp.view.activity.dynamicevent.recyclerview;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,15 @@ public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         //Pre-scrutineering details
         if(register instanceof PreScrutineeringRegister){
-            eventRegistersViewHolder.preScrutineeringTime.setText(Utils.chronoFormatter(((PreScrutineeringRegister) register).getTime()));
+            Long time = ((PreScrutineeringRegister) register).getTime();
+            if(time != 0L){
+                eventRegistersViewHolder.preScrutineeringTime.setText(Utils.chronoFormatter(time));
+                eventRegistersViewHolder.preScrutineeringTime.setTextColor(Color.parseColor("#A5D6A7"));
+
+            }else{
+                eventRegistersViewHolder.preScrutineeringTime.setText("N/A");
+                eventRegistersViewHolder.preScrutineeringTime.setTextColor(Color.parseColor("#E0E0E0"));
+            }
         }
 
     }

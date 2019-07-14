@@ -99,9 +99,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
     protected void addDrawer(){
 
-        //TODO eliminar
-        String userRole = "staff";
-
         //Create account header
         AccountHeader accountHeader = this.createDrawerHeader();
 
@@ -218,64 +215,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             dynamicEvents.withSubItems(acceleration, enduranceEfficiency);
         }
 */
-        //Team
-        PrimaryDrawerItem myTeam = new PrimaryDrawerItem()
-                .withIdentifier(20001)
-                .withEnabled(false)
-                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
-                .withName(R.string.drawer_menu_participant_myTeam)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-        //Team: Members
-        SecondaryDrawerItem teamMembers = new SecondaryDrawerItem()
-                .withIdentifier(20002)
-                .withLevel(2)
-                .withName(R.string.drawer_menu_participant_teamMembers)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-        //Team: Status
-        SecondaryDrawerItem teamStatus = new SecondaryDrawerItem()
-                .withIdentifier(20003)
-                .withLevel(2)
-                .withName(R.string.drawer_menu_participant_status)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-
-        //FSS status
-        PrimaryDrawerItem fss_status = new PrimaryDrawerItem()
-                .withIdentifier(30001)
-                .withEnabled(false)
-                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
-                .withName(R.string.drawer_menu_common_fss_status)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-        //Timeline
-        SecondaryDrawerItem timeline = new SecondaryDrawerItem()
-                .withIdentifier(30003)
-                .withLevel(2)
-                .withName(R.string.drawer_menu_common_timeline)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-        //Scoring
-        SecondaryDrawerItem scoring = new SecondaryDrawerItem()
-                .withIdentifier(30004)
-                .withLevel(2)
-                .withName(R.string.drawer_menu_common_scoring)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-
-        //Settings
-        PrimaryDrawerItem settings = new PrimaryDrawerItem()
-                .withIdentifier(30005)
-                .withName(R.string.drawer_menu_common_settings)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
 
         //Logout
         PrimaryDrawerItem logout = new PrimaryDrawerItem()
@@ -285,23 +224,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
 
-
-     //   if (BuildConfig.FLAVOR.equals("dev_fss") || BuildConfig.FLAVOR.equals("pro_fss")){
-//            builder.addDrawerItems(
-//                    fss_status,
-//                    timeline,
-//                    scoring,
-//                    new DividerDrawerItem(),
-//                    eventControl,
-//                    briefing,
-//                    preScrutineering,
-//                    dynamicEvents,
-//                    new DividerDrawerItem(),
-//                    staffUserManagement,
-//                    settings,
-//                    logout);
-
-      //  } else if(BuildConfig.FLAVOR.equals("pro_ka")){
             builder.addDrawerItems(
                     eventControl,
                     briefing,
@@ -310,7 +232,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency,
                     new DividerDrawerItem(),
                     staffUserManagement,
-                    //settings,
                     logout);
 
        // }

@@ -101,4 +101,16 @@
     <string name="dynamic_event_filtering_dialog_filter_button">Filter</string>
     <string name="dynamic_event_filtering_dialog_cancel_button">Cancel</string>
 
+
+    <!-- Pre-Scrutineering detail activity -->
+    <string name="prescruti_detail_activity_title">Egress time</string>
+    <string name="prescruti_detail_activity_button_start">Start</string>
+    <string name="prescruti_detail_activity_button_stop">Stop</string>
+
+    <!-- Pre-Scrutineering detail dialog -->
+    <string name="prescruti_confirm_time_dialog_title">Successful time</string>
+    <string name="prescruti_confirm_time_dialog_message">Do you want to save this time?</string>
+    <string name="prescruti_confirm_time_dialog_save">Save</string>
+    <string name="prescruti_confirm_time_dialog_cancel">Cancel</string>
+
 </resources>

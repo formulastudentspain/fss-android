@@ -162,6 +162,7 @@ public class DynamicEventPresenter implements RecyclerViewLongClickedListener, R
      */
     public void onChronoTimeRegistered(Long milliseconds, String registerID) {
 
+        view.showLoading();
         dynamicEventBO.updatePreScrutineeringRegister(registerID, milliseconds, new BusinessCallback() {
 
             @Override

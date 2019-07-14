@@ -13,6 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="400dp"
+        android:layout_marginTop="56dp"
         android:layout_below="@+id/my_toolbar">
 
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
@@ -22,7 +23,7 @@
             android:layout_margin="16dp"
             app:cpb_background_progressbar_color="@color/colorPrimaryLight"
             app:cpb_background_progressbar_width="10dp"
-            app:cpb_progressbar_color="@color/colorAccent"
+            app:cpb_progressbar_color="@color/md_red_200"
             app:cpb_progressbar_width="15dp" />
 
 
@@ -53,12 +54,14 @@
 
                 <Button
                     android:id="@+id/start_stop_chrono"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerInParent="true"
                     android:layout_marginBottom="16dp"
-                    android:text="Start"/>
+                    android:textColor="@color/md_white_1000"
+                    android:background="@drawable/activity_prescrutineering_rounded_button"
+                    android:text="@string/prescruti_detail_activity_button_start"/>
 
             </RelativeLayout>
 
