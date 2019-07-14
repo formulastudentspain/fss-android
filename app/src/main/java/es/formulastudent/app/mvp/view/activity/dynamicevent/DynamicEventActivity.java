@@ -112,6 +112,7 @@ public class DynamicEventActivity extends GeneralActivity implements
     protected void onStart(){
         super.onStart();
         drawer.setSelection(mDrawerIdentifier, false);
+        registersAdapter.notifyDataSetChanged();
     }
 
 
@@ -202,4 +203,27 @@ public class DynamicEventActivity extends GeneralActivity implements
         return true;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (registersAdapter != null) {
+            registersAdapter.saveStates(outState);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (registersAdapter != null) {
+            registersAdapter.restoreStates(savedInstanceState);
+        }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+    }
 }
+
+

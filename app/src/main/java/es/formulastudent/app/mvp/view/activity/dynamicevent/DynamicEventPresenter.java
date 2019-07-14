@@ -33,7 +33,6 @@ public class DynamicEventPresenter implements RecyclerViewLongClickedListener, R
     //DYNAMIC EVENT TYPE
     EventType eventType;
 
-
     //Dependencies
     private View view;
     private Context context;
@@ -41,7 +40,6 @@ public class DynamicEventPresenter implements RecyclerViewLongClickedListener, R
     private DynamicEventBO dynamicEventBO;
     private UserBO userBO;
     private BriefingBO briefingBO;
-
 
     //Data
     List<EventRegister> allEventRegisterList = new ArrayList<>();

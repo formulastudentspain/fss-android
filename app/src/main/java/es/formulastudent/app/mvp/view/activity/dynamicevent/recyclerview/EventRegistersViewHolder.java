@@ -5,7 +5,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickedListener;
@@ -22,6 +25,10 @@ public class EventRegistersViewHolder extends RecyclerView.ViewHolder implements
     TextView registerDate;
     ImageView carTypeIcon;
     TextView carNumber;
+    SwipeRevealLayout swipeRevealLayout;
+
+    CardView mainElement;
+
 
     //Pre-scrutineering view components
     LinearLayout preScrutineeringContainer;
@@ -33,6 +40,7 @@ public class EventRegistersViewHolder extends RecyclerView.ViewHolder implements
 
     public EventRegistersViewHolder(View itemView, RecyclerViewLongClickedListener longClickListener, RecyclerViewClickListener clickListener, int eventType) {
         super(itemView);
+        swipeRevealLayout = itemView.findViewById(R.id.swipeLayout);
         profileImage =  itemView.findViewById(R.id.user_profile_image);
         userName =  itemView.findViewById(R.id.acceleration_item_user);
         userTeam =  itemView.findViewById(R.id.acceleration_item_team);
@@ -41,14 +49,16 @@ public class EventRegistersViewHolder extends RecyclerView.ViewHolder implements
         carNumber = itemView.findViewById(R.id.carNumber);
         preScrutineeringContainer = itemView.findViewById(R.id.prescruti_container);
         preScrutineeringTime = itemView.findViewById(R.id.prescruti_time);
+        mainElement = itemView.findViewById(R.id.main_element);
         this.longClickListener = longClickListener;
         this.clickListener = clickListener;
-        itemView.setOnLongClickListener(this);
+        mainElement.setOnLongClickListener(this);
+
 
         //PreScrutineering
         if(eventType == EVENT_TYPE_PRESCRUTINEERING){
             preScrutineeringContainer.setVisibility(View.VISIBLE);
-            itemView.setOnClickListener(this);
+            mainElement.setOnClickListener(this);
         }
 
     }

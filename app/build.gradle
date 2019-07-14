@@ -99,6 +99,9 @@ dependencies {
     //Circular progress bar
     implementation 'com.mikhaellopez:circularprogressbar:2.0.0'
 
+    //Swipe rows
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
