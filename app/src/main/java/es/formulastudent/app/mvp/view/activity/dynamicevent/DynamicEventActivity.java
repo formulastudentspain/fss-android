@@ -92,7 +92,7 @@ public class DynamicEventActivity extends GeneralActivity implements
 
         //Recycler view
         recyclerView = findViewById(R.id.recyclerView);
-        registersAdapter = new EventRegistersAdapter(presenter.getEventRegisterList(), this, presenter, presenter);
+        registersAdapter = new EventRegistersAdapter(presenter.getEventRegisterList(), this, presenter);
         recyclerView.setAdapter(registersAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);

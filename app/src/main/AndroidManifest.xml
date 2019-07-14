@@ -80,7 +80,9 @@
                 android:value=".mvp.view.activity.dynamicevent.DynamicEventActivity"/>
         </activity>
 
-
+        <activity
+            android:name=".mvp.view.activity.welcome.WelcomeActivity">
+        </activity>
     </application>
 
 </manifest>

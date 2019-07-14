@@ -11,10 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickedListener;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
-public class EventRegistersViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
+public class EventRegistersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private final static int EVENT_TYPE_PRESCRUTINEERING = 1;
 
@@ -25,20 +24,20 @@ public class EventRegistersViewHolder extends RecyclerView.ViewHolder implements
     TextView registerDate;
     ImageView carTypeIcon;
     TextView carNumber;
-    SwipeRevealLayout swipeRevealLayout;
-
     CardView mainElement;
 
+    //Swipe components
+    SwipeRevealLayout swipeRevealLayout;
+    CardView repeatRunLayout;
+    CardView deleteRunLayout;
 
     //Pre-scrutineering view components
     LinearLayout preScrutineeringContainer;
     TextView preScrutineeringTime;
 
-
-    RecyclerViewLongClickedListener longClickListener;
     RecyclerViewClickListener clickListener;
 
-    public EventRegistersViewHolder(View itemView, RecyclerViewLongClickedListener longClickListener, RecyclerViewClickListener clickListener, int eventType) {
+    public EventRegistersViewHolder(View itemView, RecyclerViewClickListener clickListener, int eventType) {
         super(itemView);
         swipeRevealLayout = itemView.findViewById(R.id.swipeLayout);
         profileImage =  itemView.findViewById(R.id.user_profile_image);
@@ -50,9 +49,13 @@ public class EventRegistersViewHolder extends RecyclerView.ViewHolder implements
         preScrutineeringContainer = itemView.findViewById(R.id.prescruti_container);
         preScrutineeringTime = itemView.findViewById(R.id.prescruti_time);
         mainElement = itemView.findViewById(R.id.main_element);
-        this.longClickListener = longClickListener;
         this.clickListener = clickListener;
-        mainElement.setOnLongClickListener(this);
+
+        //Swipe components
+        repeatRunLayout = itemView.findViewById(R.id.repeat_run_button);
+        repeatRunLayout.setOnClickListener(this);
+        deleteRunLayout = itemView.findViewById(R.id.delete_run_button);
+        deleteRunLayout.setOnClickListener(this);
 
 
         //PreScrutineering
@@ -61,12 +64,6 @@ public class EventRegistersViewHolder extends RecyclerView.ViewHolder implements
             mainElement.setOnClickListener(this);
         }
 
-    }
-
-    @Override
-    public boolean onLongClick(View view) {
-        longClickListener.recyclerViewListLongClicked(view, this.getLayoutPosition());
-        return true;
     }
 
     @Override

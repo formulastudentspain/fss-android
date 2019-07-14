@@ -101,6 +101,12 @@
     <string name="dynamic_event_filtering_dialog_filter_button">Filter</string>
     <string name="dynamic_event_filtering_dialog_cancel_button">Cancel</string>
 
+    <!-- Dynamic Events Filtering Dialog -->
+    <string name="dynamic_event_delete_register_dialog_title">Delete register</string>
+    <string name="dynamic_event_delete_register_dialog_message">Are you sure you want to delete the selected register?</string>
+    <string name="dynamic_event_delete_register_dialog_delete_button">Delete</string>
+    <string name="dynamic_event_delete_register_dialog_cancel_button">Cancel</string>
+
 
     <!-- Pre-Scrutineering detail activity -->
     <string name="prescruti_detail_activity_title">Egress time</string>

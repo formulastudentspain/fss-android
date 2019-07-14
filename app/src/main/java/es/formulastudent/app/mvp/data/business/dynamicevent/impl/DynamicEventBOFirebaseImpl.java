@@ -53,6 +53,7 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
             query = query.whereEqualTo(EventRegister.CAR_NUMBER, carNumber);
         }
 
+
         final ResponseDTO responseDTO = new ResponseDTO();
         query.orderBy(EventRegister.DATE, Query.Direction.DESCENDING)
                 .get()
@@ -143,6 +144,48 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         responseDTO.getInfo().add("Chrono time updated successfully!!");
+                                        callback.onSuccess(responseDTO);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        //TODO
+                                        responseDTO.getErrors().add("");
+                                        callback.onSuccess(responseDTO);
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //TODO
+                        responseDTO.getErrors().add("");
+                        callback.onSuccess(responseDTO);
+                    }
+                });
+    }
+
+    @Override
+    public void deleteRegister(EventType type, String registerID, final BusinessCallback callback) {
+
+        final ResponseDTO responseDTO = new ResponseDTO();
+        final DocumentReference registerReference = firebaseFirestore
+                .collection(type.getFirebaseTable())
+                .document(registerID);
+
+        registerReference.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        registerReference.delete()
+
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        responseDTO.getInfo().add("Register deleted successfully!!");
                                         callback.onSuccess(responseDTO);
                                     }
                                 })

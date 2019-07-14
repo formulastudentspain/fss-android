@@ -16,7 +16,7 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
+import es.formulastudent.app.mvp.view.activity.welcome.WelcomeActivity;
 
 
 public class LoginPresenter {
@@ -53,7 +53,7 @@ public class LoginPresenter {
                     editor.commit();
 
                     //Start Timeline activity
-                    Intent myIntent = new Intent(context, TimelineActivity.class);
+                    Intent myIntent = new Intent(context, WelcomeActivity.class);
                     myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(myIntent);
                     view.finishView();

@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
@@ -24,11 +25,11 @@ import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.ConfirmEventRegisterDialog;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.DeleteEventRegisterDialog;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickedListener;
 
 
-public class DynamicEventPresenter implements RecyclerViewLongClickedListener, RecyclerViewClickListener {
+public class DynamicEventPresenter implements RecyclerViewClickListener {
 
     //DYNAMIC EVENT TYPE
     EventType eventType;
@@ -181,6 +182,32 @@ public class DynamicEventPresenter implements RecyclerViewLongClickedListener, R
     }
 
 
+    /**
+     * Method to delete a dynamic event register
+     * @param registerID
+     */
+    public void deleteDynamicEventRegister(String registerID) {
+
+        view.showLoading();
+        dynamicEventBO.deleteRegister(eventType, registerID, new BusinessCallback() {
+
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                if(!responseDTO.getInfo().isEmpty()){
+                    view.createMessage(responseDTO.getInfo().get(0));
+                }
+
+                retrieveRegisterList();
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+
+            }
+        });
+
+    }
+
 
     void getUserBriefingRegister(final User user){
 
@@ -272,23 +299,33 @@ public class DynamicEventPresenter implements RecyclerViewLongClickedListener, R
 
 
 
-    @Override
-    public void recyclerViewListLongClicked(android.view.View v, int position) {
-        EventRegister selectedRegister = filteredEventRegisterList.get(position);
+    public void openRepeatRunDialog(EventRegister selectedRegister) {
 
         //With all the information, we open the dialog
         FragmentManager fm = ((DynamicEventActivity)view.getActivity()).getSupportFragmentManager();
         ConfirmEventRegisterDialog createUserDialog = ConfirmEventRegisterDialog
                 .newInstance(DynamicEventPresenter.this, selectedRegister);
         createUserDialog.show(fm, "fragment_event_confirm");
-
     }
 
 
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
-        PreScrutineeringRegister selectedRegister = (PreScrutineeringRegister) filteredEventRegisterList.get(position);
-        view.openChronoActivity(selectedRegister);
+
+        if(v.getId() == R.id.delete_run_button){
+            EventRegister selectedRegister = filteredEventRegisterList.get(position);
+            openConfirmDeleteRegister(selectedRegister);
+
+        }else if(v.getId() == R.id.repeat_run_button){
+            EventRegister selectedRegister = filteredEventRegisterList.get(position);
+            openRepeatRunDialog(selectedRegister);
+
+        }else if(v.getId() == R.id.main_element){
+            PreScrutineeringRegister selectedRegister = (PreScrutineeringRegister) filteredEventRegisterList.get(position);
+            view.openChronoActivity(selectedRegister);
+
+        }
+
     }
 
 
@@ -303,6 +340,13 @@ public class DynamicEventPresenter implements RecyclerViewLongClickedListener, R
 
         //Hide loading right after showing the filtering dialog
         view.hideLoading();
+    }
+
+    public void openConfirmDeleteRegister(EventRegister register){
+        //With all the information, we open the dialog
+        FragmentManager fm = ((DynamicEventActivity)view.getActivity()).getSupportFragmentManager();
+        DeleteEventRegisterDialog deleteEventRegisterDialog = DeleteEventRegisterDialog.newInstance(this, register);
+        deleteEventRegisterDialog.show(fm, "delete_event_confirm");
     }
 
 

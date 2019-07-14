@@ -46,6 +46,13 @@ public interface DynamicEventBO {
     void updatePreScrutineeringRegister(String id, long milliseconds, BusinessCallback callback);
 
 
+    /**
+     * Method to delete a Dynamic Event register
+     * @param type
+     * @param registerID
+     * @param callback
+     */
+    void deleteRegister(EventType type, String registerID, BusinessCallback callback);
 
 
 }

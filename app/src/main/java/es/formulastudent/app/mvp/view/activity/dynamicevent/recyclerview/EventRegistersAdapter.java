@@ -23,7 +23,6 @@ import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.view.Utils;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickedListener;
 
 
 public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -34,13 +33,11 @@ public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private List<EventRegister> eventRegisterList;
     private Context context;
     private LayoutInflater mLayoutInflater;
-    private RecyclerViewLongClickedListener longClickedListener;
     private RecyclerViewClickListener clickListener;
 
 
-    public EventRegistersAdapter(List<EventRegister> eventRegisterList, Context context, RecyclerViewLongClickedListener longClickedListener, RecyclerViewClickListener clickListener) {
+    public EventRegistersAdapter(List<EventRegister> eventRegisterList, Context context, RecyclerViewClickListener clickListener) {
         this.eventRegisterList = eventRegisterList;
-        this.longClickedListener = longClickedListener;
         this.clickListener = clickListener;
         this.context = context;
     }
@@ -53,7 +50,7 @@ public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         View view;
 
         view = mLayoutInflater.inflate(R.layout.activity_dynamic_event_list_item, parent, false);
-        return new EventRegistersViewHolder(view, longClickedListener, clickListener, viewType);
+        return new EventRegistersViewHolder(view, clickListener, viewType);
 
     }
 
