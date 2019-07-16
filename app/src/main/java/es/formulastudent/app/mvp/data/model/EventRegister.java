@@ -42,6 +42,7 @@ public class EventRegister implements Serializable {
 
     public EventRegister(String teamID, String team, String userID, String user, String userImage,
                          Date date, String carType, Long carNumber, Boolean briefingDone, EventType type) {
+        this.ID = UUID.randomUUID().toString();
         this.teamID = teamID;
         this.team = team;
         this.userID = userID;
@@ -49,7 +50,6 @@ public class EventRegister implements Serializable {
         this.date = date;
         this.userImage = userImage;
         this.date = Calendar.getInstance().getTime();
-        this.ID = UUID.randomUUID().toString();
         this.carType = carType;
         this.carNumber = carNumber;
         this.briefingDone = briefingDone;

@@ -15,6 +15,7 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
+import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
@@ -41,6 +42,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
     private DynamicEventBO dynamicEventBO;
     private UserBO userBO;
     private BriefingBO briefingBO;
+    private EgressBO egressBO;
 
     //Data
     List<EventRegister> allEventRegisterList = new ArrayList<>();
@@ -58,13 +60,14 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
 
 
     public DynamicEventPresenter(DynamicEventPresenter.View view, Context context, TeamBO teamBO,
-                                 DynamicEventBO dynamicEventBO, UserBO userBO, BriefingBO briefingBO, EventType eventType) {
+                                 DynamicEventBO dynamicEventBO, UserBO userBO, BriefingBO briefingBO, EventType eventType, EgressBO egressBO) {
         this.view = view;
         this.context = context;
         this.teamBO = teamBO;
         this.dynamicEventBO = dynamicEventBO;
         this.userBO = userBO;
         this.briefingBO = briefingBO;
+        this.egressBO = egressBO;
         this.eventType = eventType;
     }
 
@@ -84,7 +87,13 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
          dynamicEventBO.createRegister(user, carType, carNumber, briefingDone, eventType, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                retrieveRegisterList();
+
+                if(eventType.equals(EventType.PRE_SCRUTINEERING)){
+                    PreScrutineeringRegister register = (PreScrutineeringRegister) responseDTO.getData();
+                    createEgressRegister(register);
+                }else{
+                    retrieveRegisterList();
+                }
             }
 
             @Override
@@ -92,6 +101,22 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
                 view.createMessage("Couldn't not create the registry");
             }
         });
+    }
+
+
+    private void createEgressRegister(PreScrutineeringRegister register){
+
+         egressBO.createRegister(register.getID(), new BusinessCallback() {
+             @Override
+             public void onSuccess(ResponseDTO responseDTO) {
+                 retrieveRegisterList();
+             }
+
+             @Override
+             public void onFailure(ResponseDTO responseDTO) {
+                 view.createMessage("Couldn't not create the egress registry");
+             }
+         });
     }
 
 

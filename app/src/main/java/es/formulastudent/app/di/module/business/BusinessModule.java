@@ -11,6 +11,8 @@ import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.briefing.impl.BriefingBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.impl.DynamicEventBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.egress.EgressBO;
+import es.formulastudent.app.mvp.data.business.egress.impl.EgressBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.team.impl.TeamBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
@@ -84,6 +86,16 @@ public class BusinessModule {
     @Provides
     public DynamicEventBO provideDynamicEventBO(FirebaseFirestore firebaseFirestore) {
         return new DynamicEventBOFirebaseImpl(firebaseFirestore);
+    }
+
+    /**
+     * Provide Egress business
+     * @param firebaseFirestore
+     * @return
+     */
+    @Provides
+    public EgressBO provideEgressBO(FirebaseFirestore firebaseFirestore) {
+        return new EgressBOFirebaseImpl(firebaseFirestore);
     }
 
 

@@ -97,7 +97,7 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
 
-        EventRegister register = null;
+        final EventRegister register;
         if(type.equals(EventType.PRE_SCRUTINEERING)){
             register = new PreScrutineeringRegister(user.getTeamID(), user.getTeam(), user.getID(),
                     user.getName(), user.getPhotoUrl(), registerDate, carType, carNumber, briefingDone, type, 0L);
@@ -114,7 +114,9 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
 
                     @Override
                     public void onSuccess(Void aVoid) {
+                        responseDTO.setData(register);
                         callback.onSuccess(responseDTO);
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

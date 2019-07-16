@@ -11,9 +11,10 @@
 
 
     <RelativeLayout
+        android:id="@+id/chrono"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="8dp"
         android:layout_below="@+id/my_toolbar">
 
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
@@ -74,6 +75,78 @@
         </LinearLayout>
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="16dp"
+        android:layout_below="@id/chrono">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:text="1º attempt:"/>
+
+            <TextView
+                android:id="@+id/firstAttemptValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:text="-"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:text="2º attempt:"/>
+
+            <TextView
+                android:id="@+id/secondAttemptValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_marginStart="8dp"
+                android:textStyle="bold"
+                android:text="-"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:text="3º attempt:"/>
+
+            <TextView
+                android:id="@+id/thirdAttemptValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_marginStart="8dp"
+                android:textStyle="bold"
+                android:text="-"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 

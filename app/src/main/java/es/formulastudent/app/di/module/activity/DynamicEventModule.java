@@ -8,6 +8,7 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
+import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.EventType;
@@ -38,8 +39,8 @@ public class DynamicEventModule {
     @Provides
     public DynamicEventPresenter providePresenter(DynamicEventPresenter.View categoryView, Context context,
                                                   TeamBO teamBO, DynamicEventBO dynamicEventBO, UserBO userBO,
-                                                  BriefingBO briefingBO, EventType eventType) {
-        return new DynamicEventPresenter(categoryView, context, teamBO, dynamicEventBO, userBO, briefingBO, eventType);
+                                                  BriefingBO briefingBO, EventType eventType, EgressBO egressBO) {
+        return new DynamicEventPresenter(categoryView, context, teamBO, dynamicEventBO, userBO, briefingBO, eventType, egressBO);
     }
 
 
