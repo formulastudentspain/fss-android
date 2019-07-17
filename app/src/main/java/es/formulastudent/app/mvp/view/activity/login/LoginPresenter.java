@@ -80,17 +80,21 @@ public class LoginPresenter {
      */
     public void forgotPassword(String mail){
 
-        authBO.resetPassword(mail, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                view.createMessage("Mail Sent."); //TODO Mirar la opcion de plantillas de correo electronico: https://support.google.com/firebase/answer/7000714?hl=es
-            }
+        if(mail != null && !mail.isEmpty()) {
+            authBO.resetPassword(mail, new BusinessCallback() {
+                @Override
+                public void onSuccess(ResponseDTO responseDTO) {
+                    view.createMessage("Mail Sent."); //TODO Mirar la opcion de plantillas de correo electronico: https://support.google.com/firebase/answer/7000714?hl=es
+                }
 
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                //TODO failure Message
-            }
-        });
+                @Override
+                public void onFailure(ResponseDTO responseDTO) {
+                    //TODO failure Message
+                }
+            });
+        } else {
+            view.createMessage("Enter your mail account in order to send you the password recover mail. Thanks");
+        }
     }
 
     /**
