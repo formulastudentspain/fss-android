@@ -102,6 +102,9 @@ dependencies {
     //Swipe rows
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
 
+    //Apache POI
+    //implementation group: 'org.apache.poi', name: 'poi', version: '3.17'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

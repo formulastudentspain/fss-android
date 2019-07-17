@@ -83,6 +83,10 @@
         <activity
             android:name=".mvp.view.activity.welcome.WelcomeActivity">
         </activity>
+
+        <activity
+            android:name=".mvp.view.activity.statistics.StatisticsActivity">
+        </activity>
     </application>
 
 </manifest>

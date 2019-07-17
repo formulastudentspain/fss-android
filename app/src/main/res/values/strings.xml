@@ -23,6 +23,7 @@
     <string name="drawer_menu_common_scoring">Scoring</string>
     <string name="drawer_menu_common_settings">Settings</string>
     <string name="drawer_menu_common_logout">Logout</string>
+    <string name="drawer_menu_staff_statistics">Statistics</string>
 
 
 

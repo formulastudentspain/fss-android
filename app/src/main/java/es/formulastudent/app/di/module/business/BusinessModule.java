@@ -1,10 +1,13 @@
 package es.formulastudent.app.di.module.business;
 
+import android.content.Context;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import dagger.Module;
 import dagger.Provides;
+import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.auth.impl.AuthBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
@@ -13,6 +16,8 @@ import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.impl.DynamicEventBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.egress.impl.EgressBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
+import es.formulastudent.app.mvp.data.business.statistics.impl.StatisticsBOImpl;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.team.impl.TeamBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
@@ -20,7 +25,7 @@ import es.formulastudent.app.mvp.data.business.user.impl.UserBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
 import es.formulastudent.app.mvp.data.business.userrole.impl.UserRoleBOFirebaseImpl;
 
-@Module(includes = {FirebaseModule.class})
+@Module(includes = {FirebaseModule.class, ContextModule.class})
 public class BusinessModule {
 
     /**
@@ -98,5 +103,12 @@ public class BusinessModule {
         return new EgressBOFirebaseImpl(firebaseFirestore);
     }
 
-
+    /**
+     * Provide Statistics business
+     * @return
+     */
+    @Provides
+    public StatisticsBO provideStatisticsBO(DynamicEventBO dynamicEventBO, Context context) {
+        return new StatisticsBOImpl(dynamicEventBO, context);
+    }
 }

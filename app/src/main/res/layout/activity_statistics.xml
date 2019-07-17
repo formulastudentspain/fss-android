@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".mvp.view.activity.timeline.TimelineActivity"
+    >
+
+    <include layout="@layout/activity_toolbar" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/statistics_chip_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/statistics_chip_wed"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/material_chip_background"
+            android:text="Wednesday"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/statistics_chip_thu"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/material_chip_background"
+            android:text="Thursday"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/statistics_chip_fri"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/material_chip_background"
+            android:text="Friday"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/statistics_chip_sat"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/material_chip_background"
+            android:text="Saturday"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/statistics_chip_sun"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/material_chip_background"
+            android:text="Sunday"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/statistics_chip_all"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/material_chip_background"
+            android:checked="true"
+            android:text="All"/>
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+    <Button
+        android:id="@+id/exportBriefing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/drawer_menu_staff_briefing"/>
+
+
+    <Button
+        android:id="@+id/exportPreScrutineering"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drawer_menu_staff_pre_scrutineering"/>
+
+
+    <Button
+        android:id="@+id/exportPracticeTrack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drawer_menu_staff_practice_track"/>
+
+
+    <Button
+        android:id="@+id/exportSkidPad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drawer_menu_staff_skidpad"/>
+
+
+    <Button
+        android:id="@+id/exportAcceleration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drawer_menu_staff_acceleration"/>
+
+
+    <Button
+        android:id="@+id/exportAutocross"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drawer_menu_staff_autocross"/>
+
+
+    <Button
+        android:id="@+id/exportEndurance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drawer_menu_staff_endurance_efficiency"/>
+
+
+    <Button
+        android:id="@+id/exportUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Users"/>
+
+
+
+</LinearLayout>

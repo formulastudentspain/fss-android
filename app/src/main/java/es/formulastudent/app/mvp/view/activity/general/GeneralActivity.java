@@ -40,6 +40,7 @@ import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventActivity
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityExitDialog;
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.activity.login.LoginActivity;
+import es.formulastudent.app.mvp.view.activity.statistics.StatisticsActivity;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
 
@@ -154,6 +155,14 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
 
+        //Staff: Statistics
+        PrimaryDrawerItem staffStatistics = new PrimaryDrawerItem()
+                .withIdentifier(10016)
+                .withName(R.string.drawer_menu_staff_statistics)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
         //Staff: Practice track
         SecondaryDrawerItem practiceTrack = new SecondaryDrawerItem()
                 .withIdentifier(10011)
@@ -231,6 +240,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     dynamicEvents,
                     practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency,
                     new DividerDrawerItem(),
+                    staffStatistics,
                     staffUserManagement,
                     logout);
 
@@ -338,6 +348,11 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }else if(drawerItem.getIdentifier() == 30006){ //Logout
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, LoginActivity.class);
+            this.startActivity(intent);
+            finish();
+
+        }else if(drawerItem.getIdentifier() == 10016){ //Statistics
+            Intent intent = new Intent(this, StatisticsActivity.class);
             this.startActivity(intent);
             finish();
         }
