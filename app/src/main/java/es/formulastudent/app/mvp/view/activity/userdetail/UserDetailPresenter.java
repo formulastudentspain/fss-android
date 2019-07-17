@@ -22,7 +22,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
+import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 
@@ -35,16 +37,15 @@ public class UserDetailPresenter {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private StorageReference mStorageRef;
-
     private UserBO userBO;
 
     public UserDetailPresenter(UserDetailPresenter.View view, Context context, UserBO userBO) {
         this.view = view;
         this.context = context;
-        this.userBO = userBO;
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        this.userBO = userBO;
     }
 
 
@@ -57,14 +58,29 @@ public class UserDetailPresenter {
                 if(task.isSuccessful()){
                     DocumentSnapshot document = task.getResult();
                     if(document.exists()){
-                        userRef.update("tagNFC", tagNFC).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        userBO.retrieveUserByNFCTag(tagNFC, new BusinessCallback() {
                             @Override
-                            public void onSuccess(Void aVoid) {
-                                view.createMessage("User successfully registered");
+                            public void onSuccess(ResponseDTO responseDTO) {
+                                if(responseDTO.getData() == null) {
+                                    userRef.update("tagNFC", tagNFC).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            view.createMessage("User successfully registered");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            view.createMessage("Error on update NFC Tag");
+                                        }
+                                    });
+                                } else {
+                                    User user = (User) responseDTO.getData();
+                                    view.createMessage("TAG is already registered by "+user.getName());
+                                }
                             }
-                        }).addOnFailureListener(new OnFailureListener() {
+
                             @Override
-                            public void onFailure(@NonNull Exception e) {
+                            public void onFailure(ResponseDTO responseDTO) {
                                 view.createMessage("Error on update NFC Tag");
                             }
                         });
@@ -75,8 +91,6 @@ public class UserDetailPresenter {
                         docData.put("preScrutineering", false);
                         docData.put("role", "default");
                         docData.put("tagNFC", tagNFC);
-
-                        userBO.toString();
 
                         db.collection("UserInfo").document(mAuth.getUid())
                                 .set(docData)
