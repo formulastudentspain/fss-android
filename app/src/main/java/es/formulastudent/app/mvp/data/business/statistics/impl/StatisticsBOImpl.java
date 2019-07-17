@@ -2,21 +2,33 @@ package es.formulastudent.app.mvp.data.business.statistics.impl;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.os.Environment;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
+import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 
 public class StatisticsBOImpl implements StatisticsBO {
 
@@ -48,6 +60,131 @@ public class StatisticsBOImpl implements StatisticsBO {
                     Workbook wb = new HSSFWorkbook(is);
                     Sheet sheet = wb.getSheetAt(0);
                     wb.setSheetName(0, eventType.getActivityTitle());
+
+                    String[] columns = context.getResources().getStringArray(R.array.dynamicEventExcelExportColumns);
+
+                    //HEADERS
+
+                    //ID
+                    Row row = sheet.createRow(3);
+                    Cell cell = row.createCell(0);
+                    cell.setCellValue("ID");
+
+                    //TEAM ID
+                    cell = row.createCell(1);
+                    cell.setCellValue("TEAM ID");
+
+                    //TEAM NAME
+                    cell = row.createCell(2);
+                    cell.setCellValue("TEAM NAME");
+
+                    //DRIVER ID
+                    cell = row.createCell(3);
+                    cell.setCellValue("DRIVER ID");
+
+                    //DRIVER NAME
+                    cell = row.createCell(4);
+                    cell.setCellValue("DRIVER NAME");
+
+                    //DATE
+                    cell = row.createCell(5);
+                    cell.setCellValue("DATE");
+
+                    //CAR TYPE
+                    cell = row.createCell(6);
+                    cell.setCellValue("CAR TYPE");
+
+                    //CAR NUMBER
+                    cell = row.createCell(7);
+                    cell.setCellValue("CAR NUMBER");
+
+                    //BRIEFING DONE
+                    cell = row.createCell(8);
+                    cell.setCellValue("BRIEFING DONE");
+
+
+                    if(eventType.equals(EventType.PRE_SCRUTINEERING)){
+                        //EGRESS TIME
+                        cell = row.createCell(9);
+                        cell.setCellValue("EGRESS TIME");
+                    }
+
+
+
+                    /*
+                        Test Data Values
+                    */
+                    int rowNum = 4;
+                    int cellNum = 0;
+
+                    for(EventRegister register: listToExport){
+
+                        //Init values
+                        cellNum = 0;
+                        row = sheet.createRow(++rowNum);
+
+                        //ID
+                        cell = row.createCell(cellNum);
+                        cell.setCellValue(register.getID());
+
+                        //TEAM ID
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(register.getTeamID());
+
+                        //TEAM NAME
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(register.getTeam());
+
+                        //DRIVER ID
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(register.getUserID());
+
+                        //DRIVER NAME
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(register.getUser());
+
+                        //DATE
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(register.getDate());
+
+                        //CAR TYPE
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(register.getCarType());
+
+                        //CAR NUMBER
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(register.getCarNumber());
+
+                        //BRIEFING DONE
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(register.getBriefingDone());
+
+                        //EGRESS TIME
+                        if(eventType.equals(EventType.PRE_SCRUTINEERING)){
+                            cell = row.createCell(++cellNum);
+                            cell.setCellValue(((PreScrutineeringRegister)register).getTime());
+                        }
+
+                    }
+
+
+                    //Get File Name
+                    DateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    String nameFile = "Export" + "_" + sdf.format(timestamp);
+
+                    //Create Directory
+                    String rootDirectoryName = Environment.getExternalStorageDirectory()+"";
+                    File subDirectory = new File(rootDirectoryName, eventType.getActivityTitle());
+                    subDirectory.mkdirs();
+
+                    //Create File
+                    OutputStream stream = new FileOutputStream(rootDirectoryName+"/"+eventType.getActivityTitle()+"/"+nameFile+".xls");
+
+                    wb.write(stream);
+                    stream.close();
+                    wb.close();
+
 
                 }catch(IOException e){
                     responseDTOExport.getErrors().add("Mal");

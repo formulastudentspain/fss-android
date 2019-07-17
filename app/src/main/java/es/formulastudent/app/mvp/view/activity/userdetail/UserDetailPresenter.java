@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
+import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 
 
@@ -35,9 +36,12 @@ public class UserDetailPresenter {
     private FirebaseFirestore db;
     private StorageReference mStorageRef;
 
-    public UserDetailPresenter(UserDetailPresenter.View view, Context context) {
+    private UserBO userBO;
+
+    public UserDetailPresenter(UserDetailPresenter.View view, Context context, UserBO userBO) {
         this.view = view;
         this.context = context;
+        this.userBO = userBO;
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -71,6 +75,8 @@ public class UserDetailPresenter {
                         docData.put("preScrutineering", false);
                         docData.put("role", "default");
                         docData.put("tagNFC", tagNFC);
+
+                        userBO.toString();
 
                         db.collection("UserInfo").document(mAuth.getUid())
                                 .set(docData)

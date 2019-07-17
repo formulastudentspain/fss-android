@@ -5,9 +5,11 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
+import es.formulastudent.app.di.module.business.BusinessModule;
+import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailPresenter;
 
-@Module(includes = {ContextModule.class})
+@Module(includes = {ContextModule.class, BusinessModule.class})
 public class UserDetailModule {
 
     private UserDetailPresenter.View view;
@@ -22,8 +24,8 @@ public class UserDetailModule {
     }
 
     @Provides
-    public UserDetailPresenter providePresenter(UserDetailPresenter.View categoryView, Context context) {
-        return new UserDetailPresenter(categoryView, context);
+    public UserDetailPresenter providePresenter(UserDetailPresenter.View categoryView, Context context, UserBO userBO) {
+        return new UserDetailPresenter(categoryView, context, userBO);
     }
 
 

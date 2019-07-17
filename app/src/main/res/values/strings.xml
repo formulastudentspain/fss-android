@@ -120,4 +120,17 @@
     <string name="prescruti_confirm_time_dialog_save">Save</string>
     <string name="prescruti_confirm_time_dialog_cancel">Cancel</string>
 
+    <string-array name="dynamicEventExcelExportColumns">
+        <item>ID</item>
+        <item>TEAM ID</item>
+        <item>TEAM NAME</item>
+        <item>DRIVER_ID</item>
+        <item>DRIVER_NAME</item>
+        <item>DATE</item>
+        <item>CAR TYPE</item>
+        <item>CAR NUMBER</item>
+        <item>BRIEFING DONE</item>
+        <item>EGRESS TIME</item>
+    </string-array>
+
 </resources>
