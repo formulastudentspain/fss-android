@@ -2,6 +2,10 @@ package es.formulastudent.app.mvp.view.activity.statistics;
 
 import android.content.Context;
 
+import java.io.IOException;
+
+import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
 import es.formulastudent.app.mvp.data.model.EventType;
 
@@ -23,7 +27,22 @@ public class StatisticsPresenter {
 
 
     public void exportDynamicEvent(EventType eventType){
-        statisticsBO.exportDynamicEvent(eventType);
+
+        try {
+            statisticsBO.exportDynamicEvent(eventType, new BusinessCallback() {
+                @Override
+                public void onSuccess(ResponseDTO responseDTO) {
+
+                }
+
+                @Override
+                public void onFailure(ResponseDTO responseDTO) {
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
