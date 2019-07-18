@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
@@ -61,7 +60,6 @@ public class StatisticsBOImpl implements StatisticsBO {
                     Sheet sheet = wb.getSheetAt(0);
                     wb.setSheetName(0, eventType.getActivityTitle());
 
-                    String[] columns = context.getResources().getStringArray(R.array.dynamicEventExcelExportColumns);
 
                     //HEADERS
 
@@ -185,6 +183,9 @@ public class StatisticsBOImpl implements StatisticsBO {
                     stream.close();
                     wb.close();
 
+                    responseDTOExport.setData(rootDirectoryName+"/"+eventType.getActivityTitle()+"/"+nameFile+".xls");
+
+                    callback.onSuccess(responseDTOExport);
 
                 }catch(IOException e){
                     responseDTOExport.getErrors().add("Mal");
