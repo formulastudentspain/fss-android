@@ -89,7 +89,7 @@ public class LoginPresenter {
 
                 @Override
                 public void onFailure(ResponseDTO responseDTO) {
-                    //TODO failure Message
+                    view.createMessage("Something Failed. Unknown error");
                 }
             });
         } else {
