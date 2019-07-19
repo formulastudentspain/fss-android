@@ -177,6 +177,11 @@ public class StatisticsActivity extends GeneralActivity implements View.OnClickL
         super.hideLoadingDialog();
     }
 
+    @Override
+    public StatisticsActivity getActivity() {
+        return this;
+    }
+
 
     @Override
     protected void onStart(){
