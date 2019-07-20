@@ -18,6 +18,7 @@ import es.formulastudent.app.di.component.DaggerStatisticsComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.StatisticsModule;
 import es.formulastudent.app.mvp.data.model.EventType;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
 public class StatisticsActivity extends GeneralActivity implements View.OnClickListener, StatisticsPresenter.View {
@@ -70,6 +71,9 @@ public class StatisticsActivity extends GeneralActivity implements View.OnClickL
         //Add drawer
         addDrawer();
         mDrawerIdentifier = 10016L;
+
+        //Add toolbar title
+        setToolbarTitle(getString(R.string.statistics_activity_title));
 
         //Bind components
         exportBriefing = findViewById(R.id.exportBriefing);
@@ -133,7 +137,7 @@ public class StatisticsActivity extends GeneralActivity implements View.OnClickL
     public void onClick(View view) {
 
         if(view.getId() == R.id.exportBriefing){
-            //TODO
+            presenter.exportDynamicEvent(EventType.BRIEFING);
 
         }else if(view.getId() == R.id.exportPreScrutineering){
             presenter.exportDynamicEvent(EventType.PRE_SCRUTINEERING);
@@ -154,7 +158,7 @@ public class StatisticsActivity extends GeneralActivity implements View.OnClickL
             presenter.exportDynamicEvent(EventType.ENDURANCE_EFFICIENCY);
 
         }else if(view.getId() == R.id.exportUsers){
-            //TODO
+            presenter.exportUsers();
 
         }
 
@@ -180,6 +184,11 @@ public class StatisticsActivity extends GeneralActivity implements View.OnClickL
     @Override
     public StatisticsActivity getActivity() {
         return this;
+    }
+
+    @Override
+    public User getCurrentLoggedUser() {
+        return super.loggedUser;
     }
 
 

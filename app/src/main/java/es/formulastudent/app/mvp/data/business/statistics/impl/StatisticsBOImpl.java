@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,19 +26,27 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
+import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDTO;
+import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
+import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.view.Utils;
 
 public class StatisticsBOImpl implements StatisticsBO {
 
 
     private DynamicEventBO dynamicEventBO;
+    private UserBO userBO;
     private Context context;
 
+    private DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
 
-    public StatisticsBOImpl(DynamicEventBO dynamicEventBO, Context context) {
+
+    public StatisticsBOImpl(DynamicEventBO dynamicEventBO, UserBO userBO, Context context) {
         this.dynamicEventBO = dynamicEventBO;
+        this.userBO = userBO;
         this.context = context;
     }
 
@@ -55,7 +64,7 @@ public class StatisticsBOImpl implements StatisticsBO {
 
                 List<EventRegister> listToExport = (List<EventRegister>) responseDTO.getData();
 
-                try{
+                try {
                     Workbook wb = new HSSFWorkbook(is);
                     Sheet sheet = wb.getSheetAt(0);
                     wb.setSheetName(0, eventType.getActivityTitle());
@@ -64,7 +73,7 @@ public class StatisticsBOImpl implements StatisticsBO {
                     //HEADERS
 
                     //ID
-                    Row row = sheet.createRow(3);
+                    Row row = sheet.createRow(4);
                     Cell cell = row.createCell(0);
                     cell.setCellValue("ID");
 
@@ -88,23 +97,26 @@ public class StatisticsBOImpl implements StatisticsBO {
                     cell = row.createCell(5);
                     cell.setCellValue("DATE");
 
-                    //CAR TYPE
-                    cell = row.createCell(6);
-                    cell.setCellValue("CAR TYPE");
+                    if(!eventType.equals(EventType.BRIEFING)) {
 
-                    //CAR NUMBER
-                    cell = row.createCell(7);
-                    cell.setCellValue("CAR NUMBER");
+                        //CAR TYPE
+                        cell = row.createCell(6);
+                        cell.setCellValue("CAR TYPE");
 
-                    //BRIEFING DONE
-                    cell = row.createCell(8);
-                    cell.setCellValue("BRIEFING DONE");
+                        //CAR NUMBER
+                        cell = row.createCell(7);
+                        cell.setCellValue("CAR NUMBER");
+
+                        //BRIEFING DONE
+                        cell = row.createCell(8);
+                        cell.setCellValue("BRIEFING DONE");
 
 
-                    if(eventType.equals(EventType.PRE_SCRUTINEERING)){
-                        //EGRESS TIME
-                        cell = row.createCell(9);
-                        cell.setCellValue("EGRESS TIME");
+                        if (eventType.equals(EventType.PRE_SCRUTINEERING)) {
+                            //EGRESS TIME
+                            cell = row.createCell(9);
+                            cell.setCellValue("EGRESS TIME");
+                        }
                     }
 
 
@@ -113,9 +125,9 @@ public class StatisticsBOImpl implements StatisticsBO {
                         Test Data Values
                     */
                     int rowNum = 4;
-                    int cellNum = 0;
+                    int cellNum;
 
-                    for(EventRegister register: listToExport){
+                    for (EventRegister register : listToExport) {
 
                         //Init values
                         cellNum = 0;
@@ -123,44 +135,49 @@ public class StatisticsBOImpl implements StatisticsBO {
 
                         //ID
                         cell = row.createCell(cellNum);
-                        cell.setCellValue(register.getID());
+                        cell.setCellValue(register.getID()==null ? "" : register.getID());
 
                         //TEAM ID
                         cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getTeamID());
+                        cell.setCellValue(register.getTeamID()==null ? "" : register.getID());
 
                         //TEAM NAME
                         cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getTeam());
+                        cell.setCellValue(register.getTeam()==null ? "" : register.getTeam());
 
                         //DRIVER ID
                         cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getUserID());
+                        cell.setCellValue(register.getUserID()==null ? "" : register.getUserID());
 
                         //DRIVER NAME
                         cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getUser());
+                        cell.setCellValue(register.getUser()==null ? "" : register.getUser());
 
                         //DATE
                         cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getDate());
+                        cell.setCellValue(register.getDate()==null ? "" : df.format(register.getDate()));
 
-                        //CAR TYPE
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getCarType());
 
-                        //CAR NUMBER
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getCarNumber());
+                        if(!eventType.equals(EventType.BRIEFING)) {
 
-                        //BRIEFING DONE
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getBriefingDone());
-
-                        //EGRESS TIME
-                        if(eventType.equals(EventType.PRE_SCRUTINEERING)){
+                            //CAR TYPE
                             cell = row.createCell(++cellNum);
-                            cell.setCellValue(((PreScrutineeringRegister)register).getTime());
+                            cell.setCellValue(register.getCarType() == null ? "" : register.getCarType());
+
+                            //CAR NUMBER
+                            cell = row.createCell(++cellNum);
+                            cell.setCellValue(register.getCarNumber() == null ? "" : register.getCarNumber().toString());
+
+                            //BRIEFING DONE
+                            cell = row.createCell(++cellNum);
+                            cell.setCellValue(register.getBriefingDone() == null ? "" : register.getBriefingDone().toString());
+
+                            //EGRESS TIME
+                            if (eventType.equals(EventType.PRE_SCRUTINEERING)) {
+                                cell = row.createCell(++cellNum);
+                                String value = ((PreScrutineeringRegister) register).getTime() == null ? "" : Utils.chronoFormatter(((PreScrutineeringRegister) register).getTime());
+                                cell.setCellValue(value);
+                            }
                         }
 
                     }
@@ -172,23 +189,29 @@ public class StatisticsBOImpl implements StatisticsBO {
                     String nameFile = "Export" + "_" + sdf.format(timestamp);
 
                     //Create Directory
-                    String rootDirectoryName = Environment.getExternalStorageDirectory()+"";
-                    File subDirectory = new File(rootDirectoryName, eventType.getActivityTitle());
+                    String rootDirectoryName = Environment.getExternalStorageDirectory() + "";
+                    File subDirectory = new File(rootDirectoryName, "FSS/" + eventType.getActivityTitle());
                     subDirectory.mkdirs();
 
                     //Create File
-                    OutputStream stream = new FileOutputStream(rootDirectoryName+"/"+eventType.getActivityTitle()+"/"+nameFile+".xls");
+                    OutputStream stream = new FileOutputStream(rootDirectoryName + "/" + "FSS/" + eventType.getActivityTitle() + "/" + nameFile + ".xls");
 
                     wb.write(stream);
                     stream.close();
                     wb.close();
 
-                    responseDTOExport.setData(rootDirectoryName+"/"+eventType.getActivityTitle()+"/"+nameFile+".xls");
+
+                    ExportStatisticsDTO exportStatisticsDTO = new ExportStatisticsDTO();
+                    exportStatisticsDTO.setEventType(eventType);
+                    exportStatisticsDTO.setExportDate(Calendar.getInstance().getTime());
+                    exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/" + eventType.getActivityTitle() + "/" + nameFile + ".xls");
+
+                    responseDTOExport.setData(exportStatisticsDTO);
 
                     callback.onSuccess(responseDTOExport);
 
-                }catch(IOException e){
-                    responseDTOExport.getErrors().add("Mal");
+                } catch (IOException e) {
+                    responseDTOExport.getErrors().add("Unable to export " + eventType.getActivityTitle());
                     callback.onFailure(responseDTOExport);
                 }
 
@@ -196,172 +219,143 @@ public class StatisticsBOImpl implements StatisticsBO {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-
+                responseDTO.getErrors().add("Unable to export " + eventType.getActivityTitle());
+                callback.onFailure(responseDTO);
             }
         });
-
-
-
-
-
-
     }
-/*
-    public String exportTestToExcelIntoDirectory(Test test, Context context, String subDirectoryName) throws Exception {
+
+    @Override
+    public void exportUsers(final BusinessCallback businessCallback) throws IOException {
+
         AssetManager mngr = context.getAssets();
-        InputStream is = mngr.open("template_export_test.xls");
-
-        Workbook wb = new HSSFWorkbook(is);
-        Sheet sheet = wb.getSheetAt(0);
-        wb.setSheetName(0, test.getName());
-
-        //Data test
-        String testTemplateName = TemplateBO.getInstance().getTemplate(test.getTemplateId()).getName();
-        String testDate = test.getDate().toString();
-        String testDriver = test.getDriver();
-        String testVehicle = VehicleBO.getInstance().getVehicle(test.getVehicleId()).getName();
-        String testDrivingMode = test.getDrivingMode();
-        String testTyreSpecFront = test.getTyreSpecsFront();
-        String testTyreSpecRear = test.getTyreSpecsRear();
-        String testTyrePressureFront = test.getTyrePressureFront();
-        String testTyrePressureRear = test.getTyrePressureRear();
-        String testAxleLoadFront = test.getAxleLoadFront();
-        String testAxleLoadRear = test.getAxleLoadRear();
-        String testWeather = test.getWeather();
-        String testAirTemperature = test.getAirTemperature();
-        String testRemarks = test.getRemarks();
-        Long testProjectId = VehicleBO.getInstance().getVehicle(test.getVehicleId()).getProjectId();
-        String testProject = ProjectBO.getInstance().getProject(testProjectId).getName();
-
-        Row row = sheet.getRow(0);
-        //Template
-        Cell cell = row.getCell(0);
-        cell.setCellValue(testTemplateName);
-        //Project
-        cell = row.getCell(3);
-        cell.setCellValue(testProject);
-
-        row = sheet.getRow(1);
-        //Vehicle
-        cell = row.getCell(3);
-        cell.setCellValue(testVehicle);
-        //Driver
-        cell = row.getCell(5);
-        cell.setCellValue(testDriver);
-
-        row = sheet.getRow(2);
-        //Date
-        cell = row.getCell(3);
-        cell.setCellValue(testDate);
-        //Weather
-        cell = row.getCell(5);
-        cell.setCellValue(testWeather);
-        //Remarks
-        cell = row.getCell(9);
-        cell.setCellValue(testRemarks);
-
-        row = sheet.getRow(3);
-        //Driving mode
-        cell = row.getCell(3);
-        cell.setCellValue(testDrivingMode);
-        //Air Temperature
-        cell = row.getCell(5);
-        cell.setCellValue(testAirTemperature);
-
-        row = sheet.getRow(4);
-        //Axle Front
-        cell = row.getCell(3);
-        cell.setCellValue(testAxleLoadFront);
-        //Axle Rear
-        cell = row.getCell(5);
-        cell.setCellValue(testAxleLoadRear);
-
-        row = sheet.getRow(5);
-        //Tyre Spec Front
-        cell = row.getCell(3);
-        cell.setCellValue(testTyreSpecFront);
-        //Tyre Spec Rear
-        cell = row.getCell(5);
-        cell.setCellValue(testTyreSpecRear);
-
-        row = sheet.getRow(6);
-        //Tyre Spec Front
-        cell = row.getCell(3);
-        cell.setCellValue(testTyrePressureFront);
-        //Tyre Spec Rear
-        cell = row.getCell(5);
-        cell.setCellValue(testTyrePressureRear);
+        final InputStream is = mngr.open("template_export_fss.xls");
 
 
-        int rowNum = 7;
-        int cellNum = 0;
+        userBO.retrieveUsers(new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                ResponseDTO responseDTOExport = new ResponseDTO();
 
-        TestData data = test.getData();
-        for (Group group : data.getGroupList()) {
-            row = sheet.createRow(++rowNum);
-            cellNum = 0;
-            cell = row.createCell(cellNum);
-            cell.setCellValue("Group");
-            cell = row.createCell(++cellNum);
-            cell.setCellValue(group.getName());
+                List<User> listToExport = (List<User>) responseDTO.getData();
 
-            for (SubGroup subGroup : group.getSubGroupList()) {
-                row = sheet.createRow(++rowNum);
-                cellNum = 0;
-                cell = row.createCell(cellNum);
-                cell.setCellValue("Subgroup");
-                cell = row.createCell(++cellNum);
-                cell.setCellValue(subGroup.getName());
+                try {
+                    Workbook wb = new HSSFWorkbook(is);
+                    Sheet sheet = wb.getSheetAt(0);
+                    wb.setSheetName(0, "Users");
 
-                for (Task task : subGroup.getTaskList()) {
-                    row = sheet.createRow(++rowNum);
-                    cellNum = 0;
-                    cell = row.createCell(cellNum);
-                    cell.setCellValue("Task");
-                    cell = row.createCell(++cellNum);
-                    cell.setCellValue(task.getDescription());
-                    cellNum = 3;
-                    cell = row.createCell(cellNum);
-                    cell.setCellValue(task.getInfo1());
-                    cellNum = 6;
-                    cell = row.createCell(cellNum);
-                    cell.setCellValue(task.getInfo2());
-                    cellNum = 9;
-                    cell = row.createCell(cellNum);
-                    cell.setCellValue(task.getRating());
-                    cell = row.createCell(++cellNum);
-                    cell.setCellValue(task.getTendency1());
-                    cell = row.createCell(++cellNum);
-                    cell.setCellValue(task.getTendency2());
-                    cell = row.createCell(++cellNum);
-                    cell.setCellValue(task.getTendencyValue());
-                    cell = row.createCell(++cellNum);
-                    cell.setCellValue(task.getComments());
+                    //HEADERS
+
+                    //ID
+                    Row row = sheet.createRow(4);
+                    Cell cell = row.createCell(0);
+                    cell.setCellValue("ID");
+
+                    //MAIL
+                    cell = row.createCell(1);
+                    cell.setCellValue("MAIL");
+
+                    //NAME
+                    cell = row.createCell(2);
+                    cell.setCellValue("NAME");
+
+                    //ROLE
+                    cell = row.createCell(3);
+                    cell.setCellValue("ROLE");
+
+                    //NFC TAG
+                    cell = row.createCell(4);
+                    cell.setCellValue("NFC TAG");
+
+                    //TEAM ID
+                    cell = row.createCell(5);
+                    cell.setCellValue("TEAM ID");
+
+                    //TEAM
+                    cell = row.createCell(6);
+                    cell.setCellValue("TEAM");
+
+
+                    /*
+                        Test Data Values
+                    */
+                    int rowNum = 4;
+                    int cellNum;
+
+                    for (User user : listToExport) {
+
+                        //Init values
+                        cellNum = 0;
+                        row = sheet.createRow(++rowNum);
+
+                        //ID
+                        cell = row.createCell(cellNum);
+                        cell.setCellValue(user.getID() == null ? "" : user.getID());
+
+                        //MAIL
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(user.getMail() == null ? "" : user.getMail());
+
+                        //NAME
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(user.getName() == null ? "" : user.getName());
+
+                        //ROLE
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(user.getRole() == null ? "" : user.getRole());
+
+                        //NFC TAG
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(user.getNFCTag() == null ? "" : user.getNFCTag());
+
+                        //TEAM ID
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(user.getTeamID() == null ? "" : user.getTeamID());
+
+                        //TEAM
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(user.getTeam() == null ? "" : user.getTeam());
+                    }
+
+
+                    //Get File Name
+                    DateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    String nameFile = "Export" + "_" + sdf.format(timestamp);
+
+                    //Create Directory
+                    String rootDirectoryName = Environment.getExternalStorageDirectory() + "";
+                    File subDirectory = new File(rootDirectoryName, "FSS/USERS");
+                    subDirectory.mkdirs();
+
+                    //Create File
+                    OutputStream stream = new FileOutputStream(rootDirectoryName + "/" + "FSS/USERS" + "/" + nameFile + ".xls");
+
+                    wb.write(stream);
+                    stream.close();
+                    wb.close();
+
+                    ExportStatisticsDTO exportStatisticsDTO = new ExportStatisticsDTO();
+                    exportStatisticsDTO.setExportDate(Calendar.getInstance().getTime());
+                    exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/" + "FSS/USERS" + "/" + nameFile + ".xls");
+
+                    responseDTOExport.setData(exportStatisticsDTO);
+
+                    businessCallback.onSuccess(responseDTOExport);
+
+                } catch (IOException e) {
+                    responseDTOExport.getErrors().add("Unable to export USERS");
+                    businessCallback.onFailure(responseDTOExport);
                 }
+
             }
-        }
 
-        //Get File Name
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        String nameFile = testProject+"_"+testVehicle+"_"+test.getName() + "_" + sdf.format(timestamp);
-
-        //Create Directory
-        String rootDirectoryName = Environment.getExternalStorageDirectory()+"";
-        File subDirectory = new File(rootDirectoryName, subDirectoryName);
-        subDirectory.mkdirs();
-
-        //Create File
-        OutputStream stream = new FileOutputStream(rootDirectoryName+"/"+subDirectoryName+"/"+nameFile+".xls");
-
-        wb.write(stream);
-        stream.close();
-        wb.close();
-
-        return rootDirectoryName+"/"+subDirectoryName+"/"+nameFile+".xls";
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                responseDTO.getErrors().add("Unable to export USERS");
+                businessCallback.onFailure(responseDTO);
+            }
+        });
     }
-
-    */
-
 
 }

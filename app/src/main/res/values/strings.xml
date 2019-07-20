@@ -120,17 +120,12 @@
     <string name="prescruti_confirm_time_dialog_save">Save</string>
     <string name="prescruti_confirm_time_dialog_cancel">Cancel</string>
 
-    <string-array name="dynamicEventExcelExportColumns">
-        <item>ID</item>
-        <item>TEAM ID</item>
-        <item>TEAM NAME</item>
-        <item>DRIVER_ID</item>
-        <item>DRIVER_NAME</item>
-        <item>DATE</item>
-        <item>CAR TYPE</item>
-        <item>CAR NUMBER</item>
-        <item>BRIEFING DONE</item>
-        <item>EGRESS TIME</item>
-    </string-array>
+    <!-- Statistics -->
+    <string name="statistics_activity_title">Statistics</string>
+    <string name="statistics_activity_text">Click a button to start the export process: </string>
+    <string name="statistics_dialog_title">Send/open export result</string>
+
+
+
 
 </resources>

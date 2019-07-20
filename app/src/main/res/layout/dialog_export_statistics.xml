@@ -8,17 +8,29 @@
     android:padding="8dp"
     tools:context=".mvp.view.activity.dynamicevent.DynamicEventActivity">
 
-
-    <Button
-        android:id="@+id/exportSendMail"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send mail"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/exportOpenDirectory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Open file"/>
+
+        <ImageView
+            android:id="@+id/exportSendMail"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/gmail_icon"/>
+
+        <ImageView
+            android:id="@+id/exportOpenDirectory"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/excel_icon"/>
+    </LinearLayout>
+
+
 
 </LinearLayout>
