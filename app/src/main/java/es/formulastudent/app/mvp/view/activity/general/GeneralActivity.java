@@ -311,35 +311,35 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             finish();
 
         }else if(drawerItem.getIdentifier() == 10015){ //Endurance
-            FirebaseAuth.getInstance().signOut();
+            //FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.ENDURANCE_EFFICIENCY);
             this.startActivity(intent);
             finish();
 
         }else if(drawerItem.getIdentifier() == 10014){ //Autocross
-            FirebaseAuth.getInstance().signOut();
+            //FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.AUTOCROSS);
             this.startActivity(intent);
             finish();
 
         }else if(drawerItem.getIdentifier() == 10012){ //SkidPad
-            FirebaseAuth.getInstance().signOut();
+            //FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.SKIDPAD);
             this.startActivity(intent);
             finish();
 
         }else if(drawerItem.getIdentifier() == 10011){ //Practice Track
-            FirebaseAuth.getInstance().signOut();
+            //FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.PRACTICE_TRACK);
             this.startActivity(intent);
             finish();
 
         }else if(drawerItem.getIdentifier() == 10002){ //Pre-Scrutineering
-            FirebaseAuth.getInstance().signOut();
+            //FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.PRE_SCRUTINEERING);
             this.startActivity(intent);

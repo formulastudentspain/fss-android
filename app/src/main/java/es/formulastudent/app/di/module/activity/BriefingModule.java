@@ -2,6 +2,8 @@ package es.formulastudent.app.di.module.activity;
 
 import android.content.Context;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
@@ -27,8 +29,8 @@ public class BriefingModule {
 
     @Provides
     public BriefingPresenter providePresenter(BriefingPresenter.View categoryView, Context context,
-                                              TeamBO teamBO, BriefingBO briefingBO, UserBO userBO) {
-        return new BriefingPresenter(categoryView, context, teamBO, briefingBO, userBO);
+                                              TeamBO teamBO, BriefingBO briefingBO, UserBO userBO, FirebaseAuth firebaseAuth) {
+        return new BriefingPresenter(categoryView, context, teamBO, briefingBO, userBO, firebaseAuth);
     }
 
 

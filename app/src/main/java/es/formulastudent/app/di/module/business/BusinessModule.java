@@ -89,8 +89,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public DynamicEventBO provideDynamicEventBO(FirebaseFirestore firebaseFirestore) {
-        return new DynamicEventBOFirebaseImpl(firebaseFirestore);
+    public DynamicEventBO provideDynamicEventBO(FirebaseFirestore firebaseFirestore, FirebaseAuth firebaseAuth) {
+        return new DynamicEventBOFirebaseImpl(firebaseFirestore, firebaseAuth);
     }
 
     /**

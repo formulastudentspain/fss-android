@@ -5,6 +5,8 @@ import android.content.Context;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +27,7 @@ public class BriefingPresenter {
     //Dependencies
     private View view;
     private Context context;
+    private FirebaseAuth firebaseAuth;
     private TeamBO teamBO;
     private BriefingBO briefingBO;
     private UserBO userBO;
@@ -42,12 +45,13 @@ public class BriefingPresenter {
     private String selectedTeamID;
 
 
-    public BriefingPresenter(BriefingPresenter.View view, Context context, TeamBO teamBO, BriefingBO briefingBO, UserBO userBO) {
+    public BriefingPresenter(BriefingPresenter.View view, Context context, TeamBO teamBO, BriefingBO briefingBO, UserBO userBO, FirebaseAuth firebaseAuth) {
         this.view = view;
         this.context = context;
         this.teamBO = teamBO;
         this.briefingBO = briefingBO;
         this.userBO = userBO;
+        this.firebaseAuth = firebaseAuth;
     }
 
     /**
@@ -59,7 +63,7 @@ public class BriefingPresenter {
         //Show loading
         view.showLoading();
 
-        briefingBO.createBriefingRegistry(user, new BusinessCallback() {
+        briefingBO.createBriefingRegistry(user, firebaseAuth.getCurrentUser().getEmail(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 retrieveBriefingRegisterList();
@@ -90,6 +94,9 @@ public class BriefingPresenter {
              @Override
              public void onSuccess(ResponseDTO responseDTO) {
                      List<BriefingRegister> results = (List<BriefingRegister>) responseDTO.getData();
+                     if(results == null){
+                         results = new ArrayList<>();
+                     }
                      updateBriefingRegisters(results);
              }
 

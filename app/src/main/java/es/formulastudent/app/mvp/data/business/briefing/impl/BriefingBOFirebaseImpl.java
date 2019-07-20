@@ -23,6 +23,8 @@ import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
+import es.formulastudent.app.mvp.data.model.EventRegister;
+import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.User;
 
 public class BriefingBOFirebaseImpl implements BriefingBO {
@@ -36,7 +38,7 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
     @Override
     public void retrieveBriefingRegisters(Date from, Date to, String teamID, final BusinessCallback callback) {
 
-        Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_BRIEFING);
+        Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS);
 
         //Competition day filter
         if(from != null && to != null){
@@ -48,6 +50,9 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
         if(teamID != null && !teamID.equals("-1")){
             query = query.whereEqualTo(BriefingRegister.TEAM_ID, teamID);
         }
+
+        //Type Filter
+        query = query.whereEqualTo(BriefingRegister.EVENT_TYPE, EventType.BRIEFING);
 
         query.orderBy(BriefingRegister.DATE, Query.Direction.DESCENDING)
                 .get()
@@ -81,13 +86,13 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
 
 
     @Override
-    public void createBriefingRegistry(User user, final BusinessCallback callback) {
+    public void createBriefingRegistry(User user, String registerUserMail, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
-        BriefingRegister briefingRegister = new BriefingRegister(user, registerDate);
+        BriefingRegister briefingRegister = new BriefingRegister(user, registerDate, registerUserMail);
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_BRIEFING)
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS)
                 .document(briefingRegister.getID())
                 .set(briefingRegister.toObjectData())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

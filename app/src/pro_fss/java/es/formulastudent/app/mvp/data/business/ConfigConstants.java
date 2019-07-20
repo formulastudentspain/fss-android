@@ -14,6 +14,7 @@ public class ConfigConstants {
     public static final String FIREBASE_TABLE_ACCELERATION = "FSS_EVENT_CONTROL_ACCELERATION";
     public static final String FIREBASE_TABLE_ENDURANCE = "FSS_EVENT_CONTROL_ENDURANCE";
     public static final String FIREBASE_TABLE_EVENT_CONTROL_EGRESS = "DEV_EVENT_CONTROL_EGRESS";
+    public static final String FIREBASE_TABLE_DYNAMIC_EVENTS = "FSS_DYNAMIC_EVENT_CONTROL";
 
 
 }

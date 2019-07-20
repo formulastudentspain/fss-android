@@ -23,7 +23,7 @@ public interface BriefingBO {
      * @param user
      * @param callback
      */
-    void createBriefingRegistry(User user, BusinessCallback callback);
+    void createBriefingRegistry(User user, String registerUserMail, BusinessCallback callback);
 
 
     /**
