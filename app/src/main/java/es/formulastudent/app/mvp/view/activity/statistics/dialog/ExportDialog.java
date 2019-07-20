@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.fragment.app.DialogFragment;
 
@@ -18,8 +18,8 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
     private AlertDialog dialog;
 
     //View elements
-    private Button sendMail;
-    private Button openDirectory;
+    private ImageView sendMail;
+    private ImageView openDirectory;
 
     //Presenter
     private StatisticsPresenter presenter;
@@ -44,7 +44,7 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
         initializeElements(rootView);
 
         builder.setView(rootView)
-                    .setTitle(R.string.dynamic_event_filtering_dialog_title)
+                    .setTitle(R.string.statistics_dialog_title)
                     .setNegativeButton(R.string.dynamic_event_filtering_dialog_cancel_button, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             ExportDialog.this.getDialog().cancel();

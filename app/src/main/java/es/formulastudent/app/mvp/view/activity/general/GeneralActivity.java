@@ -49,7 +49,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
 
     @Inject
-    User loggedUser;
+    protected User loggedUser;
 
     //Drawer colors
     private static final String SELECTED_DRAWER_ITEM_COLOR = "#e6e6e6";

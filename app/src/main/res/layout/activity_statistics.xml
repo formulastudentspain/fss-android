@@ -10,122 +10,155 @@
 
     <include layout="@layout/activity_toolbar" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/statistics_chip_group"
+
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        app:singleSelection="true">
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/statistics_chip_wed"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:text="Wednesday"/>
+            android:textSize="25sp"
+            android:text="@string/statistics_activity_text"/>
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/statistics_chip_thu"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:text="Thursday"/>
+            android:orientation="horizontal">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/statistics_chip_fri"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            <Button
+                android:id="@+id/exportUsers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/primary_light"
+                android:background="@drawable/activity_prescrutineering_rounded_button"
+                android:text="Users"/>
+
+            <Button
+                android:id="@+id/exportBriefing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:backgroundTint="@color/primary_light"
+                android:background="@drawable/activity_prescrutineering_rounded_button"
+                android:text="@string/drawer_menu_staff_briefing"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/primary_light"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+
+        <Button
+            android:id="@+id/exportPreScrutineering"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:text="Friday"/>
+            android:backgroundTint="@color/primary_light"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:background="@drawable/activity_prescrutineering_rounded_button"
+            android:text="@string/drawer_menu_staff_pre_scrutineering"/>
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/statistics_chip_sat"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:text="Saturday"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/statistics_chip_sun"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:text="Sunday"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/statistics_chip_all"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:checked="true"
-            android:text="All"/>
-
-    </com.google.android.material.chip.ChipGroup>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/primary_light"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
 
 
-    <Button
-        android:id="@+id/exportBriefing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/drawer_menu_staff_briefing"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/exportPracticeTrack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary_light"
+                android:layout_marginTop="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:background="@drawable/activity_prescrutineering_rounded_button"
+                android:text="@string/drawer_menu_staff_practice_track"/>
 
 
-    <Button
-        android:id="@+id/exportPreScrutineering"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/drawer_menu_staff_pre_scrutineering"/>
+            <Button
+                android:id="@+id/exportSkidPad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary_light"
+                android:layout_marginTop="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_toEndOf="@id/exportPracticeTrack"
+                android:background="@drawable/activity_prescrutineering_rounded_button"
+                android:text="@string/drawer_menu_staff_skidpad"/>
 
 
-    <Button
-        android:id="@+id/exportPracticeTrack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/drawer_menu_staff_practice_track"/>
+            <Button
+                android:id="@+id/exportAcceleration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary_light"
+                android:layout_marginTop="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_below="@id/exportPracticeTrack"
+                android:background="@drawable/activity_prescrutineering_rounded_button"
+                android:text="@string/drawer_menu_staff_acceleration"/>
 
 
-    <Button
-        android:id="@+id/exportSkidPad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/drawer_menu_staff_skidpad"/>
+            <Button
+                android:id="@+id/exportAutocross"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary_light"
+                android:layout_marginTop="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_toEndOf="@id/exportAcceleration"
+                android:layout_alignBaseline="@id/exportAcceleration"
+                android:background="@drawable/activity_prescrutineering_rounded_button"
+                android:text="@string/drawer_menu_staff_autocross"/>
 
 
-    <Button
-        android:id="@+id/exportAcceleration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/drawer_menu_staff_acceleration"/>
+            <Button
+                android:id="@+id/exportEndurance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary_light"
+                android:layout_marginTop="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_below="@id/exportAcceleration"
+                android:background="@drawable/activity_prescrutineering_rounded_button"
+                android:text="@string/drawer_menu_staff_endurance_efficiency"/>
+
+        </RelativeLayout>
 
 
-    <Button
-        android:id="@+id/exportAutocross"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/drawer_menu_staff_autocross"/>
 
 
-    <Button
-        android:id="@+id/exportEndurance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/drawer_menu_staff_endurance_efficiency"/>
 
 
-    <Button
-        android:id="@+id/exportUsers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Users"/>
+    </LinearLayout>
 
 
 

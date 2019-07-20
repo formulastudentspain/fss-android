@@ -108,7 +108,7 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public StatisticsBO provideStatisticsBO(DynamicEventBO dynamicEventBO, Context context) {
-        return new StatisticsBOImpl(dynamicEventBO, context);
+    public StatisticsBO provideStatisticsBO(DynamicEventBO dynamicEventBO, UserBO userBO, Context context) {
+        return new StatisticsBOImpl(dynamicEventBO, userBO, context);
     }
 }
