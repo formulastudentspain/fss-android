@@ -13,6 +13,16 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/fssgrey"/>
+        android:layout_marginTop="64dp"
+        android:src="@mipmap/fssgrey" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/md_red_300"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="italic|bold"
+        android:textSize="35sp"
+        android:text="#becauseracecar"/>
 
 </LinearLayout>
