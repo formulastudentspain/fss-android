@@ -24,6 +24,7 @@
     <string name="drawer_menu_common_settings">Settings</string>
     <string name="drawer_menu_common_logout">Logout</string>
     <string name="drawer_menu_staff_statistics">Statistics</string>
+    <string name="drawer_menu_staff_admin_operations">Admin operations</string>
 
 
 
@@ -124,6 +125,9 @@
     <string name="statistics_activity_title">Statistics</string>
     <string name="statistics_activity_text">Click a button to start the export process: </string>
     <string name="statistics_dialog_title">Send/open export result</string>
+
+    <!-- Admin operations -->
+    <string name="statistics_admin_operations_title">Admin operations</string>
 
 
 

@@ -3,7 +3,9 @@ package es.formulastudent.app.mvp.data.model;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Team implements Serializable {
 
@@ -33,7 +35,19 @@ public class Team implements Serializable {
         this.car = car;
     }
 
-    public Team() { }
+    public Map<String, Object> toDocumentData(){
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put(Team.NAME, this.getName());
+        docData.put(Team.CAR, this.getCar());
+
+        return docData;
+    }
+
+
+    public Team() {
+        this.ID = UUID.randomUUID().toString();
+    }
 
     public String getID() {
         return ID;

@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
@@ -86,6 +87,57 @@ public class TeamBOFirebaseImpl implements TeamBO {
                     public void onFailure(@NonNull Exception e) {
                         //TODO añadir mensaje de error
                         //responseDTO.getErrors().add(R.string.mensajedeerror);
+                        callback.onFailure(responseDTO);
+                    }
+                });
+    }
+
+
+    @Override
+    public void deleteAllTeams(final BusinessCallback callback){
+
+        final ResponseDTO responseDTO = new ResponseDTO();
+
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                            doc.getReference().delete();
+                        }
+                        callback.onSuccess(responseDTO);
+                    }
+                })
+
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onFailure(responseDTO);
+                    }
+                });
+
+    }
+
+    @Override
+    public void createTeam(Team team, final BusinessCallback callback) {
+        final ResponseDTO responseDTO = new ResponseDTO();
+        Map<String, Object> docData = team.toDocumentData();
+
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
+                .document(team.getID())
+                .set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        callback.onSuccess(responseDTO);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //TODO añadir mensaje de error
+                        responseDTO.getErrors().add("");
                         callback.onFailure(responseDTO);
                     }
                 });

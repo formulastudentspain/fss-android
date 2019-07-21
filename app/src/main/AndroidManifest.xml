@@ -89,6 +89,10 @@
         <activity
             android:name=".mvp.view.activity.statistics.StatisticsActivity">
         </activity>
+
+        <activity
+            android:name=".mvp.view.activity.adminoperations.AdminOpsActivity">
+        </activity>
     </application>
 
 </manifest>

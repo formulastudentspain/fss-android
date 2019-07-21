@@ -35,6 +35,7 @@ import javax.inject.Inject;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.view.activity.adminoperations.AdminOpsActivity;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventActivity;
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityExitDialog;
@@ -154,6 +155,13 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
+        //Staff: Admin Operations
+        PrimaryDrawerItem adminOperations = new PrimaryDrawerItem()
+                .withIdentifier(10017)
+                .withName(R.string.drawer_menu_staff_admin_operations)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
 
         //Staff: Statistics
         PrimaryDrawerItem staffStatistics = new PrimaryDrawerItem()
@@ -233,6 +241,19 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
 
+        if(loggedUser.getMail().equals("dpconde.me@gmail.com") || loggedUser.getMail().equals("gerardmarti6@gmail.com")){
+            builder.addDrawerItems(
+                    eventControl,
+                    briefing,
+                    preScrutineering,
+                    dynamicEvents,
+                    practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency,
+                    new DividerDrawerItem(),
+                    staffStatistics,
+                    staffUserManagement,
+                    adminOperations,
+                    logout);
+        }else{
             builder.addDrawerItems(
                     eventControl,
                     briefing,
@@ -243,6 +264,8 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     staffStatistics,
                     staffUserManagement,
                     logout);
+        }
+
 
        // }
 
@@ -353,6 +376,11 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         }else if(drawerItem.getIdentifier() == 10016){ //Statistics
             Intent intent = new Intent(this, StatisticsActivity.class);
+            this.startActivity(intent);
+            finish();
+
+        }else if(drawerItem.getIdentifier() == 10017) { //Admin operations
+            Intent intent = new Intent(this, AdminOpsActivity.class);
             this.startActivity(intent);
             finish();
         }

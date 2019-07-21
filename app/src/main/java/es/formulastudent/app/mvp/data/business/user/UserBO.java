@@ -44,4 +44,10 @@ public interface UserBO {
      */
     void retrieveUserById(String id, BusinessCallback callback);
 
+    /**
+     * Method to delete all drivers
+     * @param callback
+     */
+    void deleteAllDrivers(BusinessCallback callback);
+
 }

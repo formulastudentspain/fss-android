@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class User implements Serializable {
 
@@ -73,6 +74,7 @@ public class User implements Serializable {
 
 
     public User() {
+        this.ID = UUID.randomUUID().toString();
     }
 
     public User (FirebaseUser firebaseUser){

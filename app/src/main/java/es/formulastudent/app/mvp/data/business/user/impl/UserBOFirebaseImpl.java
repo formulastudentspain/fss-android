@@ -171,4 +171,32 @@ public class UserBOFirebaseImpl implements UserBO {
                     }
                 });
     }
+
+    @Override
+    public void deleteAllDrivers(final BusinessCallback callback) {
+        final ResponseDTO responseDTO = new ResponseDTO();
+
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
+                .whereEqualTo(User.ROLE, "DRIVER")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        for(DocumentSnapshot doc: queryDocumentSnapshots.getDocuments()){
+                            doc.getReference().delete();
+                        }
+
+                        callback.onSuccess(responseDTO);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        responseDTO.getErrors().add("");
+                        callback.onFailure(responseDTO);
+                    }
+                });
+    }
 }
