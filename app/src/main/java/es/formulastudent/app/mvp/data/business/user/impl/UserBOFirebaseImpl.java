@@ -199,4 +199,40 @@ public class UserBOFirebaseImpl implements UserBO {
                     }
                 });
     }
+
+    @Override
+    public void getRegisteredUsersByTeamId(String teamID, final BusinessCallback callback){
+        final ResponseDTO responseDTO = new ResponseDTO();
+
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
+                .whereEqualTo(User.TEAM_ID, teamID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<User> userList = new ArrayList<>();
+
+                        for(DocumentSnapshot doc: queryDocumentSnapshots.getDocuments()){
+                            User user = new User(doc);
+
+                            if(user.getNFCTag()!=null){
+                                userList.add(user);
+                            }
+                        }
+
+                        responseDTO.setData(userList);
+
+                        callback.onSuccess(responseDTO);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //TODO añadir mensaje de error
+                        responseDTO.getErrors().add("");
+                        callback.onFailure(responseDTO);
+                    }
+                });
+    }
 }

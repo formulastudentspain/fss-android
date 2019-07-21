@@ -128,8 +128,8 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.user_detail_nfc_image){
-            Intent i = new Intent(this, NFCReaderActivity.class);
-            startActivityForResult(i, NFC_REQUEST_CODE);
+            presenter.checkMaxNumDrivers();
+
         }else if(view.getId() == R.id.user_detail_profile_image){
             dispatchTakePictureIntent();
         }
@@ -160,6 +160,17 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     @Override
     public void updateProfilePicture(Bitmap imageBitmap){
         userProfilePhoto.setImageBitmap(imageBitmap);
+    }
+
+    @Override
+    public User getSelectedUser() {
+        return user;
+    }
+
+    @Override
+    public void openNFCReader() {
+        Intent i = new Intent(this, NFCReaderActivity.class);
+        startActivityForResult(i, NFC_REQUEST_CODE);
     }
 
     @Override

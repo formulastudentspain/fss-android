@@ -20,6 +20,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
@@ -115,6 +116,37 @@ public class UserDetailPresenter {
     }
 
 
+    public void checkMaxNumDrivers(){
+
+        userBO.getRegisteredUsersByTeamId(view.getSelectedUser().getTeamID(), new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                List<User> users = (List<User>) responseDTO.getData();
+
+                boolean updatingUserNFC = false;
+                for(User user: users){
+                    if(user.getID().equals(view.getSelectedUser().getID())){
+                        updatingUserNFC = true;
+                        break;
+                    }
+                }
+
+                if(!updatingUserNFC && users.size() >= 6){
+                    view.createMessage("Unable to register more drivers. 6 max.");
+                }else{
+                    view.openNFCReader();
+                }
+
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+
+            }
+        });
+    }
+
+
     protected void uploadProfilePicture(Bitmap bitmap, User user){
         final User actualUser = user;
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -194,6 +226,17 @@ public class UserDetailPresenter {
          * @param imageBitmap
          */
         void updateProfilePicture(Bitmap imageBitmap);
+
+        /**
+         * Get selected User
+         * @return
+         */
+        User getSelectedUser();
+
+        /**
+         * Open NFC Reader Activity
+         */
+        void openNFCReader();
     }
 
 }

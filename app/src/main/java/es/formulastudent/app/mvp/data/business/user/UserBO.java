@@ -50,4 +50,10 @@ public interface UserBO {
      */
     void deleteAllDrivers(BusinessCallback callback);
 
+    /**
+     * Method to get the users register by a team (max. 6)
+     * @param teamID
+     * @param callback
+     */
+    void getRegisteredUsersByTeamId(String teamID, BusinessCallback callback);
 }
