@@ -23,7 +23,6 @@ import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
-import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.User;
 
@@ -117,10 +116,11 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
 
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_BRIEFING)
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS)
                 .whereLessThanOrEqualTo(BriefingRegister.DATE, to)
                 .whereGreaterThan(BriefingRegister.DATE, from)
                 .whereEqualTo(BriefingRegister.USER_ID, userID)
+                .whereEqualTo(BriefingRegister.EVENT_TYPE, EventType.BRIEFING)
                 .orderBy(BriefingRegister.DATE, Query.Direction.DESCENDING)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
