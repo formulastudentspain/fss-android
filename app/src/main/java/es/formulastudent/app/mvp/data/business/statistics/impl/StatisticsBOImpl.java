@@ -204,7 +204,7 @@ public class StatisticsBOImpl implements StatisticsBO {
                     ExportStatisticsDTO exportStatisticsDTO = new ExportStatisticsDTO();
                     exportStatisticsDTO.setEventType(eventType);
                     exportStatisticsDTO.setExportDate(Calendar.getInstance().getTime());
-                    exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/" + eventType.getActivityTitle() + "/" + nameFile + ".xls");
+                    exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/FSS/" + eventType.getActivityTitle() + "/" + nameFile + ".xls");
 
                     responseDTOExport.setData(exportStatisticsDTO);
 
