@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
@@ -79,28 +80,46 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
      * @param carType
      * @param briefingDone
      */
-     public void createRegistry(User user, Long carNumber, String carType, Boolean briefingDone){
+     public void createRegistry(final User user, final Long carNumber, final String carType, final Boolean briefingDone){
 
         //Show loading
         view.showLoading();
 
-         dynamicEventBO.createRegister(user, carType, carNumber, briefingDone, eventType, new BusinessCallback() {
+        dynamicEventBO.getDifferentEventRegistersByDriver(user.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-
-                if(eventType.equals(EventType.PRE_SCRUTINEERING)){
-                    PreScrutineeringRegister register = (PreScrutineeringRegister) responseDTO.getData();
-                    createEgressRegister(register);
-                }else{
-                    retrieveRegisterList();
+                if(responseDTO.getErrors().isEmpty()){
+                    Map<String, EventRegister> eventRegisterMap = (Map<String, EventRegister>) responseDTO.getData();
+                    if(eventRegisterMap.size() >= 2){
+                        view.createMessage("Error. Driver is registered in 2 or more dynamic events");
+                    } else {
+                        dynamicEventBO.createRegister(user, carType, carNumber, briefingDone, eventType, new BusinessCallback() {
+                            @Override
+                            public void onSuccess(ResponseDTO responseDTO) {
+                                if(eventType.equals(EventType.PRE_SCRUTINEERING)){
+                                    PreScrutineeringRegister register = (PreScrutineeringRegister) responseDTO.getData();
+                                    createEgressRegister(register);
+                                }else{
+                                    retrieveRegisterList();
+                                }
+                            }
+                            @Override
+                            public void onFailure(ResponseDTO responseDTO) {
+                                view.createMessage("Couldn't create the registry");
+                            }
+                        });
+                    }
+                } else {
+                    view.createMessage("Error. Driver is registered in 2 or more dynamic events");
                 }
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage("Couldn't not create the registry");
+
             }
         });
+
     }
 
 
@@ -114,7 +133,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
 
              @Override
              public void onFailure(ResponseDTO responseDTO) {
-                 view.createMessage("Couldn't not create the egress registry");
+                 view.createMessage("Couldn't create the egress registry");
              }
          });
     }

@@ -55,4 +55,5 @@ public interface DynamicEventBO {
     void deleteRegister(EventType type, String registerID, BusinessCallback callback);
 
 
+    void getDifferentEventRegistersByDriver(String userId, BusinessCallback callback);
 }

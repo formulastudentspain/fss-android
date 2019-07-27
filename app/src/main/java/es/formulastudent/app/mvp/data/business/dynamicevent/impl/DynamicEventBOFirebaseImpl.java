@@ -12,14 +12,20 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.apache.poi.ss.formula.functions.Even;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
+import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
@@ -217,6 +223,47 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                         callback.onSuccess(responseDTO);
                     }
                 });
+    }
+
+    @Override
+    public void getDifferentEventRegistersByDriver(String userId, final BusinessCallback callback){
+        Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS);
+
+        if(userId != null){
+            query = query.whereEqualTo(BriefingRegister.USER_ID, userId);
+        }
+
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                //Response object
+                ResponseDTO responseDTO = new ResponseDTO();
+
+                //Add results to list Map<EventType, register>
+                Map<String, List<EventRegister>> result = new HashMap<>();
+                List<EventRegister> eventRegisterList;
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    EventRegister register = new EventRegister(document);
+                    //Get all dynamic event from user, with 2 as maximum, except PracticeTrack and PreScrutineering
+                    if(register.getType() != EventType.PRACTICE_TRACK && register.getType() != EventType.PRE_SCRUTINEERING) {
+                        if (result.containsKey(register.getType().name()) && result.size() < 2) {
+                            eventRegisterList = result.get(register.getType().name());
+                            eventRegisterList.add(register);
+                            result.put(register.getType().name(), eventRegisterList);
+                        } else if (!result.containsKey(register.getType().name()) && result.size() < 2) {
+                            eventRegisterList = new ArrayList<>();
+                            eventRegisterList.add(register);
+                            result.put(register.getType().name(), eventRegisterList);
+                        } else {
+                            responseDTO.getErrors().add("User is registered in more than one dynamic event");
+                        }
+                    }
+                }
+
+                responseDTO.setData(result);
+                callback.onSuccess(responseDTO);
+            }
+        });
     }
 
 }

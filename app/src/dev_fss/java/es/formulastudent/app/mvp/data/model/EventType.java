@@ -1,5 +1,7 @@
 package es.formulastudent.app.mvp.data.model;
 
+import org.apache.poi.ss.formula.functions.Even;
+
 import java.io.Serializable;
 
 public enum EventType implements Serializable {

@@ -95,6 +95,26 @@ public class EventRegister implements Serializable {
 
     }
 
+    public EventRegister(DocumentSnapshot object){
+        this.ID = object.getId();
+        this.date = object.getDate(EventRegister.DATE);
+        this.userImage = object.getString(EventRegister.USER_IMAGE);
+        this.user = object.getString(EventRegister.USER);
+        this.userID = object.getString(EventRegister.USER_ID);
+        this.team = object.getString(EventRegister.TEAM);
+        this.teamID = object.getString(EventRegister.TEAM_ID);
+        this.carNumber = object.getLong(EventRegister.CAR_NUMBER);
+        this.carType = object.getString(EventRegister.CAR_TYPE);
+        this.briefingDone = object.getBoolean(EventRegister.BRIEFING_DONE);
+        this.doneByUserMail = object.getString(EventRegister.DONE_BY_USER);
+        for(EventType type : EventType.values()){
+            if(type.name().equalsIgnoreCase(object.getString(EventRegister.EVENT_TYPE))){
+                this.type = type;
+                break;
+            }
+        }
+    }
+
 
     public String getID() {
         return ID;
