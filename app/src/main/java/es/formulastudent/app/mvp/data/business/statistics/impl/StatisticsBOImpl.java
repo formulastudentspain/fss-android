@@ -97,24 +97,28 @@ public class StatisticsBOImpl implements StatisticsBO {
                     cell = row.createCell(5);
                     cell.setCellValue("DATE");
 
+                    //DONE BY USERMAIL
+                    cell = row.createCell(6);
+                    cell.setCellValue("DONE BY");
+
                     if(!eventType.equals(EventType.BRIEFING)) {
 
                         //CAR TYPE
-                        cell = row.createCell(6);
+                        cell = row.createCell(7);
                         cell.setCellValue("CAR TYPE");
 
                         //CAR NUMBER
-                        cell = row.createCell(7);
+                        cell = row.createCell(8);
                         cell.setCellValue("CAR NUMBER");
 
                         //BRIEFING DONE
-                        cell = row.createCell(8);
+                        cell = row.createCell(9);
                         cell.setCellValue("BRIEFING DONE");
 
 
                         if (eventType.equals(EventType.PRE_SCRUTINEERING)) {
                             //EGRESS TIME
-                            cell = row.createCell(9);
+                            cell = row.createCell(10);
                             cell.setCellValue("EGRESS TIME");
                         }
                     }
@@ -157,6 +161,10 @@ public class StatisticsBOImpl implements StatisticsBO {
                         cell = row.createCell(++cellNum);
                         cell.setCellValue(register.getDate()==null ? "" : df.format(register.getDate()));
 
+                        //DONE EMAIL BY
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(register.getDoneByUserMail()==null ? "" : register.getDoneByUserMail());
+
 
                         if(!eventType.equals(EventType.BRIEFING)) {
 
@@ -179,6 +187,8 @@ public class StatisticsBOImpl implements StatisticsBO {
                                 cell.setCellValue(value);
                             }
                         }
+
+
 
                     }
 
