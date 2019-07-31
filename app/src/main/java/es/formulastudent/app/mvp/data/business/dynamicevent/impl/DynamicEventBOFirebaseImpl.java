@@ -12,8 +12,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.apache.poi.ss.formula.functions.Even;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -244,16 +242,21 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                 List<EventRegister> eventRegisterList;
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     EventRegister register = new EventRegister(document);
-                    //Get all dynamic event from user, with 2 as maximum, except PracticeTrack and PreScrutineering
-                    if(register.getType() != EventType.PRACTICE_TRACK && register.getType() != EventType.PRE_SCRUTINEERING) {
-                        if (result.containsKey(register.getType().name()) && result.size() < 2) {
+                    //Get all dynamic event from user, with 2 as maximum, except PracticeTrack, PreScrutineering and Briefing
+                    if(register.getType() != EventType.PRACTICE_TRACK &&
+                            register.getType() != EventType.PRE_SCRUTINEERING &&
+                            register.getType() != EventType.BRIEFING) {
+
+                        if (result.containsKey(register.getType().name())) {
                             eventRegisterList = result.get(register.getType().name());
                             eventRegisterList.add(register);
                             result.put(register.getType().name(), eventRegisterList);
+
                         } else if (!result.containsKey(register.getType().name()) && result.size() < 2) {
                             eventRegisterList = new ArrayList<>();
                             eventRegisterList.add(register);
                             result.put(register.getType().name(), eventRegisterList);
+
                         } else {
                             responseDTO.getErrors().add("User is registered in more than one dynamic event");
                         }

@@ -88,10 +88,19 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
         dynamicEventBO.getDifferentEventRegistersByDriver(user.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
+
                 if(responseDTO.getErrors().isEmpty()){
                     Map<String, EventRegister> eventRegisterMap = (Map<String, EventRegister>) responseDTO.getData();
-                    if(eventRegisterMap.size() >= 2){
+
+                    if(eventRegisterMap.size() >= 2
+                            && !eventRegisterMap.containsKey(eventType.name())
+                            && !eventType.equals(EventType.PRE_SCRUTINEERING)
+                            && !eventType.equals(EventType.BRIEFING)
+                            && !eventType.equals(EventType.PRACTICE_TRACK)){
+
+                        view.hideLoading();
                         view.createMessage("Error. Driver is registered in 2 or more dynamic events");
+
                     } else {
                         dynamicEventBO.createRegister(user, carType, carNumber, briefingDone, eventType, new BusinessCallback() {
                             @Override
@@ -102,14 +111,17 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
                                 }else{
                                     retrieveRegisterList();
                                 }
+                                view.hideLoading();
                             }
                             @Override
                             public void onFailure(ResponseDTO responseDTO) {
+                                view.hideLoading();
                                 view.createMessage("Couldn't create the registry");
                             }
                         });
-                    }
+                   }
                 } else {
+                    view.hideLoading();
                     view.createMessage("Error. Driver is registered in 2 or more dynamic events");
                 }
             }
@@ -182,6 +194,8 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
      */
     void onNFCTagDetected(String tag){
 
+        view.showLoading();
+
         userBO.retrieveUserByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
@@ -192,6 +206,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
             }
             @Override
             public void onFailure(ResponseDTO responseDTO) {
+                view.hideLoading();
                 view.createMessage("Couldn't get the user by this Tag");
             }
         });
@@ -295,6 +310,8 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
                 Team team = (Team) responseDTO.getData();
                 Car car = team.getCar();
 
+                view.hideLoading();
+
                 //With all the information, we open the dialog
                 FragmentManager fm = ((DynamicEventActivity)view.getActivity()).getSupportFragmentManager();
                 ConfirmEventRegisterDialog createUserDialog = ConfirmEventRegisterDialog
@@ -304,6 +321,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
+                view.hideLoading();
                 view.createMessage("Couldn't get the team from this user");
             }
         });
