@@ -105,7 +105,7 @@ public class AdminOpsPresenter {
                     Cell cellCarType = row.getCell(1);
                     String carType = cellCarType.getStringCellValue();
                     if(carType.equalsIgnoreCase("E")){
-                        car.setType(Car.CAR_TYPE_AUTONOMOUS_ELECTRIC);
+                        car.setType(Car.CAR_TYPE_ELECTRIC);
                     }else if(carType.equalsIgnoreCase("C")){
                         car.setType(Car.CAR_TYPE_COMBUSTION);
                     }else if(carType.equalsIgnoreCase("DE")){
