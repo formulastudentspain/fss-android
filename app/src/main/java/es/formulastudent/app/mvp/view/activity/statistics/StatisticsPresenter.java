@@ -46,7 +46,8 @@ public class StatisticsPresenter {
 
 
     public void exportDynamicEvent(EventType eventType){
-
+        //Show Loading
+        view.showLoading();
         try {
             statisticsBO.exportDynamicEvent(eventType, new BusinessCallback() {
                 @Override
@@ -54,13 +55,14 @@ public class StatisticsPresenter {
 
                     ExportStatisticsDTO result = (ExportStatisticsDTO)responseDTO.getData();
                     exportStatisticsDTO = result;
-
+                    view.hideLoadingIcon();
                     openExportDialog();
 
                 }
 
                 @Override
                 public void onFailure(ResponseDTO responseDTO) {
+                    view.hideLoadingIcon();
 
                 }
             });
@@ -120,6 +122,7 @@ public class StatisticsPresenter {
     }
 
     public void exportUsers() {
+        view.showLoading();
         try {
             statisticsBO.exportUsers(new BusinessCallback() {
                 @Override
@@ -127,18 +130,21 @@ public class StatisticsPresenter {
 
                     ExportStatisticsDTO result = (ExportStatisticsDTO)responseDTO.getData();
                     exportStatisticsDTO = result;
-
+                    view.hideLoadingIcon();
                     openExportDialog();
                 }
 
                 @Override
                 public void onFailure(ResponseDTO responseDTO) {
+                    view.hideLoadingIcon();
 
                 }
             });
         } catch (IOException e) {
+            view.hideLoadingIcon();
             e.printStackTrace();
         }
+        view.hideLoadingIcon();
     }
 
 

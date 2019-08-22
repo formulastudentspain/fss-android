@@ -72,53 +72,42 @@ public class StatisticsBOImpl implements StatisticsBO {
 
                     //HEADERS
 
-                    //ID
-                    Row row = sheet.createRow(4);
-                    Cell cell = row.createCell(0);
-                    cell.setCellValue("ID");
-
-                    //TEAM ID
-                    cell = row.createCell(1);
-                    cell.setCellValue("TEAM ID");
 
                     //TEAM NAME
-                    cell = row.createCell(2);
+                    Row row = sheet.createRow(4);
+                    Cell cell = row.createCell(0);
                     cell.setCellValue("TEAM NAME");
 
-                    //DRIVER ID
-                    cell = row.createCell(3);
-                    cell.setCellValue("DRIVER ID");
-
                     //DRIVER NAME
-                    cell = row.createCell(4);
+                    cell = row.createCell(1);
                     cell.setCellValue("DRIVER NAME");
 
                     //DATE
-                    cell = row.createCell(5);
+                    cell = row.createCell(2);
                     cell.setCellValue("DATE");
 
                     //DONE BY USERMAIL
-                    cell = row.createCell(6);
+                    cell = row.createCell(3);
                     cell.setCellValue("DONE BY");
 
                     if(!eventType.equals(EventType.BRIEFING)) {
 
                         //CAR TYPE
-                        cell = row.createCell(7);
+                        cell = row.createCell(4);
                         cell.setCellValue("CAR TYPE");
 
                         //CAR NUMBER
-                        cell = row.createCell(8);
+                        cell = row.createCell(5);
                         cell.setCellValue("CAR NUMBER");
 
                         //BRIEFING DONE
-                        cell = row.createCell(9);
+                        cell = row.createCell(6);
                         cell.setCellValue("BRIEFING DONE");
 
 
                         if (eventType.equals(EventType.PRE_SCRUTINEERING)) {
                             //EGRESS TIME
-                            cell = row.createCell(10);
+                            cell = row.createCell(7);
                             cell.setCellValue("EGRESS TIME");
                         }
                     }
@@ -137,21 +126,9 @@ public class StatisticsBOImpl implements StatisticsBO {
                         cellNum = 0;
                         row = sheet.createRow(++rowNum);
 
-                        //ID
-                        cell = row.createCell(cellNum);
-                        cell.setCellValue(register.getID()==null ? "" : register.getID());
-
-                        //TEAM ID
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getTeamID()==null ? "" : register.getID());
-
                         //TEAM NAME
-                        cell = row.createCell(++cellNum);
+                        cell = row.createCell(cellNum);
                         cell.setCellValue(register.getTeam()==null ? "" : register.getTeam());
-
-                        //DRIVER ID
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getUserID()==null ? "" : register.getUserID());
 
                         //DRIVER NAME
                         cell = row.createCell(++cellNum);
@@ -256,33 +233,25 @@ public class StatisticsBOImpl implements StatisticsBO {
 
                     //HEADERS
 
-                    //ID
+                    //MAIL
                     Row row = sheet.createRow(4);
                     Cell cell = row.createCell(0);
-                    cell.setCellValue("ID");
-
-                    //MAIL
-                    cell = row.createCell(1);
                     cell.setCellValue("MAIL");
 
                     //NAME
-                    cell = row.createCell(2);
+                    cell = row.createCell(1);
                     cell.setCellValue("NAME");
 
                     //ROLE
-                    cell = row.createCell(3);
+                    cell = row.createCell(2);
                     cell.setCellValue("ROLE");
 
                     //NFC TAG
-                    cell = row.createCell(4);
+                    cell = row.createCell(3);
                     cell.setCellValue("NFC TAG");
 
-                    //TEAM ID
-                    cell = row.createCell(5);
-                    cell.setCellValue("TEAM ID");
-
                     //TEAM
-                    cell = row.createCell(6);
+                    cell = row.createCell(4);
                     cell.setCellValue("TEAM");
 
 
@@ -298,12 +267,8 @@ public class StatisticsBOImpl implements StatisticsBO {
                         cellNum = 0;
                         row = sheet.createRow(++rowNum);
 
-                        //ID
-                        cell = row.createCell(cellNum);
-                        cell.setCellValue(user.getID() == null ? "" : user.getID());
-
                         //MAIL
-                        cell = row.createCell(++cellNum);
+                        cell = row.createCell(cellNum);
                         cell.setCellValue(user.getMail() == null ? "" : user.getMail());
 
                         //NAME
@@ -317,10 +282,6 @@ public class StatisticsBOImpl implements StatisticsBO {
                         //NFC TAG
                         cell = row.createCell(++cellNum);
                         cell.setCellValue(user.getNFCTag() == null ? "" : user.getNFCTag());
-
-                        //TEAM ID
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(user.getTeamID() == null ? "" : user.getTeamID());
 
                         //TEAM
                         cell = row.createCell(++cellNum);
