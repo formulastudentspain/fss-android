@@ -77,6 +77,7 @@ public class StatisticsPresenter {
         try {
             File file = new File(exportStatisticsDTO.getFullFilePath());
             Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.ms-excel");
             context.startActivity(intent);
         }catch (Exception e){
@@ -95,6 +96,7 @@ public class StatisticsPresenter {
         Uri path = Uri.fromFile(fileLocation);
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
+        //emailIntent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         // set the type to 'email'
         emailIntent.setType("vnd.android.cursor.dir/email");
         String to[] = {view.getCurrentLoggedUser().getMail()};
@@ -107,7 +109,7 @@ public class StatisticsPresenter {
         }else{
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "[FSS Export] " + exportStatisticsDTO.getEventType() + " | " + df.format(exportStatisticsDTO.getExportDate()));
         }
-        context.startActivity(Intent.createChooser(emailIntent , "Send email..."));
+        context.startActivity(Intent.createChooser(emailIntent , "Send email...").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
     }
 

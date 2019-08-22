@@ -187,7 +187,7 @@ public class UserDetailPresenter {
     }
 
     private void updatePhotoUrl(User actualUser, Uri path) {
-        db.collection("UserInfo").document(actualUser.getID()).update(
+        db.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO).document(actualUser.getID()).update(
                 User.USER_IMAGE, path.toString()
         );
     }
