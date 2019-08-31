@@ -10,6 +10,7 @@ import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -34,7 +35,7 @@ import es.formulastudent.app.mvp.view.activity.prescrutineeringdetail.PreScrutin
 
 
 public class DynamicEventActivity extends GeneralActivity implements
-        DynamicEventPresenter.View, View.OnClickListener {
+        DynamicEventPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int NFC_REQUEST_CODE = 101;
     private static final int CHRONO_CODE = 102;
@@ -45,6 +46,7 @@ public class DynamicEventActivity extends GeneralActivity implements
     DynamicEventPresenter presenter;
 
     //View components
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView recyclerView;
     private EventRegistersAdapter registersAdapter;
     private FloatingActionButton buttonAddRegister;
@@ -91,6 +93,8 @@ public class DynamicEventActivity extends GeneralActivity implements
         mDrawerIdentifier = eventType.getDrawerItemID();
 
         //Recycler view
+        mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         recyclerView = findViewById(R.id.recyclerView);
         registersAdapter = new EventRegistersAdapter(presenter.getEventRegisterList(), this, presenter);
         recyclerView.setAdapter(registersAdapter);
@@ -105,7 +109,6 @@ public class DynamicEventActivity extends GeneralActivity implements
         setToolbarTitle(eventType.getActivityTitle());
 
     }
-
 
 
     @Override
@@ -129,6 +132,7 @@ public class DynamicEventActivity extends GeneralActivity implements
     @Override
     public void hideLoading() {
         super.hideLoadingDialog();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -223,6 +227,11 @@ public class DynamicEventActivity extends GeneralActivity implements
     protected void onResume(){
         super.onResume();
 
+    }
+
+    @Override
+    public void onRefresh() {
+        presenter.retrieveRegisterList();
     }
 }
 

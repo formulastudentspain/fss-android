@@ -9,6 +9,7 @@ import android.widget.Spinner;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,8 +28,8 @@ import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerBriefingComponent;
-import es.formulastudent.app.di.module.activity.BriefingModule;
 import es.formulastudent.app.di.module.ContextModule;
+import es.formulastudent.app.di.module.activity.BriefingModule;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.briefing.recyclerview.BriefingRegistersAdapter;
@@ -36,7 +37,7 @@ import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.general.spinneradapters.TeamsSpinnerAdapter;
 
 
-public class BriefingActivity extends GeneralActivity implements ChipGroup.OnCheckedChangeListener, BriefingPresenter.View, View.OnClickListener {
+public class BriefingActivity extends GeneralActivity implements ChipGroup.OnCheckedChangeListener, BriefingPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int NFC_REQUEST_CODE = 101;
 
@@ -44,6 +45,7 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
     BriefingPresenter presenter;
 
     //View components
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView recyclerView;
     private BriefingRegistersAdapter registersAdapter;
     private TeamsSpinnerAdapter teamsAdapter;
@@ -88,6 +90,8 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
         mDrawerIdentifier = 10001L;
 
         //Recycler view
+        mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         recyclerView = findViewById(R.id.recyclerView);
         registersAdapter = new BriefingRegistersAdapter(presenter.getBriefingRegisterList(), this);
         recyclerView.setAdapter(registersAdapter);
@@ -149,6 +153,7 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
     @Override
     public void hideLoading() {
         super.hideLoadingDialog();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -235,5 +240,10 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
         //Update list
         presenter.retrieveBriefingRegisterList();
 
+    }
+
+    @Override
+    public void onRefresh() {
+        presenter.retrieveBriefingRegisterList();
     }
 }

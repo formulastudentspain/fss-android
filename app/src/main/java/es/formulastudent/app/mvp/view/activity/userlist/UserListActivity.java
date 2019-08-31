@@ -9,6 +9,7 @@ import android.widget.EditText;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -29,13 +30,14 @@ import es.formulastudent.app.mvp.view.activity.userlist.dialog.CreateUserDialog;
 import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.UserListAdapter;
 
 
-public class UserListActivity extends GeneralActivity implements UserListPresenter.View, View.OnClickListener, TextWatcher {
+public class UserListActivity extends GeneralActivity implements UserListPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
 
 
     @Inject
     UserListPresenter presenter;
 
     //View components
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView recyclerView;
     private UserListAdapter userListAdapter;
     private FloatingActionButton buttonAddUser;
@@ -88,6 +90,8 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
         mDrawerIdentifier = 10003L;
 
         //Recycler view
+        mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         recyclerView = findViewById(R.id.recyclerView);
         userListAdapter = new UserListAdapter(presenter.getUserItemList(), this, presenter);
         recyclerView.setAdapter(userListAdapter);
@@ -126,6 +130,7 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
     @Override
     public void hideLoading() {
         super.hideLoadingDialog();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -153,4 +158,9 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
 
     @Override
     public void afterTextChanged(Editable editable) {}
+
+    @Override
+    public void onRefresh() {
+        presenter.retrieveUsers();
+    }
 }
