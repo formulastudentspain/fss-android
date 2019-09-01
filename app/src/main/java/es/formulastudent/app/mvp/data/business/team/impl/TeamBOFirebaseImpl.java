@@ -34,7 +34,7 @@ public class TeamBOFirebaseImpl implements TeamBO {
     public void retrieveAllTeams(final BusinessCallback callback) {
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
-                .orderBy(Team.NAME, Query.Direction.ASCENDING)
+                .orderBy(Team.CAR_NUMBER, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 

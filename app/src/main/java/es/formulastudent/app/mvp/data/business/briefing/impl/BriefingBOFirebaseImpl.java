@@ -6,6 +6,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -145,5 +147,46 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
                     }
         });
 
+    }
+
+    @Override
+    public void deleteBriefingRegister(String registerID, final BusinessCallback callback) {
+        final ResponseDTO responseDTO = new ResponseDTO();
+        final DocumentReference registerReference = firebaseFirestore
+                .collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS)
+                .document(registerID);
+
+        registerReference.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        registerReference.delete()
+
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        responseDTO.getInfo().add("Register deleted successfully!!");
+                                        callback.onSuccess(responseDTO);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        //TODO
+                                        responseDTO.getErrors().add("");
+                                        callback.onSuccess(responseDTO);
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //TODO
+                        responseDTO.getErrors().add("");
+                        callback.onSuccess(responseDTO);
+                    }
+                });
     }
 }

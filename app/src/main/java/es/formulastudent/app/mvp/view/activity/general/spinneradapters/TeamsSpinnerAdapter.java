@@ -62,7 +62,7 @@ public class TeamsSpinnerAdapter extends ArrayAdapter<Team> {
 
         TextView teamName = view.findViewById(R.id.spinner_value);
         if(team.getCar() != null) {
-            teamName.setText(team.getName() + " - " + team.getCar().getNumber());
+            teamName.setText(team.getCar().getNumber() + " - " + team.getName());
         } else{
             teamName.setText(team.getName());
         }

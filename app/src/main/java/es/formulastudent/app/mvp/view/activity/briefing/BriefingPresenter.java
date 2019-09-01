@@ -11,18 +11,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
+import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.briefing.dialog.ConfirmBriefingRegisterDialog;
+import es.formulastudent.app.mvp.view.activity.briefing.dialog.DeleteEventRegisterDialog;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
 
-public class BriefingPresenter {
+public class BriefingPresenter implements RecyclerViewClickListener {
 
     //Dependencies
     private View view;
@@ -120,6 +124,29 @@ public class BriefingPresenter {
     }
 
 
+
+    public void deleteBriefingRegister(String id) {
+
+        briefingBO.deleteBriefingRegister(id, new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                if(!responseDTO.getInfo().isEmpty()){
+                    view.createMessage(responseDTO.getInfo().get(0));
+                }
+
+                retrieveBriefingRegisterList();
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO mostrar mensajes
+            }
+        });
+
+     }
+
+
+
     /**
      * Retrieve user by NFC tag after read
      * @param tag
@@ -185,6 +212,24 @@ public class BriefingPresenter {
     }
 
 
+    @Override
+    public void recyclerViewListClicked(android.view.View v, int position) {
+        if(v.getId() == R.id.delete_run_button){
+            BriefingRegister selectedRegister = filteredBriefingRegisterList.get(position);
+            openConfirmDeleteRegister(selectedRegister);
+
+        }
+    }
+
+
+    public void openConfirmDeleteRegister(EventRegister register){
+        //With all the information, we open the dialog
+        FragmentManager fm = ((BriefingActivity)view.getActivity()).getSupportFragmentManager();
+        DeleteEventRegisterDialog deleteEventRegisterDialog = DeleteEventRegisterDialog.newInstance(this, register);
+        deleteEventRegisterDialog.show(fm, "delete_event_confirm");
+    }
+
+
     public List<BriefingRegister> getBriefingRegisterList() {
         return filteredBriefingRegisterList;
     }
@@ -212,6 +257,9 @@ public class BriefingPresenter {
     public void setSelectedTeamID(String selectedTeamID) {
         this.selectedTeamID = selectedTeamID;
     }
+
+
+
 
     public interface View {
 

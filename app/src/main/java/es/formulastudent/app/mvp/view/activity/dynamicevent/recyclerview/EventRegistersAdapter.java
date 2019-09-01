@@ -58,9 +58,6 @@ public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         EventRegister register = eventRegisterList.get(position);
-
-
-
         DateFormat sdf = new SimpleDateFormat("EEE, dd MMM 'at' HH:mm", Locale.US);
 
         EventRegistersViewHolder eventRegistersViewHolder = (EventRegistersViewHolder)holder;

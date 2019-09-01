@@ -186,6 +186,7 @@ public class AdminOpsPresenter {
                 Team team = teams.get(teamName);
                 user.setTeamID(team.getID());
                 user.setTeam(team.getName());
+                user.setCarNumber(team.getCar().getNumber());
 
                 //User mail
                 Cell cellUserMail = row.getCell(3);

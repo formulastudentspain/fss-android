@@ -261,7 +261,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-
+                //TODO write message
             }
         });
 

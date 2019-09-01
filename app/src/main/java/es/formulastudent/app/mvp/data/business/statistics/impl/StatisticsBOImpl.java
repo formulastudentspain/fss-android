@@ -254,6 +254,10 @@ public class StatisticsBOImpl implements StatisticsBO {
                     cell = row.createCell(4);
                     cell.setCellValue("TEAM");
 
+                    //TEAM
+                    cell = row.createCell(5);
+                    cell.setCellValue("CAR NUMBER");
+
 
                     /*
                         Test Data Values
@@ -284,6 +288,10 @@ public class StatisticsBOImpl implements StatisticsBO {
                         cell.setCellValue(user.getNFCTag() == null ? "" : user.getNFCTag());
 
                         //TEAM
+                        cell = row.createCell(++cellNum);
+                        cell.setCellValue(user.getTeam() == null ? "" : user.getTeam());
+
+                        //CAR NUMBER
                         cell = row.createCell(++cellNum);
                         cell.setCellValue(user.getTeam() == null ? "" : user.getTeam());
                     }

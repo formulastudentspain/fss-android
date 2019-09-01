@@ -37,7 +37,8 @@ import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.general.spinneradapters.TeamsSpinnerAdapter;
 
 
-public class BriefingActivity extends GeneralActivity implements ChipGroup.OnCheckedChangeListener, BriefingPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class BriefingActivity extends GeneralActivity implements ChipGroup.OnCheckedChangeListener,
+        BriefingPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int NFC_REQUEST_CODE = 101;
 
@@ -93,7 +94,7 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
         mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         recyclerView = findViewById(R.id.recyclerView);
-        registersAdapter = new BriefingRegistersAdapter(presenter.getBriefingRegisterList(), this);
+        registersAdapter = new BriefingRegistersAdapter(presenter.getBriefingRegisterList(), this, presenter);
         recyclerView.setAdapter(registersAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -242,8 +243,26 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
 
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (registersAdapter != null) {
+            registersAdapter.saveStates(outState);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (registersAdapter != null) {
+            registersAdapter.restoreStates(savedInstanceState);
+        }
+    }
+
     @Override
     public void onRefresh() {
         presenter.retrieveBriefingRegisterList();
     }
+
 }

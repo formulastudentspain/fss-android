@@ -14,6 +14,7 @@ public class Team implements Serializable {
     //Database constants
     public static final String NAME = "name";
     public static final String CAR = "car";
+    public static final String CAR_NUMBER = "car.number";
 
     private String ID;
     private String name;

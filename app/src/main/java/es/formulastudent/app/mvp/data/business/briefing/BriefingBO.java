@@ -35,5 +35,13 @@ public interface BriefingBO {
      */
     void retrieveBriefingRegistersByUserAndDates(Date from, Date to, String userID, BusinessCallback callback);
 
+
+    /**
+     * Delete Briefing register
+     * @param userID
+     * @param callback
+     */
+    void deleteBriefingRegister(String userID, BusinessCallback callback);
+
 }
 

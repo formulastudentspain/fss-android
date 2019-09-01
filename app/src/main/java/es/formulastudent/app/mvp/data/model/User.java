@@ -22,6 +22,7 @@ public class User implements Serializable {
     public static final String MAIL = "mail";
     public static final String ROLE = "role";
     public static final String ROLE_ID = "roleID";
+    public static final String CAR_NUMBER = "carNumber";
 
 
     private String ID;
@@ -33,6 +34,7 @@ public class User implements Serializable {
     private String teamID;
     private String role;
     private String roleID;
+    private Long carNumber;
 
 
     public User(String ID, String name, String mail, String photoUrl, String NFCTag, String role, String roleID) {
@@ -55,6 +57,7 @@ public class User implements Serializable {
         this.teamID = object.getString(User.TEAM_ID);
         this.role = object.getString(User.ROLE);
         this.roleID = object.getString(User.ROLE_ID);
+        this.carNumber = object.getLong(User.CAR_NUMBER);
     }
 
     public Map<String, Object> toDocumentData(){
@@ -68,6 +71,7 @@ public class User implements Serializable {
         docData.put(User.TEAM_ID, this.getTeamID());
         docData.put(User.USER_IMAGE, this.getPhotoUrl());
         docData.put(User.TAG_NFC, this.getNFCTag());
+        docData.put(User.CAR_NUMBER, this.getCarNumber());
 
         return docData;
     }
@@ -152,5 +156,13 @@ public class User implements Serializable {
 
     public void setRoleID(String roleID) {
         this.roleID = roleID;
+    }
+
+    public Long getCarNumber() {
+        return carNumber;
+    }
+
+    public void setCarNumber(Long carNumber) {
+        this.carNumber = carNumber;
     }
 }
