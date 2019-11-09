@@ -75,10 +75,9 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //Hide loading
+                //Hide loading and show error
                 view.hideLoading();
-
-                view.createMessage("Error. Unable to create Briefing Registry");
+                view.createMessage(responseDTO.getError());
             }
         });
     }
@@ -106,7 +105,8 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
              @Override
              public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
+                 //Show error message
+                 view.createMessage(responseDTO.getError());
              }
          });
     }
@@ -124,22 +124,26 @@ public class BriefingPresenter implements RecyclerViewClickListener {
     }
 
 
-
+    /**
+     * Delete briefing register given a register ID
+     * @param id
+     */
     public void deleteBriefingRegister(String id) {
 
+        //Call business to delete Briefing registers
         briefingBO.deleteBriefingRegister(id, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                if(!responseDTO.getInfo().isEmpty()){
-                    view.createMessage(responseDTO.getInfo().get(0));
-                }
 
+                //Show info message and refresh the briefing list
+                view.createMessage(responseDTO.getInfo());
                 retrieveBriefingRegisterList();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes
+                //Show error message
+                view.createMessage(responseDTO.getError());
             }
         });
 
@@ -175,7 +179,8 @@ public class BriefingPresenter implements RecyclerViewClickListener {
                 //Hide loading
                 view.hideLoading();
 
-                view.createMessage("Error. Unable to get user by NFC tag");
+                //Show error message
+                view.createMessage(responseDTO.getError());
             }
         });
     }
@@ -196,7 +201,7 @@ public class BriefingPresenter implements RecyclerViewClickListener {
             public void onSuccess(ResponseDTO responseDTO) {
                 List<Team> teams = (List<Team>)responseDTO.getData();
 
-                //Add All option
+                //Add "All" option
                 Team teamAll = new Team("-1", "All");
                 teams.add(0, teamAll);
 
@@ -205,7 +210,8 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes de error
+                //Show error message
+                view.createMessage(responseDTO.getError());
             }
 
         });
@@ -217,7 +223,6 @@ public class BriefingPresenter implements RecyclerViewClickListener {
         if(v.getId() == R.id.delete_run_button){
             BriefingRegister selectedRegister = filteredBriefingRegisterList.get(position);
             openConfirmDeleteRegister(selectedRegister);
-
         }
     }
 
@@ -234,25 +239,14 @@ public class BriefingPresenter implements RecyclerViewClickListener {
         return filteredBriefingRegisterList;
     }
 
-    public Date getSelectedDateFrom() {
-        return selectedDateFrom;
-    }
-
     public void setSelectedDateFrom(Date selectedDateFrom) {
         this.selectedDateFrom = selectedDateFrom;
-    }
-
-    public Date getSelectedDateTo() {
-        return selectedDateTo;
     }
 
     public void setSelectedDateTo(Date selectedDateTo) {
         this.selectedDateTo = selectedDateTo;
     }
 
-    public String getSelectedTeamID() {
-        return selectedTeamID;
-    }
 
     public void setSelectedTeamID(String selectedTeamID) {
         this.selectedTeamID = selectedTeamID;
@@ -269,7 +263,7 @@ public class BriefingPresenter implements RecyclerViewClickListener {
          * Show message to user
          * @param message
          */
-        void createMessage(String message);
+        void createMessage(Integer message, Object...args);
 
         /**
          * Finish current activity

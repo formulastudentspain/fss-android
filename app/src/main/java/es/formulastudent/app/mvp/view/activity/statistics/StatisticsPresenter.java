@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
@@ -82,8 +83,9 @@ public class StatisticsPresenter {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.ms-excel");
             context.startActivity(intent);
+
         }catch (Exception e){
-            view.createMessage("Unable to open file, try send it my email.");
+            view.createMessage(R.string.statistics_error_opening_file);
         }
     }
 
@@ -154,7 +156,7 @@ public class StatisticsPresenter {
          * Show message to user
          * @param message
          */
-        void createMessage(String message);
+        void createMessage(Integer message, Object...args);
 
         /**
          * Finish current activity

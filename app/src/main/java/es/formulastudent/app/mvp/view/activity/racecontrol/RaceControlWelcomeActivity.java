@@ -25,13 +25,12 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
         super.onCreate(savedInstanceState);
         setupComponent(FSSApp.getApp().component());
 
+        //Get the event type (Endurance, AutoX, Skidpad, Acceleration)
         RaceControlEvent rcEvent = (RaceControlEvent) getIntent().getSerializableExtra("eventType");
         this.rcEvent = rcEvent;
 
         initViews();
         setSupportActionBar(toolbar);
-
-
     }
 
     /**
@@ -54,13 +53,15 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
         addDrawer();
         mDrawerIdentifier = rcEvent.getDrawerItemID();
 
-        //Buttons
+        //Button for combustion
         Button type_combustion = findViewById(R.id.rc_welcome_combustion);
         type_combustion.setOnClickListener(this);
 
+        //Button for electric
         Button type_electric = findViewById(R.id.rc_welcome_electric);
         type_electric.setOnClickListener(this);
 
+        //Button for final
         Button type_final = findViewById(R.id.rc_welcome_final);
         type_final.setOnClickListener(this);
 
@@ -88,15 +89,17 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
 
         Intent intent = new Intent(this, RaceControlActivity.class);
 
+        //Electric race
         if(view.getId() == R.id.rc_welcome_electric){
             intent.putExtra("rc_type", RaceControlRegister.RACE_TYPE_ELECTRIC);
 
+        //Combustion race
         }else if(view.getId() == R.id.rc_welcome_combustion){
             intent.putExtra("rc_type", RaceControlRegister.RACE_TYPE_COMBUSTION);
 
+        //Final race
         }else if(view.getId() == R.id.rc_welcome_final){
             intent.putExtra("rc_type", RaceControlRegister.RACE_TYPE_FINAL);
-
         }
 
         intent.putExtra("eventType", rcEvent);

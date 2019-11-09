@@ -91,12 +91,12 @@ public class CreateRegisterDialog extends DialogFragment implements CheckboxChec
             @Override
             public void onClick(View view) {
 
-                    //Set values for filtering
-                    presenter.createRaceControlRegisters(raceControlTeamDTOSelected, getMaxIndex());
+                //Set values for filtering
+                presenter.createRaceControlRegisters(raceControlTeamDTOSelected, getMaxIndex());
 
 
-                    //Close dialog
-                    dialog.dismiss();
+                //Close dialog
+                dialog.dismiss();
 
             }
         });

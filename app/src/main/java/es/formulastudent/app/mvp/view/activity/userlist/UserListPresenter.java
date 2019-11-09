@@ -6,6 +6,7 @@ import android.content.Intent;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
@@ -14,8 +15,8 @@ import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
-import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
 
 public class UserListPresenter implements RecyclerViewClickListener {
 
@@ -117,7 +118,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
             public void onSuccess(ResponseDTO responseDTO) {
                 //Update list
                 retrieveUsers();
-                view.createMessage("User registered successfully!");
+                view.createMessage(R.string.users_create_info);
             }
 
             @Override
@@ -199,7 +200,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
          * Show message to user
          * @param message
          */
-        void createMessage(String message);
+        void createMessage(Integer message, Object...args);
 
         /**
          * Finish current activity

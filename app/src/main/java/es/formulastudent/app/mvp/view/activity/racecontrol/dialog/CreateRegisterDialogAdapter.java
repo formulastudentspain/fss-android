@@ -39,7 +39,6 @@ public class CreateRegisterDialogAdapter extends RecyclerView.Adapter<RecyclerVi
         view = mLayoutInflater.inflate(R.layout.dialog_create_rc_register_list_item, parent, false);
 
         return new RaceControlCreateRegisterViewHolder(view, checkListener);
-
     }
 
     @Override
@@ -58,9 +57,6 @@ public class CreateRegisterDialogAdapter extends RecyclerView.Adapter<RecyclerVi
             viewHolder.checkBox.setChecked(register.getSelected()==null ? false : register.getSelected());
             viewHolder.checkBox.setEnabled(true);
         }
-
-
-
     }
 
     @Override

@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
@@ -74,7 +75,8 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                         ResponseDTO responseDTO = new ResponseDTO();
 
                         if (e != null) {
-                            responseDTO.getErrors().add("Error retrieving Race Control registers");
+                            responseDTO.setError(R.string.rc_realtime_error_retrieving_message);
+                            callback.onFailure(responseDTO);
                             return;
                         }
 
@@ -145,7 +147,8 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
                     @Override
                     public void onFailure(ResponseDTO responseDTO) {
-                        //TODO
+                        responseDTO.setError(R.string.rc_teams_error_message);
+                        callback.onFailure(responseDTO);
                     }
                 });
 
@@ -153,7 +156,8 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO
+                responseDTO.setError(R.string.rc_teams_error_message);
+                callback.onFailure(responseDTO);
             }
         });
     }
@@ -161,6 +165,8 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
     @Override
     public void createRaceControlRegister(List<RaceControlTeamDTO> raceControlTeamDTOList, RaceControlEvent eventType, String raceType, Long currentMaxIndex, final BusinessCallback callback) {
 
+
+        final ResponseDTO responseDTO = new ResponseDTO();
 
         // Get a new write batch
         WriteBatch batch = firebaseFirestore.batch();
@@ -189,20 +195,16 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                //callback.onSuccess(responseDTO);
-                int a = 0;
+                responseDTO.setInfo(R.string.rc_create_info_message);
+                callback.onSuccess(responseDTO);
             }
         }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        //responseDTO.getErrors().add("");
-                   //     callback.onFailure(responseDTO);
-                        int a = 0;
-                    }
-                });
-
-
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                responseDTO.setError(R.string.rc_create_error_message);
+                callback.onFailure(responseDTO);
+            }
+        });
     }
 
 
@@ -234,13 +236,14 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                         }
 
                         responseDTO.setData(result);
+                        responseDTO.setInfo(R.string.rc_info_retrieving_message);
                         callback.onSuccess(responseDTO);
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO add messages
+                        responseDTO.setError(R.string.rc_error_retrieving_message);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -249,6 +252,8 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
     @Override
     public void updateRaceControlState(RaceControlRegister register, RaceControlEvent event, RaceControlState newState, final BusinessCallback callback) {
+
+        final ResponseDTO responseDTO = new ResponseDTO();
 
         //Update currentState and currentStateDate with the new value
         register.setCurrentState(newState);
@@ -266,17 +271,16 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-
-                        //There is nothing to be returned
-                        callback.onSuccess(new ResponseDTO());
+                        responseDTO.setInfo(R.string.rc_info_update_message);
+                        callback.onSuccess(responseDTO);
 
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
-                        callback.onFailure(new ResponseDTO());
+                        responseDTO.setInfo(R.string.rc_error_update_message);
+                        callback.onFailure(responseDTO);
 
                     }
                 });

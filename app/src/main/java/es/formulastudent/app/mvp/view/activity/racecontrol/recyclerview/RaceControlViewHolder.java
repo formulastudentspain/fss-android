@@ -57,8 +57,6 @@ public class RaceControlViewHolder extends RecyclerView.ViewHolder implements Vi
         state2.setOnClickListener(this);
         state2Label = itemView.findViewById(R.id.state2Label);
         state2Icon = itemView.findViewById(R.id.state2Icon);
-
-
     }
 
     @Override

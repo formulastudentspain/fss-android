@@ -1,13 +1,10 @@
 package es.formulastudent.app.mvp.data.business;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ResponseDTO {
 
     private Object data;
-    private List<String> errors = new ArrayList<>();
-    private List<String> info = new ArrayList<>();
+    private Integer error = null;
+    private Integer info = null;
 
     public Object getData() {
         return data;
@@ -17,19 +14,19 @@ public class ResponseDTO {
         this.data = data;
     }
 
-    public List<String> getErrors() {
-        return errors;
+    public Integer getError() {
+        return error;
     }
 
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
+    public void setError(Integer error) {
+        this.error = error;
     }
 
-    public List<String> getInfo() {
+    public Integer getInfo() {
         return info;
     }
 
-    public void setInfo(List<String> info) {
+    public void setInfo(Integer info) {
         this.info = info;
     }
 }

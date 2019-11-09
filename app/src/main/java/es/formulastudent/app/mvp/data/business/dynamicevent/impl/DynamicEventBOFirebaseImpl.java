@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
@@ -90,13 +91,14 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                         }
 
                         responseDTO.setData(result);
+                        responseDTO.setInfo(R.string.dynamic_event_message_info_retrieving_registers);
                         callback.onSuccess(responseDTO);
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                //TODO add messages
+                responseDTO.setError(R.string.dynamic_event_message_error_retrieving_registers);
                 callback.onFailure(responseDTO);
             }
         });
@@ -127,6 +129,7 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                     @Override
                     public void onSuccess(Void aVoid) {
                         responseDTO.setData(register);
+                        responseDTO.setInfo(R.string.dynamic_event_messages_create_registers_info);
                         callback.onSuccess(responseDTO);
 
                     }
@@ -134,8 +137,7 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.dynamic_event_messages_create_registers_error);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -157,16 +159,15 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        responseDTO.getInfo().add("Chrono time updated successfully!!");
+                                        responseDTO.setInfo(R.string.dynamic_event_messages_prescrutineering_update_info);
                                         callback.onSuccess(responseDTO);
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        //TODO
-                                        responseDTO.getErrors().add("");
-                                        callback.onSuccess(responseDTO);
+                                        responseDTO.setError(R.string.dynamic_event_messages_prescrutineering_update_error);
+                                        callback.onFailure(responseDTO);
                                     }
                                 });
                     }
@@ -174,9 +175,8 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO
-                        responseDTO.getErrors().add("");
-                        callback.onSuccess(responseDTO);
+                        responseDTO.setError(R.string.dynamic_event_messages_prescrutineering_update_error);
+                        callback.onFailure(responseDTO);
                     }
                 });
     }
@@ -199,16 +199,15 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        responseDTO.getInfo().add("Register deleted successfully!!");
+                                        responseDTO.setInfo(R.string.dynamic_event_message_info_deleting_registers);
                                         callback.onSuccess(responseDTO);
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        //TODO
-                                        responseDTO.getErrors().add("");
-                                        callback.onSuccess(responseDTO);
+                                        responseDTO.setError(R.string.dynamic_event_message_error_deleting_registers);
+                                        callback.onFailure(responseDTO);
                                     }
                                 });
                     }
@@ -216,15 +215,18 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO
-                        responseDTO.getErrors().add("");
-                        callback.onSuccess(responseDTO);
+                        responseDTO.setError(R.string.dynamic_event_message_error_deleting_registers);
+                        callback.onFailure(responseDTO);
                     }
                 });
     }
 
     @Override
     public void getDifferentEventRegistersByDriver(String userId, final BusinessCallback callback){
+
+        //Response object
+        final ResponseDTO responseDTO = new ResponseDTO();
+
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS);
 
         if(userId != null){
@@ -232,16 +234,17 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
         }
 
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                //Response object
-                ResponseDTO responseDTO = new ResponseDTO();
+
 
                 //Add results to list Map<EventType, register>
                 Map<String, List<EventRegister>> result = new HashMap<>();
                 List<EventRegister> eventRegisterList;
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     EventRegister register = new EventRegister(document);
+
                     //Get all dynamic event from user, with 2 as maximum, except PracticeTrack, PreScrutineering and Briefing
                     if(register.getType() != EventType.PRACTICE_TRACK &&
                             register.getType() != EventType.PRE_SCRUTINEERING &&
@@ -258,13 +261,20 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                             result.put(register.getType().name(), eventRegisterList);
 
                         } else {
-                            responseDTO.getErrors().add("User is registered in more than one dynamic event");
+                            responseDTO.setError(R.string.dynamic_event_message_error_runs);
                         }
                     }
                 }
 
                 responseDTO.setData(result);
                 callback.onSuccess(responseDTO);
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                responseDTO.setError(R.string.dynamic_event_message_error_runs);
+                callback.onFailure(responseDTO);
             }
         });
     }

@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
@@ -195,10 +196,11 @@ public class StatisticsBOImpl implements StatisticsBO {
 
                     responseDTOExport.setData(exportStatisticsDTO);
 
+                    responseDTOExport.setInfo(R.string.statistics_info_exporting_dynamic_event);
                     callback.onSuccess(responseDTOExport);
 
                 } catch (IOException e) {
-                    responseDTOExport.getErrors().add("Unable to export " + eventType.getActivityTitle());
+                    responseDTOExport.setError(R.string.statistics_error_exporting_dynamic_event);
                     callback.onFailure(responseDTOExport);
                 }
 
@@ -206,7 +208,7 @@ public class StatisticsBOImpl implements StatisticsBO {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                responseDTO.getErrors().add("Unable to export " + eventType.getActivityTitle());
+                responseDTO.setError(R.string.statistics_error_exporting_dynamic_event);
                 callback.onFailure(responseDTO);
             }
         });
@@ -320,10 +322,11 @@ public class StatisticsBOImpl implements StatisticsBO {
 
                     responseDTOExport.setData(exportStatisticsDTO);
 
+                    responseDTOExport.setInfo(R.string.statistics_info_exporting_users);
                     businessCallback.onSuccess(responseDTOExport);
 
                 } catch (IOException e) {
-                    responseDTOExport.getErrors().add("Unable to export USERS");
+                    responseDTOExport.setError(R.string.statistics_error_exporting_users);
                     businessCallback.onFailure(responseDTOExport);
                 }
 
@@ -331,7 +334,7 @@ public class StatisticsBOImpl implements StatisticsBO {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                responseDTO.getErrors().add("Unable to export USERS");
+                responseDTO.setError(R.string.statistics_error_exporting_users);
                 businessCallback.onFailure(responseDTO);
             }
         });

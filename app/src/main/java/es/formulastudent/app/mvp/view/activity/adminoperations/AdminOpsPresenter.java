@@ -238,7 +238,7 @@ public class AdminOpsPresenter {
          * Show message to user
          * @param message
          */
-        void createMessage(String message);
+        void createMessage(Integer message, Object...args);
 
         /**
          * Finish current activity

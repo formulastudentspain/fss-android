@@ -2,10 +2,8 @@ package es.formulastudent.app.mvp.data.business.briefing.impl;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
@@ -57,32 +56,38 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
 
         query.orderBy(BriefingRegister.DATE, Query.Direction.DESCENDING)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+                    //Response object
+                    ResponseDTO responseDTO = new ResponseDTO();
+
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                        //Response object
-                        ResponseDTO responseDTO = new ResponseDTO();
+                        List<BriefingRegister> result = new ArrayList<>();
 
-                        if (task.isSuccessful()) {
-                            List<BriefingRegister> result = new ArrayList<>();
-
-                            //Add results to list
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                BriefingRegister briefingRegister = new BriefingRegister(document);
-                                result.add(briefingRegister);
-                            }
-
-                            responseDTO.setData(result);
-
-                        } else {
-                            //TODO añadir mensaje de error
-                            //responseDTO.getErrors().add(R.string.mensajedeerror);
+                        //Add results to list
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            BriefingRegister briefingRegister = new BriefingRegister(document);
+                            result.add(briefingRegister);
                         }
 
+                        responseDTO.setData(result);
+                        responseDTO.setInfo(R.string.briefing_messages_retrieve_registers_info);
                         callback.onSuccess(responseDTO);
                     }
-                });
+
+                }).addOnFailureListener(new OnFailureListener() {
+
+                    //Response object
+                    ResponseDTO responseDTO = new ResponseDTO();
+
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        responseDTO.setInfo(R.string.briefing_messages_retrieve_registers_error);
+                        callback.onFailure(responseDTO);
+                    }
+        });
     }
 
 
@@ -100,14 +105,14 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
 
                     @Override
                     public void onSuccess(Void aVoid) {
+                        responseDTO.setInfo(R.string.briefing_messages_create_registers_info);
                         callback.onSuccess(responseDTO);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.briefing_messages_create_registers_error);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -137,12 +142,12 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
                         }
                         responseDTO.setData(result);
                         callback.onSuccess(responseDTO);
+                        responseDTO.setInfo(R.string.briefing_messages_retrieve_registers_info);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.briefing_messages_retrieve_registers_error);
                         callback.onFailure(responseDTO);
                     }
         });
@@ -156,25 +161,22 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
                 .collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS)
                 .document(registerID);
 
-        registerReference.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        registerReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
 
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         registerReference.delete()
-
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        responseDTO.getInfo().add("Register deleted successfully!!");
+                                        responseDTO.setInfo(R.string.briefing_messages_delete_register_info);
                                         callback.onSuccess(responseDTO);
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        //TODO
-                                        responseDTO.getErrors().add("");
+                                        responseDTO.setError(R.string.briefing_messages_delete_register_error);
                                         callback.onSuccess(responseDTO);
                                     }
                                 });
@@ -183,8 +185,7 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.briefing_messages_delete_register_error);
                         callback.onSuccess(responseDTO);
                     }
                 });

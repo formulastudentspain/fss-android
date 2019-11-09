@@ -191,7 +191,6 @@ public class StatisticsActivity extends GeneralActivity implements View.OnClickL
         return super.loggedUser;
     }
 
-
     @Override
     protected void onStart(){
         super.onStart();

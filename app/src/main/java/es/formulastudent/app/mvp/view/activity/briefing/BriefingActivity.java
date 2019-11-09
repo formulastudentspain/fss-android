@@ -234,7 +234,7 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
                 presenter.setSelectedDateTo(calTo.getTime());
 
             }catch (ParseException pe){
-                createMessage("Error parsing dates");
+                createMessage(R.string.briefing_messages_parsing_dates_error);
             }
         }
 

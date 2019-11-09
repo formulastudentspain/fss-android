@@ -20,9 +20,7 @@ public class RaceControlCreateRegisterViewHolder extends RecyclerView.ViewHolder
         this.checkListener = checkListener;
         checkBox = itemView.findViewById(R.id.checkBox);
         checkBox.setOnCheckedChangeListener(this);
-
     }
-
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {

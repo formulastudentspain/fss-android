@@ -17,7 +17,6 @@ public class RaceControlTeamDTO {
         this.carName = team.getName();
     }
 
-
     public Long getCarNumber() {
         return carNumber;
     }

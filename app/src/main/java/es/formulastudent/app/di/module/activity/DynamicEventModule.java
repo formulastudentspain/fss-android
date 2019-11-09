@@ -1,7 +1,5 @@
 package es.formulastudent.app.di.module.activity;
 
-import android.content.Context;
-
 import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
@@ -37,10 +35,10 @@ public class DynamicEventModule {
     }
 
     @Provides
-    public DynamicEventPresenter providePresenter(DynamicEventPresenter.View categoryView, Context context,
+    public DynamicEventPresenter providePresenter(DynamicEventPresenter.View categoryView,
                                                   TeamBO teamBO, DynamicEventBO dynamicEventBO, UserBO userBO,
                                                   BriefingBO briefingBO, EventType eventType, EgressBO egressBO) {
-        return new DynamicEventPresenter(categoryView, context, teamBO, dynamicEventBO, userBO, briefingBO, eventType, egressBO);
+        return new DynamicEventPresenter(categoryView, teamBO, dynamicEventBO, userBO, briefingBO, eventType, egressBO);
     }
 
 

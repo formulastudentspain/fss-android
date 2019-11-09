@@ -8,6 +8,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
@@ -32,14 +33,14 @@ public class AuthBOFirebaseImpl implements AuthBO {
                       public void onSuccess(AuthResult authResult) {
                           FirebaseUser user = firebaseAuth.getCurrentUser();
                           responseDTO.setData(user);
+                          responseDTO.setInfo(R.string.login_business_info_login);
                           callback.onSuccess(responseDTO);
                       }
 
                   }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.login_business_error_login_with_mail);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -54,52 +55,16 @@ public class AuthBOFirebaseImpl implements AuthBO {
         firebaseAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                responseDTO.setInfo(R.string.login_business_info_reset);
                 callback.onSuccess(responseDTO);
             }
 
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                //TODO añadir mensaje de error
-                responseDTO.getErrors().add("");
+                responseDTO.setError(R.string.login_business_error_reset_password);
                 callback.onFailure(responseDTO);
             }
         });
     }
-
-
-
-
-
-    /**
-     * Create Account by Mail and Password
-     * @param mail
-     * @param password
-     */
-    /*
-    public void createAccount(String mail, String password){
-
-        //show progress dialog
-
-        mAuth.createUserWithEmailAndPassword(mail, password)
-                .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(context, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-
-        //close progress dialog
-
-    }
-    */
 }

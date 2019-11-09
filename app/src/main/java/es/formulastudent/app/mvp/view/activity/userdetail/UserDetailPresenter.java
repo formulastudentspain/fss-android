@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
@@ -66,23 +67,23 @@ public class UserDetailPresenter {
                                     userRef.update("tagNFC", tagNFC).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            view.createMessage("User successfully registered");
+                                            view.createMessage(R.string.users_info_registered);
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            view.createMessage("Error on update NFC Tag");
+                                            view.createMessage(R.string.users_error_registering);
                                         }
                                     });
                                 } else {
                                     User user = (User) responseDTO.getData();
-                                    view.createMessage("TAG is already registered by "+user.getName());
+                                    view.createMessage(R.string.users_error_tag_already_used, user.getName());
                                 }
                             }
 
                             @Override
                             public void onFailure(ResponseDTO responseDTO) {
-                                view.createMessage("Error on update NFC Tag");
+                                view.createMessage(R.string.users_error_registering);
                             }
                         });
                     } else {
@@ -105,7 +106,7 @@ public class UserDetailPresenter {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         //fail
-                                        view.createMessage("Failed to save data to db");
+                                        view.createMessage(R.string.users_error_creating_user);
                                     }
                                 });
                     }
@@ -132,7 +133,7 @@ public class UserDetailPresenter {
                 }
 
                 if(!updatingUserNFC && users.size() >= 6){
-                    view.createMessage("Unable to register more drivers. 6 max.");
+                    view.createMessage(R.string.users_error_max_6_drivers);
                 }else{
                     view.openNFCReader();
                 }
@@ -164,7 +165,7 @@ public class UserDetailPresenter {
             @Override
             public void onFailure(@NonNull Exception e) {
                 //on failure
-                view.createMessage("Error uploading profile picture");
+                view.createMessage(R.string.users_error_updating_profile_picture);
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -178,7 +179,7 @@ public class UserDetailPresenter {
                             updatePhotoUrl(actualUser, path);
                             view.updateProfilePicture(profileImage);
                         } else {
-                            view.createMessage("Error updating profile picture.");
+                            view.createMessage(R.string.users_error_updating_profile_picture);
                         }
                     }
                 });
@@ -199,7 +200,7 @@ public class UserDetailPresenter {
          * Show message to user
          * @param message
          */
-        void createMessage(String message);
+        void createMessage(Integer message, Object...args);
 
         /**
          * Finish current activity

@@ -58,6 +58,7 @@ public class DynamicEventActivity extends GeneralActivity implements
         setContentView(R.layout.activity_dynamic_event);
         super.onCreate(savedInstanceState);
 
+        //Retrieve the event type
         EventType eventType = (EventType) getIntent().getSerializableExtra("eventType");
         setupComponent(FSSApp.getApp().component(), eventType);
         this.eventType = eventType;
@@ -120,11 +121,6 @@ public class DynamicEventActivity extends GeneralActivity implements
 
 
     @Override
-    public void finishView() {
-
-    }
-
-    @Override
     public void showLoading() {
         super.showLoadingDialog();
     }
@@ -175,9 +171,8 @@ public class DynamicEventActivity extends GeneralActivity implements
                 String result = data.getStringExtra("result");
                 presenter.onNFCTagDetected(result);
             }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
+
+        //Chronometer result for Egress
         }else if(requestCode == CHRONO_CODE){
             if(resultCode == Activity.RESULT_OK) {
                 ArrayList<String> result = data.getStringArrayListExtra("result");

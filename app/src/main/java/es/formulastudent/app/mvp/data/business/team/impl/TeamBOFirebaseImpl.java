@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
@@ -65,11 +66,11 @@ public class TeamBOFirebaseImpl implements TeamBO {
                             }
 
                             responseDTO.setData(result);
+                            responseDTO.setInfo(R.string.teams_info_retrieving_all_message);
                             callback.onSuccess(responseDTO);
 
                         } else {
-                            //TODO añadir mensaje de error
-                            //responseDTO.getErrors().add(R.string.mensajedeerror);
+                            responseDTO.setInfo(R.string.teams_error_retrieving_all_message);
                             callback.onFailure(responseDTO);
                         }
                     }
@@ -91,14 +92,14 @@ public class TeamBOFirebaseImpl implements TeamBO {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Team team = new Team(documentSnapshot);
                         responseDTO.setData(team);
+                        responseDTO.setInfo(R.string.teams_info_retrieving_by_id_message);
                         callback.onSuccess(responseDTO);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        //responseDTO.getErrors().add(R.string.mensajedeerror);
+                        responseDTO.setError(R.string.teams_error_retrieving_by_id_message);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -118,6 +119,7 @@ public class TeamBOFirebaseImpl implements TeamBO {
                         for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
                             doc.getReference().delete();
                         }
+                        responseDTO.setInfo(R.string.teams_info_delete_all_message);
                         callback.onSuccess(responseDTO);
                     }
                 })
@@ -125,6 +127,7 @@ public class TeamBOFirebaseImpl implements TeamBO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        responseDTO.setError(R.string.teams_error_delete_all_message);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -142,14 +145,14 @@ public class TeamBOFirebaseImpl implements TeamBO {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        responseDTO.setInfo(R.string.teams_info_create_message);
                         callback.onSuccess(responseDTO);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.teams_error_create_message);
                         callback.onFailure(responseDTO);
                     }
                 });

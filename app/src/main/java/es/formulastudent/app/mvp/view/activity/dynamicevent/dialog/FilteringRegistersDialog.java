@@ -245,7 +245,8 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
                 selectedDateTo = calTo.getTime();
 
             }catch (ParseException pe){
-                presenter.createMessage("Error parsing dates");
+                //Show error message
+                presenter.createMessage(R.string.briefing_messages_parsing_dates_error);
             }
         }
 

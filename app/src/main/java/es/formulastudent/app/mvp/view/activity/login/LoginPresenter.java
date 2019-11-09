@@ -60,13 +60,13 @@ public class LoginPresenter {
 
                 }else{ //The user is created for Login, but not in users table
                     view.hideLoadingIcon();
-                    view.createMessage(context.getString(R.string.login_activity_user_not_found));
+                    view.createMessage(R.string.login_activity_user_not_found);
                 }
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO error obteniendo usuario por email
+                view.createMessage(responseDTO.getError());
             }
         });
 
@@ -84,16 +84,16 @@ public class LoginPresenter {
             authBO.resetPassword(mail, new BusinessCallback() {
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
-                    view.createMessage("Mail Sent."); //TODO Mirar la opcion de plantillas de correo electronico: https://support.google.com/firebase/answer/7000714?hl=es
+                    view.createMessage(responseDTO.getInfo());
                 }
 
                 @Override
                 public void onFailure(ResponseDTO responseDTO) {
-                    view.createMessage("Something Failed. Unknown error");
+                    view.createMessage(responseDTO.getError());
                 }
             });
         } else {
-            view.createMessage("Enter your mail account in order to send you the password recover mail. Thanks");
+            view.createMessage(R.string.login_business_email_mandatory);
         }
     }
 
@@ -143,7 +143,7 @@ public class LoginPresenter {
          * Create Snackbar Message
          * @param message
          */
-        void createMessage(String message);
+        void createMessage(Integer message, Object...args);
 
         /**
          * Finish current activity

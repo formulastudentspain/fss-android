@@ -47,6 +47,7 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
     private Date selectedDateFrom;
     private Date selectedDateTo;
 
+
     //Presenter
     private RaceControlPresenter presenter;
 
@@ -245,7 +246,7 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
                 selectedDateTo = calTo.getTime();
 
             }catch (ParseException pe){
-                presenter.createMessage("Error parsing dates");
+                //presenter.createMessage("Error parsing dates");
             }
         }
 

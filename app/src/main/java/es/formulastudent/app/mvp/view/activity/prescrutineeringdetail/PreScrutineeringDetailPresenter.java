@@ -79,7 +79,7 @@ public class PreScrutineeringDetailPresenter {
          * Show message to user
          * @param message
          */
-        void createMessage(String message);
+        void createMessage(Integer message, Object...args);
 
         void returnResult(Long time);
 

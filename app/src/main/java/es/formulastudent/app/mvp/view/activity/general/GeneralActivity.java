@@ -43,7 +43,6 @@ import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityLoa
 import es.formulastudent.app.mvp.view.activity.login.LoginActivity;
 import es.formulastudent.app.mvp.view.activity.racecontrol.RaceControlWelcomeActivity;
 import es.formulastudent.app.mvp.view.activity.statistics.StatisticsActivity;
-import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
 
 
@@ -408,11 +407,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             this.startActivity(intent);
             finish();
 
-        }else if(drawerItem.getIdentifier() == 30003){ //Timeline
-            Intent intent = new Intent(this, TimelineActivity.class);
-            this.startActivity(intent);
-            finish();
-
         }else if(drawerItem.getIdentifier() == 10001){ //Briefing
             Intent intent = new Intent(this, BriefingActivity.class);
             this.startActivity(intent);
@@ -489,9 +483,16 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
      * Create a Snackbar Message
      * @param message
      */
-    public void createMessage(String message){
-        View rootView = this.getWindow().getDecorView().findViewById(android.R.id.content);
-        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show();
+    public void createMessage(Integer message, Object... args){
+        if(message != null){
+            View rootView = this.getWindow().getDecorView().findViewById(android.R.id.content);
+
+            if(args != null){
+                Snackbar.make(rootView, getString(message, args), Snackbar.LENGTH_LONG).show();
+            }else{
+                Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show();
+            }
+        }
     }
 
     public void showLoadingDialog(){

@@ -11,6 +11,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
@@ -49,6 +50,7 @@ public class UserRoleBOFirebaseImpl implements UserRoleBO {
                             }
 
                             responseDTO.setData(result);
+                            responseDTO.setInfo(R.string.users_get_user_roles_info);
                             callback.onSuccess(responseDTO);
                         }
                     }
@@ -56,8 +58,7 @@ public class UserRoleBOFirebaseImpl implements UserRoleBO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.users_get_user_roles_error);
                         callback.onFailure(responseDTO);
                     }
                 });

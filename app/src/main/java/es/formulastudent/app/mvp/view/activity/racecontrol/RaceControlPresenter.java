@@ -96,7 +96,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
          filters.put("raceType", raceType);
          filters.put("eventType", rcEventType);
 
-        //Call Event business
+        //Retrieve race control registers in real-time
          ListenerRegistration registration = raceControlBO.getRaceControlRegistersRealTime(filters,  new BusinessCallback() {
 
              @Override
@@ -107,7 +107,8 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
 
              @Override
              public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage("Couldn't get the register");
+                 //Show error message
+                 view.createMessage(responseDTO.getError());
              }
          });
 
@@ -137,13 +138,14 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
                         .newInstance(RaceControlPresenter.this, raceControlTeamsDTO, context);
                 createUserDialog.show(fm, "rc_endurance_create_dialog");
 
+                //Hide loading
                 view.hideLoading();
-
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes de error
+                //Show error message
+                view.createMessage(responseDTO.getError());
             }
 
         });
@@ -171,9 +173,11 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
         RaceControlRegister register = filteredRaceControlRegisterList.get(position);
         RaceControlState newState = null;
 
+        //State 1 clicked
         if(v.getId() == R.id.state1){
             newState = RaceControlState.getStateByAcronym(register.getCurrentState().getStates().get(0));
 
+        //State 2 clicked
         }else if(v.getId() == R.id.state2){
             newState = RaceControlState.getStateByAcronym(register.getCurrentState().getStates().get(1));
 
@@ -183,6 +187,12 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
         updateRegister(register, rcEventType, newState);
     }
 
+    /**
+     * Change the register state
+     * @param register
+     * @param event
+     * @param newState
+     */
     private void updateRegister(final RaceControlRegister register, final RaceControlEvent event, final RaceControlState newState){
 
          final String oldState = register.getCurrentState().getAcronym();
@@ -194,14 +204,14 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
                 //Close the swiped row after updating
                 view.closeUpdatedRow(register.getID());
 
-                //Success message
-                view.createMessage(context.getString(R.string.rc_update_state_success_message,
-                        oldState, newState.getAcronym()));
+                //Show success message
+                view.createMessage(R.string.rc_update_state_success_message, oldState, newState.getAcronym());
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-
+                //Show error message
+                view.createMessage(responseDTO.getError());
             }
         });
     }
@@ -212,11 +222,11 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
         //Go retrieve teams if we have not yet
         if(teams == null){
             //TODO retrieveTeams();
-            createMessage("TODO. Crear un dialog para filtrar.");
+            //view.createMessage("TODO. Crear un dialog para filtrar.");
 
         }else{
            //TODO  openFilteringDialog(teams);
-            createMessage("TODO. Crear un dialog para filtrar.");
+           // view.createMessage("TODO. Crear un dialog para filtrar.");
         }
     }
 
@@ -232,24 +242,28 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
         );
     }
 
+
+    /**
+     * Create race control registers (as a transaction)
+     * @param raceControlTeamDTOList
+     * @param currentMaxIndex
+     */
     public void createRaceControlRegisters(List<RaceControlTeamDTO> raceControlTeamDTOList, Long currentMaxIndex){
 
          raceControlBO.createRaceControlRegister(raceControlTeamDTOList, rcEventType, raceType, currentMaxIndex, new BusinessCallback() {
              @Override
              public void onSuccess(ResponseDTO responseDTO) {
-
+                 //Show info message
+                 view.createMessage(responseDTO.getInfo());
              }
 
              @Override
              public void onFailure(ResponseDTO responseDTO) {
-
+                 //Show error message
+                 view.createMessage(responseDTO.getError());
              }
          });
 
-    }
-
-    public void createMessage(String message){
-        view.createMessage(message);
     }
 
 
@@ -266,8 +280,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
          * Show message to user
          * @param message
          */
-        void createMessage(String message);
-
+        void createMessage(Integer message, Object...args);
 
         /**
          * Show loading icon

@@ -57,9 +57,11 @@ public class RaceControlActivity extends GeneralActivity implements
         setContentView(R.layout.activity_race_control);
         super.onCreate(savedInstanceState);
 
+        //Get race type (Electric, Combustion, Final)
         String raceType = getIntent().getStringExtra("rc_type");
         this.raceType = raceType;
 
+        //Get the event type (Endurance, AutoX...)
         RaceControlEvent rcEvent = (RaceControlEvent) getIntent().getSerializableExtra("eventType");
         setupComponent(FSSApp.getApp().component(), rcEvent, raceType);
         this.rcEvent = rcEvent;

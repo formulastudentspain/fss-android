@@ -14,12 +14,10 @@
     <string name="drawer_menu_staff_users_management_drivers">Drivers</string>
     <string name="drawer_menu_staff_users_management_esos">Esos</string>
     <string name="drawer_menu_staff_users_management_volunteers">Volunteers</string>
-
     <string name="drawer_menu_participant_myTeam">My team</string>
     <string name="drawer_menu_participant_teamMembers">Team members</string>
     <string name="drawer_menu_participant_status">Status</string>
     <string name="drawer_menu_common_fss_status">FSS status</string>
-    <string name="drawer_menu_common_timeline">Timeline</string>
     <string name="drawer_menu_staff_dynamic_events">Dynamic events</string>
     <string name="drawer_menu_staff_practice_track">Practice track</string>
     <string name="drawer_menu_staff_skidpad">Skidpad</string>
@@ -33,13 +31,43 @@
     <string name="drawer_menu_staff_admin_operations">Admin operations</string>
 
 
-
-    <!-- Login activity -->
+    <!-- Login -->
     <string name="login_activity_forgot_password"><u>Forgot password?</u></string>
     <string name="login_activity_mail">Mail</string>
     <string name="login_activity_password">Password</string>
     <string name="login_activity_login">LOGIN</string>
     <string name="login_activity_user_not_found">User not found</string>
+    <string name="login_business_error_login_with_mail">Error doing login with mail</string>
+    <string name="login_business_error_reset_password">Error while reset password</string>
+    <string name="login_business_info_login">Login successfully done</string>
+    <string name="login_business_info_reset">An email has been sent to you in order to reset the password</string>
+    <string name="login_business_email_mandatory">Enter your mail account in order to send you the password recover mail</string>
+
+
+    <!-- Users -->
+    <string name="users_get_by_nfc_error">Error getting the user by this Tag</string>
+    <string name="users_get_by_nfc_not_existing">Could not get the user by this Tag</string>
+    <string name="users_get_by_nfc_info">User retrieved by NFC successfully</string>
+    <string name="users_get_all_error">Error retrieving all users</string>
+    <string name="users_get_all_info">User retrieved successfully</string>
+    <string name="users_create_error">Error creating user</string>
+    <string name="users_create_info">User created successfully</string>
+    <string name="users_get_by_mail_error">Error retrieving user by mail</string>
+    <string name="users_get_by_mail_info">User retrieved by mail successfully</string>
+    <string name="users_get_by_id_error">Error retrieving user by ID</string>
+    <string name="users_get_by_id_info">User retrieved by ID successfully</string>
+    <string name="users_delete_all_error">Error deleting all users</string>
+    <string name="users_delete_all_info">User deleted successfully</string>
+    <string name="users_get_registered_by_team_info">Registered users by team retrieved successfully</string>
+    <string name="users_get_registered_by_team_error">Error retrieving users by team</string>
+    <string name="users_get_user_roles_error">Error retrieving user roles</string>
+    <string name="users_get_user_roles_info">User roles retrieved successfully</string>
+    <string name="users_error_max_6_drivers">Unable to register more drivers. 6 max.</string>
+    <string name="users_info_registered">User successfully registered</string>
+    <string name="users_error_registering">Error registering user</string>
+    <string name="users_error_tag_already_used">TAG is already registered by %1$s</string>
+    <string name="users_error_creating_user">Error creating user</string>
+    <string name="users_error_updating_profile_picture">Error uploading profile picture</string>
 
 
 
@@ -53,12 +81,21 @@
     <string name="dialog_create_user_field_role">Role</string>
     <string name="dialog_create_user_error_field">Mandatory field</string>
 
-    <!-- Briefing activity -->
+    <!-- Briefing -->
     <string name="briefing_activity_title">Briefing control</string>
     <string name="briefing_activity_teams_label">Teams</string>
     <string name="briefing_activity_dialog_confirm_register_title">User confirmation</string>
     <string name="briefing_activity_dialog_confirm_button_confirm">Confirm</string>
     <string name="briefing_activity_dialog_confirm_button_cancel">Cancel</string>
+    <string name="briefing_messages_retrieve_registers_error">Error retrieving briefing registers</string>
+    <string name="briefing_messages_retrieve_registers_info">Registers retrieved properly</string>
+    <string name="briefing_messages_create_registers_error">Error creating briefing register</string>
+    <string name="briefing_messages_create_registers_info">Register created properly</string>
+    <string name="briefing_messages_delete_register_error">Error deleting briefing register</string>
+    <string name="briefing_messages_delete_register_info">Register deleted properly</string>
+    <string name="briefing_messages_parsing_dates_error">Error parsing dates</string>
+
+
 
     <!-- General activity -->
     <string name="general_activity_dialog_loading_title">Loading...</string>
@@ -83,13 +120,6 @@
     <string name="acceleration_activity_dialog_confirm_error_car">Please select a car</string>
 
 
-    <!-- Endurance activity -->
-    <string name="endurance_activity_title">Endurance control</string>
-    <string name="endurance_activity_teams_label">Teams</string>
-    <string name="endurance_activity_dialog_confirm_register_title">User confirmation</string>
-    <string name="endurance_activity_dialog_confirm_button_confirm">Confirm</string>
-    <string name="endurance_activity_dialog_confirm_button_cancel">Cancel</string>
-
     <!-- Exit dialog -->
     <string name="exit_dialog_title">Exit</string>
     <string name="exit_dialog_message">Are you sure you want to exit?</string>
@@ -104,33 +134,55 @@
     <string name="app_car_type_autonomous">Autonomous</string>
 
 
-    <!-- Dynamic Events Filtering Dialog -->
+    <!-- Dynamic Events -->
     <string name="dynamic_event_filtering_dialog_title">Filter results</string>
     <string name="dynamic_event_filtering_dialog_filter_button">Filter</string>
     <string name="dynamic_event_filtering_dialog_cancel_button">Cancel</string>
-
-    <!-- Dynamic Events Filtering Dialog -->
     <string name="dynamic_event_delete_register_dialog_title">Delete register</string>
     <string name="dynamic_event_delete_register_dialog_message">Are you sure you want to delete the selected register?</string>
     <string name="dynamic_event_delete_register_dialog_delete_button">Delete</string>
     <string name="dynamic_event_delete_register_dialog_cancel_button">Cancel</string>
+    <string name="dynamic_event_message_info_retrieving_registers">Event registers retrieved successfully</string>
+    <string name="dynamic_event_message_error_retrieving_registers">Error retrieving event registers</string>
+    <string name="dynamic_event_messages_create_registers_error">Error creating dynamic event register</string>
+    <string name="dynamic_event_messages_create_registers_info">Dynamic event created successfully</string>
+    <string name="dynamic_event_messages_prescrutineering_update_info">Prescutineering register updated successfully</string>
+    <string name="dynamic_event_messages_prescrutineering_update_error">Error updating prescrutineering register</string>
+    <string name="dynamic_event_message_info_deleting_registers">Event register deleted successfully</string>
+    <string name="dynamic_event_message_error_deleting_registers">Error deleting event registers</string>
+    <string name="dynamic_event_message_error_runs">Error. Driver is registered in 2 or more dynamic events</string>
+    <string name="dynamic_event_message_error_create">Could not create the registry</string>
+    <string name="dynamic_event_message_error_create_egress">Could not create the egress registry</string>
+    <string name="dynamic_event_message_info_create_egress">Egress register created successfully</string>
+    <string name="dynamic_event_message_error_retrieving_by_driver">Could not retrieve the driver events</string>
+    <string name="event_egress_message_info_retrieving">Egress registers retrieved properly</string>
+    <string name="event_egress_message_error_retrieving">Could not retrieve the Egress registers</string>
+    <string name="dynamic_event_message_error_save_egress_time">Could not save the egress time</string>
+    <string name="dynamic_event_message_info_save_egress_time">Egress time saved successfully</string>
 
 
-    <!-- Pre-Scrutineering detail activity -->
+    <!-- Pre-Scrutineering -->
     <string name="prescruti_detail_activity_title">Egress time</string>
     <string name="prescruti_detail_activity_button_start">Start</string>
     <string name="prescruti_detail_activity_button_stop">Stop</string>
-
-    <!-- Pre-Scrutineering detail dialog -->
     <string name="prescruti_confirm_time_dialog_title">Successful time</string>
     <string name="prescruti_confirm_time_dialog_message">Do you want to save this time?</string>
     <string name="prescruti_confirm_time_dialog_save">Save</string>
     <string name="prescruti_confirm_time_dialog_cancel">Cancel</string>
 
+
     <!-- Statistics -->
     <string name="statistics_activity_title">Statistics</string>
     <string name="statistics_activity_text">Click a button to start the export process: </string>
     <string name="statistics_dialog_title">Send/open export result</string>
+    <string name="statistics_error_opening_file">Unable to open file, try send it my email</string>
+    <string name="statistics_error_exporting_dynamic_event">Error exporting Dynamic Event registers</string>
+    <string name="statistics_info_exporting_dynamic_event">Dynamic Event registers exported successfully</string>
+    <string name="statistics_error_exporting_users">Error exporting users</string>
+    <string name="statistics_info_exporting_users">Users exported successfully</string>
+
+
+
 
     <!-- Admin operations -->
     <string name="statistics_admin_operations_title">Admin operations</string>
@@ -143,7 +195,14 @@
     <string name="rc_endurance_combustion_title">RC: Endurance Combustion</string>
     <string name="rc_endurance_final_title">RC: Endurance Final</string>
     <string name="rc_update_state_success_message">State change successfully from %1$s to %2$s!!</string>
-
+    <string name="rc_realtime_error_retrieving_message">Error retrieving real-time Race Control registers</string>
+    <string name="rc_teams_error_message">Error retrieving race control teams</string>
+    <string name="rc_create_error_message">Error creating race control registers</string>
+    <string name="rc_create_info_message">Race control registers created successfully</string>
+    <string name="rc_error_retrieving_message">Error retrieving Race Control registers</string>
+    <string name="rc_info_retrieving_message">Race control registers retrieved successfully</string>
+    <string name="rc_info_update_message">Error updating race control registers</string>
+    <string name="rc_error_update_message">Race control register updated successfully</string>
 
 
     <!-- Race Control Welcome-->
@@ -151,7 +210,15 @@
     <string name="rc_welcome_button_combustion">Combustion</string>
     <string name="rc_welcome_button_final">Final</string>
 
-
+    <!-- Teams -->
+    <string name="teams_error_retrieving_all_message">Error retrieving teams</string>
+    <string name="teams_info_retrieving_all_message">Teams retrieved successfully</string>
+    <string name="teams_error_retrieving_by_id_message">Error retrieving team by ID</string>
+    <string name="teams_info_retrieving_by_id_message">Team retrieved successfully</string>
+    <string name="teams_error_delete_all_message">Error deleting teams</string>
+    <string name="teams_info_delete_all_message">Teams deleted successfully</string>
+    <string name="teams_error_create_message">Error creating teams</string>
+    <string name="teams_info_create_message">Team created successfully</string>
 
 
 

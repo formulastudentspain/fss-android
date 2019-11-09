@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
@@ -37,8 +38,10 @@ public class EgressBOFirebaseImpl implements EgressBO {
                 if(!queryDocumentSnapshots.isEmpty()){
                     EgressRegister egressRegister = new EgressRegister(queryDocumentSnapshots.getDocuments().get(0));
                     responseDTO.setData(egressRegister);
+                    responseDTO.setInfo(R.string.event_egress_message_info_retrieving);
                     callback.onSuccess(responseDTO);
                 }else{
+                    responseDTO.setError(R.string.event_egress_message_error_retrieving);
                     callback.onFailure(responseDTO);
                 }
             }
@@ -46,8 +49,7 @@ public class EgressBOFirebaseImpl implements EgressBO {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                //TODO añadir mensaje de error
-                responseDTO.getErrors().add("");
+                responseDTO.setError(R.string.event_egress_message_error_retrieving);
                 callback.onFailure(responseDTO);
             }
         });
@@ -68,14 +70,15 @@ public class EgressBOFirebaseImpl implements EgressBO {
 
                     @Override
                     public void onSuccess(Void aVoid) {
+                        responseDTO.setInfo(R.string.dynamic_event_message_info_create_egress);
                         callback.onSuccess(responseDTO);
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.dynamic_event_message_error_create_egress);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -111,15 +114,14 @@ public class EgressBOFirebaseImpl implements EgressBO {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        responseDTO.getInfo().add("Chrono time updated successfully!!");
+                                        responseDTO.setInfo(R.string.dynamic_event_message_info_save_egress_time);
                                         callback.onSuccess(responseDTO);
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        //TODO
-                                        responseDTO.getErrors().add("");
+                                        responseDTO.setError(R.string.dynamic_event_message_error_save_egress_time);
                                         callback.onSuccess(responseDTO);
                                     }
                                 });
@@ -128,8 +130,7 @@ public class EgressBOFirebaseImpl implements EgressBO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.dynamic_event_message_error_save_egress_time);
                         callback.onSuccess(responseDTO);
                     }
                 });

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
@@ -42,6 +43,7 @@ public class UserBOFirebaseImpl implements UserBO {
                         if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                             User user = new User(queryDocumentSnapshots.getDocuments().get(0));
                             responseDTO.setData(user);
+                            responseDTO.setInfo(R.string.users_get_by_nfc_info);
                         }
                         callback.onSuccess(responseDTO);
                     }
@@ -49,8 +51,7 @@ public class UserBOFirebaseImpl implements UserBO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.users_get_by_nfc_error);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -81,6 +82,7 @@ public class UserBOFirebaseImpl implements UserBO {
                             }
 
                             responseDTO.setData(result);
+                            responseDTO.setInfo(R.string.users_get_all_info);
                             callback.onSuccess(responseDTO);
                         }
                     }
@@ -88,8 +90,7 @@ public class UserBOFirebaseImpl implements UserBO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.users_get_all_error);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -107,14 +108,14 @@ public class UserBOFirebaseImpl implements UserBO {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        responseDTO.setInfo(R.string.users_create_info);
                         callback.onSuccess(responseDTO);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.users_create_error);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -136,14 +137,14 @@ public class UserBOFirebaseImpl implements UserBO {
                             User user = new User(queryDocumentSnapshots.getDocuments().get(0));
                             responseDTO.setData(user);
                         }
+                        responseDTO.setInfo(R.string.users_get_by_mail_info);
                         callback.onSuccess(responseDTO);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.users_get_by_mail_error);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -159,14 +160,13 @@ public class UserBOFirebaseImpl implements UserBO {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-
+                        responseDTO.setError(R.string.users_get_by_id_info);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.users_get_by_id_error);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -187,14 +187,14 @@ public class UserBOFirebaseImpl implements UserBO {
                         for(DocumentSnapshot doc: queryDocumentSnapshots.getDocuments()){
                             doc.getReference().delete();
                         }
-
+                        responseDTO.setInfo(R.string.users_delete_all_info);
                         callback.onSuccess(responseDTO);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.users_delete_all_error);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -222,15 +222,14 @@ public class UserBOFirebaseImpl implements UserBO {
                         }
 
                         responseDTO.setData(userList);
-
+                        responseDTO.setInfo(R.string.users_get_registered_by_team_info);
                         callback.onSuccess(responseDTO);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //TODO añadir mensaje de error
-                        responseDTO.getErrors().add("");
+                        responseDTO.setError(R.string.users_get_registered_by_team_error);
                         callback.onFailure(responseDTO);
                     }
                 });
