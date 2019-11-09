@@ -24,7 +24,6 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
@@ -34,12 +33,15 @@ import javax.inject.Inject;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.EventType;
+import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.view.activity.adminoperations.AdminOpsActivity;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventActivity;
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityExitDialog;
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.activity.login.LoginActivity;
+import es.formulastudent.app.mvp.view.activity.racecontrol.RaceControlWelcomeActivity;
 import es.formulastudent.app.mvp.view.activity.statistics.StatisticsActivity;
 import es.formulastudent.app.mvp.view.activity.timeline.TimelineActivity;
 import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
@@ -116,9 +118,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 });
 
 
-        /*
-         * Menu options for Staff
-         */
+        /********** Event control ************/
 
         //Event control
         PrimaryDrawerItem eventControl = new PrimaryDrawerItem()
@@ -134,25 +134,160 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withIdentifier(10001)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_staff_briefing)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-        //Staff: Pre-Scrutineering
-        PrimaryDrawerItem preScrutineering = new PrimaryDrawerItem()
-                .withIdentifier(10002)
-                .withLevel(2)
-                .withName(R.string.drawer_menu_staff_pre_scrutineering)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
 
-        //Staff: Users management
-        PrimaryDrawerItem staffUserManagement = new PrimaryDrawerItem()
-                .withIdentifier(10003)
-                .withName(R.string.drawer_menu_staff_users_management)
+        /********** Race control ************/
+
+        //Race control
+        PrimaryDrawerItem raceControl = new PrimaryDrawerItem()
+                .withEnabled(false)
+                .withName(R.string.drawer_menu_race_control)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+        //Race Control: Skidpad
+        PrimaryDrawerItem rcSkidpad = new PrimaryDrawerItem()
+                .withIdentifier(10018)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_skidpad)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
+
+
+        //Race Control: Acceleration
+        PrimaryDrawerItem rcAcceleration = new PrimaryDrawerItem()
+                .withIdentifier(10019)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_acceleration)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Race Control: Autocross
+        PrimaryDrawerItem rcAutocross = new PrimaryDrawerItem()
+                .withIdentifier(10020)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_autocross)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Race Control: Endurance
+        PrimaryDrawerItem rcEndurance = new PrimaryDrawerItem()
+                .withIdentifier(10021)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_endurance_efficiency)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        /********** Access control ************/
+
+        //Race access
+        PrimaryDrawerItem raceAccess = new PrimaryDrawerItem()
+                .withEnabled(false)
+                .withName(R.string.drawer_menu_race_access)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Access control: Practice track
+        PrimaryDrawerItem practiceTrack = new PrimaryDrawerItem()
+                .withIdentifier(10011)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_practice_track)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Access control: Skidpad
+        PrimaryDrawerItem skidpad = new PrimaryDrawerItem()
+                .withIdentifier(10012)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_skidpad)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Access control: Acceleration
+        PrimaryDrawerItem acceleration = new PrimaryDrawerItem()
+                .withIdentifier(10013)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_acceleration)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Access control: Autocross
+        PrimaryDrawerItem autocross = new PrimaryDrawerItem()
+                .withIdentifier(10014)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_autocross)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Access control: Endurance
+        PrimaryDrawerItem endurance = new PrimaryDrawerItem()
+                .withIdentifier(10015)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_endurance_efficiency)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        /********** User Management ************/
+
+        //User management
+        PrimaryDrawerItem userManagement = new PrimaryDrawerItem()
+                .withEnabled(false)
+                .withName(R.string.drawer_menu_staff_users_management)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+        //User management: Drivers
+        PrimaryDrawerItem drivers = new PrimaryDrawerItem()
+                .withIdentifier(10020)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_users_management_drivers)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+        //User management: ESOS
+        PrimaryDrawerItem esos = new PrimaryDrawerItem()
+                .withIdentifier(10021)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_users_management_esos)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+        //User management: Volunteers
+        PrimaryDrawerItem volunteers = new PrimaryDrawerItem()
+                .withIdentifier(10022)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_staff_users_management_volunteers)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
 
         //Staff: Admin Operations
         PrimaryDrawerItem adminOperations = new PrimaryDrawerItem()
@@ -170,67 +305,15 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
 
-        //Staff: Practice track
-        SecondaryDrawerItem practiceTrack = new SecondaryDrawerItem()
-                .withIdentifier(10011)
-                .withLevel(3)
-                .withName(R.string.drawer_menu_staff_practice_track)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-
-        //Staff: Skidpad
-        SecondaryDrawerItem skidpad = new SecondaryDrawerItem()
-                .withIdentifier(10012)
-                .withLevel(3)
-                .withName(R.string.drawer_menu_staff_skidpad)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-
-        //Staff: Acceleration
-        SecondaryDrawerItem acceleration = new SecondaryDrawerItem()
-                .withIdentifier(10013)
-                .withLevel(3)
-                .withName(R.string.drawer_menu_staff_acceleration)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-
-        //Staff: Autocross
-        SecondaryDrawerItem autocross = new SecondaryDrawerItem()
-                .withIdentifier(10014)
-                .withLevel(3)
-                .withName(R.string.drawer_menu_staff_autocross)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-
-        //Staff: Endurance & Efficiency
-        SecondaryDrawerItem enduranceEfficiency = new SecondaryDrawerItem()
-                .withIdentifier(10015)
-                .withLevel(3)
-                .withName(R.string.drawer_menu_staff_endurance_efficiency)
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-
-        //Staff: Dynamic events
-        PrimaryDrawerItem dynamicEvents = new PrimaryDrawerItem()
-                .withIdentifier(10010)
+        //Staff: Pre-Scrutineering
+        PrimaryDrawerItem preScrutineering = new PrimaryDrawerItem()
+                .withIdentifier(10002)
                 .withLevel(2)
-                .withEnabled(false)
-                .withName(R.string.drawer_menu_staff_dynamic_events)
-                .withDisabledTextColor(Color.parseColor("#000000"))
+                .withName(R.string.drawer_menu_staff_pre_scrutineering)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
-/*
-        if (BuildConfig.FLAVOR.equals("dev_fss") || BuildConfig.FLAVOR.equals("pro_fss")){
-            dynamicEvents.withSubItems(practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency);
 
-        }else if(BuildConfig.FLAVOR.equals("pro_ka")){
-            dynamicEvents.withSubItems(acceleration, enduranceEfficiency);
-        }
-*/
 
         //Logout
         PrimaryDrawerItem logout = new PrimaryDrawerItem()
@@ -242,14 +325,24 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         if(loggedUser.getMail().equals("dpconde.me@gmail.com") || loggedUser.getMail().equals("gerardmarti6@gmail.com")){
             builder.addDrawerItems(
+
                     eventControl,
-                    briefing,
-                    preScrutineering,
-                    dynamicEvents,
-                    practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency,
+                    briefing, preScrutineering,
                     new DividerDrawerItem(),
+
+                    raceAccess,
+                    practiceTrack, skidpad, acceleration, autocross, endurance,
+                    new DividerDrawerItem(),
+
+                    raceControl,
+                    rcSkidpad, rcAcceleration, rcAutocross, rcEndurance,
+                    new DividerDrawerItem(),
+
+                    userManagement,
+                    drivers,esos,volunteers,
+                    new DividerDrawerItem(),
+
                     staffStatistics,
-                    staffUserManagement,
                     adminOperations,
                     logout);
         }else{
@@ -257,11 +350,10 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     eventControl,
                     briefing,
                     preScrutineering,
-                    dynamicEvents,
-                    practiceTrack, skidpad, acceleration, autocross, enduranceEfficiency,
+                    raceAccess,
+                    practiceTrack, skidpad, acceleration, autocross, endurance,
                     new DividerDrawerItem(),
                     staffStatistics,
-                    staffUserManagement,
                     logout);
         }
 
@@ -379,8 +471,14 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             finish();
 
         }else if(drawerItem.getIdentifier() == 10017) { //Admin operations
-          //  Intent intent = new Intent(this, AdminOpsActivity.class);
-          //  this.startActivity(intent);
+            Intent intent = new Intent(this, AdminOpsActivity.class);
+            this.startActivity(intent);
+            finish();
+
+        }else if(drawerItem.getIdentifier() == 10021){ //Race Control Endurance
+            Intent intent = new Intent(this, RaceControlWelcomeActivity.class);
+            intent.putExtra("eventType", RaceControlEvent.ENDURANCE);
+            this.startActivity(intent);
             finish();
         }
 

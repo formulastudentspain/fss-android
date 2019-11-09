@@ -6,9 +6,15 @@
 
     <!-- Drawer menu options -->
     <string name="drawer_menu_staff">Event control</string>
+    <string name="drawer_menu_race_control">Race control</string>
+    <string name="drawer_menu_race_access">Race access</string>
     <string name="drawer_menu_staff_briefing">Briefing</string>
     <string name="drawer_menu_staff_pre_scrutineering">Pre-scrutineering</string>
     <string name="drawer_menu_staff_users_management">User management</string>
+    <string name="drawer_menu_staff_users_management_drivers">Drivers</string>
+    <string name="drawer_menu_staff_users_management_esos">Esos</string>
+    <string name="drawer_menu_staff_users_management_volunteers">Volunteers</string>
+
     <string name="drawer_menu_participant_myTeam">My team</string>
     <string name="drawer_menu_participant_teamMembers">Team members</string>
     <string name="drawer_menu_participant_status">Status</string>
@@ -19,7 +25,7 @@
     <string name="drawer_menu_staff_skidpad">Skidpad</string>
     <string name="drawer_menu_staff_acceleration">Acceleration</string>
     <string name="drawer_menu_staff_autocross">Autocross</string>
-    <string name="drawer_menu_staff_endurance_efficiency">Endurance/efficiency</string>
+    <string name="drawer_menu_staff_endurance_efficiency">Endurance</string>
     <string name="drawer_menu_common_scoring">Scoring</string>
     <string name="drawer_menu_common_settings">Settings</string>
     <string name="drawer_menu_common_logout">Logout</string>
@@ -128,6 +134,24 @@
 
     <!-- Admin operations -->
     <string name="statistics_admin_operations_title">Admin operations</string>
+
+    <!-- Race Control-->
+    <string name="rc_dialog_add_team_title">Add team</string>
+    <string name="rc_dialog_add_team_button">Add</string>
+    <string name="rc_endurance_title">Race Control: Endurance</string>
+    <string name="rc_endurance_electric_title">RC: Endurance Electric</string>
+    <string name="rc_endurance_combustion_title">RC: Endurance Combustion</string>
+    <string name="rc_endurance_final_title">RC: Endurance Final</string>
+    <string name="rc_update_state_success_message">State change successfully from %1$s to %2$s!!</string>
+
+
+
+    <!-- Race Control Welcome-->
+    <string name="rc_welcome_button_electric">Electric</string>
+    <string name="rc_welcome_button_combustion">Combustion</string>
+    <string name="rc_welcome_button_final">Final</string>
+
+
 
 
 

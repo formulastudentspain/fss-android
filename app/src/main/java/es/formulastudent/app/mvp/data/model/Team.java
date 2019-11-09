@@ -15,6 +15,7 @@ public class Team implements Serializable {
     public static final String NAME = "name";
     public static final String CAR = "car";
     public static final String CAR_NUMBER = "car.number";
+    public static final String CAR_TYPE = "car.type";
 
     private String ID;
     private String name;

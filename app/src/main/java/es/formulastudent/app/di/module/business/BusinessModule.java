@@ -16,6 +16,8 @@ import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.impl.DynamicEventBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.egress.impl.EgressBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
+import es.formulastudent.app.mvp.data.business.racecontrol.impl.RaceControlBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
 import es.formulastudent.app.mvp.data.business.statistics.impl.StatisticsBOImpl;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
@@ -110,5 +112,14 @@ public class BusinessModule {
     @Provides
     public StatisticsBO provideStatisticsBO(DynamicEventBO dynamicEventBO, UserBO userBO, Context context) {
         return new StatisticsBOImpl(dynamicEventBO, userBO, context);
+    }
+
+    /**
+     * Provide Race Control Endurance business
+     * @return
+     */
+    @Provides
+    public RaceControlBO provideRaceControlBO(FirebaseFirestore firebaseFirestore, TeamBO teamBO) {
+        return new RaceControlBOFirebaseImpl(firebaseFirestore, teamBO);
     }
 }

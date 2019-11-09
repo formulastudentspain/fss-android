@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".mvp.view.activity.racecontrol.RaceControlWelcomeActivity">
+
+    <include layout="@layout/activity_toolbar" />
+
+    <Button
+        android:id="@+id/rc_welcome_electric"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rc_welcome_button_electric"/>
+
+    <Button
+        android:id="@+id/rc_welcome_combustion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rc_welcome_button_combustion"/>
+
+    <Button
+        android:id="@+id/rc_welcome_final"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rc_welcome_button_final"/>
+
+</LinearLayout>
+

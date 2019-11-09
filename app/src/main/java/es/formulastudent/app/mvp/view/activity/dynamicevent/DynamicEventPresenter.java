@@ -28,6 +28,7 @@ import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.ConfirmEventRegisterDialog;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.DeleteEventRegisterDialog;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.FilteringRegistersDialog;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
 
@@ -337,7 +338,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
         view.showLoading();
 
         //Call business to retrieve teams
-        teamBO.retrieveAllTeams(new BusinessCallback() {
+        teamBO.retrieveAllTeams(null, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {

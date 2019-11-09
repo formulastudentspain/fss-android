@@ -93,6 +93,18 @@
         <activity
             android:name=".mvp.view.activity.adminoperations.AdminOpsActivity">
         </activity>
+
+        <activity
+            android:name=".mvp.view.activity.racecontrol.RaceControlActivity">
+        </activity>
+
+        <activity
+            android:name=".mvp.view.activity.racecontrol.RaceControlWelcomeActivity"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".mvp.view.activity.racecontrol.RaceControlActivity"/>
+        </activity>
     </application>
 
 </manifest>

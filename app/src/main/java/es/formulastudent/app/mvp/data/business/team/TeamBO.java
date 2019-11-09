@@ -9,7 +9,7 @@ public interface TeamBO {
      * Method to retrieve all teams
      * @param callback
      */
-    void retrieveAllTeams(BusinessCallback callback);
+    void retrieveAllTeams(String carType, BusinessCallback callback);
 
 
     /**

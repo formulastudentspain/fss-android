@@ -20,6 +20,7 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
+import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Team;
 
 public class TeamBOFirebaseImpl implements TeamBO {
@@ -31,10 +32,21 @@ public class TeamBOFirebaseImpl implements TeamBO {
     }
 
     @Override
-    public void retrieveAllTeams(final BusinessCallback callback) {
+    public void retrieveAllTeams(String carType, final BusinessCallback callback) {
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
-                .orderBy(Team.CAR_NUMBER, Query.Direction.ASCENDING)
+        Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM);
+
+        //Filter by car type
+        if(Car.CAR_TYPE_COMBUSTION.equals(carType)
+                || Car.CAR_TYPE_ELECTRIC.equals(carType)
+                || Car.CAR_TYPE_AUTONOMOUS_ELECTRIC.equals(carType)
+                || Car.CAR_TYPE_AUTONOMOUS_COMBUSTION.equals(carType)){
+
+            query = query.whereEqualTo(Team.CAR_TYPE, carType);
+
+        }
+
+        query.orderBy(Team.CAR_NUMBER, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
