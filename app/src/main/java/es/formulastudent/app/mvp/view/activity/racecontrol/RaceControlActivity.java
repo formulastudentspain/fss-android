@@ -185,7 +185,7 @@ public class RaceControlActivity extends GeneralActivity implements
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 presenter.filterIconClicked();
-                return false;
+                return true;
             }
         });
 

@@ -203,6 +203,13 @@
     <string name="rc_info_retrieving_message">Race control registers retrieved successfully</string>
     <string name="rc_info_update_message">Error updating race control registers</string>
     <string name="rc_error_update_message">Race control register updated successfully</string>
+    <string name="rc_area_waiting_area">Waiting area</string>
+    <string name="rc_area_scrutineering">Scrutineering</string>
+    <string name="rc_area_racing1">Racing 1</string>
+    <string name="rc_area_racing2">Racing 2</string>
+    <string name="rc_area_all">All</string>
+
+
 
 
     <!-- Race Control Welcome-->

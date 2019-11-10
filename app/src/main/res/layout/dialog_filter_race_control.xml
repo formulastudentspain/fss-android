@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".mvp.view.activity.dynamicevent.DynamicEventActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"
+        android:text="Car number"/>
+
+    <EditText
+        android:id="@+id/filtering_car_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="16dp"
+        android:maxLines="1"
+        android:inputType="number"
+        android:hint="Type number"
+        android:background="@drawable/activity_user_list_filter_input"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"
+        android:text="Race control area"/>
+
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/dynamic_event_chip_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/rc_area_waiting_area"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/material_chip_background"
+            android:text="@string/rc_area_waiting_area"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/rc_area_scrutineering"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/material_chip_background"
+            android:text="@string/rc_area_scrutineering"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/rc_area_racing1"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/material_chip_background"
+            android:text="@string/rc_area_racing1"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/rc_area_racing2"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/material_chip_background"
+            android:text="@string/rc_area_racing2"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/rc_area_all"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/material_chip_background"
+            android:checked="true"
+            android:text="@string/rc_area_all"/>
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+    Waiting Area – WA (icono del reloj) Marshall 1 (usando driver control + NFC)
+    Fixing – FIX (icono de llave inglesa)  Marshall 2
+    Scrutineering     – SCR (icono de la lupa) Marshall 2
+    Ready     to race – RR (icono input) Marshall 3
+    Racing 1D –     R1 (icono bandera verde) Marshall 3
+    Racing 2D –     R2 (icono bandera verde) Marshall 4 (usando driver control + NFC)
+    Finished –  FIN (icono bandera a cuadros) Marshall 4
+    DNF – DNF     (icono dirección prohibida) Official 1
+    Run Later –     RL (icono alerta con exclamación ) Official 1
+
+</LinearLayout>

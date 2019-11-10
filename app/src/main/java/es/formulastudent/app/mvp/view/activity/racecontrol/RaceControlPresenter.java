@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +20,9 @@ import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
-import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.CreateRegisterDialog;
+import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.FilteringRegistersDialog;
 import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.RaceControlTeamDTO;
 
 
@@ -40,11 +40,10 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
     //Data
     List<RaceControlRegister> allRaceControlRegisterList = new ArrayList<>();
     List<RaceControlRegister> filteredRaceControlRegisterList = new ArrayList<>();
+    ListenerRegistration registration = null;
 
     //Filtering values
-    private List<Team> teams;
-    private String selectedTeamID;
-    private String selectedDay;
+    private String selectedArea;
     private Long selectedCarNumber;
 
 
@@ -54,6 +53,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
         this.rcEventType = rcEventType;
         this.raceControlBO = raceControlBO;
         this.raceType = raceType;
+        this.selectedArea = context.getString(R.string.rc_area_all);
     }
 
 
@@ -62,39 +62,60 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
      */
      public ListenerRegistration retrieveRegisterList() {
 
+         //We need to prevent multiple listeners if user filters multiple times
+         if(registration != null){
+             registration.remove();
+         }
+
         //Show loading
         view.showLoading();
 
         //Filters
-         Map<String, Object> filters = new HashMap<>();
+        Map<String, Object> filters = new HashMap<>();
 
-         //States
-         //TODO obtener estados para filtrar desde un dialog
-         //TODO Marshall_1, leerá pulseras para ponerlo en WA
-         //TODO Marshall_2, lo pondrá WA->SCR, SCR->FIX y FIX->SCR
-         //TODO Marshall_3, lo pondrá SCR->RR1D y RR1D->R1D
-         //TODO Marshall_4, lo pondrá R1D->RR2D (mediante lectura pulsera NFC), RR2D->R2D, R2D->FIN
+        //Select states fot the selected area
+        List<String> states = new ArrayList<>();
+        if(context.getString(R.string.rc_area_waiting_area).equals(selectedArea)){
+            states.addAll(Arrays.asList(
+                    RaceControlState.NOT_AVAILABLE.getAcronym()));
 
+        }else if(context.getString(R.string.rc_area_scrutineering).equals(selectedArea)){
+            states.addAll(Arrays.asList(
+                    RaceControlState.WAITING_AREA.getAcronym(),
+                    RaceControlState.FIXING.getAcronym(),
+                    RaceControlState.SCRUTINEERING.getAcronym()));
 
+        }else if(context.getString(R.string.rc_area_racing1).equals(selectedArea)){
+            states.addAll(Arrays.asList(
+                    RaceControlState.SCRUTINEERING.getAcronym(),
+                    RaceControlState.READY_TO_RACE_1D.getAcronym()));
 
-         //TODO borrar añadir estados a manija
-         List<String> states = new ArrayList<>();
+        }else if(context.getString(R.string.rc_area_racing2).equals(selectedArea)){
+            states.addAll(Arrays.asList(
+                    RaceControlState.RACING_1D.getAcronym(),
+                    RaceControlState.READY_TO_RACE_2D.getAcronym(),
+                    RaceControlState.RACING_2D.getAcronym()));
 
-         states.add("NA");
-         states.add("WA");
-         states.add("FIX");
-         states.add("SCR");
-         states.add("RR1D");
-         states.add("R1D");
-         states.add("RR2D");
-         states.add("R2D");
-         states.add("DNF");
-         states.add("RL");
+        }else if(selectedArea == null || context.getString(R.string.rc_area_all).equals(selectedArea)) {
+            states.addAll(Arrays.asList(
+                    RaceControlState.NOT_AVAILABLE.getAcronym(),
+                    RaceControlState.WAITING_AREA.getAcronym(),
+                    RaceControlState.FIXING.getAcronym(),
+                    RaceControlState.SCRUTINEERING.getAcronym(),
+                    RaceControlState.READY_TO_RACE_1D.getAcronym(),
+                    RaceControlState.RACING_1D.getAcronym(),
+                    RaceControlState.READY_TO_RACE_2D.getAcronym(),
+                    RaceControlState.RACING_2D.getAcronym(),
+                    RaceControlState.FINISHED.getAcronym(),
+                    RaceControlState.RUN_LATER.getAcronym(),
+                    RaceControlState.DNF.getAcronym()));
+        }
 
          filters.put("states",states);
-
          filters.put("raceType", raceType);
          filters.put("eventType", rcEventType);
+         filters.put("carNumber", selectedCarNumber);
+
 
         //Retrieve race control registers in real-time
          ListenerRegistration registration = raceControlBO.getRaceControlRegistersRealTime(filters,  new BusinessCallback() {
@@ -111,6 +132,8 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
                  view.createMessage(responseDTO.getError());
              }
          });
+
+         this.registration = registration;
 
          return registration;
     }
@@ -219,27 +242,19 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
 
     void filterIconClicked(){
 
-        //Go retrieve teams if we have not yet
-        if(teams == null){
-            //TODO retrieveTeams();
-            //view.createMessage("TODO. Crear un dialog para filtrar.");
+        //Opening filtering dialog
+        FragmentManager fm = ((RaceControlActivity)view.getActivity()).getSupportFragmentManager();
+        FilteringRegistersDialog createFilteringDialog = FilteringRegistersDialog
+                .newInstance(RaceControlPresenter.this, selectedCarNumber, selectedArea);
+        createFilteringDialog.show(fm, "rc_filtering_dialog");
 
-        }else{
-           //TODO  openFilteringDialog(teams);
-           // view.createMessage("TODO. Crear un dialog para filtrar.");
-        }
     }
 
-    public void setFilteringValues(Date selectedDateFrom, Date selectedDateTo, String selectedDay, String selectedTeamID, Long selectedCarNumber){
-        this.selectedTeamID = selectedTeamID;
-        this.selectedDay = selectedDay;
+    public void setFilteringValues(String selectedDay, Long selectedCarNumber){
+        this.selectedArea = selectedDay;
         this.selectedCarNumber = selectedCarNumber;
 
-        view.filtersActivated(
-                selectedDay!=null
-                        || selectedCarNumber != null
-                        || (selectedTeamID != null && !selectedTeamID.equals("-1"))
-        );
+        view.filtersActivated(selectedDay != null || selectedCarNumber != null);
     }
 
 

@@ -46,7 +46,10 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
     @Override
     public ListenerRegistration getRaceControlRegistersRealTime(final Map<String, Object> filters, final BusinessCallback callback) {
 
-        Query query = firebaseFirestore.collection(RaceControlEvent.ENDURANCE.getFirebaseTable());
+        //Event type
+        RaceControlEvent event = (RaceControlEvent)filters.get("eventType");
+
+        Query query = firebaseFirestore.collection(event.getFirebaseTable());
 
         //Race Type filter (electric, combustion and final)
         if(filters.get("raceType").equals(RaceControlRegister.RACE_TYPE_FINAL)){
@@ -60,8 +63,13 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
             }else{
                 query = query.whereEqualTo(RaceControlRegister.CAR_TYPE, Car.CAR_TYPE_COMBUSTION);
-
             }
+        }
+
+        //Car number
+        Long carNumber = (Long) filters.get("carNumber");
+        if(carNumber != null){
+            query = query.whereEqualTo(RaceControlRegister.CAR_NUMBER, carNumber);
         }
 
 
