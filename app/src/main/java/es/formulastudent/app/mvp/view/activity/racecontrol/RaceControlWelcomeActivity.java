@@ -3,7 +3,7 @@ package es.formulastudent.app.mvp.view.activity.racecontrol;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.LinearLayout;
 
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
@@ -54,15 +54,15 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
         mDrawerIdentifier = rcEvent.getDrawerItemID();
 
         //Button for combustion
-        Button type_combustion = findViewById(R.id.rc_welcome_combustion);
+        LinearLayout type_combustion = findViewById(R.id.rc_welcome_combustion);
         type_combustion.setOnClickListener(this);
 
         //Button for electric
-        Button type_electric = findViewById(R.id.rc_welcome_electric);
+        LinearLayout type_electric = findViewById(R.id.rc_welcome_electric);
         type_electric.setOnClickListener(this);
 
         //Button for final
-        Button type_final = findViewById(R.id.rc_welcome_final);
+        LinearLayout type_final = findViewById(R.id.rc_welcome_final);
         type_final.setOnClickListener(this);
 
         //Add toolbar title

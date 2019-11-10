@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".mvp.view.activity.dynamicevent.DynamicEventActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:textStyle="bold"
+                android:text="Car number"/>
+
+
+            <TextView
+                android:id="@+id/rc_car_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="255"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:textStyle="bold"
+                android:text="Current state"/>
+
+
+            <TextView
+                android:id="@+id/rc_current_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="RR1D - Ready to Race 1D"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"
+        android:text="Select the new state"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+                <!-- NA -->
+               <LinearLayout
+                   android:id="@+id/rc_state_NA"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal"
+                   android:gravity="center_vertical"
+                   android:padding="8dp"
+                   android:layout_marginBottom="8dp"
+                   android:background="@drawable/rc_state_rounded_borders">
+
+                   <ImageView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/ic_waiting_area"
+                       android:layout_marginRight="8dp"/>
+
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="@string/rc_state_na"/>
+
+               </LinearLayout>
+
+                <!-- WA -->
+                <LinearLayout
+                    android:id="@+id/rc_state_WA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_waiting_area"
+                        android:layout_marginRight="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_state_wa"/>
+
+                </LinearLayout>
+
+
+                <!-- SCR -->
+                <LinearLayout
+                    android:id="@+id/rc_state_SCR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_scrutineering"
+                        android:layout_marginRight="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_state_scr"/>
+
+                </LinearLayout>
+
+
+                <!-- FIX -->
+                <LinearLayout
+                    android:id="@+id/rc_state_FIX"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_fixing"
+                        android:layout_marginRight="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_state_fix"/>
+
+                </LinearLayout>
+
+
+                <!-- RR1D -->
+                <LinearLayout
+                    android:id="@+id/rc_state_RR1D"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ready_to_race"
+                        android:layout_marginRight="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_state_rr1d"/>
+
+                </LinearLayout>
+
+
+                <!-- R1D -->
+                <LinearLayout
+                    android:id="@+id/rc_state_R1D"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_racing"
+                        android:layout_marginRight="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_state_r1d"/>
+
+                </LinearLayout>
+
+
+                <!-- RR2D -->
+                <LinearLayout
+                    android:id="@+id/rc_state_RR2D"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ready_to_race"
+                        android:layout_marginRight="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_state_rr2d"/>
+
+                </LinearLayout>
+
+
+                <!-- R2D -->
+                <LinearLayout
+                    android:id="@+id/rc_state_R2D"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_racing"
+                        android:layout_marginRight="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_state_r2d"/>
+
+                </LinearLayout>
+
+
+                <!-- FIN -->
+                <LinearLayout
+                    android:id="@+id/rc_state_FIN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_finished"
+                        android:layout_marginRight="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_state_fin"/>
+
+                </LinearLayout>
+
+
+                <!-- RL -->
+                <LinearLayout
+                    android:id="@+id/rc_state_RL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders_critical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_run_later"
+                        android:layout_marginRight="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_state_rl"/>
+
+                </LinearLayout>
+
+
+                <!-- DNF -->
+                <LinearLayout
+                    android:id="@+id/rc_state_DNF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders_critical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_dnf"
+                        android:layout_marginRight="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_state_dnf"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+</LinearLayout>

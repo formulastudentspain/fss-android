@@ -18,6 +18,7 @@ import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlRegisterEndurance;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickListener;
 
 
 public class RaceControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -29,11 +30,13 @@ public class RaceControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private Context context;
     private LayoutInflater mLayoutInflater;
     private RecyclerViewClickListener clickListener;
+    private RecyclerViewLongClickListener longClickListener;
 
 
-    public RaceControlAdapter(List<RaceControlRegister> raceControlRegisterList, Context context, RecyclerViewClickListener clickListener) {
+    public RaceControlAdapter(List<RaceControlRegister> raceControlRegisterList, Context context, RecyclerViewClickListener clickListener, RecyclerViewLongClickListener longClickListener) {
         this.raceControlRegisterList = raceControlRegisterList;
         this.clickListener = clickListener;
+        this.longClickListener = longClickListener;
         this.context = context;
     }
 
@@ -45,7 +48,7 @@ public class RaceControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         View view;
 
         view = mLayoutInflater.inflate(R.layout.activity_race_control_list_item, parent, false);
-        return new RaceControlViewHolder(view, clickListener, viewType);
+        return new RaceControlViewHolder(view, clickListener, longClickListener, viewType);
 
     }
 

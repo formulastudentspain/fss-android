@@ -14,7 +14,7 @@ public enum RaceControlState implements Serializable {
                 "Not Available",
                 "NA",
                 new ArrayList<>(Collections.singletonList("WA")),
-                R.drawable.ic_waiting_area,
+                R.drawable.ic_not_available,
                 R.color.md_white_1000
         ),
 
@@ -23,7 +23,7 @@ public enum RaceControlState implements Serializable {
                 "WA",
                 new ArrayList<>(Collections.singletonList("SCR")),
                 R.drawable.ic_waiting_area,
-                R.color.md_grey_500
+                R.color.md_grey_300
         ),
 
         SCRUTINEERING (

@@ -12,8 +12,9 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickListener;
 
-public class RaceControlViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class RaceControlViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
     ImageView stateIcon;
     TextView carNumber;
@@ -33,12 +34,16 @@ public class RaceControlViewHolder extends RecyclerView.ViewHolder implements Vi
     ImageView state2Icon;
 
     RecyclerViewClickListener clickListener;
+    RecyclerViewLongClickListener longClickListener;
 
-    public RaceControlViewHolder(View itemView, RecyclerViewClickListener clickListener, int eventType) {
+    public RaceControlViewHolder(View itemView, RecyclerViewClickListener clickListener, RecyclerViewLongClickListener longClickListener, int eventType) {
         super(itemView);
 
         this.clickListener = clickListener;
+        this.longClickListener = longClickListener;
+
         mainElement = itemView.findViewById(R.id.main_element);
+        mainElement.setOnLongClickListener(this);
         swipeRevealLayout = itemView.findViewById(R.id.swipeLayout);
         carNumber = itemView.findViewById(R.id.carNumber);
         currentStateLabel = itemView.findViewById(R.id.currentStateLabel);
@@ -62,5 +67,11 @@ public class RaceControlViewHolder extends RecyclerView.ViewHolder implements Vi
     @Override
     public void onClick(View view) {
         clickListener.recyclerViewListClicked(view, this.getLayoutPosition());
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        longClickListener.recyclerViewLongListClicked(view, this.getLayoutPosition());
+        return false;
     }
 }

@@ -21,12 +21,14 @@ import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickListener;
 import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.CreateRegisterDialog;
 import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.FilteringRegistersDialog;
 import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.RaceControlTeamDTO;
+import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.UpdatingRegistersDialog;
 
 
-public class RaceControlPresenter implements RecyclerViewClickListener {
+public class RaceControlPresenter implements RecyclerViewClickListener, RecyclerViewLongClickListener {
 
     //Race Control Event Type
     RaceControlEvent rcEventType;
@@ -216,7 +218,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
      * @param event
      * @param newState
      */
-    private void updateRegister(final RaceControlRegister register, final RaceControlEvent event, final RaceControlState newState){
+    public void updateRegister(final RaceControlRegister register, final RaceControlEvent event, final RaceControlState newState){
 
          final String oldState = register.getCurrentState().getAcronym();
 
@@ -250,11 +252,11 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
 
     }
 
-    public void setFilteringValues(String selectedDay, Long selectedCarNumber){
-        this.selectedArea = selectedDay;
+    public void setFilteringValues(String selectedArea, Long selectedCarNumber){
+        this.selectedArea = selectedArea;
         this.selectedCarNumber = selectedCarNumber;
 
-        view.filtersActivated(selectedDay != null || selectedCarNumber != null);
+        view.filtersActivated((selectedArea != null && !selectedArea.equals(context.getString(R.string.rc_area_all)))|| selectedCarNumber != null);
     }
 
 
@@ -284,6 +286,18 @@ public class RaceControlPresenter implements RecyclerViewClickListener {
 
     public List<RaceControlRegister> getEventRegisterList() {
         return filteredRaceControlRegisterList;
+    }
+
+    @Override
+    public void recyclerViewLongListClicked(android.view.View v, int position) {
+        RaceControlRegister register = filteredRaceControlRegisterList.get(position);
+
+        //Opening officials raceControl dialog
+        FragmentManager fm = ((RaceControlActivity)view.getActivity()).getSupportFragmentManager();
+        UpdatingRegistersDialog createUpdatingDialog = UpdatingRegistersDialog
+                .newInstance(RaceControlPresenter.this, register, rcEventType);
+        createUpdatingDialog.show(fm, "rc_updating_dialog");
+
     }
 
 

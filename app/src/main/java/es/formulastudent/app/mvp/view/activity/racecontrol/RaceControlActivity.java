@@ -93,7 +93,7 @@ public class RaceControlActivity extends GeneralActivity implements
 
         //Recycler view
         recyclerView = findViewById(R.id.recyclerView);
-        rcAdapter = new RaceControlAdapter(presenter.getEventRegisterList(), this, presenter);
+        rcAdapter = new RaceControlAdapter(presenter.getEventRegisterList(), this, presenter, presenter);
         recyclerView.setAdapter(rcAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -109,10 +109,10 @@ public class RaceControlActivity extends GeneralActivity implements
                 typeColor.setBackgroundColor(getResources().getColor(R.color.md_blue_300));
                 break;
             case RaceControlRegister.RACE_TYPE_COMBUSTION:
-                typeColor.setBackgroundColor(getResources().getColor(R.color.md_red_300));
+                typeColor.setBackgroundColor(getResources().getColor(R.color.md_deep_orange_600));
                 break;
             case RaceControlRegister.RACE_TYPE_FINAL:
-                typeColor.setBackgroundColor(getResources().getColor(R.color.md_grey_900));
+                typeColor.setBackgroundColor(getResources().getColor(R.color.md_yellow_500));
                 break;
             default:
                 typeColor.setBackgroundColor(getResources().getColor(R.color.md_grey_900));
