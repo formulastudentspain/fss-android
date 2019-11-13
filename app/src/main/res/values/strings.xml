@@ -45,34 +45,35 @@
 
 
     <!-- Users -->
-    <string name="users_get_by_nfc_error">Error getting the teamMember by this Tag</string>
-    <string name="users_get_by_nfc_not_existing">Could not get the teamMember by this Tag</string>
+    <string name="users_get_by_nfc_error">Error getting the user by this Tag</string>
+    <string name="users_get_by_nfc_not_existing">Could not get the user by this Tag</string>
     <string name="users_get_by_nfc_info">User retrieved by NFC successfully</string>
-    <string name="users_get_all_error">Error retrieving all teamMembers</string>
+    <string name="users_get_all_error">Error retrieving all users</string>
+    <string name="users_get_teams_error">Error retrieving all teams</string>
     <string name="users_get_all_info">User retrieved successfully</string>
-    <string name="users_create_error">Error creating teamMember</string>
+    <string name="users_create_error">Error creating user</string>
     <string name="users_create_info">User created successfully</string>
-    <string name="users_get_by_mail_error">Error retrieving teamMember by mail</string>
+    <string name="users_get_by_mail_error">Error retrieving user by mail</string>
     <string name="users_get_by_mail_info">User retrieved by mail successfully</string>
-    <string name="users_get_by_id_error">Error retrieving teamMember by ID</string>
+    <string name="users_get_by_id_error">Error retrieving user by ID</string>
     <string name="users_get_by_id_info">User retrieved by ID successfully</string>
-    <string name="users_delete_all_error">Error deleting all teamMembers</string>
+    <string name="users_delete_all_error">Error deleting all users</string>
     <string name="users_delete_all_info">User deleted successfully</string>
-    <string name="users_get_registered_by_team_info">Registered teamMembers by team retrieved successfully</string>
-    <string name="users_get_registered_by_team_error">Error retrieving teamMembers by team</string>
-    <string name="users_get_user_roles_error">Error retrieving teamMember roles</string>
+    <string name="users_get_registered_by_team_info">Registered users by team retrieved successfully</string>
+    <string name="users_get_registered_by_team_error">Error retrieving users by team</string>
+    <string name="users_get_user_roles_error">Error retrieving user roles</string>
     <string name="users_get_user_roles_info">User roles retrieved successfully</string>
     <string name="users_error_max_6_drivers">Unable to register more drivers. 6 max.</string>
     <string name="users_info_registered">User successfully registered</string>
-    <string name="users_error_registering">Error registering teamMember</string>
+    <string name="users_error_registering">Error registering user</string>
     <string name="users_error_tag_already_used">TAG is already registered by %1$s</string>
-    <string name="users_error_creating_user">Error creating teamMember</string>
+    <string name="users_error_creating_user">Error creating user</string>
     <string name="users_error_updating_profile_picture">Error uploading profile picture</string>
 
 
 
-    <!-- Create teamMember dialog -->
-    <string name="dialog_create_user_title">Create teamMember</string>
+    <!-- Create user dialog -->
+    <string name="dialog_create_user_title">Create user</string>
     <string name="dialog_create_user_button_create">Create</string>
     <string name="dialog_create_user_button_cancel">Cancel</string>
     <string name="dialog_create_user_field_name">Name</string>
@@ -150,6 +151,8 @@
     <string name="dynamic_event_messages_prescrutineering_update_error">Error updating prescrutineering register</string>
     <string name="dynamic_event_message_info_deleting_registers">Event register deleted successfully</string>
     <string name="dynamic_event_message_error_deleting_registers">Error deleting event registers</string>
+    <string name="dynamic_event_message_error_retrieving_teams">Could not retrieve teams correctly</string>
+    <string name="dynamic_event_message_error_create_user">Could not create the user correctly.</string>
     <string name="dynamic_event_message_error_runs">Error. Driver is registered in 2 or more dynamic events</string>
     <string name="dynamic_event_message_error_create">Could not create the registry</string>
     <string name="dynamic_event_message_error_create_egress">Could not create the egress registry</string>
@@ -178,7 +181,7 @@
     <string name="statistics_error_opening_file">Unable to open file, try send it my email</string>
     <string name="statistics_error_exporting_dynamic_event">Error exporting Dynamic Event registers</string>
     <string name="statistics_info_exporting_dynamic_event">Dynamic Event registers exported successfully</string>
-    <string name="statistics_error_exporting_users">Error exporting teamMembers</string>
+    <string name="statistics_error_exporting_users">Error exporting users</string>
     <string name="statistics_info_exporting_users">Users exported successfully</string>
 
 
