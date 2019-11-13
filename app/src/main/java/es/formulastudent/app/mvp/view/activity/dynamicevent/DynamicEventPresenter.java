@@ -418,7 +418,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO mostrar mensajes de error
+                view.createMessage(R.string.dynamic_event_message_error_retrieving_teams);
             }
 
         });
