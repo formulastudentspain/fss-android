@@ -55,7 +55,7 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
             User user = new User(currentUser);
             presenter.loginSuccess(user);
         } else{
-            //No User Logged
+            //No TeamMember Logged
             initViews();
         }
 

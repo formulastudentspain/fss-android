@@ -67,7 +67,6 @@ public class RaceControlActivity extends GeneralActivity implements
         this.rcEvent = rcEvent;
 
         initViews();
-        registerListener = presenter.retrieveRegisterList();
     }
 
     @Override
@@ -228,4 +227,19 @@ public class RaceControlActivity extends GeneralActivity implements
         //Remove realTime listener
         registerListener.remove();
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        //Remove realTime listener
+        if(registerListener != null){
+            registerListener.remove();
+        }
+
+        //Refresh again the list after resuming activity
+        registerListener = presenter.retrieveRegisterList();
+
+    }
+
 }

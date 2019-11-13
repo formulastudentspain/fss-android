@@ -53,7 +53,7 @@ public class BusinessModule {
 
 
     /**
-     * Provide User business
+     * Provide TeamMember business
      * @param firebaseFirestore
      * @return
      */
@@ -64,7 +64,7 @@ public class BusinessModule {
 
 
     /**
-     * Provide User Role business
+     * Provide TeamMember Role business
      * @param firebaseFirestore
      * @return
      */

@@ -28,7 +28,7 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 
 
 public class UserDetailPresenter {
@@ -51,9 +51,9 @@ public class UserDetailPresenter {
     }
 
 
-    public void onNFCTagDetected(User user, String tag){
+    public void onNFCTagDetected(TeamMember teamMember, String tag){
         final String tagNFC = tag;
-        final DocumentReference userRef = db.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO).document(user.getID());
+        final DocumentReference userRef = db.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS).document(teamMember.getID());
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -76,8 +76,8 @@ public class UserDetailPresenter {
                                         }
                                     });
                                 } else {
-                                    User user = (User) responseDTO.getData();
-                                    view.createMessage(R.string.users_error_tag_already_used, user.getName());
+                                    TeamMember teamMember = (TeamMember) responseDTO.getData();
+                                    view.createMessage(R.string.users_error_tag_already_used, teamMember.getName());
                                 }
                             }
 
@@ -122,17 +122,17 @@ public class UserDetailPresenter {
         userBO.getRegisteredUsersByTeamId(view.getSelectedUser().getTeamID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                List<User> users = (List<User>) responseDTO.getData();
+                List<TeamMember> teamMembers = (List<TeamMember>) responseDTO.getData();
 
                 boolean updatingUserNFC = false;
-                for(User user: users){
-                    if(user.getID().equals(view.getSelectedUser().getID())){
+                for(TeamMember teamMember : teamMembers){
+                    if(teamMember.getID().equals(view.getSelectedUser().getID())){
                         updatingUserNFC = true;
                         break;
                     }
                 }
 
-                if(!updatingUserNFC && users.size() >= 6){
+                if(!updatingUserNFC && teamMembers.size() >= 6){
                     view.createMessage(R.string.users_error_max_6_drivers);
                 }else{
                     view.openNFCReader();
@@ -148,12 +148,12 @@ public class UserDetailPresenter {
     }
 
 
-    protected void uploadProfilePicture(Bitmap bitmap, User user){
-        final User actualUser = user;
+    protected void uploadProfilePicture(Bitmap bitmap, TeamMember teamMember){
+        final TeamMember actualTeamMember = teamMember;
         FirebaseStorage storage = FirebaseStorage.getInstance();
         final Bitmap profileImage = bitmap;
         StorageReference storageReference = storage.getReference();
-        final StorageReference userProfile = storageReference.child(user.getID()+"_ProfilePhoto.jpg");
+        final StorageReference userProfile = storageReference.child(teamMember.getID()+"_ProfilePhoto.jpg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 
@@ -176,7 +176,7 @@ public class UserDetailPresenter {
                     public void onComplete(@NonNull Task<Uri> task) {
                         if(task.isSuccessful()){
                             Uri path = task.getResult();
-                            updatePhotoUrl(actualUser, path);
+                            updatePhotoUrl(actualTeamMember, path);
                             view.updateProfilePicture(profileImage);
                         } else {
                             view.createMessage(R.string.users_error_updating_profile_picture);
@@ -187,9 +187,9 @@ public class UserDetailPresenter {
         });
     }
 
-    private void updatePhotoUrl(User actualUser, Uri path) {
-        db.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO).document(actualUser.getID()).update(
-                User.USER_IMAGE, path.toString()
+    private void updatePhotoUrl(TeamMember actualTeamMember, Uri path) {
+        db.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS).document(actualTeamMember.getID()).update(
+                TeamMember.USER_IMAGE, path.toString()
         );
     }
 
@@ -197,7 +197,7 @@ public class UserDetailPresenter {
     public interface View {
 
         /**
-         * Show message to user
+         * Show message to teamMember
          * @param message
          */
         void createMessage(Integer message, Object...args);
@@ -218,21 +218,21 @@ public class UserDetailPresenter {
         void hideLoadingIcon();
 
         /**
-         * Update user NFC infomation
+         * Update teamMember NFC infomation
          */
         void updateNFCInformation(String TAG);
 
         /**
-         * Update the user profile imageView
+         * Update the teamMember profile imageView
          * @param imageBitmap
          */
         void updateProfilePicture(Bitmap imageBitmap);
 
         /**
-         * Get selected User
+         * Get selected TeamMember
          * @return
          */
-        User getSelectedUser();
+        TeamMember getSelectedUser();
 
         /**
          * Open NFC Reader Activity

@@ -16,7 +16,7 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
-import es.formulastudent.app.mvp.data.model.UserRole;
+import es.formulastudent.app.mvp.data.model.Role;
 
 public class UserRoleBOFirebaseImpl implements UserRoleBO {
 
@@ -33,7 +33,7 @@ public class UserRoleBOFirebaseImpl implements UserRoleBO {
 
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_ROLE)
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_ROLES)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 
@@ -41,12 +41,12 @@ public class UserRoleBOFirebaseImpl implements UserRoleBO {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         //success
                         if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                            List<UserRole> result = new ArrayList<>();
+                            List<Role> result = new ArrayList<>();
 
                             //Add results to list
                             for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                                UserRole userRole = new UserRole(document);
-                                result.add(userRole);
+                                Role role = new Role(document);
+                                result.add(role);
                             }
 
                             responseDTO.setData(result);

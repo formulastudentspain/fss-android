@@ -49,7 +49,7 @@
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.userlist.UserListActivity"
+            android:name=".mvp.view.activity.teammember.TeamMemberActivity"
             android:label="Formula Student Spain"
             android:launchMode="singleTop">
         </activity>

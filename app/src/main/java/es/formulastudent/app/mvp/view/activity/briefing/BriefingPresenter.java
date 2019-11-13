@@ -20,7 +20,7 @@ import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.activity.briefing.dialog.ConfirmBriefingRegisterDialog;
 import es.formulastudent.app.mvp.view.activity.briefing.dialog.DeleteEventRegisterDialog;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
@@ -60,14 +60,14 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
     /**
      * Create Briefing registry
-     * @param user
+     * @param teamMember
      */
-     public void createRegistry(User user){
+     public void createRegistry(TeamMember teamMember){
 
         //Show loading
         view.showLoading();
 
-        briefingBO.createBriefingRegistry(user, firebaseAuth.getCurrentUser().getEmail(), new BusinessCallback() {
+        briefingBO.createBriefingRegistry(teamMember, firebaseAuth.getCurrentUser().getEmail(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 retrieveBriefingRegisterList();
@@ -167,10 +167,10 @@ public class BriefingPresenter implements RecyclerViewClickListener {
                 //Hide loading
                 view.hideLoading();
 
-                User user = (User)responseDTO.getData();
+                TeamMember teamMember = (TeamMember)responseDTO.getData();
 
                 FragmentManager fm = ((BriefingActivity)view.getActivity()).getSupportFragmentManager();
-                ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog.newInstance(BriefingPresenter.this, user);
+                ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog.newInstance(BriefingPresenter.this, teamMember);
                 createUserDialog.show(fm, "fragment_briefing_confirm");
             }
 

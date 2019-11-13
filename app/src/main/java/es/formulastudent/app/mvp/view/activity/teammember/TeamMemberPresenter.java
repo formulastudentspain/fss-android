@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.userlist;
+package es.formulastudent.app.mvp.view.activity.teammember;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +13,12 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.data.model.UserRole;
+import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
 
-public class UserListPresenter implements RecyclerViewClickListener {
+public class TeamMemberPresenter implements RecyclerViewClickListener {
 
     //Dependencies
     private View view;
@@ -28,12 +28,12 @@ public class UserListPresenter implements RecyclerViewClickListener {
     private UserRoleBO userRoleBO;
 
     //Data
-    private List<User> allUserList = new ArrayList<>();
-    private List<User> filteredUserList = new ArrayList<>();
+    private List<TeamMember> allTeamMemberList = new ArrayList<>();
+    private List<TeamMember> filteredTeamMemberList = new ArrayList<>();
 
 
 
-    public UserListPresenter(UserListPresenter.View view, Context context, UserBO userBO, TeamBO teamBO, UserRoleBO userRoleBO) {
+    public TeamMemberPresenter(TeamMemberPresenter.View view, Context context, UserBO userBO, TeamBO teamBO, UserRoleBO userRoleBO) {
         this.view = view;
         this.context = context;
         this.userBO = userBO;
@@ -42,14 +42,14 @@ public class UserListPresenter implements RecyclerViewClickListener {
     }
 
 
-    private void updateUserListItems(List<User> newItems){
+    private void updateUserListItems(List<TeamMember> newItems){
         //Update all-user-list
-        this.allUserList.clear();
-        this.allUserList.addAll(newItems);
+        this.allTeamMemberList.clear();
+        this.allTeamMemberList.addAll(newItems);
 
         //Update and refresh filtered-user-list
-        this.filteredUserList.clear();
-        this.filteredUserList.addAll(newItems);
+        this.filteredTeamMemberList.clear();
+        this.filteredTeamMemberList.addAll(newItems);
         this.view.refreshUserItems();
     }
 
@@ -65,10 +65,10 @@ public class UserListPresenter implements RecyclerViewClickListener {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
-                List<User> users = (List<User>) responseDTO.getData();
+                List<TeamMember> teamMembers = (List<TeamMember>) responseDTO.getData();
 
                 //Update view with new results
-                updateUserListItems(users);
+                updateUserListItems(teamMembers);
             }
 
             @Override
@@ -84,12 +84,12 @@ public class UserListPresenter implements RecyclerViewClickListener {
     public void filterUsers(String query){
 
         //Clear the list
-        filteredUserList.clear();
+        filteredTeamMemberList.clear();
 
         //Add results
-        for(User user: allUserList){
-            if(user.getName().toLowerCase().contains(query.toLowerCase())){
-                filteredUserList.add(user);
+        for(TeamMember teamMember : allTeamMemberList){
+            if(teamMember.getName().toLowerCase().contains(query.toLowerCase())){
+                filteredTeamMemberList.add(teamMember);
             }
         }
 
@@ -101,19 +101,19 @@ public class UserListPresenter implements RecyclerViewClickListener {
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
 
-        User selectedUser = filteredUserList.get(position);
+        TeamMember selectedTeamMember = filteredTeamMemberList.get(position);
 
         Intent intent = new Intent(context, UserDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("selectedUser", selectedUser);
+        intent.putExtra("selectedTeamMember", selectedTeamMember);
         context.startActivity(intent);
 
     }
 
 
-    public void createUser(User user){
+    public void createUser(TeamMember teamMember){
 
-        userBO.createUser(user, new BusinessCallback() {
+        userBO.createUser(teamMember, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 //Update list
@@ -139,7 +139,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
-                List<UserRole> roles = (List<UserRole>) responseDTO.getData();
+                List<Role> roles = (List<Role>) responseDTO.getData();
 
                 //Retrieve Teams now
                 retrieveTeams(roles);
@@ -154,7 +154,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
 
 
-    private void retrieveTeams(final List<UserRole> roles){
+    private void retrieveTeams(final List<Role> roles){
 
         //Show loading
         view.showLoading();
@@ -179,8 +179,8 @@ public class UserListPresenter implements RecyclerViewClickListener {
     }
 
 
-    public List<User> getUserItemList() {
-        return filteredUserList;
+    public List<TeamMember> getUserItemList() {
+        return filteredTeamMemberList;
     }
 
     public void retrieveCreateUserDialogData() {
@@ -222,7 +222,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
          * @param teams
          * @param roles
          */
-        void showCreateUserDialog(List<Team> teams, List<UserRole> roles);
+        void showCreateUserDialog(List<Team> teams, List<Role> roles);
     }
 
 }

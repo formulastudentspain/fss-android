@@ -24,7 +24,7 @@ import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.ConfirmEventRegisterDialog;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.DeleteEventRegisterDialog;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.FilteringRegistersDialog;
@@ -73,18 +73,18 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
 
     /**
      * Create register
-     * @param user
+     * @param teamMember
      * @param carNumber
      * @param carType
      * @param briefingDone
      */
-     public void createRegistry(final User user, final Long carNumber, final String carType, final Boolean briefingDone){
+     public void createRegistry(final TeamMember teamMember, final Long carNumber, final String carType, final Boolean briefingDone){
 
         //Show loading
         view.showLoading();
 
         //Check that the driver is able to run, that means he/she has not run already in two different events
-        dynamicEventBO.getDifferentEventRegistersByDriver(user.getID(), new BusinessCallback() {
+        dynamicEventBO.getDifferentEventRegistersByDriver(teamMember.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
@@ -108,7 +108,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
                     } else {
 
                         //The driver can run, create the register
-                        dynamicEventBO.createRegister(user, carType, carNumber, briefingDone, eventType, new BusinessCallback() {
+                        dynamicEventBO.createRegister(teamMember, carType, carNumber, briefingDone, eventType, new BusinessCallback() {
                             @Override
                             public void onSuccess(ResponseDTO responseDTO) {
 
@@ -230,10 +230,10 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
         userBO.retrieveUserByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                User user = (User)responseDTO.getData();
+                TeamMember teamMember = (TeamMember)responseDTO.getData();
 
-                //Now check if the user did the briefing today
-                getUserBriefingRegister(user);
+                //Now check if the teamMember did the briefing today
+                getUserBriefingRegister(teamMember);
             }
             @Override
             public void onFailure(ResponseDTO responseDTO) {
@@ -311,7 +311,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
     }
 
 
-    void getUserBriefingRegister(final User user){
+    void getUserBriefingRegister(final TeamMember teamMember){
 
         Calendar cal = Calendar.getInstance();
         Date to = cal.getTime();
@@ -322,10 +322,10 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
 
         Date from = cal.getTime(); //current day at 05:00am
 
-        if(user != null && user.getID() != null) {
+        if(teamMember != null && teamMember.getID() != null) {
 
-            //If the user exists, retrieve its briefing registers
-            briefingBO.retrieveBriefingRegistersByUserAndDates(from, to, user.getID(), new BusinessCallback() {
+            //If the teamMember exists, retrieve its briefing registers
+            briefingBO.retrieveBriefingRegistersByUserAndDates(from, to, teamMember.getID(), new BusinessCallback() {
 
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
@@ -333,7 +333,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
                     List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
 
                     //Now, get cars
-                    getCarByUserId(user, !briefingRegisters.isEmpty());
+                    getCarByUserId(teamMember, !briefingRegisters.isEmpty());
                 }
 
                 @Override
@@ -354,14 +354,14 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
     }
 
     /**
-     * Get the user car. The car is stored in the team, so we retrieve the team
-     * @param user
+     * Get the teamMember car. The car is stored in the team, so we retrieve the team
+     * @param teamMember
      * @param briefingExists
      */
-    void getCarByUserId(final User user, final boolean briefingExists){
+    void getCarByUserId(final TeamMember teamMember, final boolean briefingExists){
 
-        //Get the team by the user
-        teamBO.retrieveTeamById(user.getTeamID(), new BusinessCallback() {
+        //Get the team by the teamMember
+        teamBO.retrieveTeamById(teamMember.getTeamID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
@@ -375,7 +375,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
                 //With all the information, we create the dialog
                 FragmentManager fm = ((DynamicEventActivity)view.getActivity()).getSupportFragmentManager();
                 ConfirmEventRegisterDialog createUserDialog = ConfirmEventRegisterDialog
-                        .newInstance(DynamicEventPresenter.this, user, briefingExists, car);
+                        .newInstance(DynamicEventPresenter.this, teamMember, briefingExists, car);
 
                 //Show the dialog
                 createUserDialog.show(fm, "fragment_event_confirm");

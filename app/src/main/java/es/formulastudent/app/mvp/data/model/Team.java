@@ -9,7 +9,6 @@ import java.util.UUID;
 
 public class Team implements Serializable {
 
-    public static String COLLECTION_ID = "TEAM";
 
     //Database constants
     public static final String NAME = "name";

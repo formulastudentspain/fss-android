@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.userlist.dialog;
+package es.formulastudent.app.mvp.view.activity.teammember.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,15 +18,15 @@ import java.util.UUID;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.data.model.UserRole;
+import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.view.activity.general.spinneradapters.RolesSpinnerAdapter;
 import es.formulastudent.app.mvp.view.activity.general.spinneradapters.TeamsSpinnerAdapter;
-import es.formulastudent.app.mvp.view.activity.userlist.UserListPresenter;
+import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberPresenter;
 
-public class CreateUserDialog extends DialogFragment {
+public class CreateTeamMemberDialog extends DialogFragment {
 
-    private UserListPresenter presenter;
+    private TeamMemberPresenter presenter;
     private Context context;
     private AlertDialog dialog;
 
@@ -42,18 +42,18 @@ public class CreateUserDialog extends DialogFragment {
 
     //Spinner values
     List<Team> teams;
-    List<UserRole> roles;
+    List<Role> roles;
 
     //Selected values
     private Team selectedTeam;
-    private UserRole selectedRole;
+    private Role selectedRole;
 
 
-    public CreateUserDialog() {}
+    public CreateTeamMemberDialog() {}
 
-    public static CreateUserDialog newInstance(UserListPresenter presenter, Context context,
-                                               List<Team> teams, List<UserRole> roles) {
-        CreateUserDialog frag = new CreateUserDialog();
+    public static CreateTeamMemberDialog newInstance(TeamMemberPresenter presenter, Context context,
+                                                     List<Team> teams, List<Role> roles) {
+        CreateTeamMemberDialog frag = new CreateTeamMemberDialog();
         frag.setPresenter(presenter);
         frag.setContext(context);
         frag.setRoles(roles);
@@ -98,7 +98,7 @@ public class CreateUserDialog extends DialogFragment {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                UserRole role = rolesAdapter.getItem(position);
+                Role role = rolesAdapter.getItem(position);
                 selectedRole = role;
             }
             @Override
@@ -113,7 +113,7 @@ public class CreateUserDialog extends DialogFragment {
                 .setPositiveButton(R.string.dialog_create_user_button_create, null)
                 .setNegativeButton(R.string.dialog_create_user_button_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        CreateUserDialog.this.getDialog().cancel();
+                        CreateTeamMemberDialog.this.getDialog().cancel();
                     }
                 });
 
@@ -124,14 +124,14 @@ public class CreateUserDialog extends DialogFragment {
 
     private boolean validateFields(){
 
-        //User name
+        //TeamMember name
         String userNameValue = userName.getText().toString();
         if(userNameValue.trim().isEmpty()){
             userName.setError(getString(R.string.dialog_create_user_error_field));
             return false;
         }
 
-        //User mail
+        //TeamMember mail
         String userMailValue = userMail.getText().toString();
         if(userMailValue.trim().isEmpty()){
             userMail.setError(getString(R.string.dialog_create_user_error_field));
@@ -149,23 +149,23 @@ public class CreateUserDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
 
-                User user = new User();
+                TeamMember teamMember = new TeamMember();
 
                 if(validateFields()){
                     String userNameValue = userName.getText().toString();
                     String userMailValue = userMail.getText().toString();
 
-                    user.setID(UUID.randomUUID().toString());
-                    user.setName(userNameValue);
-                    user.setTeam(selectedTeam.getName());
-                    user.setTeamID(selectedTeam.getID());
-                    user.setMail(userMailValue);
-                    user.setRole(selectedRole.getName());
-                    user.setRoleID(selectedRole.getID());
-                    user.setPhotoUrl(getString(R.string.default_image_url));
+                    teamMember.setID(UUID.randomUUID().toString());
+                    teamMember.setName(userNameValue);
+                    teamMember.setTeam(selectedTeam.getName());
+                    teamMember.setTeamID(selectedTeam.getID());
+                    teamMember.setMail(userMailValue);
+                    teamMember.setRole(selectedRole.getName());
+                    teamMember.setRoleID(selectedRole.getID());
+                    teamMember.setPhotoUrl(getString(R.string.default_image_url));
 
                     //Call business
-                    presenter.createUser(user);
+                    presenter.createUser(teamMember);
 
                     //Close dialog
                     dialog.dismiss();
@@ -175,7 +175,7 @@ public class CreateUserDialog extends DialogFragment {
     }
 
 
-    public void setPresenter(UserListPresenter presenter) {
+    public void setPresenter(TeamMemberPresenter presenter) {
         this.presenter = presenter;
     }
     public void setContext(Context context){
@@ -186,7 +186,7 @@ public class CreateUserDialog extends DialogFragment {
         this.teams = teams;
     }
 
-    public void setRoles(List<UserRole> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 }

@@ -4,7 +4,7 @@ import java.util.Date;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.model.EventType;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 
 public interface DynamicEventBO {
 
@@ -25,14 +25,14 @@ public interface DynamicEventBO {
 
     /**
      * Method to create a Dynamic Event register
-     * @param user
+     * @param teamMember
      * @param carType
      * @param carNumber
      * @param briefingDone
      * @param type
      * @param callback
      */
-    void createRegister(User user, String carType, Long carNumber, Boolean briefingDone, EventType type, BusinessCallback callback);
+    void createRegister(TeamMember teamMember, String carType, Long carNumber, Boolean briefingDone, EventType type, BusinessCallback callback);
 
 
 

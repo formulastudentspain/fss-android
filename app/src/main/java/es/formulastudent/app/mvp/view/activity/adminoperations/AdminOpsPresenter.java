@@ -23,7 +23,7 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 
 public class AdminOpsPresenter {
 
@@ -156,7 +156,7 @@ public class AdminOpsPresenter {
 
     private void createDrivers(Map<String, Team> teams){
 
-        List<User> users = new ArrayList<>();
+        List<TeamMember> teamMembers = new ArrayList<>();
 
         try {
 
@@ -171,48 +171,48 @@ public class AdminOpsPresenter {
             int index = 1;
             while(sheet.getRow(index) != null){
 
-                User user = new User();
+                TeamMember teamMember = new TeamMember();
 
                 Row row = sheet.getRow(index);
 
-                //User name
+                //TeamMember name
                 Cell cellUserName = row.getCell(2);
                 String userName = cellUserName.getStringCellValue();
-                user.setName(userName);
+                teamMember.setName(userName);
 
                 //Team info
                 Cell cellTeamName = row.getCell(0);
                 String teamName = cellTeamName.getStringCellValue();
                 Team team = teams.get(teamName);
-                user.setTeamID(team.getID());
-                user.setTeam(team.getName());
-                user.setCarNumber(team.getCar().getNumber());
+                teamMember.setTeamID(team.getID());
+                teamMember.setTeam(team.getName());
+                teamMember.setCarNumber(team.getCar().getNumber());
 
-                //User mail
+                //TeamMember mail
                 Cell cellUserMail = row.getCell(3);
                 if(cellUserMail == null){
-                    user.setMail("");
+                    teamMember.setMail("");
                 }else{
                     String userMail = cellUserMail.getStringCellValue();
-                    user.setMail(userMail);
+                    teamMember.setMail(userMail);
                 }
 
 
                 //Role
-                user.setRole("DRIVER");
+                teamMember.setRole("DRIVER");
 
                 //Profile image
-                user.setPhotoUrl(context.getString(R.string.default_image_url));
+                teamMember.setPhotoUrl(context.getString(R.string.default_image_url));
 
-                users.add(user);
+                teamMembers.add(teamMember);
 
                 index ++;
             }
 
-            //Save all users
-            for(User user: users){
+            //Save all teamMembers
+            for(TeamMember teamMember : teamMembers){
 
-                userBO.createUser(user, new BusinessCallback() {
+                userBO.createUser(teamMember, new BusinessCallback() {
                     @Override
                     public void onSuccess(ResponseDTO responseDTO) {
 

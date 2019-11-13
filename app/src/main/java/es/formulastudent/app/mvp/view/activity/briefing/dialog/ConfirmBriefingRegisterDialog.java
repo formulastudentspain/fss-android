@@ -19,7 +19,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingPresenter;
 
 public class ConfirmBriefingRegisterDialog extends DialogFragment {
@@ -32,15 +32,15 @@ public class ConfirmBriefingRegisterDialog extends DialogFragment {
     //Presenter
     private BriefingPresenter presenter;
 
-    //Detected user
-    private User user;
+    //Detected teamMember
+    private TeamMember teamMember;
 
     public ConfirmBriefingRegisterDialog() {}
 
-    public static ConfirmBriefingRegisterDialog newInstance(BriefingPresenter presenter, User user) {
+    public static ConfirmBriefingRegisterDialog newInstance(BriefingPresenter presenter, TeamMember teamMember) {
         ConfirmBriefingRegisterDialog frag = new ConfirmBriefingRegisterDialog();
         frag.setPresenter(presenter);
-        frag.setUser(user);
+        frag.setTeamMember(teamMember);
         return frag;
     }
 
@@ -60,10 +60,10 @@ public class ConfirmBriefingRegisterDialog extends DialogFragment {
         userPhoto = rootView.findViewById(R.id.user_profile_image);
 
         //Set values
-        userName.setText(user.getName());
-        userTeam.setText(user.getTeam());
+        userName.setText(teamMember.getName());
+        userTeam.setText(teamMember.getTeam());
         registerDate.setText(sdf.format(Calendar.getInstance().getTime()));
-        Picasso.get().load(user.getPhotoUrl()).into(userPhoto);
+        Picasso.get().load(teamMember.getPhotoUrl()).into(userPhoto);
 
 
         //Buttons
@@ -74,7 +74,7 @@ public class ConfirmBriefingRegisterDialog extends DialogFragment {
                 .setPositiveButton(R.string.briefing_activity_dialog_confirm_button_confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.createRegistry(user);
+                        presenter.createRegistry(teamMember);
                     }
                 })
                 .setNegativeButton(R.string.briefing_activity_dialog_confirm_button_cancel, new DialogInterface.OnClickListener() {
@@ -90,8 +90,8 @@ public class ConfirmBriefingRegisterDialog extends DialogFragment {
         this.presenter = presenter;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setTeamMember(TeamMember teamMember) {
+        this.teamMember = teamMember;
     }
 }
 

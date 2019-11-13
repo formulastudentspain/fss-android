@@ -1,7 +1,7 @@
 package es.formulastudent.app.mvp.data.business.user;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 
 public interface UserBO {
 
@@ -22,11 +22,11 @@ public interface UserBO {
 
 
     /**
-     * Create user
-     * @param user
+     * Create teamMember
+     * @param teamMember
      * @param callback
      */
-    void createUser(User user, BusinessCallback callback);
+    void createUser(TeamMember teamMember, BusinessCallback callback);
 
 
     /**
@@ -36,13 +36,6 @@ public interface UserBO {
      */
     void retrieveUserByMail(String mail, BusinessCallback callback);
 
-
-    /**
-     * Method to retrieve user by id
-     * @param id
-     * @param callback
-     */
-    void retrieveUserById(String id, BusinessCallback callback);
 
     /**
      * Method to delete all drivers

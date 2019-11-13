@@ -14,15 +14,15 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.UserRole;
+import es.formulastudent.app.mvp.data.model.Role;
 
-public class RolesSpinnerAdapter extends ArrayAdapter<UserRole> {
+public class RolesSpinnerAdapter extends ArrayAdapter<Role> {
 
     private Context context;
-    private List<UserRole> roles;
+    private List<Role> roles;
     private LayoutInflater inflater;
 
-    public RolesSpinnerAdapter(Context context, int textViewResourceId, List<UserRole> roles) {
+    public RolesSpinnerAdapter(Context context, int textViewResourceId, List<Role> roles) {
         super(context, textViewResourceId, roles);
         this.context = context;
         this.roles = roles;
@@ -35,7 +35,7 @@ public class RolesSpinnerAdapter extends ArrayAdapter<UserRole> {
     }
 
     @Override
-    public UserRole getItem(int position){
+    public Role getItem(int position){
         return roles.get(position);
     }
 
@@ -58,7 +58,7 @@ public class RolesSpinnerAdapter extends ArrayAdapter<UserRole> {
     private View createItemView(int position, View convertView, ViewGroup parent) {
         final View view = inflater.inflate(R.layout.activity_general_spinner, parent, false);
 
-        UserRole team = roles.get(position);
+        Role team = roles.get(position);
 
         TextView teamName = view.findViewById(R.id.spinner_value);
         teamName.setText(team.getName());

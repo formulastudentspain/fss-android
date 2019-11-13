@@ -32,7 +32,7 @@ import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.Utils;
 
 public class StatisticsBOImpl implements StatisticsBO {
@@ -226,7 +226,7 @@ public class StatisticsBOImpl implements StatisticsBO {
             public void onSuccess(ResponseDTO responseDTO) {
                 ResponseDTO responseDTOExport = new ResponseDTO();
 
-                List<User> listToExport = (List<User>) responseDTO.getData();
+                List<TeamMember> listToExport = (List<TeamMember>) responseDTO.getData();
 
                 try {
                     Workbook wb = new HSSFWorkbook(is);
@@ -267,7 +267,7 @@ public class StatisticsBOImpl implements StatisticsBO {
                     int rowNum = 4;
                     int cellNum;
 
-                    for (User user : listToExport) {
+                    for (TeamMember teamMember : listToExport) {
 
                         //Init values
                         cellNum = 0;
@@ -275,27 +275,27 @@ public class StatisticsBOImpl implements StatisticsBO {
 
                         //MAIL
                         cell = row.createCell(cellNum);
-                        cell.setCellValue(user.getMail() == null ? "" : user.getMail());
+                        cell.setCellValue(teamMember.getMail() == null ? "" : teamMember.getMail());
 
                         //NAME
                         cell = row.createCell(++cellNum);
-                        cell.setCellValue(user.getName() == null ? "" : user.getName());
+                        cell.setCellValue(teamMember.getName() == null ? "" : teamMember.getName());
 
                         //ROLE
                         cell = row.createCell(++cellNum);
-                        cell.setCellValue(user.getRole() == null ? "" : user.getRole());
+                        cell.setCellValue(teamMember.getRole() == null ? "" : teamMember.getRole());
 
                         //NFC TAG
                         cell = row.createCell(++cellNum);
-                        cell.setCellValue(user.getNFCTag() == null ? "" : user.getNFCTag());
+                        cell.setCellValue(teamMember.getNFCTag() == null ? "" : teamMember.getNFCTag());
 
                         //TEAM
                         cell = row.createCell(++cellNum);
-                        cell.setCellValue(user.getTeam() == null ? "" : user.getTeam());
+                        cell.setCellValue(teamMember.getTeam() == null ? "" : teamMember.getTeam());
 
                         //CAR NUMBER
                         cell = row.createCell(++cellNum);
-                        cell.setCellValue(user.getTeam() == null ? "" : user.getTeam());
+                        cell.setCellValue(teamMember.getTeam() == null ? "" : teamMember.getTeam());
                     }
 
 

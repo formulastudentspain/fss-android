@@ -17,6 +17,7 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.data.model.User;
 
 public class UserBOFirebaseImpl implements UserBO {
@@ -32,8 +33,8 @@ public class UserBOFirebaseImpl implements UserBO {
 
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
-                .whereEqualTo(User.TAG_NFC, tag)
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
+                .whereEqualTo(TeamMember.TAG_NFC, tag)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 
@@ -41,8 +42,8 @@ public class UserBOFirebaseImpl implements UserBO {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         //success
                         if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                            User user = new User(queryDocumentSnapshots.getDocuments().get(0));
-                            responseDTO.setData(user);
+                            TeamMember teamMember = new TeamMember(queryDocumentSnapshots.getDocuments().get(0));
+                            responseDTO.setData(teamMember);
                             responseDTO.setInfo(R.string.users_get_by_nfc_info);
                         }
                         callback.onSuccess(responseDTO);
@@ -65,7 +66,7 @@ public class UserBOFirebaseImpl implements UserBO {
 
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 
@@ -73,12 +74,12 @@ public class UserBOFirebaseImpl implements UserBO {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         //success
                         if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                            List<User> result = new ArrayList<>();
+                            List<TeamMember> result = new ArrayList<>();
 
                             //Add results to list
                             for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                                User user = new User(document);
-                                result.add(user);
+                                TeamMember teamMember = new TeamMember(document);
+                                result.add(teamMember);
                             }
 
                             responseDTO.setData(result);
@@ -97,13 +98,13 @@ public class UserBOFirebaseImpl implements UserBO {
     }
 
     @Override
-    public void createUser(User user, final BusinessCallback callback) {
+    public void createUser(TeamMember teamMember, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
-        Map<String, Object> docData = user.toDocumentData();
+        Map<String, Object> docData = teamMember.toDocumentData();
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
-                .document(user.getID())
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
+                .document(teamMember.getID())
                 .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -125,7 +126,7 @@ public class UserBOFirebaseImpl implements UserBO {
     public void retrieveUserByMail(String mail, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER)
                 .whereEqualTo(User.MAIL, mail)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -151,33 +152,11 @@ public class UserBOFirebaseImpl implements UserBO {
     }
 
     @Override
-    public void retrieveUserById(String id, final BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
-
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
-                .document(id)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        responseDTO.setError(R.string.users_get_by_id_info);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.users_get_by_id_error);
-                        callback.onFailure(responseDTO);
-                    }
-                });
-    }
-
-    @Override
     public void deleteAllDrivers(final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
-                .whereEqualTo(User.ROLE, "DRIVER")
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
+                .whereEqualTo(TeamMember.ROLE, "DRIVER")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 
@@ -204,24 +183,24 @@ public class UserBOFirebaseImpl implements UserBO {
     public void getRegisteredUsersByTeamId(String teamID, final BusinessCallback callback){
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER_INFO)
-                .whereEqualTo(User.TEAM_ID, teamID)
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
+                .whereEqualTo(TeamMember.TEAM_ID, teamID)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<User> userList = new ArrayList<>();
+                        List<TeamMember> teamMemberList = new ArrayList<>();
 
                         for(DocumentSnapshot doc: queryDocumentSnapshots.getDocuments()){
-                            User user = new User(doc);
+                            TeamMember teamMember = new TeamMember(doc);
 
-                            if(user.getNFCTag()!=null){
-                                userList.add(user);
+                            if(teamMember.getNFCTag()!=null){
+                                teamMemberList.add(teamMember);
                             }
                         }
 
-                        responseDTO.setData(userList);
+                        responseDTO.setData(teamMemberList);
                         responseDTO.setInfo(R.string.users_get_registered_by_team_info);
                         callback.onSuccess(responseDTO);
                     }

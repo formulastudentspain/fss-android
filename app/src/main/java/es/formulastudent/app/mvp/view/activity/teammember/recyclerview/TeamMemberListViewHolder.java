@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.userlist.recyclerview;
+package es.formulastudent.app.mvp.view.activity.teammember.recyclerview;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
-public class UserListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class TeamMemberListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     ImageView profileImage;
     TextView userName;
@@ -21,7 +21,7 @@ public class UserListViewHolder extends RecyclerView.ViewHolder implements View.
     RecyclerViewClickListener itemListener;
 
 
-    public UserListViewHolder(View itemView, RecyclerViewClickListener itemListener) {
+    public TeamMemberListViewHolder(View itemView, RecyclerViewClickListener itemListener) {
         super(itemView);
         profileImage =  itemView.findViewById(R.id.user_profile_image);
         userName =  itemView.findViewById(R.id.user_name);

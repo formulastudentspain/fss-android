@@ -25,7 +25,7 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 
 public class BriefingBOFirebaseImpl implements BriefingBO {
 
@@ -92,11 +92,11 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
 
 
     @Override
-    public void createBriefingRegistry(User user, String registerUserMail, final BusinessCallback callback) {
+    public void createBriefingRegistry(TeamMember teamMember, String registerUserMail, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
-        BriefingRegister briefingRegister = new BriefingRegister(user, registerDate, registerUserMail);
+        BriefingRegister briefingRegister = new BriefingRegister(teamMember, registerDate, registerUserMail);
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS)
                 .document(briefingRegister.getID())

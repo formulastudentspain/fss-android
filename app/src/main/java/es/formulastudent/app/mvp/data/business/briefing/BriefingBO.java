@@ -3,7 +3,7 @@ package es.formulastudent.app.mvp.data.business.briefing;
 import java.util.Date;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 
 public interface BriefingBO {
 
@@ -20,10 +20,10 @@ public interface BriefingBO {
 
     /**
      * Method to create a Briefing registry
-     * @param user
+     * @param teamMember
      * @param callback
      */
-    void createBriefingRegistry(User user, String registerUserMail, BusinessCallback callback);
+    void createBriefingRegistry(TeamMember teamMember, String registerUserMail, BusinessCallback callback);
 
 
     /**

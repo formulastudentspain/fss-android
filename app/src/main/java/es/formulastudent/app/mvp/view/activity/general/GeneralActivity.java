@@ -34,6 +34,7 @@ import javax.inject.Inject;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
+import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.adminoperations.AdminOpsActivity;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
@@ -43,7 +44,7 @@ import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityLoa
 import es.formulastudent.app.mvp.view.activity.login.LoginActivity;
 import es.formulastudent.app.mvp.view.activity.racecontrol.RaceControlWelcomeActivity;
 import es.formulastudent.app.mvp.view.activity.statistics.StatisticsActivity;
-import es.formulastudent.app.mvp.view.activity.userlist.UserListActivity;
+import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberActivity;
 
 
 public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
@@ -147,7 +148,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
-
+/*
         //Race Control: Skidpad
         PrimaryDrawerItem rcSkidpad = new PrimaryDrawerItem()
                 .withIdentifier(10018)
@@ -177,7 +178,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-
+*/
         //Race Control: Endurance
         PrimaryDrawerItem rcEndurance = new PrimaryDrawerItem()
                 .withIdentifier(10021)
@@ -249,9 +250,9 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
 
-        /********** User Management ************/
+        /********** TeamMember Management ************/
 
-        //User management
+        //TeamMember management
         PrimaryDrawerItem userManagement = new PrimaryDrawerItem()
                 .withEnabled(false)
                 .withName(R.string.drawer_menu_staff_users_management)
@@ -259,7 +260,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-        //User management: Drivers
+        //TeamMember management: Drivers
         PrimaryDrawerItem drivers = new PrimaryDrawerItem()
                 .withIdentifier(10020)
                 .withLevel(2)
@@ -268,18 +269,18 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-        //User management: ESOS
+        //TeamMember management: ESOS
         PrimaryDrawerItem esos = new PrimaryDrawerItem()
-                .withIdentifier(10021)
+                .withIdentifier(10025)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_staff_users_management_esos)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-        //User management: Volunteers
+        //TeamMember management: Volunteers
         PrimaryDrawerItem volunteers = new PrimaryDrawerItem()
-                .withIdentifier(10022)
+                .withIdentifier(10026)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_staff_users_management_volunteers)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
@@ -322,7 +323,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
 
-        if(loggedUser.getMail().equals("dpconde.me@gmail.com") || loggedUser.getMail().equals("gerardmarti6@gmail.com")){
+        if(loggedUser.getRole().equals(Role.ADMINISTRATOR)){
             builder.addDrawerItems(
 
                     eventControl,
@@ -334,7 +335,8 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     new DividerDrawerItem(),
 
                     raceControl,
-                    rcSkidpad, rcAcceleration, rcAutocross, rcEndurance,
+                   // rcSkidpad, rcAcceleration, rcAutocross,
+                    rcEndurance,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -344,15 +346,94 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     staffStatistics,
                     adminOperations,
                     logout);
-        }else{
+
+
+        }else if(loggedUser.getRole().equals(Role.MARSHALL)){
             builder.addDrawerItems(
-                    eventControl,
-                    briefing,
-                    preScrutineering,
+
                     raceAccess,
                     practiceTrack, skidpad, acceleration, autocross, endurance,
                     new DividerDrawerItem(),
+
+                    raceControl,
+                    // rcSkidpad, rcAcceleration, rcAutocross,
+                    rcEndurance,
+                    new DividerDrawerItem(),
+
+                    userManagement,
+                    volunteers,
+                    new DividerDrawerItem(),
+
+                    logout);
+
+        }else if(loggedUser.getRole().equals(Role.SCRUTUINEER)){
+            builder.addDrawerItems(
+
+                    eventControl,
+                    briefing, preScrutineering,
+                    new DividerDrawerItem(),
+
+                    userManagement,
+                    volunteers,
+                    new DividerDrawerItem(),
+
+                    logout);
+
+        }else if(loggedUser.getRole().equals(Role.STAFF)){
+            builder.addDrawerItems(
+
+                    eventControl,
+                    briefing,
+                    new DividerDrawerItem(),
+
+                    userManagement,
+                    drivers,esos,volunteers,
+                    new DividerDrawerItem(),
+
+                    logout);
+
+        }else if(loggedUser.getRole().equals(Role.OFFICIAL_MARSHALL)){
+            builder.addDrawerItems(
+
+                    raceAccess,
+                    practiceTrack, skidpad, acceleration, autocross, endurance,
+                    new DividerDrawerItem(),
+
+                    raceControl,
+                    // rcSkidpad, rcAcceleration, rcAutocross,
+                    rcEndurance,
+                    new DividerDrawerItem(),
+
+                    userManagement,
+                    volunteers,
+                    new DividerDrawerItem(),
+
                     staffStatistics,
+                    logout);
+
+        }else if(loggedUser.getRole().equals(Role.OFFICIAL_SCRUTINEER)){
+            builder.addDrawerItems(
+
+                    preScrutineering,
+                    new DividerDrawerItem(),
+
+                    userManagement,
+                    volunteers,
+                    new DividerDrawerItem(),
+
+                    logout);
+
+        }else if(loggedUser.getRole().equals(Role.OFFICIAL_STAFF)){
+            builder.addDrawerItems(
+
+                    eventControl,
+                    briefing,
+                    new DividerDrawerItem(),
+
+                    userManagement,
+                    drivers,esos,volunteers,
+                    new DividerDrawerItem(),
+
                     logout);
         }
 
@@ -402,8 +483,8 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }
 
 
-        if(drawerItem.getIdentifier() == 10003){ //User management
-            Intent intent = new Intent(this, UserListActivity.class);
+        if(drawerItem.getIdentifier() == 10020){ //TeamMember management
+            Intent intent = new Intent(this, TeamMemberActivity.class);
             this.startActivity(intent);
             finish();
 

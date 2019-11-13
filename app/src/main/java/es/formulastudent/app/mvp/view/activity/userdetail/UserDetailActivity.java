@@ -20,7 +20,7 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerUserDetailComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.UserDetailModule;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
@@ -40,8 +40,8 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     private ImageView userNFCImage;
     private TextView userNFCTag;
 
-    //Selected user
-    User user;
+    //Selected teamMember
+    TeamMember teamMember;
 
 
     @Override
@@ -50,7 +50,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         setContentView(R.layout.activity_user_detail);
         super.onCreate(savedInstanceState);
 
-        user = (User) getIntent().getSerializableExtra("selectedUser");
+        teamMember = (TeamMember) getIntent().getSerializableExtra("selectedUser");
 
         initViews();
     }
@@ -89,13 +89,13 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         userNFCImage.setOnClickListener(this);
 
         //Set data
-        userName.setText(user.getName());
-        Picasso.get().load(user.getPhotoUrl()).into(userProfilePhoto);
+        userName.setText(teamMember.getName());
+        Picasso.get().load(teamMember.getPhotoUrl()).into(userProfilePhoto);
 
 
-        if(user.getNFCTag()!=null && !user.getNFCTag().isEmpty()){
+        if(teamMember.getNFCTag()!=null && !teamMember.getNFCTag().isEmpty()){
             userNFCImage.setImageResource(R.drawable.ic_user_nfc_registered);
-            userNFCTag.setText(user.getNFCTag());
+            userNFCTag.setText(teamMember.getNFCTag());
         }else{
             userNFCImage.setImageResource(R.drawable.ic_user_nfc_not_registered);
             userNFCTag.setText("Not registered");
@@ -142,7 +142,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         if (requestCode == NFC_REQUEST_CODE) {
             if(resultCode == Activity.RESULT_OK){
                 String result = data.getStringExtra("result");
-                presenter.onNFCTagDetected(user,result);
+                presenter.onNFCTagDetected(teamMember,result);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
@@ -153,7 +153,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            presenter.uploadProfilePicture(imageBitmap, user);
+            presenter.uploadProfilePicture(imageBitmap, teamMember);
         }
     }
 
@@ -163,8 +163,8 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     }
 
     @Override
-    public User getSelectedUser() {
-        return user;
+    public TeamMember getSelectedUser() {
+        return teamMember;
     }
 
     @Override

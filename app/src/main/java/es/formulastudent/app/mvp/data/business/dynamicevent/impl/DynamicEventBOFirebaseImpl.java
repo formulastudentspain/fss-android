@@ -28,7 +28,7 @@ import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
-import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 
 public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
 
@@ -106,18 +106,18 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
 
 
     @Override
-    public void createRegister(User user, String carType, Long carNumber, Boolean briefingDone, EventType type, final BusinessCallback callback) {
+    public void createRegister(TeamMember teamMember, String carType, Long carNumber, Boolean briefingDone, EventType type, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
 
         final EventRegister register;
         if(type.equals(EventType.PRE_SCRUTINEERING)){
-            register = new PreScrutineeringRegister(user.getTeamID(), user.getTeam(), user.getID(),
-                    user.getName(), user.getPhotoUrl(), registerDate, carType, carNumber, briefingDone, type, firebaseAuth.getCurrentUser().getEmail(), 0L);
+            register = new PreScrutineeringRegister(teamMember.getTeamID(), teamMember.getTeam(), teamMember.getID(),
+                    teamMember.getName(), teamMember.getPhotoUrl(), registerDate, carType, carNumber, briefingDone, type, firebaseAuth.getCurrentUser().getEmail(), 0L);
         }else{
-            register = new EventRegister(user.getTeamID(), user.getTeam(), user.getID(),
-                    user.getName(), user.getPhotoUrl(), registerDate, carType, carNumber, briefingDone, type, firebaseAuth.getCurrentUser().getEmail());
+            register = new EventRegister(teamMember.getTeamID(), teamMember.getTeam(), teamMember.getID(),
+                    teamMember.getName(), teamMember.getPhotoUrl(), registerDate, carType, carNumber, briefingDone, type, firebaseAuth.getCurrentUser().getEmail());
         }
 
 

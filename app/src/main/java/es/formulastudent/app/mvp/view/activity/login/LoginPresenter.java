@@ -46,7 +46,7 @@ public class LoginPresenter {
             public void onSuccess(ResponseDTO responseDTO) {
                 if(responseDTO.getData()!=null){
 
-                    //If user exists in database, we store it in local storage
+                    //If teamMember exists in database, we store it in local storage
                     User user = (User) responseDTO.getData();
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(SharedPreferencesModule.PREFS_CURRENT_USER, new Gson().toJson(user));
@@ -58,7 +58,7 @@ public class LoginPresenter {
                     context.startActivity(myIntent);
                     view.finishView();
 
-                }else{ //The user is created for Login, but not in users table
+                }else{ //The teamMember is created for Login, but not in users table
                     view.hideLoadingIcon();
                     view.createMessage(R.string.login_activity_user_not_found);
                 }

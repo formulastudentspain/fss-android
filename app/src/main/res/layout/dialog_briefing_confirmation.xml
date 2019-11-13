@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".mvp.view.activity.userlist.UserListActivity">
+    tools:context=".mvp.view.activity.teammember.TeamMemberActivity">
 
     <LinearLayout
         android:id="@+id/user_row_container"

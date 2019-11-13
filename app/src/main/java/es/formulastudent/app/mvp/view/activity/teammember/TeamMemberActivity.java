@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.userlist;
+package es.formulastudent.app.mvp.view.activity.teammember;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,22 +24,22 @@ import es.formulastudent.app.di.component.DaggerUserListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.UserListModule;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.data.model.UserRole;
+import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
-import es.formulastudent.app.mvp.view.activity.userlist.dialog.CreateUserDialog;
-import es.formulastudent.app.mvp.view.activity.userlist.recyclerview.UserListAdapter;
+import es.formulastudent.app.mvp.view.activity.teammember.dialog.CreateTeamMemberDialog;
+import es.formulastudent.app.mvp.view.activity.teammember.recyclerview.TeamMemberListAdapter;
 
 
-public class UserListActivity extends GeneralActivity implements UserListPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
+public class TeamMemberActivity extends GeneralActivity implements TeamMemberPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
 
 
     @Inject
-    UserListPresenter presenter;
+    TeamMemberPresenter presenter;
 
     //View components
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView recyclerView;
-    private UserListAdapter userListAdapter;
+    private TeamMemberListAdapter teamMemberListAdapter;
     private FloatingActionButton buttonAddUser;
     private EditText searchUser;
 
@@ -93,8 +93,8 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
         mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         recyclerView = findViewById(R.id.recyclerView);
-        userListAdapter = new UserListAdapter(presenter.getUserItemList(), this, presenter);
-        recyclerView.setAdapter(userListAdapter);
+        teamMemberListAdapter = new TeamMemberListAdapter(presenter.getUserItemList(), this, presenter);
+        recyclerView.setAdapter(teamMemberListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
@@ -113,7 +113,7 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
 
     @Override
     public void refreshUserItems() {
-        userListAdapter.notifyDataSetChanged();
+        teamMemberListAdapter.notifyDataSetChanged();
         this.hideLoading();
     }
 
@@ -142,10 +142,10 @@ public class UserListActivity extends GeneralActivity implements UserListPresent
 
 
     @Override
-    public void showCreateUserDialog(List<Team> teams, List<UserRole> roles) {
+    public void showCreateUserDialog(List<Team> teams, List<Role> roles) {
         FragmentManager fm = getSupportFragmentManager();
-        CreateUserDialog createUserDialog = CreateUserDialog.newInstance(presenter, this, teams, roles);
-        createUserDialog.show(fm, "fragment_edit_name");
+        CreateTeamMemberDialog createTeamMemberDialog = CreateTeamMemberDialog.newInstance(presenter, this, teams, roles);
+        createTeamMemberDialog.show(fm, "fragment_edit_name");
     }
 
     @Override
