@@ -49,6 +49,7 @@
     <string name="users_get_by_nfc_not_existing">Could not get the user by this Tag</string>
     <string name="users_get_by_nfc_info">User retrieved by NFC successfully</string>
     <string name="users_get_all_error">Error retrieving all users</string>
+    <string name="users_get_teams_error">Error retrieving all teams</string>
     <string name="users_get_all_info">User retrieved successfully</string>
     <string name="users_create_error">Error creating user</string>
     <string name="users_create_info">User created successfully</string>
@@ -150,6 +151,8 @@
     <string name="dynamic_event_messages_prescrutineering_update_error">Error updating prescrutineering register</string>
     <string name="dynamic_event_message_info_deleting_registers">Event register deleted successfully</string>
     <string name="dynamic_event_message_error_deleting_registers">Error deleting event registers</string>
+    <string name="dynamic_event_message_error_retrieving_teams">Could not retrieve teams correctly</string>
+    <string name="dynamic_event_message_error_create_user">Could not create the user correctly.</string>
     <string name="dynamic_event_message_error_runs">Error. Driver is registered in 2 or more dynamic events</string>
     <string name="dynamic_event_message_error_create">Could not create the registry</string>
     <string name="dynamic_event_message_error_create_egress">Could not create the egress registry</string>

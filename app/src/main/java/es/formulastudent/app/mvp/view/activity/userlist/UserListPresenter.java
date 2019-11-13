@@ -73,7 +73,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO
+                view.createMessage(R.string.users_get_all_error);
             }
         });
     }
@@ -123,7 +123,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-               //TODO
+               view.createMessage(R.string.dynamic_event_message_error_create_user);
             }
         });
     }
@@ -147,7 +147,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO
+                view.createMessage(R.string.users_get_user_roles_error);
             }
         });
     }
@@ -173,7 +173,7 @@ public class UserListPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //TODO
+               view.createMessage(R.string.users_get_teams_error);
             }
         });
     }
