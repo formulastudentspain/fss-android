@@ -20,7 +20,7 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
-import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
@@ -31,18 +31,18 @@ public class AdminOpsPresenter {
     private AdminOpsPresenter.View view;
     private Context context;
     private TeamBO teamBO;
-    private UserBO userBO;
+    private TeamMemberBO teamMemberBO;
 
 
-    public AdminOpsPresenter(AdminOpsPresenter.View view, Context context, TeamBO teamBO, UserBO userBO) {
+    public AdminOpsPresenter(AdminOpsPresenter.View view, Context context, TeamBO teamBO, TeamMemberBO teamMemberBO) {
         this.view = view;
         this.context = context;
         this.teamBO = teamBO;
-        this.userBO = userBO;
+        this.teamMemberBO = teamMemberBO;
     }
 
     public void deleteAllDrivers() {
-        userBO.deleteAllDrivers(new BusinessCallback() {
+        teamMemberBO.deleteAllTeamMembers(new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
@@ -212,7 +212,7 @@ public class AdminOpsPresenter {
             //Save all teamMembers
             for(TeamMember teamMember : teamMembers){
 
-                userBO.createUser(teamMember, new BusinessCallback() {
+                teamMemberBO.createTeamMember(teamMember, new BusinessCallback() {
                     @Override
                     public void onSuccess(ResponseDTO responseDTO) {
 

@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.userdetail;
+package es.formulastudent.app.mvp.view.activity.teammemberdetail;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,11 +27,11 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
-import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
 
-public class UserDetailPresenter {
+public class TeamMemberDetailPresenter {
 
     //Dependencies
     private View view;
@@ -39,15 +39,15 @@ public class UserDetailPresenter {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private StorageReference mStorageRef;
-    private UserBO userBO;
+    private TeamMemberBO teamMemberBO;
 
-    public UserDetailPresenter(UserDetailPresenter.View view, Context context, UserBO userBO) {
+    public TeamMemberDetailPresenter(TeamMemberDetailPresenter.View view, Context context, TeamMemberBO teamMemberBO) {
         this.view = view;
         this.context = context;
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        this.userBO = userBO;
+        this.teamMemberBO = teamMemberBO;
     }
 
 
@@ -60,30 +60,30 @@ public class UserDetailPresenter {
                 if(task.isSuccessful()){
                     DocumentSnapshot document = task.getResult();
                     if(document.exists()){
-                        userBO.retrieveUserByNFCTag(tagNFC, new BusinessCallback() {
+                        teamMemberBO.retrieveTeamMemberByNFCTag(tagNFC, new BusinessCallback() {
                             @Override
                             public void onSuccess(ResponseDTO responseDTO) {
                                 if(responseDTO.getData() == null) {
                                     userRef.update("tagNFC", tagNFC).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            view.createMessage(R.string.users_info_registered);
+                                            view.createMessage(R.string.team_member_info_registered);
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            view.createMessage(R.string.users_error_registering);
+                                            view.createMessage(R.string.team_member_error_registering);
                                         }
                                     });
                                 } else {
                                     TeamMember teamMember = (TeamMember) responseDTO.getData();
-                                    view.createMessage(R.string.users_error_tag_already_used, teamMember.getName());
+                                    view.createMessage(R.string.team_member_error_tag_already_used, teamMember.getName());
                                 }
                             }
 
                             @Override
                             public void onFailure(ResponseDTO responseDTO) {
-                                view.createMessage(R.string.users_error_registering);
+                                view.createMessage(R.string.team_member_error_registering);
                             }
                         });
                     } else {
@@ -106,7 +106,7 @@ public class UserDetailPresenter {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         //fail
-                                        view.createMessage(R.string.users_error_creating_user);
+                                        view.createMessage(R.string.team_member_error_creating_user);
                                     }
                                 });
                     }
@@ -119,7 +119,7 @@ public class UserDetailPresenter {
 
     public void checkMaxNumDrivers(){
 
-        userBO.getRegisteredUsersByTeamId(view.getSelectedUser().getTeamID(), new BusinessCallback() {
+        teamMemberBO.getRegisteredTeamMemberByTeamId(view.getSelectedUser().getTeamID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 List<TeamMember> teamMembers = (List<TeamMember>) responseDTO.getData();
@@ -133,7 +133,7 @@ public class UserDetailPresenter {
                 }
 
                 if(!updatingUserNFC && teamMembers.size() >= 6){
-                    view.createMessage(R.string.users_error_max_6_drivers);
+                    view.createMessage(R.string.team_member_error_max_6_drivers);
                 }else{
                     view.openNFCReader();
                 }
@@ -165,7 +165,7 @@ public class UserDetailPresenter {
             @Override
             public void onFailure(@NonNull Exception e) {
                 //on failure
-                view.createMessage(R.string.users_error_updating_profile_picture);
+                view.createMessage(R.string.team_member_error_updating_profile_picture);
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -179,7 +179,7 @@ public class UserDetailPresenter {
                             updatePhotoUrl(actualTeamMember, path);
                             view.updateProfilePicture(profileImage);
                         } else {
-                            view.createMessage(R.string.users_error_updating_profile_picture);
+                            view.createMessage(R.string.team_member_error_updating_profile_picture);
                         }
                     }
                 });

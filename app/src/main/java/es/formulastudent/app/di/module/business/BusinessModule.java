@@ -22,6 +22,8 @@ import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
 import es.formulastudent.app.mvp.data.business.statistics.impl.StatisticsBOImpl;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.team.impl.TeamBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
+import es.formulastudent.app.mvp.data.business.teammember.impl.TeamMemberBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.business.user.impl.UserBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
@@ -58,8 +60,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public UserBO provideUserBO(FirebaseFirestore firebaseFirestore) {
-        return new UserBOFirebaseImpl(firebaseFirestore);
+    public TeamMemberBO provideTeamMemberBO(FirebaseFirestore firebaseFirestore) {
+        return new TeamMemberBOFirebaseImpl(firebaseFirestore);
     }
 
 
@@ -110,8 +112,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public StatisticsBO provideStatisticsBO(DynamicEventBO dynamicEventBO, UserBO userBO, Context context) {
-        return new StatisticsBOImpl(dynamicEventBO, userBO, context);
+    public StatisticsBO provideStatisticsBO(DynamicEventBO dynamicEventBO, TeamMemberBO teamMemberBO, Context context) {
+        return new StatisticsBOImpl(dynamicEventBO, teamMemberBO, context);
     }
 
     /**
@@ -121,5 +123,15 @@ public class BusinessModule {
     @Provides
     public RaceControlBO provideRaceControlBO(FirebaseFirestore firebaseFirestore, TeamBO teamBO) {
         return new RaceControlBOFirebaseImpl(firebaseFirestore, teamBO);
+    }
+
+    /**
+     * Provide User business
+     * @param firebaseFirestore
+     * @return
+     */
+    @Provides
+    public UserBO provideUserBO(FirebaseFirestore firebaseFirestore, AuthBO authBO) {
+        return new UserBOFirebaseImpl(firebaseFirestore, authBO);
     }
 }

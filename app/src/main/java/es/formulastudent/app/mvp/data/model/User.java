@@ -16,38 +16,42 @@ public class User implements Serializable {
     public static final String USER_IMAGE = "imageURL";
     public static final String MAIL = "mail";
     public static final String ROLE = "role";
+    public static final String WITH_WALKIE = "withWalkie";
+    public static final String WITH_CELL_PHONE = "withCellPhone";
 
 
     private String ID;
     private String name;
     private String mail;
     private String photoUrl;
-    private String role;
+    private Role role;
+    private Boolean withWalkie;
+    private Boolean withCellPhone;
 
 
-    public User(String ID, String name, String mail, String photoUrl, String role) {
-        this.ID = ID;
-        this.name = name;
-        this.mail = mail;
-        this.photoUrl = photoUrl;
-        this.role = role;
-    }
 
     public User(DocumentSnapshot object){
         this.ID = object.getId();
-        this.name = object.getString(TeamMember.NAME);
-        this.mail = object.getString(TeamMember.MAIL);
-        this.photoUrl = object.getString(TeamMember.USER_IMAGE);
-        this.role = object.getString(TeamMember.ROLE);
+        this.name = object.getString(User.NAME);
+        this.mail = object.getString(User.MAIL);
+        this.photoUrl = object.getString(User.USER_IMAGE);
+        this.withCellPhone = object.getBoolean(User.WITH_CELL_PHONE);
+        this.withWalkie = object.getBoolean(User.WITH_WALKIE);
+
+        //Getting role from enum
+        String roleString = object.getString(TeamMember.ROLE);
+        this.role = Role.getRoleByName(roleString);
     }
 
     public Map<String, Object> toDocumentData(){
 
         Map<String, Object> docData = new HashMap<>();
-        docData.put(TeamMember.NAME, this.getName());
-        docData.put(TeamMember.MAIL, this.getMail());
-        docData.put(TeamMember.ROLE, this.getRole());
-        docData.put(TeamMember.USER_IMAGE, this.getPhotoUrl());
+        docData.put(User.NAME, this.getName());
+        docData.put(User.MAIL, this.getMail());
+        docData.put(User.ROLE, this.getRole().getName());
+        docData.put(User.USER_IMAGE, this.getPhotoUrl());
+        docData.put(User.WITH_CELL_PHONE, this.getWithCellPhone());
+        docData.put(User.WITH_WALKIE, this.getWithWalkie());
 
         return docData;
     }
@@ -94,12 +98,27 @@ public class User implements Serializable {
         this.photoUrl = photoUrl;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
+    public Boolean getWithWalkie() {
+        return withWalkie;
+    }
+
+    public void setWithWalkie(Boolean withWalkie) {
+        this.withWalkie = withWalkie;
+    }
+
+    public Boolean getWithCellPhone() {
+        return withCellPhone;
+    }
+
+    public void setWithCellPhone(Boolean withCellPhone) {
+        this.withCellPhone = withCellPhone;
+    }
 }

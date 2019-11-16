@@ -20,9 +20,9 @@ import javax.inject.Inject;
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
-import es.formulastudent.app.di.component.DaggerUserListComponent;
+import es.formulastudent.app.di.component.DaggerTeamMemberListComponent;
 import es.formulastudent.app.di.module.ContextModule;
-import es.formulastudent.app.di.module.activity.UserListModule;
+import es.formulastudent.app.di.module.activity.TeamMemberListModule;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
@@ -47,7 +47,7 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_user_list);
+        setContentView(R.layout.activity_team_member_list);
         super.onCreate(savedInstanceState);
 
         initViews();
@@ -60,10 +60,10 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
      */
     protected void setupComponent(AppComponent appComponent) {
 
-        DaggerUserListComponent.builder()
+        DaggerTeamMemberListComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(this))
-                .userListModule(new UserListModule(this))
+                .teamMemberListModule(new TeamMemberListModule(this))
                 .build()
                 .inject(this);
     }

@@ -29,7 +29,7 @@
         android:paddingEnd="8dp"
         android:paddingStart="16dp"
         android:maxLines="1"
-        android:inputType="textPersonName"
+        android:inputType="textCapWords"
         android:hint="Type name"
         android:background="@drawable/activity_user_list_filter_input"/>
 
@@ -54,7 +54,7 @@
         android:paddingEnd="8dp"
         android:paddingStart="16dp"
         android:maxLines="1"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:hint="Type mail"
         android:background="@drawable/activity_user_list_filter_input"/>
 
@@ -66,14 +66,6 @@
         android:textStyle="bold"
         android:text="@string/dialog_create_user_field_team"/>
 
-    <Spinner
-        android:id="@+id/create_user_team"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        />
 
     <TextView
         android:layout_width="wrap_content"

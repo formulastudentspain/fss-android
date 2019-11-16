@@ -9,24 +9,24 @@ import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
-import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberPresenter;
+import es.formulastudent.app.mvp.view.activity.user.UserPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class UserListModule {
 
-    private TeamMemberPresenter.View view;
+    private UserPresenter.View view;
 
-    public UserListModule(TeamMemberPresenter.View view) {
+    public UserListModule(UserPresenter.View view) {
         this.view = view;
     }
 
     @Provides
-    public TeamMemberPresenter.View provideView() {
+    public UserPresenter.View provideView() {
         return view;
     }
 
     @Provides
-    public TeamMemberPresenter providePresenter(TeamMemberPresenter.View categoryView, Context context, UserBO userBO, TeamBO teamBO, UserRoleBO userRoleBO) {
-        return new TeamMemberPresenter(categoryView, context, userBO, teamBO, userRoleBO);
+    public UserPresenter providePresenter(UserPresenter.View categoryView, Context context, UserBO userBO, TeamBO teamBO, UserRoleBO userRoleBO) {
+        return new UserPresenter(categoryView, context, userBO, teamBO, userRoleBO);
     }
 }

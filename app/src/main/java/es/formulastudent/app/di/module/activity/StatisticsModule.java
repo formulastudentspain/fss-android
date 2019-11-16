@@ -8,7 +8,7 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
-import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.view.activity.statistics.StatisticsPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
@@ -26,8 +26,8 @@ public class StatisticsModule {
     }
 
     @Provides
-    public StatisticsPresenter providePresenter(StatisticsPresenter.View categoryView, Context context, StatisticsBO statisticsBO, TeamBO teamBO, UserBO userBO) {
-        return new StatisticsPresenter(categoryView, context, statisticsBO, teamBO, userBO);
+    public StatisticsPresenter providePresenter(StatisticsPresenter.View categoryView, Context context, StatisticsBO statisticsBO, TeamBO teamBO, TeamMemberBO teamMemberBO) {
+        return new StatisticsPresenter(categoryView, context, statisticsBO, teamBO, teamMemberBO);
     }
 
 

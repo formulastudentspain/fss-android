@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.userdetail;
+package es.formulastudent.app.mvp.view.activity.teammemberdetail;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,22 +17,22 @@ import javax.inject.Inject;
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
-import es.formulastudent.app.di.component.DaggerUserDetailComponent;
+import es.formulastudent.app.di.component.DaggerTeamMemberDetailComponent;
 import es.formulastudent.app.di.module.ContextModule;
-import es.formulastudent.app.di.module.activity.UserDetailModule;
+import es.formulastudent.app.di.module.activity.TeamMemberDetailModule;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
 
-public class UserDetailActivity extends GeneralActivity implements UserDetailPresenter.View, View.OnClickListener {
+public class TeamMemberDetailActivity extends GeneralActivity implements TeamMemberDetailPresenter.View, View.OnClickListener {
 
     private static final int NFC_REQUEST_CODE = 101;
     private static final int REQUEST_IMAGE_CAPTURE = 102;
 
 
     @Inject
-    UserDetailPresenter presenter;
+    TeamMemberDetailPresenter presenter;
 
     //View components
     private TextView userName;
@@ -47,7 +47,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_user_detail);
+        setContentView(R.layout.activity_team_member_detail);
         super.onCreate(savedInstanceState);
 
         teamMember = (TeamMember) getIntent().getSerializableExtra("selectedUser");
@@ -62,10 +62,10 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
      */
     protected void setupComponent(AppComponent appComponent) {
 
-        DaggerUserDetailComponent.builder()
+        DaggerTeamMemberDetailComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(this))
-                .userDetailModule(new UserDetailModule(this))
+                .teamMemberDetailModule(new TeamMemberDetailModule(this))
                 .build()
                 .inject(this);
     }

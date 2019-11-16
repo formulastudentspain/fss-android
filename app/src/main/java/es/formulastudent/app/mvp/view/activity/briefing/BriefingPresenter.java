@@ -16,7 +16,7 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
-import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.Team;
@@ -34,7 +34,7 @@ public class BriefingPresenter implements RecyclerViewClickListener {
     private FirebaseAuth firebaseAuth;
     private TeamBO teamBO;
     private BriefingBO briefingBO;
-    private UserBO userBO;
+    private TeamMemberBO teamMemberBO;
 
 
     //Data
@@ -49,12 +49,12 @@ public class BriefingPresenter implements RecyclerViewClickListener {
     private String selectedTeamID;
 
 
-    public BriefingPresenter(BriefingPresenter.View view, Context context, TeamBO teamBO, BriefingBO briefingBO, UserBO userBO, FirebaseAuth firebaseAuth) {
+    public BriefingPresenter(BriefingPresenter.View view, Context context, TeamBO teamBO, BriefingBO briefingBO, TeamMemberBO teamMemberBO, FirebaseAuth firebaseAuth) {
         this.view = view;
         this.context = context;
         this.teamBO = teamBO;
         this.briefingBO = briefingBO;
-        this.userBO = userBO;
+        this.teamMemberBO = teamMemberBO;
         this.firebaseAuth = firebaseAuth;
     }
 
@@ -160,7 +160,7 @@ public class BriefingPresenter implements RecyclerViewClickListener {
         //Show loading
         view.showLoading();
 
-        userBO.retrieveUserByNFCTag(tag, new BusinessCallback() {
+        teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 

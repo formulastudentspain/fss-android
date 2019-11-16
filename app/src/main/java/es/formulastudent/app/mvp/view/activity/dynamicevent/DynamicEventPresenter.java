@@ -17,7 +17,7 @@ import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
-import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.EventRegister;
@@ -40,7 +40,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
     private View view;
     private TeamBO teamBO;
     private DynamicEventBO dynamicEventBO;
-    private UserBO userBO;
+    private TeamMemberBO teamMemberBO;
     private BriefingBO briefingBO;
     private EgressBO egressBO;
 
@@ -60,11 +60,11 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
 
 
     public DynamicEventPresenter(DynamicEventPresenter.View view, TeamBO teamBO,
-                                 DynamicEventBO dynamicEventBO, UserBO userBO, BriefingBO briefingBO, EventType eventType, EgressBO egressBO) {
+                                 DynamicEventBO dynamicEventBO, TeamMemberBO teamMemberBO, BriefingBO briefingBO, EventType eventType, EgressBO egressBO) {
         this.view = view;
         this.teamBO = teamBO;
         this.dynamicEventBO = dynamicEventBO;
-        this.userBO = userBO;
+        this.teamMemberBO = teamMemberBO;
         this.briefingBO = briefingBO;
         this.egressBO = egressBO;
         this.eventType = eventType;
@@ -227,7 +227,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
         view.showLoading();
 
         //Retrieve user by the NFC tag
-        userBO.retrieveUserByNFCTag(tag, new BusinessCallback() {
+        teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 TeamMember teamMember = (TeamMember)responseDTO.getData();
@@ -241,7 +241,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
                 view.hideLoading();
 
                 //Show error message
-                view.createMessage(R.string.users_get_by_nfc_error);
+                view.createMessage(R.string.team_member_get_by_nfc_error);
             }
         });
     }
@@ -349,7 +349,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
             view.hideLoading();
 
             //Show error message
-            view.createMessage(R.string.users_get_by_nfc_not_existing);
+            view.createMessage(R.string.team_member_get_by_nfc_not_existing);
         }
     }
 

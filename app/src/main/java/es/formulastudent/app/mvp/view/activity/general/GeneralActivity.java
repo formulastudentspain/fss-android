@@ -45,6 +45,7 @@ import es.formulastudent.app.mvp.view.activity.login.LoginActivity;
 import es.formulastudent.app.mvp.view.activity.racecontrol.RaceControlWelcomeActivity;
 import es.formulastudent.app.mvp.view.activity.statistics.StatisticsActivity;
 import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberActivity;
+import es.formulastudent.app.mvp.view.activity.user.UserActivity;
 
 
 public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
@@ -366,7 +367,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
                     logout);
 
-        }else if(loggedUser.getRole().equals(Role.SCRUTUINEER)){
+        }else if(loggedUser.getRole().equals(Role.SCRUTINEER)){
             builder.addDrawerItems(
 
                     eventControl,
@@ -555,7 +556,14 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             intent.putExtra("eventType", RaceControlEvent.ENDURANCE);
             this.startActivity(intent);
             finish();
+
+        }else if(drawerItem.getIdentifier() == 10026){ //Users
+            Intent intent = new Intent(this, UserActivity.class);
+            this.startActivity(intent);
+            finish();
         }
+
+
 
         return false;
     }

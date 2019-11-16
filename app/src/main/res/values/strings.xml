@@ -42,33 +42,35 @@
     <string name="login_business_info_login">Login successfully done</string>
     <string name="login_business_info_reset">An email has been sent to you in order to reset the password</string>
     <string name="login_business_email_mandatory">Enter your mail account in order to send you the password recover mail</string>
+    <string name="login_business_create_user_success">User created successfully to do login</string>
+    <string name="login_business_create_user_failure">Error creating user to login</string>
 
 
-    <!-- Users -->
-    <string name="users_get_by_nfc_error">Error getting the user by this Tag</string>
-    <string name="users_get_by_nfc_not_existing">Could not get the user by this Tag</string>
-    <string name="users_get_by_nfc_info">User retrieved by NFC successfully</string>
-    <string name="users_get_all_error">Error retrieving all users</string>
-    <string name="users_get_teams_error">Error retrieving all teams</string>
-    <string name="users_get_all_info">User retrieved successfully</string>
-    <string name="users_create_error">Error creating user</string>
-    <string name="users_create_info">User created successfully</string>
-    <string name="users_get_by_mail_error">Error retrieving user by mail</string>
-    <string name="users_get_by_mail_info">User retrieved by mail successfully</string>
-    <string name="users_get_by_id_error">Error retrieving user by ID</string>
-    <string name="users_get_by_id_info">User retrieved by ID successfully</string>
-    <string name="users_delete_all_error">Error deleting all users</string>
-    <string name="users_delete_all_info">User deleted successfully</string>
-    <string name="users_get_registered_by_team_info">Registered users by team retrieved successfully</string>
-    <string name="users_get_registered_by_team_error">Error retrieving users by team</string>
-    <string name="users_get_user_roles_error">Error retrieving user roles</string>
-    <string name="users_get_user_roles_info">User roles retrieved successfully</string>
-    <string name="users_error_max_6_drivers">Unable to register more drivers. 6 max.</string>
-    <string name="users_info_registered">User successfully registered</string>
-    <string name="users_error_registering">Error registering user</string>
-    <string name="users_error_tag_already_used">TAG is already registered by %1$s</string>
-    <string name="users_error_creating_user">Error creating user</string>
-    <string name="users_error_updating_profile_picture">Error uploading profile picture</string>
+    <!-- Team Member -->
+    <string name="team_member_get_by_nfc_error">Error getting the team member by this Tag</string>
+    <string name="team_member_get_by_nfc_not_existing">Could not get the team member by this Tag</string>
+    <string name="team_member_get_by_nfc_info">Team member retrieved by NFC successfully</string>
+    <string name="team_member_get_all_error">Error retrieving all team members</string>
+    <string name="team_member_get_teams_error">Error retrieving all teams</string>
+    <string name="team_member_get_all_info">Team member retrieved successfully</string>
+    <string name="team_member_create_error">Error creating team member</string>
+    <string name="team_member_create_info">Team member created successfully</string>
+    <string name="team_member_get_by_mail_error">Error retrieving team member by mail</string>
+    <string name="team_member_get_by_mail_info">Team member retrieved by mail successfully</string>
+    <string name="team_member_get_by_id_error">Error retrieving team member by ID</string>
+    <string name="team_member_get_by_id_info">Team member retrieved by ID successfully</string>
+    <string name="team_member_delete_all_error">Error deleting all team members</string>
+    <string name="team_member_delete_all_info">Team member deleted successfully</string>
+    <string name="team_member_get_registered_by_team_info">Registered team members by team retrieved successfully</string>
+    <string name="team_member_get_registered_by_team_error">Error retrieving team members by team</string>
+    <string name="team_member_get_user_roles_error">Error retrieving team member roles</string>
+    <string name="team_member_get_user_roles_info">Team member roles retrieved successfully</string>
+    <string name="team_member_error_max_6_drivers">Unable to register more drivers. 6 max.</string>
+    <string name="team_member_info_registered">Team member successfully registered</string>
+    <string name="team_member_error_registering">Error registering team member</string>
+    <string name="team_member_error_tag_already_used">TAG is already registered by %1$s</string>
+    <string name="team_member_error_creating_user">Error creating team member</string>
+    <string name="team_member_error_updating_profile_picture">Error uploading profile picture</string>
 
 
 
@@ -224,12 +226,11 @@
     <string name="rc_state_dnf">DNF - Did not finish</string>
 
 
-
-
     <!-- Race Control Welcome-->
     <string name="rc_welcome_button_electric">Electric</string>
     <string name="rc_welcome_button_combustion">Combustion</string>
     <string name="rc_welcome_button_final">Final</string>
+
 
     <!-- Teams -->
     <string name="teams_error_retrieving_all_message">Error retrieving teams</string>
@@ -241,6 +242,14 @@
     <string name="teams_error_create_message">Error creating teams</string>
     <string name="teams_info_create_message">Team created successfully</string>
 
+
+    <!-- User -->
+    <string name="user_get_all_info">Users retrieved successfully</string>
+    <string name="user_get_all_error">Error retrieving users</string>
+    <string name="user_create_info">User created successfully</string>
+    <string name="user_create_error">Error creating user</string>
+    <string name="user_get_by_mail_info">TODO</string>
+    <string name="user_get_by_mail_error">TODO</string>
 
 
 

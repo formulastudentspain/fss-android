@@ -19,7 +19,7 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
 import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
-import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.statistics.dialog.ExportDialog;
@@ -31,18 +31,18 @@ public class StatisticsPresenter {
     private Context context;
     private StatisticsBO statisticsBO;
     private TeamBO teamBO;
-    private UserBO userBO;
+    private TeamMemberBO teamMemberBO;
 
     //Export result
     private ExportStatisticsDTO exportStatisticsDTO;
 
 
-    public StatisticsPresenter(StatisticsPresenter.View view, Context context, StatisticsBO statisticsBO, TeamBO teamBO, UserBO userBO) {
+    public StatisticsPresenter(StatisticsPresenter.View view, Context context, StatisticsBO statisticsBO, TeamBO teamBO, TeamMemberBO teamMemberBO) {
         this.view = view;
         this.context = context;
         this.statisticsBO = statisticsBO;
         this.teamBO = teamBO;
-        this.userBO = userBO;
+        this.teamMemberBO = teamMemberBO;
     }
 
 

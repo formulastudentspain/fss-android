@@ -7,7 +7,7 @@ import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
-import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.view.activity.adminoperations.AdminOpsPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
@@ -25,8 +25,8 @@ public class AdminOpsModule {
     }
 
     @Provides
-    public AdminOpsPresenter providePresenter(AdminOpsPresenter.View categoryView, Context context, TeamBO teamBO, UserBO userBO) {
-        return new AdminOpsPresenter(categoryView, context, teamBO, userBO);
+    public AdminOpsPresenter providePresenter(AdminOpsPresenter.View categoryView, Context context, TeamBO teamBO, TeamMemberBO teamMemberBO) {
+        return new AdminOpsPresenter(categoryView, context, teamBO, teamMemberBO);
     }
 
 

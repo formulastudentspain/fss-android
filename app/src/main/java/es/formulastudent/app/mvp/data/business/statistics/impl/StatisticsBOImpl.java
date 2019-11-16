@@ -28,7 +28,7 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
 import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDTO;
-import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
@@ -39,15 +39,15 @@ public class StatisticsBOImpl implements StatisticsBO {
 
 
     private DynamicEventBO dynamicEventBO;
-    private UserBO userBO;
+    private TeamMemberBO teamMemberBO;
     private Context context;
 
     private DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
 
 
-    public StatisticsBOImpl(DynamicEventBO dynamicEventBO, UserBO userBO, Context context) {
+    public StatisticsBOImpl(DynamicEventBO dynamicEventBO, TeamMemberBO teamMemberBO, Context context) {
         this.dynamicEventBO = dynamicEventBO;
-        this.userBO = userBO;
+        this.teamMemberBO = teamMemberBO;
         this.context = context;
     }
 
@@ -221,7 +221,7 @@ public class StatisticsBOImpl implements StatisticsBO {
         final InputStream is = mngr.open("template_export_fss.xls");
 
 
-        userBO.retrieveUsers(new BusinessCallback() {
+        teamMemberBO.retrieveTeamMembers(new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 ResponseDTO responseDTOExport = new ResponseDTO();

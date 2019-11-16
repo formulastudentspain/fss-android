@@ -67,4 +67,27 @@ public class AuthBOFirebaseImpl implements AuthBO {
             }
         });
     }
+
+    @Override
+    public void createUser(String mail, final BusinessCallback callback) {
+
+        final ResponseDTO responseDTO = new ResponseDTO();
+
+        String defaultPassword = "defaultFSSPass$";
+
+       firebaseAuth.createUserWithEmailAndPassword(mail, defaultPassword).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+           @Override
+           public void onSuccess(AuthResult authResult) {
+               responseDTO.setInfo(R.string.login_business_create_user_success);
+               callback.onSuccess(responseDTO);
+           }
+       }).addOnFailureListener(new OnFailureListener() {
+           @Override
+           public void onFailure(@NonNull Exception e) {
+               responseDTO.setInfo(R.string.login_business_create_user_failure);
+               callback.onFailure(responseDTO);
+           }
+       });
+
+    }
 }

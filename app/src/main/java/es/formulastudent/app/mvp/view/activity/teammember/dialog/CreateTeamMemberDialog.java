@@ -161,7 +161,7 @@ public class CreateTeamMemberDialog extends DialogFragment {
                     teamMember.setTeamID(selectedTeam.getID());
                     teamMember.setMail(userMailValue);
                     teamMember.setRole(selectedRole.getName());
-                    teamMember.setRoleID(selectedRole.getID());
+                    teamMember.setRoleID(null);
                     teamMember.setPhotoUrl(getString(R.string.default_image_url));
 
                     //Call business

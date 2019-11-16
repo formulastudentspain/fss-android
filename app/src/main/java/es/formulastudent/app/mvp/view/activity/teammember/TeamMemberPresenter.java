@@ -10,20 +10,20 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
-import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
+import es.formulastudent.app.mvp.view.activity.teammemberdetail.TeamMemberDetailActivity;
 
 public class TeamMemberPresenter implements RecyclerViewClickListener {
 
     //Dependencies
     private View view;
     private Context context;
-    private UserBO userBO;
+    private TeamMemberBO teamMemberBO;
     private TeamBO teamBO;
     private UserRoleBO userRoleBO;
 
@@ -33,10 +33,10 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
 
 
 
-    public TeamMemberPresenter(TeamMemberPresenter.View view, Context context, UserBO userBO, TeamBO teamBO, UserRoleBO userRoleBO) {
+    public TeamMemberPresenter(TeamMemberPresenter.View view, Context context, TeamMemberBO teamMemberBO, TeamBO teamBO, UserRoleBO userRoleBO) {
         this.view = view;
         this.context = context;
-        this.userBO = userBO;
+        this.teamMemberBO = teamMemberBO;
         this.teamBO = teamBO;
         this.userRoleBO = userRoleBO;
     }
@@ -61,7 +61,7 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
         view.showLoading();
 
         //call business to retrieve users
-        userBO.retrieveUsers(new BusinessCallback() {
+        teamMemberBO.retrieveTeamMembers(new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
@@ -73,7 +73,7 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(R.string.users_get_all_error);
+                view.createMessage(R.string.team_member_get_all_error);
             }
         });
     }
@@ -103,7 +103,7 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
 
         TeamMember selectedTeamMember = filteredTeamMemberList.get(position);
 
-        Intent intent = new Intent(context, UserDetailActivity.class);
+        Intent intent = new Intent(context, TeamMemberDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("selectedTeamMember", selectedTeamMember);
         context.startActivity(intent);
@@ -113,12 +113,12 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
 
     public void createUser(TeamMember teamMember){
 
-        userBO.createUser(teamMember, new BusinessCallback() {
+        teamMemberBO.createTeamMember(teamMember, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 //Update list
                 retrieveUsers();
-                view.createMessage(R.string.users_create_info);
+                view.createMessage(R.string.team_member_create_info);
             }
 
             @Override
@@ -147,7 +147,7 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(R.string.users_get_user_roles_error);
+                view.createMessage(R.string.team_member_get_user_roles_error);
             }
         });
     }
@@ -173,7 +173,7 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-               view.createMessage(R.string.users_get_teams_error);
+               view.createMessage(R.string.team_member_get_teams_error);
             }
         });
     }

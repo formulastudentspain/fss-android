@@ -58,10 +58,10 @@ public class RolesSpinnerAdapter extends ArrayAdapter<Role> {
     private View createItemView(int position, View convertView, ViewGroup parent) {
         final View view = inflater.inflate(R.layout.activity_general_spinner, parent, false);
 
-        Role team = roles.get(position);
+        Role role = roles.get(position);
 
         TextView teamName = view.findViewById(R.id.spinner_value);
-        teamName.setText(team.getName());
+        teamName.setText(role.getName());
 
         return view;
     }

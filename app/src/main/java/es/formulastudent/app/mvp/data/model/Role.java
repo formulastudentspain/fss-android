@@ -1,53 +1,109 @@
 package es.formulastudent.app.mvp.data.model;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-public class Role implements Serializable {
+import es.formulastudent.app.R;
 
-        //ROLES
-        public final static String ADMINISTRATOR = "ADMINISTRATOR";
-        public final static String STAFF = "STAFF";
-        public final static String SCRUTUINEER = "SCRUTUINEER";
-        public final static String MARSHALL = "MARSHALL";
-        public final static String OFFICIAL_MARSHALL = "OFFICIAL_MARSHALL";
-        public final static String OFFICIAL_SCRUTINEER = "OFFICIAL_SCRUTINEER";
-        public final static String OFFICIAL_STAFF = "OFFICIAL_STAFF";
+public enum Role implements Serializable {
 
 
-        //Database constants
-        public static final String NAME = "name";
+        ADMINISTRATOR(
+                "Administrator",
+                new ArrayList<>(Arrays.asList("Administrator", "Staff", "Scrutineer", "Marshall", "Official Marshall", "Official Scrutineer", "Official Staff")),
+                R.color.md_black_1000
+        ),
 
-        private String ID;
-        private String name;
+        STAFF(
+                "Staff",
+                new ArrayList<>(Collections.<String>emptyList()),
+                R.color.md_red_500
+        ),
+
+        SCRUTINEER(
+                "Scrutineer",
+                new ArrayList<>(Collections.<String>emptyList()),
+                R.color.md_orange_800
+        ),
+
+        MARSHALL(
+                "Marshall",
+                new ArrayList<>(Collections.<String>emptyList()),
+                R.color.md_blue_600
+        ),
+
+        OFFICIAL_MARSHALL(
+                "Official Marshall",
+                new ArrayList<>(Collections.singletonList("Marshall")),
+                R.color.md_blue_600
+        ),
+
+        OFFICIAL_STAFF(
+                "Official Staff",
+                new ArrayList<>(Collections.singletonList("Staff")),
+                R.color.md_red_500
+        ),
+
+        OFFICIAL_SCRUTINEER(
+                "Official Scrutineer",
+                new ArrayList<>(Collections.singletonList("Scrutineer")),
+                R.color.md_orange_800
+        );
+
+        private final String name;
+        private final List<String> managedRoles;
+        private final int color;
 
 
-        public Role(String ID, String name) {
-                this.ID = ID;
+        Role(String name, List<String> managedRoles, int color) {
                 this.name = name;
+                this.managedRoles = managedRoles;
+                this.color = color;
         }
 
-        public Role(DocumentSnapshot object){
-                this.name = object.getString(Role.NAME);
+        public static Role getRoleByName(String name){
+
+                if(ADMINISTRATOR.getName().equals(name)){
+                        return  ADMINISTRATOR;
+
+                }else if(SCRUTINEER.getName().equals(name)){
+                        return  SCRUTINEER;
+
+                }else if(MARSHALL.getName().equals(name)){
+                        return  MARSHALL;
+
+                }else if(STAFF.getName().equals(name)){
+                        return STAFF;
+
+                }else if(OFFICIAL_SCRUTINEER.getName().equals(name)){
+                        return OFFICIAL_SCRUTINEER;
+
+                }else if(OFFICIAL_MARSHALL.getName().equals(name)){
+                        return OFFICIAL_MARSHALL;
+
+                }else if(OFFICIAL_STAFF.getName().equals(name)){
+                        return OFFICIAL_STAFF;
+                }
+
+                return null;
+
         }
 
-        public Role() {
-        }
-
-        public String getID() {
-                return ID;
-        }
-
-        public void setID(String ID) {
-                this.ID = ID;
-        }
 
         public String getName() {
                 return name;
         }
 
-        public void setName(String name) {
-                this.name = name;
+        public List<String> getManagedRoles() {
+                return managedRoles;
         }
+
+        public int getColor() {
+                return color;
+        }
+
+
 }

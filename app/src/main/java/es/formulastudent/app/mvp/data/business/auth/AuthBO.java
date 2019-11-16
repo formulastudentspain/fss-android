@@ -19,4 +19,11 @@ public interface AuthBO {
      */
     void resetPassword(String mail, BusinessCallback callback);
 
+
+    /**
+     * Create user in auth system
+     * @param mail
+     */
+    void createUser(String mail, BusinessCallback callback);
+
 }
