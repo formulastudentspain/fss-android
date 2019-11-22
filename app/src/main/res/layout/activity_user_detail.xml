@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".mvp.view.activity.teammemberdetail.TeamMemberDetailActivity"
+    tools:context=".mvp.view.activity.user.UserActivity"
     >
 
     <include layout="@layout/activity_toolbar" />
@@ -71,6 +71,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Not registered"/>
+
     </LinearLayout>
+
+
+
 
 </LinearLayout>

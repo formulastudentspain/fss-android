@@ -1,6 +1,5 @@
-package es.formulastudent.app.mvp.view.activity.teammemberdetail;
+package es.formulastudent.app.mvp.view.activity.userdetail;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,29 +9,36 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import javax.inject.Inject;
 
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
-import es.formulastudent.app.di.component.DaggerTeamMemberDetailComponent;
+import es.formulastudent.app.di.component.DaggerUserDetailComponent;
 import es.formulastudent.app.di.module.ContextModule;
-import es.formulastudent.app.di.module.activity.TeamMemberDetailModule;
-import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.di.module.activity.UserDetailModule;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
 
-public class TeamMemberDetailActivity extends GeneralActivity implements TeamMemberDetailPresenter.View, View.OnClickListener {
+public class UserDetailActivity extends GeneralActivity implements UserDetailPresenter.View, View.OnClickListener {
 
     private static final int NFC_REQUEST_CODE = 101;
     private static final int REQUEST_IMAGE_CAPTURE = 102;
 
 
+    /**
+     * TODO
+     * Se tiene que poder cambiar:
+     *  - Rol
+     *  - Foto
+     *
+     *  Además se tiene que poder gestionar el préstamo de walkies y móviles
+     */
+
     @Inject
-    TeamMemberDetailPresenter presenter;
+    UserDetailPresenter presenter;
 
     //View components
     private TextView userName;
@@ -40,8 +46,8 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
     private ImageView userNFCImage;
     private TextView userNFCTag;
 
-    //Selected teamMember
-    TeamMember teamMember;
+    //Selected user
+    User user;
 
 
     @Override
@@ -50,7 +56,7 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
         setContentView(R.layout.activity_team_member_detail);
         super.onCreate(savedInstanceState);
 
-        teamMember = (TeamMember) getIntent().getSerializableExtra("selectedTeamMember");
+        user = (User) getIntent().getSerializableExtra("selectedUser");
 
         initViews();
     }
@@ -62,10 +68,10 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
      */
     protected void setupComponent(AppComponent appComponent) {
 
-        DaggerTeamMemberDetailComponent.builder()
+        DaggerUserDetailComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(this))
-                .teamMemberDetailModule(new TeamMemberDetailModule(this))
+                .userDetailModule(new UserDetailModule(this))
                 .build()
                 .inject(this);
     }
@@ -88,18 +94,6 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
         userNFCImage = findViewById(R.id.user_detail_nfc_image);
         userNFCImage.setOnClickListener(this);
 
-        //Set data
-        userName.setText(teamMember.getName());
-        Picasso.get().load(teamMember.getPhotoUrl()).into(userProfilePhoto);
-
-
-        if(teamMember.getNFCTag()!=null && !teamMember.getNFCTag().isEmpty()){
-            userNFCImage.setImageResource(R.drawable.ic_user_nfc_registered);
-            userNFCTag.setText(teamMember.getNFCTag());
-        }else{
-            userNFCImage.setImageResource(R.drawable.ic_user_nfc_not_registered);
-            userNFCTag.setText("Not registered");
-        }
     }
 
 
@@ -127,10 +121,7 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.user_detail_nfc_image){
-            presenter.checkMaxNumDrivers();
-
-        }else if(view.getId() == R.id.user_detail_profile_image){
+        if(view.getId() == R.id.user_detail_profile_image){
             dispatchTakePictureIntent();
         }
     }
@@ -138,22 +129,12 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        //NFC reader
-        if (requestCode == NFC_REQUEST_CODE) {
-            if(resultCode == Activity.RESULT_OK){
-                String result = data.getStringExtra("result");
-                presenter.onNFCTagDetected(teamMember,result);
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
-        }
 
         //Camera image
-        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            presenter.uploadProfilePicture(imageBitmap, teamMember);
+            //presenter.uploadProfilePicture(imageBitmap, user);
         }
     }
 
@@ -163,8 +144,8 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
     }
 
     @Override
-    public TeamMember getSelectedUser() {
-        return teamMember;
+    public User getSelectedUser() {
+        return user;
     }
 
     @Override

@@ -26,14 +26,12 @@ public interface DynamicEventBO {
     /**
      * Method to create a Dynamic Event register
      * @param teamMember
-     * @param carType
      * @param carNumber
      * @param briefingDone
      * @param type
      * @param callback
      */
-    void createRegister(TeamMember teamMember, String carType, Long carNumber, Boolean briefingDone, EventType type, BusinessCallback callback);
-
+    void createRegister(TeamMember teamMember, Long carNumber, Boolean briefingDone, EventType type, BusinessCallback callback);
 
 
 

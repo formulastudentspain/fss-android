@@ -100,6 +100,10 @@ dependencies {
     //Swipe rows
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
 
+    //QRCode reader
+    implementation 'com.budiyev.android:code-scanner:2.1.0'
+
+
 
 }
 

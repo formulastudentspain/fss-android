@@ -1,10 +1,17 @@
 package es.formulastudent.app.mvp.view.activity.user;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,12 +29,14 @@ import es.formulastudent.app.di.component.DaggerUserListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.UserListModule;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.qrreader.QRReaderActivity;
 import es.formulastudent.app.mvp.view.activity.user.dialog.CreateUserDialog;
 import es.formulastudent.app.mvp.view.activity.user.recyclerview.UserListAdapter;
 
 
 public class UserActivity extends GeneralActivity implements UserPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
 
+    private final static int QR_REQUEST_CODE_SEARCH = 2;
 
     @Inject
     UserPresenter presenter;
@@ -38,6 +47,7 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
     private UserListAdapter userListAdapter;
     private FloatingActionButton buttonAddUser;
     private EditText searchUser;
+    private ImageView qrCodeReaderButton;
 
 
     @Override
@@ -47,6 +57,7 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
         super.onCreate(savedInstanceState);
 
         initViews();
+        requestPermissions();
         presenter.retrieveUsers();
     }
 
@@ -102,8 +113,35 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
         searchUser = findViewById(R.id.search_user_field);
         searchUser.addTextChangedListener(this);
 
+        //QR Code reader
+        qrCodeReaderButton = findViewById(R.id.qr_code_reader);
+        qrCodeReaderButton.setOnClickListener(this);
+
         //Add toolbar title
         setToolbarTitle(getString(R.string.activity_user_list_label));
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+       if(requestCode == QR_REQUEST_CODE_SEARCH){
+            if(resultCode == Activity.RESULT_OK){
+                String result = data.getStringExtra("result");
+
+                Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+            }
+       }
+    }//onActivityResult
+
+
+
+    private void requestPermissions(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[] {Manifest.permission.CAMERA}, 1);
+            }
+        }
     }
 
 
@@ -133,7 +171,16 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
     public void onClick(View view) {
         if(view.getId() == R.id.button_add_user){
             presenter.retrieveCreateUserDialogData();
+
+        }else if(view.getId() == R.id.qr_code_reader){
+            this.openQRCodeReader();
         }
+    }
+
+    @Override
+    public void openQRCodeReader(){
+        Intent i = new Intent(this, QRReaderActivity.class);
+        startActivityForResult(i, QR_REQUEST_CODE_SEARCH);
     }
 
 

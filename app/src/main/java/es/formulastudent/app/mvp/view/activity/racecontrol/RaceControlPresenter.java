@@ -9,6 +9,8 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,10 +18,19 @@ import java.util.Map;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
+import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
+import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
+import es.formulastudent.app.mvp.data.model.BriefingRegister;
+import es.formulastudent.app.mvp.data.model.EventRegister;
+import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
+import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventGeneralPresenter;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.ConfirmEventRegisterDialog;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickListener;
 import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.CreateRegisterDialog;
@@ -28,7 +39,7 @@ import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.RaceControlTea
 import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.UpdatingRegistersDialog;
 
 
-public class RaceControlPresenter implements RecyclerViewClickListener, RecyclerViewLongClickListener {
+public class RaceControlPresenter implements RecyclerViewClickListener, RecyclerViewLongClickListener, DynamicEventGeneralPresenter {
 
     //Race Control Event Type
     RaceControlEvent rcEventType;
@@ -38,22 +49,32 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
     private View view;
     private Context context;
     private RaceControlBO raceControlBO;
+    private TeamMemberBO teamMemberBO;
+    private BriefingBO briefingBO;
+    private DynamicEventBO dynamicEventBO;
 
     //Data
     List<RaceControlRegister> allRaceControlRegisterList = new ArrayList<>();
     List<RaceControlRegister> filteredRaceControlRegisterList = new ArrayList<>();
     ListenerRegistration registration = null;
+    RaceControlState newState = null;
+    RaceControlRegister register = null;
+
 
     //Filtering values
     private String selectedArea;
     private Long selectedCarNumber;
 
 
-    public RaceControlPresenter(RaceControlPresenter.View view, Context context, RaceControlEvent rcEventType, String raceType, RaceControlBO raceControlBO) {
+    public RaceControlPresenter(RaceControlPresenter.View view, Context context, RaceControlEvent rcEventType,
+                                String raceType, RaceControlBO raceControlBO, TeamMemberBO teamMemberBO, BriefingBO briefingBO, DynamicEventBO dynamicEventBO) {
         this.view = view;
         this.context = context;
         this.rcEventType = rcEventType;
         this.raceControlBO = raceControlBO;
+        this.teamMemberBO = teamMemberBO;
+        this.briefingBO = briefingBO;
+        this.dynamicEventBO = dynamicEventBO;
         this.raceType = raceType;
         this.selectedArea = context.getString(R.string.rc_area_all);
     }
@@ -195,21 +216,37 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
 
-        RaceControlRegister register = filteredRaceControlRegisterList.get(position);
-        RaceControlState newState = null;
+         register = filteredRaceControlRegisterList.get(position);
+
 
         //State 1 clicked
         if(v.getId() == R.id.state1){
             newState = RaceControlState.getStateByAcronym(register.getCurrentState().getStates().get(0));
 
+            if(newState.equals(RaceControlState.READY_TO_RACE_1D) || newState.equals(RaceControlState.READY_TO_RACE_2D)){
+                //Open NFC reader to check driver
+                view.openNFCReader();
+
+            }else{
+                //Update register state
+                updateRegister(register, rcEventType, newState);
+            }
+
         //State 2 clicked
         }else if(v.getId() == R.id.state2){
             newState = RaceControlState.getStateByAcronym(register.getCurrentState().getStates().get(1));
 
+            if(newState.equals(RaceControlState.READY_TO_RACE_1D) || newState.equals(RaceControlState.READY_TO_RACE_2D)){
+                //Open NFC reader to check driver
+                view.openNFCReader();
+
+            }else{
+                //Update register state
+                updateRegister(register, rcEventType, newState);
+            }
         }
 
-        //Update register state
-        updateRegister(register, rcEventType, newState);
+
     }
 
     /**
@@ -283,6 +320,86 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
     }
 
+    /**
+     * Retrieve user by NFC tag after read
+     * @param tag
+     */
+    void onNFCTagDetected(String tag){
+
+        //Show loading
+        view.showLoading();
+
+        //Retrieve user by the NFC tag
+        teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                TeamMember teamMember = (TeamMember)responseDTO.getData();
+
+                //Now check if the teamMember did the briefing today
+                getUserBriefingRegister(teamMember);
+            }
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //Hide loading
+                view.hideLoading();
+
+                //Show error message
+                view.createMessage(R.string.team_member_get_by_nfc_error);
+            }
+        });
+    }
+
+    void getUserBriefingRegister(final TeamMember teamMember){
+
+        Calendar cal = Calendar.getInstance();
+        Date to = cal.getTime();
+
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.HOUR_OF_DAY, 5);
+        cal.set(Calendar.SECOND, 0);
+
+        Date from = cal.getTime(); //current day at 05:00am
+
+        if(teamMember != null && teamMember.getID() != null) {
+
+            //If the teamMember exists, retrieve its briefing registers
+            briefingBO.retrieveBriefingRegistersByUserAndDates(from, to, teamMember.getID(), new BusinessCallback() {
+
+                @Override
+                public void onSuccess(ResponseDTO responseDTO) {
+
+                    List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
+
+                    //Hide loading
+                    view.hideLoading();
+
+                    //With all the information, we create the dialog
+                    FragmentManager fm = ((RaceControlActivity)view.getActivity()).getSupportFragmentManager();
+                    ConfirmEventRegisterDialog createUserDialog = ConfirmEventRegisterDialog
+                            .newInstance(RaceControlPresenter.this, teamMember, !briefingRegisters.isEmpty());
+
+                    //Show the dialog
+                    createUserDialog.show(fm, "fragment_event_confirm");
+
+                }
+
+                @Override
+                public void onFailure(ResponseDTO responseDTO) {
+                    //Show error message
+                    view.createMessage(R.string.briefing_messages_retrieve_registers_error);
+                }
+            });
+
+        } else {
+
+            //Hide loading
+            view.hideLoading();
+
+            //Show error message
+            view.createMessage(R.string.team_member_get_by_nfc_not_existing);
+        }
+    }
+
 
     public List<RaceControlRegister> getEventRegisterList() {
         return filteredRaceControlRegisterList;
@@ -297,6 +414,82 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
         UpdatingRegistersDialog createUpdatingDialog = UpdatingRegistersDialog
                 .newInstance(RaceControlPresenter.this, register, rcEventType);
         createUpdatingDialog.show(fm, "rc_updating_dialog");
+
+    }
+
+    @Override
+    public void createRegistry(final TeamMember teamMember, final Long carNumber, final Boolean briefingDone){
+
+        //Show loading
+        view.showLoading();
+
+        //Check that the driver is able to run, that means he/she has not run already in two different events
+        dynamicEventBO.getDifferentEventRegistersByDriver(teamMember.getID(), new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+
+                if(responseDTO.getError() == null){
+
+                    Map<String, EventRegister> eventRegisterMap = (Map<String, EventRegister>) responseDTO.getData();
+
+                    //The driver can't run
+                    if(eventRegisterMap.size() >= 2
+                            && !eventRegisterMap.containsKey(rcEventType.getEventType().name())
+                            && !rcEventType.getEventType().equals(EventType.PRE_SCRUTINEERING)
+                            && !rcEventType.getEventType().equals(EventType.BRIEFING)
+                            && !rcEventType.getEventType().equals(EventType.PRACTICE_TRACK)){
+
+                        //Hide loading
+                        view.hideLoading();
+
+                        //Show error message
+                        view.createMessage(R.string.dynamic_event_message_error_runs);
+
+                    } else {
+
+                        //The driver can run, create the register
+                        dynamicEventBO.createRegister(teamMember, carNumber, briefingDone, rcEventType.getEventType(), new BusinessCallback() {
+                            @Override
+                            public void onSuccess(ResponseDTO responseDTO) {
+
+                                //Refresh the records
+                                retrieveRegisterList();
+
+                                //Hide loading
+                                view.hideLoading();
+
+                                //Update new state
+                                updateRegister(register, rcEventType, newState);
+
+                            }
+                            @Override
+                            public void onFailure(ResponseDTO responseDTO) {
+
+                                //Hide loading
+                                view.hideLoading();
+
+                                //Show error message
+                                view.createMessage(R.string.dynamic_event_message_error_create);
+                            }
+                        });
+                    }
+
+                } else {
+
+                    //Hide loading
+                    view.hideLoading();
+
+                    //Show error message
+                    view.createMessage(R.string.dynamic_event_message_error_runs);
+                }
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //Show error message
+                view.createMessage(R.string.dynamic_event_message_error_retrieving_by_driver);
+            }
+        });
 
     }
 
@@ -325,6 +518,11 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
          * Refresh items in list
          */
         void refreshEventRegisterItems();
+
+        /**
+         * Open NFC reader
+         */
+        void openNFCReader();
 
         /**
          * Method to know if the filters are activated

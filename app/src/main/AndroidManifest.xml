@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
 
     <application
@@ -88,6 +89,14 @@
 
         <activity
             android:name=".mvp.view.activity.user.UserActivity">
+        </activity>
+
+        <activity
+            android:name=".mvp.view.activity.qrreader.QRReaderActivity">
+        </activity>
+
+        <activity
+            android:name=".mvp.view.activity.userdetail.UserDetailActivity">
         </activity>
     </application>
 

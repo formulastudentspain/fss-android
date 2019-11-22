@@ -14,9 +14,9 @@ import androidx.fragment.app.DialogFragment;
 import com.squareup.picasso.Picasso;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventGeneralPresenter;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventPresenter;
 
 public class ConfirmEventRegisterDialog extends DialogFragment{
@@ -28,29 +28,23 @@ public class ConfirmEventRegisterDialog extends DialogFragment{
     private TextView userTeam;
     private ImageView briefingDoneIcon;
 
-    //Car elements
-    private TextView carNumber;
-    private ImageView carTypeIcon;
-
     //Presenter
-    private DynamicEventPresenter presenter;
+    private DynamicEventGeneralPresenter presenter;
 
     //Detected teamMember
     private TeamMember teamMember;
     private boolean briefingDone;
-    private Car car;
 
     public ConfirmEventRegisterDialog() {}
 
-    public static ConfirmEventRegisterDialog newInstance(DynamicEventPresenter presenter, TeamMember teamMember,
-                                                         boolean briefingDone, Car car) {
+    public static ConfirmEventRegisterDialog newInstance(DynamicEventGeneralPresenter presenter, TeamMember teamMember, boolean briefingDone) {
         ConfirmEventRegisterDialog frag = new ConfirmEventRegisterDialog();
         frag.setPresenter(presenter);
         frag.setTeamMember(teamMember);
         frag.setBriefingDone(briefingDone);
-        frag.setCar(car);
         return frag;
     }
+
 
     public static ConfirmEventRegisterDialog newInstance(DynamicEventPresenter presenter, EventRegister register) {
         ConfirmEventRegisterDialog frag = new ConfirmEventRegisterDialog();
@@ -66,12 +60,6 @@ public class ConfirmEventRegisterDialog extends DialogFragment{
 
         frag.setTeamMember(teamMember);
         frag.setBriefingDone(register.getBriefingDone());
-
-        //Create car to show
-        Car car = new Car();
-        car.setNumber(register.getCarNumber());
-        car.setType(register.getCarType());
-        frag.setCar(car);
 
         return frag;
     }
@@ -89,7 +77,6 @@ public class ConfirmEventRegisterDialog extends DialogFragment{
         userTeam = rootView.findViewById(R.id.user_team);
         userPhoto = rootView.findViewById(R.id.user_profile_image);
         briefingDoneIcon = rootView.findViewById(R.id.briefing_done_icon);
-        this.initializeCarElements(rootView);
 
         //Set values
         userName.setText(teamMember.getName());
@@ -115,28 +102,6 @@ public class ConfirmEventRegisterDialog extends DialogFragment{
         return dialog;
     }
 
-    private void initializeCarElements(View rootView){
-
-        carNumber = rootView.findViewById(R.id.carNumber);
-        carTypeIcon = rootView.findViewById(R.id.carTypeIcon);
-
-        if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_COMBUSTION)){
-
-            carNumber.setText(car.getNumber().toString());
-            carTypeIcon.setImageResource(R.drawable.ic_combustion);
-
-        }else if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_ELECTRIC)){
-
-            carNumber.setText(car.getNumber().toString());
-            carTypeIcon.setImageResource(R.drawable.ic_electric_icon);
-
-        }else if(car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_COMBUSTION)
-                || car.getType().equalsIgnoreCase(Car.CAR_TYPE_AUTONOMOUS_ELECTRIC)){
-
-            carNumber.setText(car.getNumber().toString());
-            carTypeIcon.setImageResource(R.drawable.ic_steering_wheel);
-        }
-    }
 
 
     @Override
@@ -147,13 +112,13 @@ public class ConfirmEventRegisterDialog extends DialogFragment{
             @Override
             public void onClick(View view) {
 
-                presenter.createRegistry(teamMember, car.getNumber(), car.getType(), briefingDone);
+                presenter.createRegistry(teamMember, teamMember.getCarNumber(), briefingDone);
                 dialog.dismiss();
             }
         });
     }
 
-    public void setPresenter(DynamicEventPresenter presenter) {
+    public void setPresenter(DynamicEventGeneralPresenter presenter) {
         this.presenter = presenter;
     }
 
@@ -165,9 +130,6 @@ public class ConfirmEventRegisterDialog extends DialogFragment{
         this.briefingDone = briefingDone;
     }
 
-    public void setCar(Car car) {
-        this.car = car;
-    }
 
 }
 

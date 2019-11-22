@@ -19,7 +19,6 @@ public class EventRegister implements Serializable {
     public static final String USER = "userName";
     public static final String DATE = "date";
     public static final String USER_IMAGE = "userImage";
-    public static final String CAR_TYPE = "carType";
     public static final String CAR_NUMBER = "carNumber";
     public static final String BRIEFING_DONE = "briefingDone";
     public static final String DONE_BY_USER = "doneByUserMail";
@@ -34,7 +33,6 @@ public class EventRegister implements Serializable {
     private String userImage;
     private EventType type;
     private Date date;
-    private String carType;
     private Long carNumber;
     private Boolean briefingDone;
     private String doneByUserMail;
@@ -43,7 +41,7 @@ public class EventRegister implements Serializable {
     public EventRegister(){}
 
     public EventRegister(String teamID, String team, String userID, String user, String userImage,
-                         Date date, String carType, Long carNumber, Boolean briefingDone, EventType type, String doneByUserMail) {
+                         Date date, Long carNumber, Boolean briefingDone, EventType type, String doneByUserMail) {
         this.ID = UUID.randomUUID().toString();
         this.teamID = teamID;
         this.team = team;
@@ -52,7 +50,6 @@ public class EventRegister implements Serializable {
         this.date = date;
         this.userImage = userImage;
         this.date = Calendar.getInstance().getTime();
-        this.carType = carType;
         this.carNumber = carNumber;
         this.briefingDone = briefingDone;
         this.type = type;
@@ -69,7 +66,6 @@ public class EventRegister implements Serializable {
         docData.put(EventRegister.USER_IMAGE, this.userImage);
         docData.put(EventRegister.DATE, new Timestamp(this.date));
         docData.put(EventRegister.CAR_NUMBER, this.carNumber);
-        docData.put(EventRegister.CAR_TYPE, this.carType);
         docData.put(EventRegister.BRIEFING_DONE, this.briefingDone);
         docData.put(EventRegister.EVENT_TYPE, this.type.name());
         docData.put(EventRegister.DONE_BY_USER, this.doneByUserMail);
@@ -87,7 +83,6 @@ public class EventRegister implements Serializable {
         this.team = object.getString(EventRegister.TEAM);
         this.teamID = object.getString(EventRegister.TEAM_ID);
         this.carNumber = object.getLong(EventRegister.CAR_NUMBER);
-        this.carType = object.getString(EventRegister.CAR_TYPE);
         this.briefingDone = object.getBoolean(EventRegister.BRIEFING_DONE);
         this.doneByUserMail = object.getString(EventRegister.DONE_BY_USER);
         this.type = type;
@@ -104,7 +99,6 @@ public class EventRegister implements Serializable {
         this.team = object.getString(EventRegister.TEAM);
         this.teamID = object.getString(EventRegister.TEAM_ID);
         this.carNumber = object.getLong(EventRegister.CAR_NUMBER);
-        this.carType = object.getString(EventRegister.CAR_TYPE);
         this.briefingDone = object.getBoolean(EventRegister.BRIEFING_DONE);
         this.doneByUserMail = object.getString(EventRegister.DONE_BY_USER);
         for(EventType type : EventType.values()){
@@ -178,14 +172,6 @@ public class EventRegister implements Serializable {
 
     public void setUserImage(String userImage) {
         this.userImage = userImage;
-    }
-
-    public String getCarType() {
-        return carType;
-    }
-
-    public void setCarType(String carType) {
-        this.carType = carType;
     }
 
     public Long getCarNumber() {

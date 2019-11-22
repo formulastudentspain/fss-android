@@ -19,7 +19,6 @@ import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
-import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
@@ -31,7 +30,7 @@ import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.FilteringRegi
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
 
-public class DynamicEventPresenter implements RecyclerViewClickListener {
+public class DynamicEventPresenter implements RecyclerViewClickListener, DynamicEventGeneralPresenter {
 
     //DYNAMIC EVENT TYPE
     EventType eventType;
@@ -71,14 +70,15 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
     }
 
 
+
     /**
      * Create register
      * @param teamMember
      * @param carNumber
-     * @param carType
      * @param briefingDone
      */
-     public void createRegistry(final TeamMember teamMember, final Long carNumber, final String carType, final Boolean briefingDone){
+    @Override
+     public void createRegistry(final TeamMember teamMember, final Long carNumber, final Boolean briefingDone){
 
         //Show loading
         view.showLoading();
@@ -108,7 +108,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
                     } else {
 
                         //The driver can run, create the register
-                        dynamicEventBO.createRegister(teamMember, carType, carNumber, briefingDone, eventType, new BusinessCallback() {
+                        dynamicEventBO.createRegister(teamMember, carNumber, briefingDone, eventType, new BusinessCallback() {
                             @Override
                             public void onSuccess(ResponseDTO responseDTO) {
 
@@ -332,8 +332,17 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
 
                     List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
 
-                    //Now, get cars
-                    getCarByUserId(teamMember, !briefingRegisters.isEmpty());
+                    //Hide loading
+                    view.hideLoading();
+
+                    //With all the information, we create the dialog
+                    FragmentManager fm = ((DynamicEventActivity)view.getActivity()).getSupportFragmentManager();
+                    ConfirmEventRegisterDialog createUserDialog = ConfirmEventRegisterDialog
+                            .newInstance(DynamicEventPresenter.this, teamMember, !briefingRegisters.isEmpty());
+
+                    //Show the dialog
+                    createUserDialog.show(fm, "fragment_event_confirm");
+
                 }
 
                 @Override
@@ -353,44 +362,6 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
         }
     }
 
-    /**
-     * Get the teamMember car. The car is stored in the team, so we retrieve the team
-     * @param teamMember
-     * @param briefingExists
-     */
-    void getCarByUserId(final TeamMember teamMember, final boolean briefingExists){
-
-        //Get the team by the teamMember
-        teamBO.retrieveTeamById(teamMember.getTeamID(), new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-
-                //We just need the car from the team
-                Team team = (Team) responseDTO.getData();
-                Car car = team.getCar();
-
-                //Hide loading
-                view.hideLoading();
-
-                //With all the information, we create the dialog
-                FragmentManager fm = ((DynamicEventActivity)view.getActivity()).getSupportFragmentManager();
-                ConfirmEventRegisterDialog createUserDialog = ConfirmEventRegisterDialog
-                        .newInstance(DynamicEventPresenter.this, teamMember, briefingExists, car);
-
-                //Show the dialog
-                createUserDialog.show(fm, "fragment_event_confirm");
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                //Hide loading
-                view.hideLoading();
-
-                //Show error message
-                view.createMessage(responseDTO.getError());
-            }
-        });
-    }
 
 
     /**
@@ -541,6 +512,8 @@ public class DynamicEventPresenter implements RecyclerViewClickListener {
     public List<EventRegister> getEventRegisterList() {
         return filteredEventRegisterList;
     }
+
+
 
 
     public interface View {

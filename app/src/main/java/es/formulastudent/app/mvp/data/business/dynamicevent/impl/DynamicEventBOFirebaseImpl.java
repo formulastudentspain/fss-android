@@ -106,7 +106,7 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
 
 
     @Override
-    public void createRegister(TeamMember teamMember, String carType, Long carNumber, Boolean briefingDone, EventType type, final BusinessCallback callback) {
+    public void createRegister(TeamMember teamMember, Long carNumber, Boolean briefingDone, EventType type, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
@@ -114,10 +114,10 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
         final EventRegister register;
         if(type.equals(EventType.PRE_SCRUTINEERING)){
             register = new PreScrutineeringRegister(teamMember.getTeamID(), teamMember.getTeam(), teamMember.getID(),
-                    teamMember.getName(), teamMember.getPhotoUrl(), registerDate, carType, carNumber, briefingDone, type, firebaseAuth.getCurrentUser().getEmail(), 0L);
+                    teamMember.getName(), teamMember.getPhotoUrl(), registerDate, carNumber, briefingDone, type, firebaseAuth.getCurrentUser().getEmail(), 0L);
         }else{
             register = new EventRegister(teamMember.getTeamID(), teamMember.getTeam(), teamMember.getID(),
-                    teamMember.getName(), teamMember.getPhotoUrl(), registerDate, carType, carNumber, briefingDone, type, firebaseAuth.getCurrentUser().getEmail());
+                    teamMember.getName(), teamMember.getPhotoUrl(), registerDate, carNumber, briefingDone, type, firebaseAuth.getCurrentUser().getEmail());
         }
 
 

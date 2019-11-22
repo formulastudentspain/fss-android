@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Locale;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.view.Utils;
@@ -68,23 +67,6 @@ public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         eventRegistersViewHolder.carNumber.setText(register.getCarNumber().toString());
 
         Picasso.get().load(register.getUserImage()).into(eventRegistersViewHolder.profileImage);
-
-        switch(register.getCarType()) {
-            case Car.CAR_TYPE_COMBUSTION:
-                eventRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_combustion);
-                break;
-            case Car.CAR_TYPE_ELECTRIC:
-                eventRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_electric_icon);
-                break;
-            case Car.CAR_TYPE_AUTONOMOUS_COMBUSTION:
-                eventRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_steering_wheel);
-                break;
-            case Car.CAR_TYPE_AUTONOMOUS_ELECTRIC:
-                eventRegistersViewHolder.carTypeIcon.setImageResource(R.drawable.ic_steering_wheel);
-                break;
-            default:
-                // code block
-        }
 
         //Pre-scrutineering details
         if(register instanceof PreScrutineeringRegister){

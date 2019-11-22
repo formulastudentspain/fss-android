@@ -14,9 +14,11 @@ import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.activity.teammemberdetail.TeamMemberDetailActivity;
+import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
+
 
 public class UserPresenter implements RecyclerViewClickListener {
+
 
     //Dependencies
     private View view;
@@ -78,7 +80,6 @@ public class UserPresenter implements RecyclerViewClickListener {
 
 
 
-
     public void filterUsers(String query){
 
         //Clear the list
@@ -101,9 +102,9 @@ public class UserPresenter implements RecyclerViewClickListener {
 
         User selectedUser = filteredUserList.get(position);
 
-        Intent intent = new Intent(context, TeamMemberDetailActivity.class);
+        Intent intent = new Intent(context, UserDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("selectedTeamMember", selectedUser);
+        intent.putExtra("selectedUser", selectedUser);
         context.startActivity(intent);
 
     }
@@ -164,6 +165,11 @@ public class UserPresenter implements RecyclerViewClickListener {
          * Hide loading
          */
         void hideLoading();
+
+        /**
+         * Open QR reader
+         */
+        void openQRCodeReader();
 
         /**
          * Show create user dialog

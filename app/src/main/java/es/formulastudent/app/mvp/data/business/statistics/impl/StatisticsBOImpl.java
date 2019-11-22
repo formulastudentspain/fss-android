@@ -146,10 +146,6 @@ public class StatisticsBOImpl implements StatisticsBO {
 
                         if(!eventType.equals(EventType.BRIEFING)) {
 
-                            //CAR TYPE
-                            cell = row.createCell(++cellNum);
-                            cell.setCellValue(register.getCarType() == null ? "" : register.getCarType());
-
                             //CAR NUMBER
                             cell = row.createCell(++cellNum);
                             cell.setCellValue(register.getCarNumber() == null ? "" : register.getCarNumber().toString());

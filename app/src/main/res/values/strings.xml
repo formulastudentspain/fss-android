@@ -164,6 +164,8 @@
     <string name="event_egress_message_error_retrieving">Could not retrieve the Egress registers</string>
     <string name="dynamic_event_message_error_save_egress_time">Could not save the egress time</string>
     <string name="dynamic_event_message_info_save_egress_time">Egress time saved successfully</string>
+    <string name="dynamic_event_message_info_controlled_from_race_control">This control is done from Race Control</string>
+
 
 
     <!-- Pre-Scrutineering -->
@@ -248,9 +250,17 @@
     <string name="user_get_all_error">Error retrieving users</string>
     <string name="user_create_info">User created successfully</string>
     <string name="user_create_error">Error creating user</string>
-    <string name="user_get_by_mail_info">TODO</string>
-    <string name="user_get_by_mail_error">TODO</string>
-
+    <string name="user_get_by_mail_info">Retrieved user properly</string>
+    <string name="user_get_by_mail_error">Error retrieving user by mail</string>
+    <string name="user_role_staff">Staff</string>
+    <string name="user_role_scrutineer">Scrutineer</string>
+    <string name="user_role_marshall">Marshall</string>
+    <string name="user_role_official">Official</string>
+    <string name="user_role_all">All</string>
+    <string name="user_role_area">Roles</string>
+    <string name="user_with_walkie">Walkie</string>
+    <string name="user_with_cellphone">Cellphone</string>
+    <string name="user_items">Items</string>
 
 
 </resources>

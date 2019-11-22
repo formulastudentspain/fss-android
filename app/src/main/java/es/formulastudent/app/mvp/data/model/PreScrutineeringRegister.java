@@ -13,8 +13,8 @@ public class PreScrutineeringRegister extends EventRegister implements Serializa
     private Long time;
 
     public PreScrutineeringRegister(String teamID, String team, String userID, String user, String userImage,
-                                    Date date, String carType, Long carNumber, Boolean briefingDone, EventType type, String registerUserMail, Long time) {
-        super(teamID, team, userID, user, userImage, date, carType, carNumber, briefingDone, type, registerUserMail);
+                                    Date date, Long carNumber, Boolean briefingDone, EventType type, String registerUserMail, Long time) {
+        super(teamID, team, userID, user, userImage, date, carNumber, briefingDone, type, registerUserMail);
         this.time = time;
     }
 

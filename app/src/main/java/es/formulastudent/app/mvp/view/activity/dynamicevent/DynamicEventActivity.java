@@ -156,10 +156,24 @@ public class DynamicEventActivity extends GeneralActivity implements
 
     @Override
     public void onClick(View view) {
+
         if(view.getId() == R.id.button_add_acceleration_register){
-            Intent i = new Intent(this, NFCReaderActivity.class);
-            startActivityForResult(i, NFC_REQUEST_CODE);
+
+            //Endurance control is done from Race Control
+            if(eventType.equals(EventType.ENDURANCE_EFFICIENCY)){
+                createMessage(R.string.dynamic_event_message_info_controlled_from_race_control);
+
+            }else{
+                Intent i = new Intent(this, NFCReaderActivity.class);
+                startActivityForResult(i, NFC_REQUEST_CODE);
+            }
+
+
         }
+
+
+
+
     }
 
     @Override
