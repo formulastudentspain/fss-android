@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -132,6 +133,43 @@ public class UserBOFirebaseImpl implements UserBO {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         responseDTO.setError(R.string.user_get_by_mail_error);
+                        callback.onFailure(responseDTO);
+                    }
+                });
+    }
+
+    @Override
+    public void editUser(final User user, final BusinessCallback callback) {
+
+        final ResponseDTO responseDTO = new ResponseDTO();
+        final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER).document(user.getID());
+
+        registerReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        registerReference.update(user.toDocumentData())
+
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        responseDTO.setInfo(R.string.user_update_info);
+                                        callback.onSuccess(responseDTO);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        responseDTO.setError(R.string.user_update_error);
+                                        callback.onFailure(responseDTO);
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        responseDTO.setError(R.string.user_update_error);
                         callback.onFailure(responseDTO);
                     }
                 });

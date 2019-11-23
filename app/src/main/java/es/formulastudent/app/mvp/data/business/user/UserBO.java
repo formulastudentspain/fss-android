@@ -26,4 +26,12 @@ public interface UserBO {
      * @param callback
      */
     void retrieveUserByMail(String mail, BusinessCallback callback);
+
+
+    /**
+     * Edit user in Database
+     * @param user
+     * @param callback
+     */
+    void editUser(User user, BusinessCallback callback);
 }

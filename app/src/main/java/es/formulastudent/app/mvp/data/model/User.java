@@ -16,8 +16,8 @@ public class User implements Serializable {
     public static final String USER_IMAGE = "imageURL";
     public static final String MAIL = "mail";
     public static final String ROLE = "role";
-    public static final String WITH_WALKIE = "withWalkie";
-    public static final String WITH_CELL_PHONE = "withCellPhone";
+    public static final String WALKIE = "walkie";
+    public static final String CELL_PHONE = "cellPhone";
 
 
     private String ID;
@@ -25,8 +25,8 @@ public class User implements Serializable {
     private String mail;
     private String photoUrl;
     private Role role;
-    private Boolean withWalkie;
-    private Boolean withCellPhone;
+    private Long walkie;
+    private Long cellPhone;
 
 
 
@@ -35,8 +35,8 @@ public class User implements Serializable {
         this.name = object.getString(User.NAME);
         this.mail = object.getString(User.MAIL);
         this.photoUrl = object.getString(User.USER_IMAGE);
-        this.withCellPhone = object.getBoolean(User.WITH_CELL_PHONE);
-        this.withWalkie = object.getBoolean(User.WITH_WALKIE);
+        this.cellPhone = object.getLong(User.CELL_PHONE);
+        this.walkie = object.getLong(User.WALKIE);
 
         //Getting role from enum
         String roleString = object.getString(TeamMember.ROLE);
@@ -50,8 +50,8 @@ public class User implements Serializable {
         docData.put(User.MAIL, this.getMail());
         docData.put(User.ROLE, this.getRole().getName());
         docData.put(User.USER_IMAGE, this.getPhotoUrl());
-        docData.put(User.WITH_CELL_PHONE, this.getWithCellPhone());
-        docData.put(User.WITH_WALKIE, this.getWithWalkie());
+        docData.put(User.CELL_PHONE, this.getCellPhone());
+        docData.put(User.WALKIE, this.getWalkie());
 
         return docData;
     }
@@ -106,19 +106,19 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    public Boolean getWithWalkie() {
-        return withWalkie;
+    public Long getWalkie() {
+        return walkie;
     }
 
-    public void setWithWalkie(Boolean withWalkie) {
-        this.withWalkie = withWalkie;
+    public void setWalkie(Long walkie) {
+        this.walkie = walkie;
     }
 
-    public Boolean getWithCellPhone() {
-        return withCellPhone;
+    public Long getCellPhone() {
+        return cellPhone;
     }
 
-    public void setWithCellPhone(Boolean withCellPhone) {
-        this.withCellPhone = withCellPhone;
+    public void setCellPhone(Long cellPhone) {
+        this.cellPhone = cellPhone;
     }
 }

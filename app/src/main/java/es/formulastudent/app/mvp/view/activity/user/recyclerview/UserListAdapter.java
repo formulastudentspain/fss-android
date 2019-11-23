@@ -67,14 +67,14 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         //Cell Phone
-        if(user.getWithCellPhone() != null && user.getWithCellPhone()){
+        if(user.getCellPhone() != null){
             userListViewHolder.withCellPhone.setImageResource(R.drawable.ic_cell_phone_on);
         }else{
             userListViewHolder.withCellPhone.setImageResource(R.drawable.ic_cell_phone_off);
         }
 
         //Walkie
-        if(user.getWithWalkie() != null && user.getWithWalkie()){
+        if(user.getWalkie() != null){
             userListViewHolder.withWalkie.setImageResource(R.drawable.ic_walkie_talkie_on);
         }else{
             userListViewHolder.withWalkie.setImageResource(R.drawable.ic_walkie_talkie_off);

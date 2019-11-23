@@ -29,8 +29,16 @@
             android:layout_marginTop="95dp"
             app:civ_border_color="@color/md_white_1000"
             app:civ_border_width="2dp"
-            android:src="@mipmap/drawer_background" />
+            android:src="@color/md_black_1000" />
 
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@id/user_detail_profile_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="48dp"
+            android:alpha="0.5"
+            android:src="@drawable/ic_camera" />
     </RelativeLayout>
 
     <TextView
@@ -40,41 +48,69 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:text="David Pérez"
-        android:textColor="@color/accent"
+        android:textColor="@color/md_black_1000"
         android:textSize="24sp"/>
 
     <TextView
-        android:id="@+id/user_detail_team"
+        android:id="@+id/user_detail_role"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Euskal Herriko Scuderia"
+        android:text="Scrutineer"
         />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:gravity="bottom|center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/user_detail_nfc_image"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_user_nfc_not_registered"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/user_detail_nfc_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Not registered"/>
+            <ImageView
+                android:id="@+id/user_walkie_talkie"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_walkie_talkie_on" />
+
+            <TextView
+                android:id="@+id/user_walkie_talkie_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#12"
+                android:textSize="24sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/user_cell_phone"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_cell_phone_off" />
+
+            <TextView
+                android:id="@+id/user_cell_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textSize="24sp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
-
-
-
 
 </LinearLayout>

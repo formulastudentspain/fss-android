@@ -2,12 +2,17 @@ package es.formulastudent.app.mvp.view.activity.userdetail;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -17,14 +22,13 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerUserDetailComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.UserDetailModule;
+import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
 
 public class UserDetailActivity extends GeneralActivity implements UserDetailPresenter.View, View.OnClickListener {
 
-    private static final int NFC_REQUEST_CODE = 101;
     private static final int REQUEST_IMAGE_CAPTURE = 102;
 
 
@@ -43,17 +47,22 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     //View components
     private TextView userName;
     private ImageView userProfilePhoto;
-    private ImageView userNFCImage;
-    private TextView userNFCTag;
+    private ImageView userWalkie;
+    private TextView userWalkieNumber;
+    private ImageView userCellPhone;
+    private TextView userCellPhoneNumber;
+    private TextView userRole;
+    private MenuItem filterItem;
 
     //Selected user
     User user;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_team_member_detail);
+        setContentView(R.layout.activity_user_detail);
         super.onCreate(savedInstanceState);
 
         user = (User) getIntent().getSerializableExtra("selectedUser");
@@ -88,41 +97,45 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
 
         //Instantiate vies components
         userName = findViewById(R.id.user_detail_name);
+        userRole = findViewById(R.id.user_detail_role);
         userProfilePhoto = findViewById(R.id.user_detail_profile_image);
         userProfilePhoto.setOnClickListener(this);
-        userNFCTag = findViewById(R.id.user_detail_nfc_tag);
-        userNFCImage = findViewById(R.id.user_detail_nfc_image);
-        userNFCImage.setOnClickListener(this);
 
-    }
+        //Walkie
+        userWalkie = findViewById(R.id.user_walkie_talkie);
+        userWalkie.setOnClickListener(this);
+        userWalkieNumber = findViewById(R.id.user_walkie_talkie_number);
 
+        //Cell Phone
+        userCellPhone = findViewById(R.id.user_cell_phone);
+        userCellPhone.setOnClickListener(this);
+        userCellPhoneNumber = findViewById(R.id.user_cell_phone_number);
 
-    @Override
-    public void finishView() {
+        //Set info
+        setUserDetails(user);
 
-    }
+      }
 
     @Override
     public void showLoading() {
-
+        super.showLoadingDialog();
     }
 
     @Override
-    public void hideLoadingIcon() {
-
+    public void hideLoading() {
+        super.hideLoadingDialog();
     }
-
-    @Override
-    public void updateNFCInformation(String TAG) {
-        userNFCImage.setImageResource(R.drawable.ic_user_nfc_registered);
-        userNFCTag.setText(TAG);
-    }
-
 
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.user_detail_profile_image){
             dispatchTakePictureIntent();
+
+        }else if(view.getId() == R.id.user_walkie_talkie){
+            presenter.manageDeviceAssignment("walkie");
+
+        }else if(view.getId() == R.id.user_cell_phone){
+            presenter.manageDeviceAssignment("phone");
         }
     }
 
@@ -139,6 +152,24 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_user_detail, menu);
+
+        //Search menu item
+        filterItem = menu.findItem(R.id.filter_results);
+        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                presenter.openEditUserDialog();
+                return true;
+            }
+        });
+
+        return true;
+    }
+
+    @Override
     public void updateProfilePicture(Bitmap imageBitmap){
         userProfilePhoto.setImageBitmap(imageBitmap);
     }
@@ -149,9 +180,43 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     }
 
     @Override
-    public void openNFCReader() {
-        Intent i = new Intent(this, NFCReaderActivity.class);
-        startActivityForResult(i, NFC_REQUEST_CODE);
+    public UserDetailActivity getActivity() {
+        return UserDetailActivity.this;
+    }
+
+    @Override
+    public void setUserDetails(User user) {
+
+        userName.setText(user.getName());
+        Picasso.get().load(user.getPhotoUrl()).into(userProfilePhoto);
+
+        if(user.getCellPhone() != null){
+            userCellPhone.setImageResource(R.drawable.ic_cell_phone_on);
+            userCellPhoneNumber.setText("#"+user.getCellPhone());
+        }else{
+            userCellPhone.setImageResource(R.drawable.ic_cell_phone_off);
+            userCellPhoneNumber.setText("-");
+        }
+        if(user.getWalkie() != null){
+            userWalkie.setImageResource(R.drawable.ic_walkie_talkie_on);
+            userWalkieNumber.setText("#"+user.getWalkie());
+        }else{
+            userWalkie.setImageResource(R.drawable.ic_walkie_talkie_off);
+            userWalkieNumber.setText("-");
+        }
+
+
+        userRole.setText(user.getRole().getName().toUpperCase());
+        userRole.setTextColor(getResources().getColor(user.getRole().getColor()));
+
+        //For Officials, in bold
+        if(user.getRole().equals(Role.ADMINISTRATOR) || user.getRole().equals(Role.OFFICIAL_MARSHALL)
+                || user.getRole().equals(Role.OFFICIAL_SCRUTINEER) || user.getRole().equals(Role.OFFICIAL_STAFF)){
+            userRole.setTypeface(null, Typeface.BOLD);
+
+        }else{
+            userRole.setTypeface(null, Typeface.NORMAL);
+        }
     }
 
     @Override

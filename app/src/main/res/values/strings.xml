@@ -84,6 +84,21 @@
     <string name="dialog_create_user_field_role">Role</string>
     <string name="dialog_create_user_error_field">Mandatory field</string>
 
+    <!-- Edit user dialog -->
+    <string name="dialog_edit_user_title">Edit user</string>
+    <string name="dialog_edit_user_button_edit">Edit</string>
+    <string name="dialog_edit_user_button_cancel">Cancel</string>
+    <string name="dialog_assign_device_title">Assign %1$s</string>
+    <string name="dialog_assign_device_error_wrong_number">Wrong number</string>
+    <string name="dialog_assign_device_number">Number</string>
+    <string name="dialog_assign_device_number_hint">Type the device number</string>
+    <string name="dialog_return_device_message">Are you sure you want to return the selected device?</string>
+    <string name="dialog_return_device_title">Return %1$s</string>
+    <string name="dialog_return_device_return">Return</string>
+    <string name="dialog_assign_device_assign">Assign</string>
+
+
+
     <!-- Briefing -->
     <string name="briefing_activity_title">Briefing control</string>
     <string name="briefing_activity_teams_label">Teams</string>
@@ -261,6 +276,9 @@
     <string name="user_with_walkie">Walkie</string>
     <string name="user_with_cellphone">Cellphone</string>
     <string name="user_items">Items</string>
+    <string name="user_update_info">User updated properly</string>
+    <string name="user_update_error">Error updating user</string>
+
 
 
 </resources>
