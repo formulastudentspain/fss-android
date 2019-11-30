@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 
-public interface ImageUploaderBO {
+public interface ImageBO {
 
     /**
      * Method to upload a picture. It returns the URL to download it

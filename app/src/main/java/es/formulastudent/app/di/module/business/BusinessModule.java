@@ -17,8 +17,8 @@ import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.impl.DynamicEventBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.egress.impl.EgressBOFirebaseImpl;
-import es.formulastudent.app.mvp.data.business.imageuploader.ImageUploaderBO;
-import es.formulastudent.app.mvp.data.business.imageuploader.impl.ImageUploaderBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
+import es.formulastudent.app.mvp.data.business.imageuploader.impl.ImageBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.business.racecontrol.impl.RaceControlBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
@@ -132,7 +132,7 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public ImageUploaderBO provideImageUploaderBO(FirebaseStorage firebaseStorage) {
-        return new ImageUploaderBOFirebaseImpl(firebaseStorage);
+    public ImageBO provideImageUploaderBO(FirebaseStorage firebaseStorage) {
+        return new ImageBOFirebaseImpl(firebaseStorage);
     }
 }

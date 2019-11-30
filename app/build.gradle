@@ -103,6 +103,9 @@ dependencies {
     //QRCode reader
     implementation 'com.budiyev.android:code-scanner:2.1.0'
 
+    // font awesome
+    implementation 'info.androidhive:fontawesome:0.0.5'
+
 
 
 }

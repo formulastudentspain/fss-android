@@ -6,7 +6,7 @@ import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
-import es.formulastudent.app.mvp.data.business.imageuploader.ImageUploaderBO;
+import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailPresenter;
@@ -26,8 +26,8 @@ public class UserDetailModule {
     }
 
     @Provides
-    public UserDetailPresenter providePresenter(UserDetailPresenter.View categoryView, Context context, UserBO userBO, User loggedUser, ImageUploaderBO imageUploaderBO) {
-        return new UserDetailPresenter(categoryView, context, userBO, loggedUser, imageUploaderBO);
+    public UserDetailPresenter providePresenter(UserDetailPresenter.View categoryView, Context context, UserBO userBO, User loggedUser, ImageBO imageBO) {
+        return new UserDetailPresenter(categoryView, context, userBO, loggedUser, imageBO);
     }
 
 

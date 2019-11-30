@@ -29,6 +29,7 @@
     <string name="drawer_menu_common_logout">Logout</string>
     <string name="drawer_menu_staff_statistics">Statistics</string>
     <string name="drawer_menu_staff_admin_operations">Admin operations</string>
+    <string name="drawer_menu_teams">Teams</string>
 
 
     <!-- Login -->

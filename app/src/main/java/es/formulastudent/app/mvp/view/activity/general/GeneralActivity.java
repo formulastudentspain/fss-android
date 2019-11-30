@@ -45,6 +45,7 @@ import es.formulastudent.app.mvp.view.activity.login.LoginActivity;
 import es.formulastudent.app.mvp.view.activity.racecontrol.RaceControlWelcomeActivity;
 import es.formulastudent.app.mvp.view.activity.statistics.StatisticsActivity;
 import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberActivity;
+import es.formulastudent.app.mvp.view.activity.teams.TeamsActivity;
 import es.formulastudent.app.mvp.view.activity.user.UserActivity;
 
 
@@ -135,6 +136,16 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withIdentifier(10001)
                 .withLevel(2)
                 .withName(R.string.drawer_menu_staff_briefing)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Staff: Briefing
+        PrimaryDrawerItem teams = new PrimaryDrawerItem()
+                .withIdentifier(70001)
+                .withLevel(2)
+                .withName(R.string.drawer_menu_teams)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
@@ -328,7 +339,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             builder.addDrawerItems(
 
                     eventControl,
-                    briefing, preScrutineering,
+                    briefing, preScrutineering, teams,
                     new DividerDrawerItem(),
 
                     raceAccess,
@@ -371,7 +382,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             builder.addDrawerItems(
 
                     eventControl,
-                    briefing, preScrutineering,
+                    briefing, preScrutineering, teams,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -384,7 +395,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             builder.addDrawerItems(
 
                     eventControl,
-                    briefing,
+                    briefing, teams,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -415,7 +426,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }else if(loggedUser.getRole().equals(UserRole.OFFICIAL_SCRUTINEER)){
             builder.addDrawerItems(
 
-                    preScrutineering,
+                    preScrutineering, teams,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -427,8 +438,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }else if(loggedUser.getRole().equals(UserRole.OFFICIAL_STAFF)){
             builder.addDrawerItems(
 
-                    eventControl,
-                    briefing,
+                    eventControl, briefing, teams,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -559,6 +569,11 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         }else if(drawerItem.getIdentifier() == 10026){ //Users
             Intent intent = new Intent(this, UserActivity.class);
+            this.startActivity(intent);
+            finish();
+
+        }else if(drawerItem.getIdentifier() == 70001){ //Teams
+            Intent intent = new Intent(this, TeamsActivity.class);
             this.startActivity(intent);
             finish();
         }

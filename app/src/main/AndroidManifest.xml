@@ -98,6 +98,9 @@
         <activity
             android:name=".mvp.view.activity.userdetail.UserDetailActivity">
         </activity>
+        <activity
+            android:name=".mvp.view.activity.teams.TeamsActivity">
+        </activity>
     </application>
 
 </manifest>

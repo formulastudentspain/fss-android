@@ -18,14 +18,14 @@ import java.io.ByteArrayOutputStream;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
-import es.formulastudent.app.mvp.data.business.imageuploader.ImageUploaderBO;
+import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 
-public class ImageUploaderBOFirebaseImpl implements ImageUploaderBO {
+public class ImageBOFirebaseImpl implements ImageBO {
 
 
     private FirebaseStorage firebaseStorage;
 
-    public ImageUploaderBOFirebaseImpl(FirebaseStorage firebaseStorage) {
+    public ImageBOFirebaseImpl(FirebaseStorage firebaseStorage) {
         this.firebaseStorage = firebaseStorage;
     }
 

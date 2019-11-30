@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
-import es.formulastudent.app.mvp.data.business.imageuploader.ImageUploaderBO;
+import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.Device;
 import es.formulastudent.app.mvp.data.model.User;
@@ -24,14 +24,14 @@ public class UserDetailPresenter {
     private Context context;
     private UserBO userBO;
     private User loggedUser;
-    private ImageUploaderBO imageUploaderBO;
+    private ImageBO imageBO;
 
-    public UserDetailPresenter(UserDetailPresenter.View view, Context context, UserBO userBO, User loggedUser, ImageUploaderBO imageUploaderBO) {
+    public UserDetailPresenter(UserDetailPresenter.View view, Context context, UserBO userBO, User loggedUser, ImageBO imageBO) {
         this.view = view;
         this.context = context;
         this.userBO = userBO;
         this.loggedUser = loggedUser;
-        this.imageUploaderBO = imageUploaderBO;
+        this.imageBO = imageBO;
     }
 
 
@@ -158,7 +158,7 @@ public class UserDetailPresenter {
         view.showLoading();
 
         //Upload image and get the URL
-        imageUploaderBO.uploadImage(bitmap, user.getID(), new BusinessCallback() {
+        imageBO.uploadImage(bitmap, user.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 Uri path = (Uri) responseDTO.getData();

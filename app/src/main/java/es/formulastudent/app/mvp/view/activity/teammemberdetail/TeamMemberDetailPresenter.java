@@ -8,7 +8,7 @@ import java.util.List;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
-import es.formulastudent.app.mvp.data.business.imageuploader.ImageUploaderBO;
+import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
@@ -18,12 +18,12 @@ public class TeamMemberDetailPresenter {
     //Dependencies
     private View view;
     private TeamMemberBO teamMemberBO;
-    private ImageUploaderBO imageUploaderBO;
+    private ImageBO imageBO;
 
-    public TeamMemberDetailPresenter(TeamMemberDetailPresenter.View view, TeamMemberBO teamMemberBO, ImageUploaderBO imageUploaderBO) {
+    public TeamMemberDetailPresenter(TeamMemberDetailPresenter.View view, TeamMemberBO teamMemberBO, ImageBO imageBO) {
         this.view = view;
         this.teamMemberBO = teamMemberBO;
-        this.imageUploaderBO = imageUploaderBO;
+        this.imageBO = imageBO;
     }
 
     void onNFCTagDetected(final TeamMember teamMember, final String tagNFC){
@@ -109,7 +109,7 @@ public class TeamMemberDetailPresenter {
         view.showLoading();
 
         //Upload image and get the URL
-        imageUploaderBO.uploadImage(bitmap, teamMember.getID(), new BusinessCallback() {
+        imageBO.uploadImage(bitmap, teamMember.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 Uri path = (Uri) responseDTO.getData();
