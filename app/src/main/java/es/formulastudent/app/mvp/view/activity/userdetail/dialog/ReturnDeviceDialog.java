@@ -11,6 +11,7 @@ import android.view.View;
 import androidx.fragment.app.DialogFragment;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.model.Device;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailPresenter;
 
 public class ReturnDeviceDialog extends DialogFragment {
@@ -18,11 +19,11 @@ public class ReturnDeviceDialog extends DialogFragment {
     private UserDetailPresenter presenter;
     private Context context;
     private AlertDialog dialog;
-    private String device;
+    private Device device;
 
     public ReturnDeviceDialog() {}
 
-    public static ReturnDeviceDialog newInstance(UserDetailPresenter presenter, Context context, String device) {
+    public static ReturnDeviceDialog newInstance(UserDetailPresenter presenter, Context context, Device device) {
         ReturnDeviceDialog frag = new ReturnDeviceDialog();
         frag.setPresenter(presenter);
         frag.setContext(context);
@@ -81,7 +82,7 @@ public class ReturnDeviceDialog extends DialogFragment {
     public void setContext(Context context){
         this.context = context;
     }
-    public void setDevice(String device) {
+    public void setDevice(Device device) {
         this.device = device;
     }
 

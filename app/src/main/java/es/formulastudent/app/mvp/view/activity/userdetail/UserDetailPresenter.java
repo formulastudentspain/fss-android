@@ -4,27 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import java.io.ByteArrayOutputStream;
-
-import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.imageuploader.ImageUploaderBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
-import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.data.model.Device;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.userdetail.dialog.AssignDeviceDialog;
 import es.formulastudent.app.mvp.view.activity.userdetail.dialog.EditUserDialog;
@@ -36,68 +22,18 @@ public class UserDetailPresenter {
     //Dependencies
     private View view;
     private Context context;
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
-    private StorageReference mStorageRef;
     private UserBO userBO;
     private User loggedUser;
+    private ImageUploaderBO imageUploaderBO;
 
-    public UserDetailPresenter(UserDetailPresenter.View view, Context context, UserBO userBO, User loggedUser) {
+    public UserDetailPresenter(UserDetailPresenter.View view, Context context, UserBO userBO, User loggedUser, ImageUploaderBO imageUploaderBO) {
         this.view = view;
         this.context = context;
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
         this.userBO = userBO;
         this.loggedUser = loggedUser;
+        this.imageUploaderBO = imageUploaderBO;
     }
 
-
-
-    protected void uploadProfilePicture(Bitmap bitmap, TeamMember teamMember){
-        final TeamMember actualTeamMember = teamMember;
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        final Bitmap profileImage = bitmap;
-        StorageReference storageReference = storage.getReference();
-        final StorageReference userProfile = storageReference.child(teamMember.getID()+"_ProfilePhoto.jpg");
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        UploadTask uploadTask = userProfile.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                //on failure
-                view.createMessage(R.string.team_member_error_updating_profile_picture);
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //success
-                taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if(task.isSuccessful()){
-                            Uri path = task.getResult();
-                            updatePhotoUrl(actualTeamMember, path);
-                            view.updateProfilePicture(profileImage);
-                        } else {
-                            view.createMessage(R.string.team_member_error_updating_profile_picture);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    private void updatePhotoUrl(TeamMember actualTeamMember, Uri path) {
-        db.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS).document(actualTeamMember.getID()).update(
-                TeamMember.USER_IMAGE, path.toString()
-        );
-    }
 
     /**
      * Open the selected user to edit
@@ -138,9 +74,9 @@ public class UserDetailPresenter {
    }
 
 
-   public void manageDeviceAssignment(String device) {
+   public void manageDeviceAssignment(Device device) {
 
-       if("walkie".equals(device)){
+       if(Device.WALKIE.equals(device)){
 
            //assign walkie
            if(view.getSelectedUser().getWalkie() == null){
@@ -156,7 +92,7 @@ public class UserDetailPresenter {
                        .newInstance(UserDetailPresenter.this, context, device);
                returnDeviceDialog.show(fm, "rc_endurance_create_dialog");
            }
-       }else if("phone".equals(device)){
+       }else if(Device.CELLPHONE.equals(device)){
 
            //Assign phone
            if(view.getSelectedUser().getCellPhone() == null){
@@ -179,14 +115,14 @@ public class UserDetailPresenter {
      * Return device (walkie or phone)
      * @param device
      */
-   public void returnDevice(String device){
+   public void returnDevice(Device device){
        User user = view.getSelectedUser();
 
-       if("walkie".equals(device)){
+       if(Device.WALKIE.equals(device)){
            user.setWalkie(null);
            this.updateUser(user);
 
-       }else if("phone".equals(device)){
+       }else if(Device.CELLPHONE.equals(device)){
            user.setCellPhone(null);
            this.updateUser(user);
        }
@@ -197,17 +133,63 @@ public class UserDetailPresenter {
      * @param device
      * @param number
      */
-    public void assignDevice(String device, Long number){
+    public void assignDevice(Device device, Long number){
         User user = view.getSelectedUser();
 
-        if("walkie".equals(device)){
+        if(Device.WALKIE.equals(device)){
             user.setWalkie(number);
             this.updateUser(user);
 
-        }else if("phone".equals(device)){
+        }else if(Device.CELLPHONE.equals(device)){
             user.setCellPhone(number);
             this.updateUser(user);
         }
+    }
+
+
+    /**
+     * Update usere profile picture
+     * @param bitmap
+     * @param user
+     */
+    void uploadProfilePicture(final Bitmap bitmap, final User user){
+
+        //Show loading
+        view.showLoading();
+
+        //Upload image and get the URL
+        imageUploaderBO.uploadImage(bitmap, user.getID(), new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                Uri path = (Uri) responseDTO.getData();
+                user.setPhotoUrl(path.toString());
+
+                //Update de team member with the URL
+                userBO.editUser(user, new BusinessCallback() {
+                    @Override
+                    public void onSuccess(ResponseDTO responseDTO) {
+
+                        //Update the image in view
+                        view.updateProfilePicture(bitmap);
+                        view.hideLoading();
+                        view.createMessage(responseDTO.getInfo());
+                    }
+
+                    @Override
+                    public void onFailure(ResponseDTO responseDTO) {
+                        view.createMessage(responseDTO.getError());
+                        view.hideLoading();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                view.createMessage(responseDTO.getError());
+                view.hideLoading();
+            }
+        });
+
     }
 
     public interface View {

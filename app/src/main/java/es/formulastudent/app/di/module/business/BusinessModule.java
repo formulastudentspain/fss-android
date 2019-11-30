@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import dagger.Module;
 import dagger.Provides;
@@ -16,6 +17,8 @@ import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.impl.DynamicEventBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.egress.impl.EgressBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.imageuploader.ImageUploaderBO;
+import es.formulastudent.app.mvp.data.business.imageuploader.impl.ImageUploaderBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.business.racecontrol.impl.RaceControlBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
@@ -26,8 +29,7 @@ import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.business.teammember.impl.TeamMemberBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.business.user.impl.UserBOFirebaseImpl;
-import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
-import es.formulastudent.app.mvp.data.business.userrole.impl.UserRoleBOFirebaseImpl;
+
 
 @Module(includes = {FirebaseModule.class, ContextModule.class})
 public class BusinessModule {
@@ -62,17 +64,6 @@ public class BusinessModule {
     @Provides
     public TeamMemberBO provideTeamMemberBO(FirebaseFirestore firebaseFirestore) {
         return new TeamMemberBOFirebaseImpl(firebaseFirestore);
-    }
-
-
-    /**
-     * Provide TeamMember Role business
-     * @param firebaseFirestore
-     * @return
-     */
-    @Provides
-    public UserRoleBO provideUserRoleBO(FirebaseFirestore firebaseFirestore) {
-        return new UserRoleBOFirebaseImpl(firebaseFirestore);
     }
 
 
@@ -133,5 +124,15 @@ public class BusinessModule {
     @Provides
     public UserBO provideUserBO(FirebaseFirestore firebaseFirestore, AuthBO authBO) {
         return new UserBOFirebaseImpl(firebaseFirestore, authBO);
+    }
+
+    /**
+     * Provide image uploader business
+     * @param firebaseStorage
+     * @return
+     */
+    @Provides
+    public ImageUploaderBO provideImageUploaderBO(FirebaseStorage firebaseStorage) {
+        return new ImageUploaderBOFirebaseImpl(firebaseStorage);
     }
 }

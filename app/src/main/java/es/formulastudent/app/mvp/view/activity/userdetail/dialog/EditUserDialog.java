@@ -19,6 +19,7 @@ import java.util.List;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.activity.general.spinneradapters.RolesSpinnerAdapter;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailPresenter;
 
@@ -38,7 +39,7 @@ public class EditUserDialog extends DialogFragment {
     private RolesSpinnerAdapter rolesAdapter;
 
     //Selected values
-    private Role selectedRole;
+    private UserRole selectedRole;
 
 
     public EditUserDialog() {}
@@ -73,7 +74,7 @@ public class EditUserDialog extends DialogFragment {
         int selectedRoleIndex = 0;
         int roleIndex = 0;
         for(String roleString: loggedUser.getRole().getManagedRoles()){
-            roles.add(Role.getRoleByName(roleString));
+            roles.add(UserRole.getRoleByName(roleString));
             if(roleString.equals(selectedUser.getRole().getName())){
                 selectedRoleIndex = roleIndex;
             }
@@ -86,7 +87,7 @@ public class EditUserDialog extends DialogFragment {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                Role role = rolesAdapter.getItem(position);
+                UserRole role = (UserRole) rolesAdapter.getItem(position);
                 selectedRole = role;
             }
             @Override

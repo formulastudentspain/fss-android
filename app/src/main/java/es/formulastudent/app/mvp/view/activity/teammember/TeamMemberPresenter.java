@@ -11,10 +11,10 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
-import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
+import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.data.model.Role;
+import es.formulastudent.app.mvp.data.model.TeamMemberRole;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.teammemberdetail.TeamMemberDetailActivity;
 
@@ -25,7 +25,6 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
     private Context context;
     private TeamMemberBO teamMemberBO;
     private TeamBO teamBO;
-    private UserRoleBO userRoleBO;
 
     //Data
     private List<TeamMember> allTeamMemberList = new ArrayList<>();
@@ -33,12 +32,11 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
 
 
 
-    public TeamMemberPresenter(TeamMemberPresenter.View view, Context context, TeamMemberBO teamMemberBO, TeamBO teamBO, UserRoleBO userRoleBO) {
+    public TeamMemberPresenter(TeamMemberPresenter.View view, Context context, TeamMemberBO teamMemberBO, TeamBO teamBO) {
         this.view = view;
         this.context = context;
         this.teamMemberBO = teamMemberBO;
         this.teamBO = teamBO;
-        this.userRoleBO = userRoleBO;
     }
 
 
@@ -129,32 +127,7 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
     }
 
 
-    private void retrieveRoles(){
-
-        //Show loading
-        view.showLoading();
-
-        //Call business to retrieve user roles
-        userRoleBO.retrieveUserRoles(new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-
-                List<Role> roles = (List<Role>) responseDTO.getData();
-
-                //Retrieve Teams now
-                retrieveTeams(roles);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(R.string.team_member_get_user_roles_error);
-            }
-        });
-    }
-
-
-
-    private void retrieveTeams(final List<Role> roles){
+    void openCreateTeamMemberDialog(){
 
         //Show loading
         view.showLoading();
@@ -168,7 +141,7 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
                 view.hideLoading();
 
                 List<Team> teams = (List<Team>) responseDTO.getData();
-                view.showCreateUserDialog(teams, roles);
+                view.showCreateTeamMemberDialog(teams, TeamMemberRole.getAll());
             }
 
             @Override
@@ -183,10 +156,6 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
         return filteredTeamMemberList;
     }
 
-    public void retrieveCreateUserDialogData() {
-        //First retrieve roles, then retrieve teams
-        retrieveRoles();
-    }
 
 
     public interface View {
@@ -222,7 +191,7 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
          * @param teams
          * @param roles
          */
-        void showCreateUserDialog(List<Team> teams, List<Role> roles);
+        void showCreateTeamMemberDialog(List<Team> teams, List<Role> roles);
     }
 
 }

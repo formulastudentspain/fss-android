@@ -11,7 +11,6 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
-import es.formulastudent.app.mvp.data.business.userrole.UserRoleBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
@@ -25,7 +24,6 @@ public class UserPresenter implements RecyclerViewClickListener {
     private Context context;
     private UserBO userBO;
     private TeamBO teamBO;
-    private UserRoleBO userRoleBO;
 
     //Data
     private List<User> allUsersList = new ArrayList<>();
@@ -33,12 +31,11 @@ public class UserPresenter implements RecyclerViewClickListener {
 
 
 
-    public UserPresenter(UserPresenter.View view, Context context, UserBO userBO, TeamBO teamBO, UserRoleBO userRoleBO) {
+    public UserPresenter(UserPresenter.View view, Context context, UserBO userBO, TeamBO teamBO) {
         this.view = view;
         this.context = context;
         this.userBO = userBO;
         this.teamBO = teamBO;
-        this.userRoleBO = userRoleBO;
     }
 
 

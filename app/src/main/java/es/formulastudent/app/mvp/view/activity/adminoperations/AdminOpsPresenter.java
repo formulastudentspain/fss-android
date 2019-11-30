@@ -198,7 +198,7 @@ public class AdminOpsPresenter {
                 }
 
 
-                //Role
+                //UserRole
                 teamMember.setRole("DRIVER");
 
                 //Profile image

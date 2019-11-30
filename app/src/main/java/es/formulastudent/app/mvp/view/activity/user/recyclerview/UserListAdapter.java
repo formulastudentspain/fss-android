@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.Role;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
@@ -50,7 +50,7 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         User user = userList.get(position);
-        Role role = user.getRole();
+        UserRole role = user.getRole();
 
         UserListViewHolder userListViewHolder = (UserListViewHolder)holder;
         userListViewHolder.userName.setText(user.getName());
@@ -58,8 +58,8 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         userListViewHolder.userRole.setTextColor(context.getResources().getColor(role.getColor()));
 
         //For Officials, in bold
-        if(role.equals(Role.ADMINISTRATOR) || role.equals(Role.OFFICIAL_MARSHALL)
-                || role.equals(Role.OFFICIAL_SCRUTINEER) || role.equals(Role.OFFICIAL_STAFF)){
+        if(role.equals(UserRole.ADMINISTRATOR) || role.equals(UserRole.OFFICIAL_MARSHALL)
+                || role.equals(UserRole.OFFICIAL_SCRUTINEER) || role.equals(UserRole.OFFICIAL_STAFF)){
             userListViewHolder.userRole.setTypeface(null, Typeface.BOLD);
 
         }else{

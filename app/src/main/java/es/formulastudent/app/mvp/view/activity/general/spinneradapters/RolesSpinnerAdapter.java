@@ -29,6 +29,7 @@ public class RolesSpinnerAdapter extends ArrayAdapter<Role> {
         this.inflater = LayoutInflater.from(context);
     }
 
+
     @Override
     public int getCount(){
         return roles.size();

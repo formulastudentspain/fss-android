@@ -28,7 +28,6 @@ public interface TeamMemberBO {
      */
     void createTeamMember(TeamMember teamMember, BusinessCallback callback);
 
-
     /**
      * Method to delete all team members
      * @param callback
@@ -41,4 +40,11 @@ public interface TeamMemberBO {
      * @param callback
      */
     void getRegisteredTeamMemberByTeamId(String teamID, BusinessCallback callback);
+
+    /**
+     * Method to update the team member
+     * @param teamMember
+     * @param callback
+     */
+    void updateTeamMember(TeamMember teamMember, BusinessCallback callback);
 }

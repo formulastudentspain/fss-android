@@ -39,6 +39,7 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
     private ImageView userProfilePhoto;
     private ImageView userNFCImage;
     private TextView userNFCTag;
+    private TextView teamName;
 
     //Selected teamMember
     TeamMember teamMember;
@@ -82,6 +83,7 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
 
         //Instantiate vies components
         userName = findViewById(R.id.user_detail_name);
+        teamName = findViewById(R.id.user_detail_team);
         userProfilePhoto = findViewById(R.id.user_detail_profile_image);
         userProfilePhoto.setOnClickListener(this);
         userNFCTag = findViewById(R.id.user_detail_nfc_tag);
@@ -90,6 +92,7 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
 
         //Set data
         userName.setText(teamMember.getName());
+        teamName.setText(teamMember.getTeam());
         Picasso.get().load(teamMember.getPhotoUrl()).into(userProfilePhoto);
 
 
@@ -110,12 +113,12 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
 
     @Override
     public void showLoading() {
-
+        super.showLoadingDialog();
     }
 
     @Override
     public void hideLoadingIcon() {
-
+        super.hideLoadingDialog();
     }
 
     @Override

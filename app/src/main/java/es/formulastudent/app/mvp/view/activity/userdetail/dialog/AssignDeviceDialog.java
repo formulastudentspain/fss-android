@@ -12,6 +12,7 @@ import android.widget.EditText;
 import androidx.fragment.app.DialogFragment;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.model.Device;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailPresenter;
 
 public class AssignDeviceDialog extends DialogFragment {
@@ -19,7 +20,7 @@ public class AssignDeviceDialog extends DialogFragment {
     private UserDetailPresenter presenter;
     private Context context;
     private AlertDialog dialog;
-    private String device;
+    private Device device;
 
     //View components
     private EditText deviceNumber;
@@ -27,7 +28,7 @@ public class AssignDeviceDialog extends DialogFragment {
 
     public AssignDeviceDialog() {}
 
-    public static AssignDeviceDialog newInstance(UserDetailPresenter presenter, Context context, String device) {
+    public static AssignDeviceDialog newInstance(UserDetailPresenter presenter, Context context, Device device) {
         AssignDeviceDialog frag = new AssignDeviceDialog();
         frag.setPresenter(presenter);
         frag.setContext(context);
@@ -103,7 +104,7 @@ public class AssignDeviceDialog extends DialogFragment {
     public void setContext(Context context){
         this.context = context;
     }
-    public void setDevice(String device) {
+    public void setDevice(Device device) {
         this.device = device;
     }
 }

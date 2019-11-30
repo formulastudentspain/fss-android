@@ -23,8 +23,8 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerTeamMemberListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.TeamMemberListModule;
-import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.Role;
+import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.teammember.dialog.CreateTeamMemberDialog;
 import es.formulastudent.app.mvp.view.activity.teammember.recyclerview.TeamMemberListAdapter;
@@ -136,13 +136,13 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_add_user){
-            presenter.retrieveCreateUserDialogData();
+            presenter.openCreateTeamMemberDialog();
         }
     }
 
 
     @Override
-    public void showCreateUserDialog(List<Team> teams, List<Role> roles) {
+    public void showCreateTeamMemberDialog(List<Team> teams, List<Role> roles) {
         FragmentManager fm = getSupportFragmentManager();
         CreateTeamMemberDialog createTeamMemberDialog = CreateTeamMemberDialog.newInstance(presenter, this, teams, roles);
         createTeamMemberDialog.show(fm, "fragment_edit_name");

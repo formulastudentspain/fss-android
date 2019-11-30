@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -180,6 +181,42 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         responseDTO.setError(R.string.team_member_get_registered_by_team_error);
+                        callback.onFailure(responseDTO);
+                    }
+                });
+    }
+
+    @Override
+    public void updateTeamMember(final TeamMember teamMember, final BusinessCallback callback) {
+        final ResponseDTO responseDTO = new ResponseDTO();
+        final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS).document(teamMember.getID());
+
+        registerReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                registerReference.update(teamMember.toDocumentData())
+
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                responseDTO.setInfo(R.string.team_member_update_info);
+                                callback.onSuccess(responseDTO);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                responseDTO.setError(R.string.team_member_update_error);
+                                callback.onFailure(responseDTO);
+                            }
+                        });
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        responseDTO.setError(R.string.team_member_update_error);
                         callback.onFailure(responseDTO);
                     }
                 });

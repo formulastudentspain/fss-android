@@ -24,7 +24,7 @@ public class User implements Serializable {
     private String name;
     private String mail;
     private String photoUrl;
-    private Role role;
+    private UserRole role;
     private Long walkie;
     private Long cellPhone;
 
@@ -40,7 +40,7 @@ public class User implements Serializable {
 
         //Getting role from enum
         String roleString = object.getString(TeamMember.ROLE);
-        this.role = Role.getRoleByName(roleString);
+        this.role = (UserRole) UserRole.getRoleByName(roleString);
     }
 
     public Map<String, Object> toDocumentData(){
@@ -98,11 +98,11 @@ public class User implements Serializable {
         this.photoUrl = photoUrl;
     }
 
-    public Role getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 

@@ -17,9 +17,10 @@ import java.util.List;
 import java.util.UUID;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.data.model.Role;
+import es.formulastudent.app.mvp.data.model.TeamMemberRole;
 import es.formulastudent.app.mvp.view.activity.general.spinneradapters.RolesSpinnerAdapter;
 import es.formulastudent.app.mvp.view.activity.general.spinneradapters.TeamsSpinnerAdapter;
 import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberPresenter;
@@ -46,7 +47,7 @@ public class CreateTeamMemberDialog extends DialogFragment {
 
     //Selected values
     private Team selectedTeam;
-    private Role selectedRole;
+    private TeamMemberRole selectedRole;
 
 
     public CreateTeamMemberDialog() {}
@@ -68,7 +69,7 @@ public class CreateTeamMemberDialog extends DialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View rootView = inflater.inflate(R.layout.dialog_create_user, null);
+        View rootView = inflater.inflate(R.layout.dialog_create_team_member, null);
 
         // Get view components
         userName = rootView.findViewById(R.id.create_user_name);
@@ -98,7 +99,7 @@ public class CreateTeamMemberDialog extends DialogFragment {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                Role role = rolesAdapter.getItem(position);
+                TeamMemberRole role = (TeamMemberRole) rolesAdapter.getItem(position);
                 selectedRole = role;
             }
             @Override

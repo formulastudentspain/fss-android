@@ -70,7 +70,8 @@
     <string name="team_member_error_registering">Error registering team member</string>
     <string name="team_member_error_tag_already_used">TAG is already registered by %1$s</string>
     <string name="team_member_error_creating_user">Error creating team member</string>
-    <string name="team_member_error_updating_profile_picture">Error uploading profile picture</string>
+    <string name="team_member_update_info">Team member updated successfully</string>
+    <string name="team_member_update_error">Error updating team member</string>
 
 
 
@@ -278,6 +279,10 @@
     <string name="user_items">Items</string>
     <string name="user_update_info">User updated properly</string>
     <string name="user_update_error">Error updating user</string>
+
+    <!-- Image Uploader -->
+    <string name="upload_picture_error">Error uploading picture</string>
+    <string name="upload_picture_success">Picture uploaded successfully</string>
 
 
 

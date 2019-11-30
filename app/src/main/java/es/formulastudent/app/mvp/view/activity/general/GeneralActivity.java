@@ -34,7 +34,7 @@ import javax.inject.Inject;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
-import es.formulastudent.app.mvp.data.model.Role;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.adminoperations.AdminOpsActivity;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
@@ -324,7 +324,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
 
-        if(loggedUser.getRole().equals(Role.ADMINISTRATOR)){
+        if(loggedUser.getRole().equals(UserRole.ADMINISTRATOR)){
             builder.addDrawerItems(
 
                     eventControl,
@@ -349,7 +349,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     logout);
 
 
-        }else if(loggedUser.getRole().equals(Role.MARSHALL)){
+        }else if(loggedUser.getRole().equals(UserRole.MARSHALL)){
             builder.addDrawerItems(
 
                     raceAccess,
@@ -367,7 +367,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
                     logout);
 
-        }else if(loggedUser.getRole().equals(Role.SCRUTINEER)){
+        }else if(loggedUser.getRole().equals(UserRole.SCRUTINEER)){
             builder.addDrawerItems(
 
                     eventControl,
@@ -380,7 +380,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
                     logout);
 
-        }else if(loggedUser.getRole().equals(Role.STAFF)){
+        }else if(loggedUser.getRole().equals(UserRole.STAFF)){
             builder.addDrawerItems(
 
                     eventControl,
@@ -393,7 +393,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
                     logout);
 
-        }else if(loggedUser.getRole().equals(Role.OFFICIAL_MARSHALL)){
+        }else if(loggedUser.getRole().equals(UserRole.OFFICIAL_MARSHALL)){
             builder.addDrawerItems(
 
                     raceAccess,
@@ -412,7 +412,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     staffStatistics,
                     logout);
 
-        }else if(loggedUser.getRole().equals(Role.OFFICIAL_SCRUTINEER)){
+        }else if(loggedUser.getRole().equals(UserRole.OFFICIAL_SCRUTINEER)){
             builder.addDrawerItems(
 
                     preScrutineering,
@@ -424,7 +424,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
                     logout);
 
-        }else if(loggedUser.getRole().equals(Role.OFFICIAL_STAFF)){
+        }else if(loggedUser.getRole().equals(UserRole.OFFICIAL_STAFF)){
             builder.addDrawerItems(
 
                     eventControl,

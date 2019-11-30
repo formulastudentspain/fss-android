@@ -26,7 +26,7 @@
             android:paddingStart="16dp"
             android:maxLines="1"
             android:inputType="textPersonName"
-            android:hint="Search teamMember"
+            android:hint="Search team member"
             android:background="@drawable/activity_user_list_filter_input"/>
 
         <com.google.android.material.chip.ChipGroup

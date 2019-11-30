@@ -22,7 +22,8 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerUserDetailComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.UserDetailModule;
-import es.formulastudent.app.mvp.data.model.Role;
+import es.formulastudent.app.mvp.data.model.Device;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 
@@ -35,10 +36,8 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     /**
      * TODO
      * Se tiene que poder cambiar:
-     *  - Rol
      *  - Foto
      *
-     *  Además se tiene que poder gestionar el préstamo de walkies y móviles
      */
 
     @Inject
@@ -56,7 +55,6 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
 
     //Selected user
     User user;
-
 
 
     @Override
@@ -132,10 +130,10 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
             dispatchTakePictureIntent();
 
         }else if(view.getId() == R.id.user_walkie_talkie){
-            presenter.manageDeviceAssignment("walkie");
+            presenter.manageDeviceAssignment(Device.WALKIE);
 
         }else if(view.getId() == R.id.user_cell_phone){
-            presenter.manageDeviceAssignment("phone");
+            presenter.manageDeviceAssignment(Device.CELLPHONE);
         }
     }
 
@@ -147,7 +145,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            //presenter.uploadProfilePicture(imageBitmap, user);
+            presenter.uploadProfilePicture(imageBitmap, user);
         }
     }
 
@@ -210,8 +208,8 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         userRole.setTextColor(getResources().getColor(user.getRole().getColor()));
 
         //For Officials, in bold
-        if(user.getRole().equals(Role.ADMINISTRATOR) || user.getRole().equals(Role.OFFICIAL_MARSHALL)
-                || user.getRole().equals(Role.OFFICIAL_SCRUTINEER) || user.getRole().equals(Role.OFFICIAL_STAFF)){
+        if(user.getRole().equals(UserRole.ADMINISTRATOR) || user.getRole().equals(UserRole.OFFICIAL_MARSHALL)
+                || user.getRole().equals(UserRole.OFFICIAL_SCRUTINEER) || user.getRole().equals(UserRole.OFFICIAL_STAFF)){
             userRole.setTypeface(null, Typeface.BOLD);
 
         }else{

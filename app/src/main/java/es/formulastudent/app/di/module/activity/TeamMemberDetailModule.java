@@ -1,11 +1,10 @@
 package es.formulastudent.app.di.module.activity;
 
-import android.content.Context;
-
 import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
+import es.formulastudent.app.mvp.data.business.imageuploader.ImageUploaderBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.view.activity.teammemberdetail.TeamMemberDetailPresenter;
 
@@ -24,9 +23,7 @@ public class TeamMemberDetailModule {
     }
 
     @Provides
-    public TeamMemberDetailPresenter providePresenter(TeamMemberDetailPresenter.View categoryView, Context context, TeamMemberBO teamMemberBO) {
-        return new TeamMemberDetailPresenter(categoryView, context, teamMemberBO);
+    public TeamMemberDetailPresenter providePresenter(TeamMemberDetailPresenter.View categoryView, TeamMemberBO teamMemberBO, ImageUploaderBO imageUploaderBO) {
+        return new TeamMemberDetailPresenter(categoryView, teamMemberBO, imageUploaderBO);
     }
-
-
 }

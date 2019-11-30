@@ -20,6 +20,7 @@ import java.util.UUID;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.activity.general.spinneradapters.RolesSpinnerAdapter;
 import es.formulastudent.app.mvp.view.activity.user.UserPresenter;
 
@@ -38,7 +39,7 @@ public class CreateUserDialog extends DialogFragment {
     private RolesSpinnerAdapter rolesAdapter;
 
     //Selected values
-    private Role selectedRole;
+    private UserRole selectedRole;
 
 
     public CreateUserDialog() {}
@@ -70,7 +71,7 @@ public class CreateUserDialog extends DialogFragment {
 
         List<Role> roles = new ArrayList<>();
         for(String roleString: loggedUser.getRole().getManagedRoles()){
-            roles.add(Role.getRoleByName(roleString));
+            roles.add(UserRole.getRoleByName(roleString));
         }
 
         rolesAdapter = new RolesSpinnerAdapter(context, android.R.layout.simple_spinner_item, roles);
@@ -79,7 +80,7 @@ public class CreateUserDialog extends DialogFragment {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                Role role = rolesAdapter.getItem(position);
+                UserRole role = (UserRole) rolesAdapter.getItem(position);
                 selectedRole = role;
             }
             @Override
