@@ -5,12 +5,12 @@
     <string name="activity_user_detail_label">User detail</string>
 
     <!-- Drawer menu options -->
-    <string name="drawer_menu_staff">Event control</string>
-    <string name="drawer_menu_race_control">Race control</string>
-    <string name="drawer_menu_race_access">Race access</string>
+    <string name="drawer_menu_staff">EVENT CONTROL</string>
+    <string name="drawer_menu_race_control">RACE CONTROL</string>
+    <string name="drawer_menu_race_access">RACE ACCESS</string>
     <string name="drawer_menu_staff_briefing">Briefing</string>
     <string name="drawer_menu_staff_pre_scrutineering">Pre-scrutineering</string>
-    <string name="drawer_menu_staff_users_management">User management</string>
+    <string name="drawer_menu_staff_users_management">USER MANAGEMENT</string>
     <string name="drawer_menu_staff_users_management_drivers">Drivers</string>
     <string name="drawer_menu_staff_users_management_esos">Esos</string>
     <string name="drawer_menu_staff_users_management_volunteers">Volunteers</string>

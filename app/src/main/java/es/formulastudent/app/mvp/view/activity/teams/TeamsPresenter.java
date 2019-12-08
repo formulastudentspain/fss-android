@@ -2,6 +2,7 @@ package es.formulastudent.app.mvp.view.activity.teams;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringActivity;
 
 
 public class TeamsPresenter implements RecyclerViewClickListener {
@@ -76,9 +78,16 @@ public class TeamsPresenter implements RecyclerViewClickListener {
 
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
-        if(v.getId() == R.id.delete_run_button){
 
-        }
+        Team selectedTeam = filteredTeamsList.get(position);
+
+        //Open Scrutineering
+         if(v.getId() == R.id.scrutineering_button){
+             Intent intent = new Intent(context, TeamsDetailScrutineeringActivity.class);
+             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+             intent.putExtra("selectedTeam", selectedTeam);
+             context.startActivity(intent);
+         }
     }
 
 

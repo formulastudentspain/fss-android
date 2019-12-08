@@ -101,6 +101,10 @@
         <activity
             android:name=".mvp.view.activity.teams.TeamsActivity">
         </activity>
+        <activity
+            android:name=".mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringActivity">
+        </activity>
+
     </application>
 
 </manifest>

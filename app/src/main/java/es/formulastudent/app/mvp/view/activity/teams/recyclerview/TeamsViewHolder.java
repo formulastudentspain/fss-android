@@ -20,7 +20,8 @@ public class TeamsViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     //Swipe components
     SwipeRevealLayout swipeRevealLayout;
-    CardView deleteBriefingLayout;
+    CardView scrutineeringLayout;
+    CardView feeLayout;
 
     RecyclerViewClickListener clickListener;
 
@@ -34,8 +35,10 @@ public class TeamsViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
 
         //Swipe components
-        deleteBriefingLayout = itemView.findViewById(R.id.delete_run_button);
-        deleteBriefingLayout.setOnClickListener(this);
+        scrutineeringLayout = itemView.findViewById(R.id.scrutineering_button);
+        scrutineeringLayout.setOnClickListener(this);
+        feeLayout = itemView.findViewById(R.id.fee_button);
+        feeLayout.setOnClickListener(this);
     }
 
     @Override

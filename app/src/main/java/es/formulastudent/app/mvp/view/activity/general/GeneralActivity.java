@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -34,8 +35,8 @@ import javax.inject.Inject;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
-import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.activity.adminoperations.AdminOpsActivity;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventActivity;
@@ -47,6 +48,7 @@ import es.formulastudent.app.mvp.view.activity.statistics.StatisticsActivity;
 import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberActivity;
 import es.formulastudent.app.mvp.view.activity.teams.TeamsActivity;
 import es.formulastudent.app.mvp.view.activity.user.UserActivity;
+import info.androidhive.fontawesome.FontDrawable;
 
 
 public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
@@ -132,19 +134,25 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
 
         //Staff: Briefing
+        FontDrawable briefingIcon = new FontDrawable(this, R.string.fa_comment_dots, false, false);
+        briefingIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem briefing = new PrimaryDrawerItem()
                 .withIdentifier(10001)
                 .withLevel(2)
+                .withIcon(briefingIcon)
                 .withName(R.string.drawer_menu_staff_briefing)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
 
-        //Staff: Briefing
+        //Staff: Teams
+        FontDrawable teamsIcon = new FontDrawable(this, R.string.fa_car_side_solid, true, false);
+        teamsIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem teams = new PrimaryDrawerItem()
                 .withIdentifier(70001)
                 .withLevel(2)
+                .withIcon(teamsIcon)
                 .withName(R.string.drawer_menu_teams)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
@@ -192,9 +200,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
 */
         //Race Control: Endurance
+        FontDrawable enduranceIconRC = new FontDrawable(this, R.string.fa_flag_checkered_solid, true, false);
+        enduranceIconRC.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem rcEndurance = new PrimaryDrawerItem()
                 .withIdentifier(10021)
                 .withLevel(2)
+                .withIcon(enduranceIconRC)
                 .withName(R.string.drawer_menu_staff_endurance_efficiency)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
@@ -213,9 +224,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
 
         //Access control: Practice track
+        FontDrawable practiceTrackIcon = new FontDrawable(this, R.string.fa_graduation_cap_solid, true, false);
+        practiceTrackIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem practiceTrack = new PrimaryDrawerItem()
                 .withIdentifier(10011)
                 .withLevel(2)
+                .withIcon(practiceTrackIcon)
                 .withName(R.string.drawer_menu_staff_practice_track)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
@@ -223,9 +237,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
 
         //Access control: Skidpad
+        FontDrawable skidPadIcon = new FontDrawable(this, R.string.fa_infinity_solid, true, false);
+        skidPadIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem skidpad = new PrimaryDrawerItem()
                 .withIdentifier(10012)
                 .withLevel(2)
+                .withIcon(skidPadIcon)
                 .withName(R.string.drawer_menu_staff_skidpad)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
@@ -233,9 +250,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
 
         //Access control: Acceleration
+        FontDrawable accelerationIcon = new FontDrawable(this, R.string.fa_road_solid, true, false);
+        accelerationIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem acceleration = new PrimaryDrawerItem()
                 .withIdentifier(10013)
                 .withLevel(2)
+                .withIcon(accelerationIcon)
                 .withName(R.string.drawer_menu_staff_acceleration)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
@@ -243,9 +263,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
 
         //Access control: Autocross
+        FontDrawable autocrossIcon = new FontDrawable(this, R.string.fa_stopwatch_solid, true, false);
+        autocrossIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem autocross = new PrimaryDrawerItem()
                 .withIdentifier(10014)
                 .withLevel(2)
+                .withIcon(autocrossIcon)
                 .withName(R.string.drawer_menu_staff_autocross)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
@@ -253,9 +276,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
 
         //Access control: Endurance
+        FontDrawable enduranceIcon = new FontDrawable(this, R.string.fa_flag_checkered_solid, true, false);
+        enduranceIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem endurance = new PrimaryDrawerItem()
                 .withIdentifier(10015)
                 .withLevel(2)
+                .withIcon(enduranceIcon)
                 .withName(R.string.drawer_menu_staff_endurance_efficiency)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
@@ -291,9 +317,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
         //TeamMember management: Volunteers
+        FontDrawable volunteersIcon = new FontDrawable(this, R.string.fa_laugh, false, false);
+        volunteersIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem volunteers = new PrimaryDrawerItem()
                 .withIdentifier(10026)
                 .withLevel(2)
+                .withIcon(volunteersIcon)
                 .withName(R.string.drawer_menu_staff_users_management_volunteers)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
@@ -339,7 +368,9 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             builder.addDrawerItems(
 
                     eventControl,
-                    briefing, preScrutineering, teams,
+                    briefing,
+                    //preScrutineering,
+                    teams,
                     new DividerDrawerItem(),
 
                     raceAccess,
@@ -352,7 +383,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     new DividerDrawerItem(),
 
                     userManagement,
-                    drivers,esos,volunteers,
+                    drivers,volunteers,
                     new DividerDrawerItem(),
 
                     staffStatistics,
@@ -382,7 +413,9 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             builder.addDrawerItems(
 
                     eventControl,
-                    briefing, preScrutineering, teams,
+                    briefing,
+                    //preScrutineering,
+                    teams,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -399,7 +432,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     new DividerDrawerItem(),
 
                     userManagement,
-                    drivers,esos,volunteers,
+                    drivers,volunteers,
                     new DividerDrawerItem(),
 
                     logout);
@@ -426,7 +459,8 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }else if(loggedUser.getRole().equals(UserRole.OFFICIAL_SCRUTINEER)){
             builder.addDrawerItems(
 
-                    preScrutineering, teams,
+                    //preScrutineering,
+                    teams,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -442,7 +476,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     new DividerDrawerItem(),
 
                     userManagement,
-                    drivers,esos,volunteers,
+                    drivers,volunteers,
                     new DividerDrawerItem(),
 
                     logout);
