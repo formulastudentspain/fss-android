@@ -21,7 +21,6 @@ import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
-import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.ConfirmEventRegisterDialog;
@@ -112,14 +111,8 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
                             @Override
                             public void onSuccess(ResponseDTO responseDTO) {
 
-                                //If it is Pre-Scrutineering, create the Egress register
-                                if(eventType.equals(EventType.PRE_SCRUTINEERING)){
-                                    PreScrutineeringRegister register = (PreScrutineeringRegister) responseDTO.getData();
-                                    createEgressRegister(register);
-                                }else{
-                                    //Refresh the records
-                                    retrieveRegisterList();
-                                }
+                                //Refresh the records
+                                retrieveRegisterList();
 
                                 //Hide loading
                                 view.hideLoading();
@@ -153,28 +146,6 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
             }
         });
 
-    }
-
-
-    /**
-     * Call business to create the Egress register
-     * @param register
-     */
-    private void createEgressRegister(PreScrutineeringRegister register){
-
-         egressBO.createRegister(register.getID(), new BusinessCallback() {
-             @Override
-             public void onSuccess(ResponseDTO responseDTO) {
-                 //Refresh the list
-                 retrieveRegisterList();
-             }
-
-             @Override
-             public void onFailure(ResponseDTO responseDTO) {
-                 //Show error message
-                 view.createMessage(R.string.dynamic_event_message_error_create_egress);
-             }
-         });
     }
 
 
@@ -247,36 +218,6 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
     }
 
 
-    /**
-     * It is time to update the chrono time
-     * @param milliseconds
-     * @param registerID
-     */
-    public void onChronoTimeRegistered(Long milliseconds, String registerID) {
-
-        //Show loading
-        view.showLoading();
-
-        //We have the time, we need to update the time
-        dynamicEventBO.updatePreScrutineeringRegister(registerID, milliseconds, new BusinessCallback() {
-
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-
-                //Show info message
-                view.createMessage(responseDTO.getInfo());
-
-                //Update results
-                retrieveRegisterList();
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                //Show error
-                view.createMessage(responseDTO.getError());
-            }
-        });
-    }
 
 
     /**
@@ -422,11 +363,6 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
         }else if(v.getId() == R.id.repeat_run_button){
             EventRegister selectedRegister = filteredEventRegisterList.get(position);
             openRepeatRunDialog(selectedRegister);
-
-        //Clicked on the register, if it is Pre-Scrutineering, open the Egress activity
-        }else if(v.getId() == R.id.main_element){
-            PreScrutineeringRegister selectedRegister = (PreScrutineeringRegister) filteredEventRegisterList.get(position);
-            view.openChronoActivity(selectedRegister);
         }
 
     }
@@ -546,12 +482,6 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
          * @param activated
          */
         void filtersActivated(Boolean activated);
-
-        /**
-         * Method to open the Chrono activity to get the Pre-Scrutineering time
-         * @param register
-         */
-        void openChronoActivity(PreScrutineeringRegister register);
     }
 
 }

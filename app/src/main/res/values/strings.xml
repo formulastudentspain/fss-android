@@ -260,6 +260,16 @@
     <string name="teams_info_delete_all_message">Teams deleted successfully</string>
     <string name="teams_error_create_message">Error creating teams</string>
     <string name="teams_info_create_message">Team created successfully</string>
+    <string name="teams_error_update_message">Error updating teams</string>
+    <string name="teams_info_update_message">Team updated successfully</string>
+    <string name="teams_dialog_pass_ok_button">Pass</string>
+    <string name="teams_dialog_pass_cancel_button">Cancel</string>
+    <string name="teams_dialog_pass_title">Pass test</string>
+    <string name="teams_dialog_pass_message">Are you sure you want to pass the selected test?</string>
+
+
+
+
 
 
     <!-- User -->

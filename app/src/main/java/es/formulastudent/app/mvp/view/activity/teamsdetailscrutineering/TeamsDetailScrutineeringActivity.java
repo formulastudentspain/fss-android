@@ -1,13 +1,19 @@
 package es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -19,10 +25,14 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.TeamsDetailScrutineeringModule;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
-import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.tabsadapter.TabAdapter;
+import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragment.prescrutineering.TeamsDetailPreScrutineeringFragment;
+import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.tabadapter.TabAdapter;
 
 
 public class TeamsDetailScrutineeringActivity extends GeneralActivity implements TeamsDetailScrutineeringPresenter.View {
+
+    private static final int NFC_REQUEST_CODE = 101;
+    private static final int CHRONO_CODE = 102;
 
     @Inject
     TeamsDetailScrutineeringPresenter presenter;
@@ -41,7 +51,7 @@ public class TeamsDetailScrutineeringActivity extends GeneralActivity implements
         //Get selected team
         team = (Team) getIntent().getSerializableExtra("selectedTeam");
 
-        tabAdapter = new TabAdapter(getSupportFragmentManager(), team);
+        tabAdapter = new TabAdapter(getSupportFragmentManager(), team, presenter);
         viewPager = findViewById(R.id.pager);
         viewPager.setAdapter(tabAdapter);
 
@@ -73,7 +83,7 @@ public class TeamsDetailScrutineeringActivity extends GeneralActivity implements
     private void initViews(){
 
         //Add toolbar title
-        setToolbarTitle(getString(R.string.drawer_menu_teams));
+        setToolbarTitle(team.getCar().getNumber() + " - " + team.getName());
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -104,9 +114,26 @@ public class TeamsDetailScrutineeringActivity extends GeneralActivity implements
     }
 
     @Override
+    public FragmentManager getViewFragmentManager() {
+        return getSupportFragmentManager();
+    }
+
+    @Override
     public Team getCurrentTeam() {
         return team;
     }
+
+    @Override
+    public void refreshRegisterItems() {
+        //Refresh the egress items
+        List<Fragment> fragmentLsit = getSupportFragmentManager().getFragments();
+        for(Fragment fragment: fragmentLsit){
+            if(fragment instanceof TeamsDetailPreScrutineeringFragment){
+                ((TeamsDetailPreScrutineeringFragment)fragment).refreshListItems();
+            }
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -114,13 +141,33 @@ public class TeamsDetailScrutineeringActivity extends GeneralActivity implements
         return true;
     }
 
+
     @Override
     public void onBackPressed()
     {
-        tabAdapter.updateTeamFields();
         Toast.makeText(this, "Save comments before leaving this activity", Toast.LENGTH_LONG).show();
         super.onBackPressed();  // optional depending on your needs
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //NFC reader
+        if (requestCode == NFC_REQUEST_CODE) {
+            if(resultCode == Activity.RESULT_OK){
+                String result = data.getStringExtra("result");
+                presenter.onNFCTagDetected(result);
+            }
+
+            //Chronometer result for Egress
+        }else if(requestCode == CHRONO_CODE){
+            if(resultCode == Activity.RESULT_OK) {
+                ArrayList<String> result = data.getStringArrayListExtra("result");
+                Long miliseconds = Long.parseLong(result.get(0));
+                String registerID = result.get(1);
+                presenter.onChronoTimeRegistered(miliseconds, registerID);
+            }
+        }
+    }
 }

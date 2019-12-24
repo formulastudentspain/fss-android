@@ -48,7 +48,7 @@
                             android:id="@+id/ai_check"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/fa_check_circle"
+                            android:text="@string/fa_check_solid"
                             android:textColor="@color/md_green_500"
                             android:textSize="30sp"
                             app:solid_icon="true" />
@@ -107,7 +107,7 @@
                             android:id="@+id/ei_check"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/fa_check_circle"
+                            android:text="@string/fa_check_solid"
                             android:textColor="@color/md_green_500"
                             android:textSize="30sp"
                             app:solid_icon="true" />
@@ -165,7 +165,7 @@
                             android:id="@+id/mi_check"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/fa_check_circle"
+                            android:text="@string/fa_check_solid"
                             android:textColor="@color/md_green_500"
                             android:textSize="30sp"
                             app:solid_icon="true" />
@@ -224,7 +224,7 @@
                             android:id="@+id/ttt_check"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/fa_check_circle"
+                            android:text="@string/fa_check_solid"
                             android:textColor="@color/md_green_500"
                             android:textSize="30sp"
                             app:solid_icon="true" />
@@ -280,7 +280,7 @@
                             android:id="@+id/nt_check"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/fa_check_circle"
+                            android:text="@string/fa_check_solid"
                             android:textColor="@color/md_green_500"
                             android:textSize="30sp"
                             app:solid_icon="true" />
@@ -337,7 +337,7 @@
                             android:id="@+id/rt_check"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/fa_check_circle"
+                            android:text="@string/fa_check_solid"
                             android:textColor="@color/md_green_500"
                             android:textSize="30sp"
                             app:solid_icon="true" />
@@ -395,7 +395,7 @@
                             android:id="@+id/bt_check"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/fa_check_circle"
+                            android:text="@string/fa_check_solid"
                             android:textColor="@color/md_green_500"
                             android:textSize="30sp"
                             app:solid_icon="true" />

@@ -37,7 +37,6 @@ public class TeamsActivity extends GeneralActivity implements TeamsPresenter.Vie
         super.onCreate(savedInstanceState);
 
         initViews();
-        presenter.retrieveBriefingRegisterList();
     }
 
     @Override
@@ -126,6 +125,12 @@ public class TeamsActivity extends GeneralActivity implements TeamsPresenter.Vie
 
     @Override
     public void onRefresh() {
+        presenter.retrieveBriefingRegisterList();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
         presenter.retrieveBriefingRegisterList();
     }
 

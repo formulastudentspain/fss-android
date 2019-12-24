@@ -1,36 +1,39 @@
-package es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.tabsadapter;
+package es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.tabadapter;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragments.TeamsDetailScrutineeringFragment;
-import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragments.TeamsDetailPreScrutineeringFragment;
+import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringPresenter;
+import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragment.scrutineering.TeamsDetailScrutineeringFragment;
+import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragment.prescrutineering.TeamsDetailPreScrutineeringFragment;
 
 public class TabAdapter extends FragmentStatePagerAdapter {
 
     private Team team;
+    private TeamsDetailScrutineeringPresenter presenter;
 
     //Fragments
     private TeamsDetailScrutineeringFragment teamsDetailScrutineeringFragment;
     private TeamsDetailPreScrutineeringFragment teamsDetailPreScrutineeringFragment;
 
 
-    public TabAdapter(FragmentManager fm, Team team) {
+    public TabAdapter(FragmentManager fm, Team team, TeamsDetailScrutineeringPresenter presenter) {
         super(fm);
         this.team = team;
+        this.presenter = presenter;
     }
 
     @Override
     public Fragment getItem(int i) {
 
         if(i == 0){
-            teamsDetailPreScrutineeringFragment = new TeamsDetailPreScrutineeringFragment(team);
+            teamsDetailPreScrutineeringFragment = new TeamsDetailPreScrutineeringFragment(team, presenter);
             return teamsDetailPreScrutineeringFragment;
 
         }else{
-            teamsDetailScrutineeringFragment = new TeamsDetailScrutineeringFragment(team);
+            teamsDetailScrutineeringFragment = new TeamsDetailScrutineeringFragment(team, presenter);
             return teamsDetailScrutineeringFragment;
 
         }
@@ -49,10 +52,5 @@ public class TabAdapter extends FragmentStatePagerAdapter {
         }else{
             return "SCRUTINEERING";
         }
-    }
-
-    public void updateTeamFields(){
-        teamsDetailScrutineeringFragment.updateTeamFields();
-        teamsDetailPreScrutineeringFragment.updateTeamFields();
     }
 }

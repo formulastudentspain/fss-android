@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.prescrutineeringdetail;
+package es.formulastudent.app.mvp.view.activity.egresschrono;
 
 import android.content.Context;
 
@@ -7,17 +7,17 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.model.EgressRegister;
 
-public class PreScrutineeringDetailPresenter {
+public class EgressChronoPresenter {
 
     //Dependencies
-    private PreScrutineeringDetailPresenter.View view;
+    private EgressChronoPresenter.View view;
     private Context context;
     private EgressBO egressBO;
 
     //Current register
 
 
-    public PreScrutineeringDetailPresenter(PreScrutineeringDetailPresenter.View view, Context context, EgressBO egressBO) {
+    public EgressChronoPresenter(EgressChronoPresenter.View view, Context context, EgressBO egressBO) {
         this.view = view;
         this.context = context;
         this.egressBO = egressBO;

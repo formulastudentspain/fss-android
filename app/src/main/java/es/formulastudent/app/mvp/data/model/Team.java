@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Team implements Serializable {
+public class Team implements Serializable, Cloneable {
 
 
     //Database constants
@@ -121,6 +121,21 @@ public class Team implements Serializable {
         docData.put(Team.SCRUTINEERING_BT_COMMENT, this.getScrutineeringBTComment());
 
         return docData;
+    }
+
+
+
+    @Override
+    public Team clone() {
+        final Team clone;
+        try {
+            clone = (Team) super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("superclass messed up", ex);
+        }
+        clone.car = this.car.clone();
+        return clone;
     }
 
 

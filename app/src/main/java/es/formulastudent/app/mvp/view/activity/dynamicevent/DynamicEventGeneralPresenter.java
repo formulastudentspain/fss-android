@@ -2,7 +2,7 @@ package es.formulastudent.app.mvp.view.activity.dynamicevent;
 
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
-public interface DynamicEventGeneralPresenter {
+    public interface DynamicEventGeneralPresenter {
 
 
     /**

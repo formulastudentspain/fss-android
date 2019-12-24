@@ -369,7 +369,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
                     eventControl,
                     briefing,
-                    //preScrutineering,
+                    preScrutineering,
                     teams,
                     new DividerDrawerItem(),
 

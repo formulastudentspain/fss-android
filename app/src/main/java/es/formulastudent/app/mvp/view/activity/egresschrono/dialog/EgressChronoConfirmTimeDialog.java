@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.prescrutineeringdetail.dialog;
+package es.formulastudent.app.mvp.view.activity.egresschrono.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,17 +9,17 @@ import androidx.fragment.app.DialogFragment;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.view.Utils;
-import es.formulastudent.app.mvp.view.activity.prescrutineeringdetail.PreScrutineeringDetailActivity;
+import es.formulastudent.app.mvp.view.activity.egresschrono.EgressChronoActivity;
 
-public class PreScrutineeringDetailActivityConfirmTimeDialog extends DialogFragment {
+public class EgressChronoConfirmTimeDialog extends DialogFragment {
 
-    private PreScrutineeringDetailActivity activity;
+    private EgressChronoActivity activity;
     private Long milliseconds;
 
-    public PreScrutineeringDetailActivityConfirmTimeDialog() {}
+    public EgressChronoConfirmTimeDialog() {}
 
-    public static PreScrutineeringDetailActivityConfirmTimeDialog newInstance(PreScrutineeringDetailActivity activity, Long milliseconds) {
-        PreScrutineeringDetailActivityConfirmTimeDialog frag = new PreScrutineeringDetailActivityConfirmTimeDialog();
+    public static EgressChronoConfirmTimeDialog newInstance(EgressChronoActivity activity, Long milliseconds) {
+        EgressChronoConfirmTimeDialog frag = new EgressChronoConfirmTimeDialog();
         frag.setActivity(activity);
         frag.setMilliseconds(milliseconds);
         return frag;
@@ -44,7 +44,7 @@ public class PreScrutineeringDetailActivityConfirmTimeDialog extends DialogFragm
                 .setNegativeButton(R.string.prescruti_confirm_time_dialog_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        PreScrutineeringDetailActivityConfirmTimeDialog.this.dismiss();
+                        EgressChronoConfirmTimeDialog.this.dismiss();
                         activity.resetTime();
                     }
                 });
@@ -53,7 +53,7 @@ public class PreScrutineeringDetailActivityConfirmTimeDialog extends DialogFragm
     }
 
 
-    public void setActivity(PreScrutineeringDetailActivity activity) {
+    public void setActivity(EgressChronoActivity activity) {
         this.activity = activity;
     }
 

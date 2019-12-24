@@ -36,4 +36,11 @@ public interface TeamBO {
      * @param callback
      */
     void createTeam(Team team, BusinessCallback callback);
+
+    /**
+     * Method to update a team
+     * @param team
+     * @param callback
+     */
+    void updateTeam(Team team, BusinessCallback callback);
 }

@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.activity.prescrutineeringdetail;
+package es.formulastudent.app.mvp.view.activity.egresschrono;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -30,12 +30,12 @@ import es.formulastudent.app.mvp.data.model.EgressRegister;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.view.Utils;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
-import es.formulastudent.app.mvp.view.activity.prescrutineeringdetail.dialog.PreScrutineeringDetailActivityConfirmTimeDialog;
+import es.formulastudent.app.mvp.view.activity.egresschrono.dialog.EgressChronoConfirmTimeDialog;
 
-public class PreScrutineeringDetailActivity extends GeneralActivity implements View.OnClickListener, PreScrutineeringDetailPresenter.View {
+public class EgressChronoActivity extends GeneralActivity implements View.OnClickListener, EgressChronoPresenter.View {
 
     @Inject
-    PreScrutineeringDetailPresenter presenter;
+    EgressChronoPresenter presenter;
 
     int progressStatus = 0;
     Thread progressBarThread;
@@ -116,9 +116,6 @@ public class PreScrutineeringDetailActivity extends GeneralActivity implements V
         firstAttempt = findViewById(R.id.firstAttemptValue);
         secondAttempt = findViewById(R.id.secondAttemptValue);
         thirdAttempt = findViewById(R.id.thirdAttemptValue);
-
-
-
 
         initProgressStatusThread();
 
@@ -231,7 +228,7 @@ public class PreScrutineeringDetailActivity extends GeneralActivity implements V
 
     private void openConfirmTimeDialog(Long time){
 
-        PreScrutineeringDetailActivityConfirmTimeDialog confirmDialog = PreScrutineeringDetailActivityConfirmTimeDialog.newInstance(this, time);
+        EgressChronoConfirmTimeDialog confirmDialog = EgressChronoConfirmTimeDialog.newInstance(this, time);
 
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

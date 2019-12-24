@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context=".mvp.view.activity.general.GeneralActivity">
+    android:orientation="vertical">
 
     <ProgressBar
         android:id="@+id/loading_status"

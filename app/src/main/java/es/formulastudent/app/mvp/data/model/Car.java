@@ -2,7 +2,7 @@ package es.formulastudent.app.mvp.data.model;
 
 import java.io.Serializable;
 
-public class Car implements Serializable {
+public class Car implements Serializable, Cloneable {
 
     public static final String CAR_TYPE_COMBUSTION = "Combustion";
     public static final String CAR_TYPE_ELECTRIC = "Electric";
@@ -13,6 +13,19 @@ public class Car implements Serializable {
     private Long number;
 
     public Car() { }
+
+
+    @Override
+    public Car clone() {
+        final Car clone;
+        try {
+            clone = (Car) super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("superclass messed up", ex);
+        }
+        return clone;
+    }
 
     public String getType() {
         return type;
