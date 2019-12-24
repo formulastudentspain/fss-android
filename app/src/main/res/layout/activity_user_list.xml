@@ -34,13 +34,18 @@
                 android:hint="Search user"
                 android:background="@drawable/activity_user_list_filter_input"/>
 
-            <ImageView
+
+
+            <info.androidhive.fontawesome.FontTextView
                 android:id="@+id/qr_code_reader"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_qr_reader"
+                android:text="@string/fa_qrcode_solid"
+                android:textColor="@color/md_grey_600"
+                android:layout_marginEnd="16dp"
                 android:layout_gravity="center"
-                android:layout_marginEnd="16dp"/>
+                android:textSize="35sp"
+                app:solid_icon="true" />
 
         </LinearLayout>
 

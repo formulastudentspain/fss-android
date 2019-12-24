@@ -18,6 +18,17 @@ public class TeamsViewHolder extends RecyclerView.ViewHolder implements View.OnC
     TextView teamName;
     TextView carNumber;
 
+    //Scrutineering Tests
+    TextView psTest;
+    TextView aiTest;
+    TextView eiTest;
+    TextView miTest;
+    TextView tttTest;
+    TextView ntTest;
+    TextView rtTest;
+    TextView btTest;
+
+
     //Swipe components
     SwipeRevealLayout swipeRevealLayout;
     CardView scrutineeringLayout;
@@ -33,12 +44,22 @@ public class TeamsViewHolder extends RecyclerView.ViewHolder implements View.OnC
         carNumber =  itemView.findViewById(R.id.teamNumber);
         this.clickListener = clickListener;
 
-
         //Swipe components
         scrutineeringLayout = itemView.findViewById(R.id.scrutineering_button);
         scrutineeringLayout.setOnClickListener(this);
         feeLayout = itemView.findViewById(R.id.fee_button);
         feeLayout.setOnClickListener(this);
+
+        //Scrutineering tests
+        psTest = itemView.findViewById(R.id.PS_TEST);
+        aiTest = itemView.findViewById(R.id.AI_TEST);
+        eiTest = itemView.findViewById(R.id.EI_TEST);
+        miTest = itemView.findViewById(R.id.MI_TEST);
+        tttTest = itemView.findViewById(R.id.TTT_TEST);
+        ntTest = itemView.findViewById(R.id.NT_TEST);
+        rtTest = itemView.findViewById(R.id.RT_TEST);
+        btTest = itemView.findViewById(R.id.BT_TEST);
+
     }
 
     @Override

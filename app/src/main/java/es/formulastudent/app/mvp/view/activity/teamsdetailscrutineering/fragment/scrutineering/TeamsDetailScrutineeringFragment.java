@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,8 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.Calendar;
+import java.util.List;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.model.ScrutineeringTest;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringPresenter;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.dialog.ConfirmPassTestDialog;
@@ -30,6 +33,14 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
     TeamsDetailScrutineeringPresenter presenter;
 
     //View components
+    private LinearLayout aiContainer;
+    private LinearLayout eiContainer;
+    private LinearLayout miContainer;
+    private LinearLayout tttContainer;
+    private LinearLayout ntContainer;
+    private LinearLayout rtContainer;
+    private LinearLayout btContainer;
+
     //AI
     private FontTextView aiCheckIcon;
     private EditText aiComments;
@@ -80,6 +91,15 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        //Containers
+        aiContainer = view.findViewById(R.id.ai_container);
+        eiContainer = view.findViewById(R.id.ei_container);
+        miContainer = view.findViewById(R.id.mi_container);
+        tttContainer = view.findViewById(R.id.ttt_container);
+        ntContainer = view.findViewById(R.id.nt_container);
+        rtContainer = view.findViewById(R.id.rt_container);
+        btContainer = view.findViewById(R.id.bt_container);
+
         //AI
         aiCheckIcon = view.findViewById(R.id.ai_check);
         aiComments = view.findViewById(R.id.ai_comments);
@@ -121,6 +141,50 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
     }
 
     private void loadData() {
+
+        List<ScrutineeringTest> tests = team.getTests();
+
+        if(tests.contains(ScrutineeringTest.ACCUMULATION_INSPECTION)){
+            aiContainer.setVisibility(View.VISIBLE);
+        }else{
+            aiContainer.setVisibility(View.GONE);
+        }
+
+        if(tests.contains(ScrutineeringTest.ELECTRICAL_INSPECTION)){
+            eiContainer.setVisibility(View.VISIBLE);
+        }else{
+            eiContainer.setVisibility(View.GONE);
+        }
+
+        if(tests.contains(ScrutineeringTest.MECHANICAL_INSPECTION)){
+            miContainer.setVisibility(View.VISIBLE);
+        }else{
+            miContainer.setVisibility(View.GONE);
+        }
+
+        if(tests.contains(ScrutineeringTest.TILT_TABLE_TEST)){
+            tttContainer.setVisibility(View.VISIBLE);
+        }else{
+            tttContainer.setVisibility(View.GONE);
+        }
+
+        if(tests.contains(ScrutineeringTest.RAIN_TEST)){
+            rtContainer.setVisibility(View.VISIBLE);
+        }else{
+            rtContainer.setVisibility(View.GONE);
+        }
+
+        if(tests.contains(ScrutineeringTest.NOISE_TEST)){
+            ntContainer.setVisibility(View.VISIBLE);
+        }else{
+            ntContainer.setVisibility(View.GONE);
+        }
+
+        if(tests.contains(ScrutineeringTest.BRAKE_TEST)){
+            btContainer.setVisibility(View.VISIBLE);
+        }else{
+            btContainer.setVisibility(View.GONE);
+        }
 
         //AI: Icon check, Button and Comments
         if(team.getScrutineeringAI() == null){

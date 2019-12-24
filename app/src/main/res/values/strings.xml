@@ -1,8 +1,8 @@
 <resources>
 
     <string name="activity_timeline_detail_label">Timeline detail</string>
-    <string name="activity_user_list_label">User list</string>
-    <string name="activity_user_detail_label">User detail</string>
+    <string name="activity_user_list_label">Volunteer list</string>
+    <string name="activity_user_detail_label">Volunteer detail</string>
 
     <!-- Drawer menu options -->
     <string name="drawer_menu_staff">EVENT CONTROL</string>

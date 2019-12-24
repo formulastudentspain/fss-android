@@ -23,65 +23,78 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-    
+
                 <LinearLayout
+                    android:id="@+id/ai_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Accumulator Insp."
-                            android:layout_marginEnd="8dp"
-                            android:textColor="@color/md_grey_800"
-                            android:textSize="20sp" />
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal">
 
-                        <info.androidhive.fontawesome.FontTextView
-                            android:id="@+id/ai_check"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Accumulator Insp."
+                                android:layout_marginEnd="8dp"
+                                android:textColor="@color/md_grey_800"
+                                android:textSize="20sp" />
+
+                            <info.androidhive.fontawesome.FontTextView
+                                android:id="@+id/ai_check"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/fa_check_solid"
+                                android:textColor="@color/md_green_500"
+                                android:textSize="30sp"
+                                app:solid_icon="true" />
+
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/ai_button"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/fa_check_solid"
                             android:textColor="@color/md_green_500"
-                            android:textSize="30sp"
-                            app:solid_icon="true" />
+                            app:rippleColor="@color/md_green_500"
+                            app:backgroundTint="@color/md_white_1000"
+                            app:strokeColor="@color/md_green_500"
+                            android:text="PASS"/>
 
                     </LinearLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/ai_button"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/md_green_500"
-                        app:rippleColor="@color/md_green_500"
-                        app:backgroundTint="@color/md_white_1000"
-                        app:strokeColor="@color/md_green_500"
-                        android:text="PASS"/>
-    
+
+                    <EditText
+                        android:id="@+id/ai_comments"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:inputType="text|textMultiLine"
+                        android:hint="Comments"
+                        android:padding="8dp"
+                        android:textSize="14sp"
+                        android:background="@drawable/text_area_rounded"
+                        android:gravity="top"/>
+
                 </LinearLayout>
 
 
-                <EditText
-                    android:id="@+id/ai_comments"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:inputType="text|textMultiLine"
-                    android:hint="Comments"
-                    android:padding="8dp"
-                    android:textSize="14sp"
-                    android:background="@drawable/text_area_rounded"
-                    android:gravity="top"/>
-    
-    
-    
+            <LinearLayout
+                android:id="@+id/ei_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -138,8 +151,15 @@
                     android:background="@drawable/text_area_rounded"
                     android:gravity="top"/>
 
+            </LinearLayout>
 
-    
+
+            <LinearLayout
+                android:id="@+id/mi_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -196,8 +216,13 @@
                     android:background="@drawable/text_area_rounded"
                     android:gravity="top"/>
 
+            </LinearLayout>
 
-
+            <LinearLayout
+                android:id="@+id/ttt_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
     
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -254,6 +279,14 @@
                     android:textSize="14sp"
                     android:background="@drawable/text_area_rounded"
                     android:gravity="top"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nt_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
     
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -311,7 +344,14 @@
                     android:background="@drawable/text_area_rounded"
                     android:gravity="top"/>
     
-    
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rt_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -368,7 +408,13 @@
                     android:background="@drawable/text_area_rounded"
                     android:gravity="top"/>
 
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/bt_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
     
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -426,6 +472,7 @@
                     android:background="@drawable/text_area_rounded"
                     android:gravity="top"/>
                 
+            </LinearLayout>
             </LinearLayout>
         </ScrollView>
         

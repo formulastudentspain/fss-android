@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
@@ -32,6 +31,7 @@ import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.qrreader.QRReaderActivity;
 import es.formulastudent.app.mvp.view.activity.user.dialog.CreateUserDialog;
 import es.formulastudent.app.mvp.view.activity.user.recyclerview.UserListAdapter;
+import info.androidhive.fontawesome.FontTextView;
 
 
 public class UserActivity extends GeneralActivity implements UserPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
@@ -47,7 +47,7 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
     private UserListAdapter userListAdapter;
     private FloatingActionButton buttonAddUser;
     private EditText searchUser;
-    private ImageView qrCodeReaderButton;
+    private FontTextView qrCodeReaderButton;
 
 
     @Override

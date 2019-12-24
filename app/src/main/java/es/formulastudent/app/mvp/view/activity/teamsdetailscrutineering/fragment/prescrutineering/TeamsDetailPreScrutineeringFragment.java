@@ -76,6 +76,7 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
         //Recycler view
         mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.accent));
         recyclerView = view.findViewById(R.id.recyclerView);
         registersAdapter = new EgressRegistersAdapter(presenter.getEventRegisterList(), getContext(), this);
         recyclerView.setAdapter(registersAdapter);
@@ -145,6 +146,7 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
 
     public void refreshListItems(){
         registersAdapter.notifyDataSetChanged();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

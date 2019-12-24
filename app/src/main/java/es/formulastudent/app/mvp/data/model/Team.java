@@ -5,6 +5,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -298,5 +299,9 @@ public class Team implements Serializable, Cloneable {
 
     public void setScrutineeringBTComment(String scrutineeringBTComment) {
         this.scrutineeringBTComment = scrutineeringBTComment;
+    }
+
+    public List<ScrutineeringTest> getTests(){
+        return ScrutineeringTest.getTestsByCarType(this.getCar().getType());
     }
 }

@@ -346,16 +346,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withOnDrawerItemClickListener(this);
 
 
-        //Staff: Pre-Scrutineering
-        PrimaryDrawerItem preScrutineering = new PrimaryDrawerItem()
-                .withIdentifier(10002)
-                .withLevel(2)
-                .withName(R.string.drawer_menu_staff_pre_scrutineering)
-                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-
         //Logout
         PrimaryDrawerItem logout = new PrimaryDrawerItem()
                 .withIdentifier(30006)
@@ -369,7 +359,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
                     eventControl,
                     briefing,
-                    preScrutineering,
                     teams,
                     new DividerDrawerItem(),
 
@@ -414,7 +403,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
                     eventControl,
                     briefing,
-                    //preScrutineering,
                     teams,
                     new DividerDrawerItem(),
 
@@ -459,7 +447,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }else if(loggedUser.getRole().equals(UserRole.OFFICIAL_SCRUTINEER)){
             builder.addDrawerItems(
 
-                    //preScrutineering,
                     teams,
                     new DividerDrawerItem(),
 
@@ -566,16 +553,8 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             finish();
 
         }else if(drawerItem.getIdentifier() == 10011){ //Practice Track
-            //FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.PRACTICE_TRACK);
-            this.startActivity(intent);
-            finish();
-
-        }else if(drawerItem.getIdentifier() == 10002){ //Pre-Scrutineering
-            //FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(this, DynamicEventActivity.class);
-            intent.putExtra("eventType", EventType.PRE_SCRUTINEERING);
             this.startActivity(intent);
             finish();
 
