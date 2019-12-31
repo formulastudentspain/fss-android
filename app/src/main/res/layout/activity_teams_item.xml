@@ -210,32 +210,143 @@
                                 <info.androidhive.fontawesome.FontTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/fa_balance_scale_solid"
+                                    android:text="@string/fa_microchip_solid"
                                     android:textColor="@color/md_grey_400"
                                     android:textSize="20sp"
+                                    android:layout_marginEnd="16dp"
+                                    app:solid_icon="true" />
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/transponder_state_1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/fa_check_circle"
+                                    android:textColor="@color/md_grey_600"
                                     app:solid_icon="true" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
-                                    android:textColor="@color/md_grey_800"
-                                    android:text="289.6Kg"/>
+                                    android:textColor="@color/md_grey_600"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_marginEnd="4dp"
+                                    android:text="-"/>
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/transponder_state_2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/md_grey_600"
+                                    android:text="@string/fa_check_circle"
+                                    app:solid_icon="true" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_marginEnd="4dp"
+                                    android:textColor="@color/md_grey_600"
+                                    android:text="-"/>
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/transponder_state_3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/md_grey_600"
+                                    android:text="@string/fa_check_circle"
+                                    app:solid_icon="true" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_marginEnd="4dp"
+                                    android:textColor="@color/md_grey_600"
+                                    android:text="-"/>
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/transponder_state_4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/md_grey_600"
+                                    android:text="4"
+                                    app:solid_icon="true" />
 
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/energy_meter_container"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
+                                android:gravity="center_vertical"
                                 android:layout_height="match_parent">
 
                                 <info.androidhive.fontawesome.FontTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/fa_file_invoice_dollar_solid"
+                                    android:text="@string/fa_car_battery_solid"
                                     android:textColor="@color/md_grey_400"
                                     android:textSize="20sp"
+                                    android:layout_marginEnd="16dp"
                                     app:solid_icon="true" />
+
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/energy_meter_state_1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/fa_check_circle"
+                                    android:textColor="@color/md_grey_600"
+                                    app:solid_icon="true" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/md_grey_600"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_marginEnd="4dp"
+                                    android:text="-"/>
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/energy_meter_state_2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/md_grey_600"
+                                    android:text="@string/fa_check_circle"
+                                    app:solid_icon="true" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_marginEnd="4dp"
+                                    android:textColor="@color/md_grey_600"
+                                    android:text="-"/>
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/energy_meter_state_3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/md_grey_600"
+                                    android:text="3"
+                                    app:solid_icon="true" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_marginEnd="4dp"
+                                    android:textColor="@color/md_grey_600"
+                                    android:text="-"/>
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/energy_meter_state_4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/md_grey_600"
+                                    android:text="4"
+                                    app:solid_icon="true" />
+
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>

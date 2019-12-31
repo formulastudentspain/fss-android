@@ -3,6 +3,7 @@ package es.formulastudent.app.mvp.data.model;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,16 @@ public class Team implements Serializable, Cloneable {
     public static final String SCRUTINEERING_NT_COMMENT = "scrutineeringNTComment";
     public static final String SCRUTINEERING_RT_COMMENT = "scrutineeringRTComment";
     public static final String SCRUTINEERING_BT_COMMENT = "scrutineeringBTComment";
+    public static final String ENERGY_METER_FEE_GIVEN = "energyMeterFeeGiven";
+    public static final String ENERGY_METER_ITEM_GIVEN = "energyMeterItemGiven";
+    public static final String ENERGY_METER_ITEM_RETURNED = "energyMeterItemReturned";
+    public static final String ENERGY_METER_FEE_RETURNED = "energyMeterFeeReturned";
+    public static final String TRANSPONDER_FEE_GIVEN = "transponderFeeGiven";
+    public static final String TRANSPONDER_ITEM_GIVEN = "transponderItemGiven";
+    public static final String TRANSPONDER_ITEM_RETURNED = "transponderItemReturned";
+    public static final String TRANSPONDER_FEE_RETURNED = "transponderFeeReturned";
+
+
 
 
 
@@ -60,8 +71,22 @@ public class Team implements Serializable, Cloneable {
     private String scrutineeringNTComment; //Noise Test (C, DC)
     private String scrutineeringRTComment; //Rain Test (E, DE)
     private String scrutineeringBTComment; //Brake Test (C, DC, E, DE)
+    
+    //Fee transponder
+    private Date transponderFeeGiven;
+    private Date transponderItemGiven;
+    private Date transponderItemReturned;
+    private Date transponderFeeReturned;
+
+    //Fee energy meter
+    private Date energyMeterFeeGiven;
+    private Date energyMeterItemGiven;
+    private Date energyMeterItemReturned;
+    private Date energyMeterFeeReturned;
 
 
+
+    
     public Team(String ID, String name) {
         this.ID = ID;
         this.name = name;
@@ -94,6 +119,16 @@ public class Team implements Serializable, Cloneable {
         this.scrutineeringNTComment = object.getString(Team.SCRUTINEERING_NT_COMMENT);
         this.scrutineeringRTComment = object.getString(Team.SCRUTINEERING_RT_COMMENT);
         this.scrutineeringBTComment = object.getString(Team.SCRUTINEERING_BT_COMMENT);
+        
+        this.transponderFeeGiven = object.getDate(Team.TRANSPONDER_FEE_GIVEN);
+        this.transponderItemGiven = object.getDate(Team.TRANSPONDER_ITEM_GIVEN);
+        this.transponderItemReturned = object.getDate(Team.TRANSPONDER_ITEM_RETURNED);
+        this.transponderFeeReturned = object.getDate(Team.TRANSPONDER_FEE_RETURNED);
+
+        this.energyMeterFeeGiven = object.getDate(Team.ENERGY_METER_FEE_GIVEN);
+        this.energyMeterItemGiven = object.getDate(Team.ENERGY_METER_ITEM_GIVEN);
+        this.energyMeterItemReturned = object.getDate(Team.ENERGY_METER_ITEM_RETURNED);
+        this.energyMeterFeeReturned = object.getDate(Team.ENERGY_METER_FEE_RETURNED);
 
     }
 
@@ -120,8 +155,64 @@ public class Team implements Serializable, Cloneable {
         docData.put(Team.SCRUTINEERING_NT_COMMENT, this.getScrutineeringNTComment());
         docData.put(Team.SCRUTINEERING_RT_COMMENT, this.getScrutineeringRTComment());
         docData.put(Team.SCRUTINEERING_BT_COMMENT, this.getScrutineeringBTComment());
+        
+        docData.put(Team.TRANSPONDER_FEE_GIVEN, this.getTransponderFeeGiven());
+        docData.put(Team.TRANSPONDER_ITEM_GIVEN, this.getTransponderItemGiven());
+        docData.put(Team.TRANSPONDER_ITEM_RETURNED, this.getTransponderItemReturned());
+        docData.put(Team.TRANSPONDER_FEE_RETURNED, this.getTransponderFeeReturned());
+
+        docData.put(Team.ENERGY_METER_FEE_GIVEN, this.getEnergyMeterFeeGiven());
+        docData.put(Team.ENERGY_METER_ITEM_GIVEN, this.getEnergyMeterItemGiven());
+        docData.put(Team.ENERGY_METER_ITEM_RETURNED, this.getEnergyMeterItemReturned());
+        docData.put(Team.ENERGY_METER_FEE_RETURNED, this.getEnergyMeterFeeReturned());
 
         return docData;
+    }
+
+    public List<FeeItem> getTransponderStates(){
+        
+        List<FeeItem> feeItems = new ArrayList<>();
+        
+        FeeItem tFeeGiven = FeeItem.TRANSPONDER_FEE_GIVEN;
+        tFeeGiven.setValue(getTransponderFeeGiven());
+        feeItems.add(tFeeGiven);
+
+        FeeItem tItemGiven = FeeItem.TRANSPONDER_GIVEN;
+        tItemGiven.setValue(getTransponderItemGiven());
+        feeItems.add(tItemGiven);
+
+        FeeItem tItemReturned = FeeItem.TRANSPONDER_RETURNED;
+        tItemReturned.setValue(getTransponderItemReturned());
+        feeItems.add(tItemReturned);
+
+        FeeItem tFeeReturned = FeeItem.TRANSPONDER_FEE_RETURNED;
+        tFeeReturned.setValue(getTransponderFeeReturned());
+        feeItems.add(tFeeReturned);
+        
+        return feeItems;
+    }
+
+    public List<FeeItem> getEnergyMeterStates(){
+
+        List<FeeItem> feeItems = new ArrayList<>();
+
+        FeeItem emFeeGiven = FeeItem.ENERGY_METER_FEE_GIVEN;
+        emFeeGiven.setValue(getEnergyMeterFeeGiven());
+        feeItems.add(emFeeGiven);
+
+        FeeItem emItemGiven = FeeItem.ENERGY_METER_GIVEN;
+        emItemGiven.setValue(getEnergyMeterItemGiven());
+        feeItems.add(emItemGiven);
+
+        FeeItem emItemReturned = FeeItem.ENERGY_METER_RETURNED;
+        emItemReturned.setValue(getEnergyMeterItemReturned());
+        feeItems.add(emItemReturned);
+
+        FeeItem emFeeReturned = FeeItem.ENERGY_METER_FEE_RETURNED;
+        emFeeReturned.setValue(getEnergyMeterFeeReturned());
+        feeItems.add(emFeeReturned);
+
+        return feeItems;
     }
 
 
@@ -303,5 +394,69 @@ public class Team implements Serializable, Cloneable {
 
     public List<ScrutineeringTest> getTests(){
         return ScrutineeringTest.getTestsByCarType(this.getCar().getType());
+    }
+
+    public Date getTransponderFeeGiven() {
+        return transponderFeeGiven;
+    }
+
+    public void setTransponderFeeGiven(Date transponderFeeGiven) {
+        this.transponderFeeGiven = transponderFeeGiven;
+    }
+
+    public Date getTransponderItemGiven() {
+        return transponderItemGiven;
+    }
+
+    public void setTransponderItemGiven(Date transponderItemGiven) {
+        this.transponderItemGiven = transponderItemGiven;
+    }
+
+    public Date getTransponderItemReturned() {
+        return transponderItemReturned;
+    }
+
+    public void setTransponderItemReturned(Date transponderItemReturned) {
+        this.transponderItemReturned = transponderItemReturned;
+    }
+
+    public Date getTransponderFeeReturned() {
+        return transponderFeeReturned;
+    }
+
+    public void setTransponderFeeReturned(Date transponderFeeReturned) {
+        this.transponderFeeReturned = transponderFeeReturned;
+    }
+
+    public Date getEnergyMeterFeeGiven() {
+        return energyMeterFeeGiven;
+    }
+
+    public void setEnergyMeterFeeGiven(Date energyMeterFeeGiven) {
+        this.energyMeterFeeGiven = energyMeterFeeGiven;
+    }
+
+    public Date getEnergyMeterItemGiven() {
+        return energyMeterItemGiven;
+    }
+
+    public void setEnergyMeterItemGiven(Date energyMeterItemGiven) {
+        this.energyMeterItemGiven = energyMeterItemGiven;
+    }
+
+    public Date getEnergyMeterItemReturned() {
+        return energyMeterItemReturned;
+    }
+
+    public void setEnergyMeterItemReturned(Date energyMeterItemReturned) {
+        this.energyMeterItemReturned = energyMeterItemReturned;
+    }
+
+    public Date getEnergyMeterFeeReturned() {
+        return energyMeterFeeReturned;
+    }
+
+    public void setEnergyMeterFeeReturned(Date energyMeterFeeReturned) {
+        this.energyMeterFeeReturned = energyMeterFeeReturned;
     }
 }

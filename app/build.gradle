@@ -106,6 +106,8 @@ dependencies {
     // font awesome
     implementation 'info.androidhive:fontawesome:0.0.5'
 
+    //Vertical stepper
+    implementation 'com.github.liefery:android-vertical-stepper-view:0.2.1'
 
 
 }

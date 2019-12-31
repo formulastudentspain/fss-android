@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Country;
 import es.formulastudent.app.mvp.data.model.ScrutineeringTest;
 import es.formulastudent.app.mvp.data.model.Team;
@@ -159,7 +160,61 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             teamsViewHolder.tttTest.setVisibility(View.GONE);
         }
 
+        //Fee states: Transponder
+        teamsViewHolder.transponderState1.setText("1");
+        teamsViewHolder.transponderState2.setText("2");
+        teamsViewHolder.transponderState3.setText("3");
+        teamsViewHolder.transponderState4.setText("4");
 
+        if(register.getTransponderFeeGiven() != null){
+            teamsViewHolder.transponderState1.setText(R.string.fa_check_circle);
+        }
+        
+        if(register.getTransponderItemGiven() != null){
+            teamsViewHolder.transponderState2.setText(R.string.fa_check_circle);
+        }
+        
+        if(register.getTransponderItemReturned() != null){
+            teamsViewHolder.transponderState3.setText(R.string.fa_check_circle);
+        }
+        
+        if(register.getTransponderFeeReturned() != null){
+            teamsViewHolder.transponderState4.setText(R.string.fa_check_circle);
+        }
+
+        if(register.getCar().getType().equals(Car.CAR_TYPE_ELECTRIC)
+                || register.getCar().getType().equals(Car.CAR_TYPE_AUTONOMOUS_ELECTRIC)){
+
+            //Fee states: EnergyMeter
+
+            teamsViewHolder.energyMeterContainer.setVisibility(View.VISIBLE);
+
+            teamsViewHolder.energyMeterState1.setText("1");
+            teamsViewHolder.energyMeterState2.setText("2");
+            teamsViewHolder.energyMeterState3.setText("3");
+            teamsViewHolder.energyMeterState4.setText("4");
+
+            if(register.getEnergyMeterFeeGiven() != null){
+                teamsViewHolder.energyMeterState1.setText(R.string.fa_check_circle);
+            }
+
+            if(register.getEnergyMeterItemGiven() != null){
+                teamsViewHolder.energyMeterState2.setText(R.string.fa_check_circle);
+            }
+
+            if(register.getEnergyMeterItemReturned() != null){
+                teamsViewHolder.energyMeterState3.setText(R.string.fa_check_circle);
+            }
+
+            if(register.getEnergyMeterFeeReturned() != null){
+                teamsViewHolder.energyMeterState4.setText(R.string.fa_check_circle);
+            }
+
+        }else{ //it is not electric, hide Energy Meter elements
+            teamsViewHolder.energyMeterContainer.setVisibility(View.INVISIBLE);
+        }
+
+        //Country flag
         Picasso.get().load(Country.GERMANY.getFlagURL()).into(teamsViewHolder.countryFlag);
 
     }

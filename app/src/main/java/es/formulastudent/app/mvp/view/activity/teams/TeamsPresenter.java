@@ -13,6 +13,7 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.activity.teamsdetailfee.TeamsDetailFeeActivity;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringActivity;
 
 
@@ -88,6 +89,14 @@ public class TeamsPresenter implements RecyclerViewClickListener {
              intent.putExtra("selectedTeam", selectedTeam);
              context.startActivity(intent);
          }
+
+        //Open Fee
+        if(v.getId() == R.id.fee_button){
+            Intent intent = new Intent(context, TeamsDetailFeeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("selectedTeam", selectedTeam);
+            context.startActivity(intent);
+        }
     }
 
 

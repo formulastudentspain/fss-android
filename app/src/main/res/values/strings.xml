@@ -294,7 +294,10 @@
     <!-- Image Uploader -->
     <string name="upload_picture_error">Error uploading picture</string>
     <string name="upload_picture_success">Picture uploaded successfully</string>
-
+    <string name="teams_dialog_fee_next_button_cancel">Cancel</string>
+    <string name="teams_dialog_fee_next_button_ok">Done</string>
+    <string name="teams_dialog_fee_next_step_title">Done</string>
+    <string name="teams_dialog_fee_next_step_description">Are you sure you want to set this state as done?</string>
 
 
 </resources>
