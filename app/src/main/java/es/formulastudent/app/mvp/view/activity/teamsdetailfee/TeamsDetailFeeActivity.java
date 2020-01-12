@@ -3,7 +3,6 @@ package es.formulastudent.app.mvp.view.activity.teamsdetailfee;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
@@ -118,14 +117,6 @@ public class TeamsDetailFeeActivity extends GeneralActivity implements TeamsDeta
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return true;
-    }
-
-
-    @Override
-    public void onBackPressed()
-    {
-        Toast.makeText(this, "Save comments before leaving this activity", Toast.LENGTH_LONG).show();
-        super.onBackPressed();  // optional depending on your needs
     }
 
 }

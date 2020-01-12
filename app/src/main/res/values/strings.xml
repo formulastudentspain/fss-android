@@ -266,10 +266,9 @@
     <string name="teams_dialog_pass_cancel_button">Cancel</string>
     <string name="teams_dialog_pass_title">Pass test</string>
     <string name="teams_dialog_pass_message">Are you sure you want to pass the selected test?</string>
-
-
-
-
+    <string name="teams_dialog_add_comment_title">Add comment</string>
+    <string name="teams_dialog_add_comment_add">Add</string>
+    <string name="teams_dialog_add_comment_cancel">Cancel</string>
 
 
     <!-- User -->

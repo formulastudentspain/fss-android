@@ -63,6 +63,7 @@
             android:layout_height="100dp"
             android:inputType="text|textMultiLine"
             android:hint="Comments"
+            android:focusable="false"
             android:padding="8dp"
             android:textSize="14sp"
             android:background="@drawable/text_area_rounded"

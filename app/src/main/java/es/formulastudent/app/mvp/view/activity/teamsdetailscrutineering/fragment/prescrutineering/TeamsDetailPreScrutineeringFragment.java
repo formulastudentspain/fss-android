@@ -23,9 +23,10 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
-import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.egresschrono.EgressChronoActivity;
+import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringPresenter;
+import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.dialog.AddCommentDialog;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.dialog.ConfirmPassTestDialog;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragment.TeamsDetailFragment;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragment.prescrutineering.recyclerview.EgressRegistersAdapter;
@@ -68,6 +69,7 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
 
         preScrutineeringCheckIcon = view.findViewById(R.id.pre_scrutineering_check);
         prescrutineeringComments = view.findViewById(R.id.pre_scrutineering_comments);
+        prescrutineeringComments.setOnClickListener(this);
         preScrutineeringButton = view.findViewById(R.id.pre_scrutineering_button);
         preScrutineeringButton.setOnClickListener(this);
         addEgressRegisterButton = view.findViewById(R.id.button_add_egress_register);
@@ -94,13 +96,10 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
         if (team.getScrutineeringPS() == null) {
             preScrutineeringCheckIcon.setVisibility(View.INVISIBLE);
             preScrutineeringButton.setVisibility(View.VISIBLE);
-            prescrutineeringComments.setEnabled(true);
 
         } else {
             preScrutineeringCheckIcon.setVisibility(View.VISIBLE);
             preScrutineeringButton.setVisibility(View.INVISIBLE);
-            prescrutineeringComments.setEnabled(false);
-
         }
         prescrutineeringComments.setText(team.getScrutineeringPSComment());
     }
@@ -117,13 +116,18 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
             modifiedTeam.setScrutineeringPSComment(prescrutineeringComments.getText().toString());
 
             //Open confirm dialog
-            ConfirmPassTestDialog confirmPassTestDialog = ConfirmPassTestDialog
-                    .newInstance(presenter, team, modifiedTeam);
+            ConfirmPassTestDialog confirmPassTestDialog = ConfirmPassTestDialog.newInstance(presenter, team, modifiedTeam);
             confirmPassTestDialog.show(getFragmentManager(), "confirmPassTestDialog");
 
         }else if(view.getId() == R.id.button_add_egress_register){
             Intent i = new Intent(getActivity(), NFCReaderActivity.class);
             getActivity().startActivityForResult(i, NFC_REQUEST_CODE);
+
+        }else if(view.getId() == R.id.pre_scrutineering_comments){
+
+            //Open add comment dialog
+            AddCommentDialog addCommentDialog = AddCommentDialog.newInstance(presenter, team, R.id.pre_scrutineering_comments);
+            addCommentDialog.show(getFragmentManager(), "addCommentDialog");
         }
     }
 

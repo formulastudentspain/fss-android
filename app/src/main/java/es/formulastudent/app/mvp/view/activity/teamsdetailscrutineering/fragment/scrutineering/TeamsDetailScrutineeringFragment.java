@@ -20,6 +20,7 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.ScrutineeringTest;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringPresenter;
+import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.dialog.AddCommentDialog;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.dialog.ConfirmPassTestDialog;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragment.TeamsDetailFragment;
 import info.androidhive.fontawesome.FontTextView;
@@ -103,37 +104,44 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
         //AI
         aiCheckIcon = view.findViewById(R.id.ai_check);
         aiComments = view.findViewById(R.id.ai_comments);
+        aiComments.setOnClickListener(this);
         aiButton = view.findViewById(R.id.ai_button);
 
         //EI
         eiCheckIcon = view.findViewById(R.id.ei_check);
         eiComments = view.findViewById(R.id.ei_comments);
+        eiComments.setOnClickListener(this);
         eiButton = view.findViewById(R.id.ei_button);
 
         //MI
         miCheckIcon = view.findViewById(R.id.mi_check);
         miComments = view.findViewById(R.id.mi_comments);
+        miComments.setOnClickListener(this);
         miButton = view.findViewById(R.id.mi_button);
         miButton.setOnClickListener(this);
 
         //TTT
         tttCheckIcon = view.findViewById(R.id.ttt_check);
         tttComments = view.findViewById(R.id.ttt_comments);
+        tttComments.setOnClickListener(this);
         tttButton = view.findViewById(R.id.ttt_button);
 
         //NT
         ntCheckIcon = view.findViewById(R.id.nt_check);
         ntComments = view.findViewById(R.id.nt_comments);
+        ntComments.setOnClickListener(this);
         ntButton = view.findViewById(R.id.nt_button);
 
         //RT
         rtCheckIcon = view.findViewById(R.id.rt_check);
         rtComments = view.findViewById(R.id.rt_comments);
+        rtComments.setOnClickListener(this);
         rtButton = view.findViewById(R.id.rt_button);
 
         //BT
         btCheckIcon = view.findViewById(R.id.bt_check);
         btComments = view.findViewById(R.id.bt_comments);
+        btComments.setOnClickListener(this);
         btButton = view.findViewById(R.id.bt_button);
 
         loadData();
@@ -191,12 +199,10 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
             aiCheckIcon.setVisibility(View.INVISIBLE);
             aiButton.setVisibility(View.VISIBLE);
             aiButton.setOnClickListener(this);
-            aiComments.setEnabled(true);
 
         }else{
             aiCheckIcon.setVisibility(View.VISIBLE);
             aiButton.setVisibility(View.INVISIBLE);
-            aiComments.setEnabled(false);
 
         }
         aiComments.setText(team.getScrutineeringAIComment());
@@ -207,12 +213,10 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
             eiCheckIcon.setVisibility(View.INVISIBLE);
             eiButton.setVisibility(View.VISIBLE);
             eiButton.setOnClickListener(this);
-            eiComments.setEnabled(true);
 
         }else{
             eiCheckIcon.setVisibility(View.VISIBLE);
             eiButton.setVisibility(View.INVISIBLE);
-            eiComments.setEnabled(false);
         }
         eiComments.setText(team.getScrutineeringEIComment());
 
@@ -222,12 +226,10 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
             miCheckIcon.setVisibility(View.INVISIBLE);
             miButton.setVisibility(View.VISIBLE);
             miButton.setOnClickListener(this);
-            miComments.setEnabled(true);
 
         }else{
             miCheckIcon.setVisibility(View.VISIBLE);
             miButton.setVisibility(View.INVISIBLE);
-            miComments.setEnabled(false);
         }
         miComments.setText(team.getScrutineeringMIComment());
 
@@ -237,12 +239,10 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
             tttCheckIcon.setVisibility(View.INVISIBLE);
             tttButton.setVisibility(View.VISIBLE);
             tttButton.setOnClickListener(this);
-            tttComments.setEnabled(true);
 
         }else{
             tttCheckIcon.setVisibility(View.VISIBLE);
             tttButton.setVisibility(View.INVISIBLE);
-            tttComments.setEnabled(false);
         }
         tttComments.setText(team.getScrutineeringTTTComment());
 
@@ -252,12 +252,10 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
             ntCheckIcon.setVisibility(View.INVISIBLE);
             ntButton.setVisibility(View.VISIBLE);
             ntButton.setOnClickListener(this);
-            ntComments.setEnabled(true);
 
         }else{
             ntCheckIcon.setVisibility(View.VISIBLE);
             ntButton.setVisibility(View.INVISIBLE);
-            ntComments.setEnabled(false);
         }
         ntComments.setText(team.getScrutineeringNTComment());
 
@@ -267,12 +265,10 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
             rtCheckIcon.setVisibility(View.INVISIBLE);
             rtButton.setVisibility(View.VISIBLE);
             rtButton.setOnClickListener(this);
-            rtComments.setEnabled(true);
 
         }else{
             rtCheckIcon.setVisibility(View.VISIBLE);
             rtButton.setVisibility(View.INVISIBLE);
-            rtComments.setEnabled(false);
         }
         rtComments.setText(team.getScrutineeringRTComment());
 
@@ -282,12 +278,10 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
             btCheckIcon.setVisibility(View.INVISIBLE);
             btButton.setVisibility(View.VISIBLE);
             btButton.setOnClickListener(this);
-            btComments.setEnabled(true);
 
         }else{
             btCheckIcon.setVisibility(View.VISIBLE);
             btButton.setVisibility(View.INVISIBLE);
-            btComments.setEnabled(false);
         }
         btComments.setText(team.getScrutineeringBTComment());
 
@@ -299,40 +293,86 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
         //Clone team and update it
         Team modifiedTeam = team.clone();
 
-        if(view.getId() == R.id.ai_button){
-            modifiedTeam.setScrutineeringAI(Calendar.getInstance().getTime());
-            modifiedTeam.setScrutineeringAIComment(aiComments.getText().toString());
+        switch (view.getId()){
+            case R.id.ai_button:
+                modifiedTeam.setScrutineeringAI(Calendar.getInstance().getTime());
+                modifiedTeam.setScrutineeringAIComment(aiComments.getText().toString());
+                openConfirmPassTestDialog(modifiedTeam);
+                break;
 
-        }else if(view.getId() == R.id.ei_button){
-            modifiedTeam.setScrutineeringEI(Calendar.getInstance().getTime());
-            modifiedTeam.setScrutineeringEIComment(eiComments.getText().toString());
+            case R.id.ei_button:
+                modifiedTeam.setScrutineeringEI(Calendar.getInstance().getTime());
+                modifiedTeam.setScrutineeringEIComment(eiComments.getText().toString());
+                openConfirmPassTestDialog(modifiedTeam);
+                break;
 
-        }else if(view.getId() == R.id.mi_button){
-            modifiedTeam.setScrutineeringMI(Calendar.getInstance().getTime());
-            modifiedTeam.setScrutineeringMIComment(miComments.getText().toString());
+            case R.id.mi_button:
+                modifiedTeam.setScrutineeringMI(Calendar.getInstance().getTime());
+                modifiedTeam.setScrutineeringMIComment(miComments.getText().toString());
+                openConfirmPassTestDialog(modifiedTeam);
+                break;
 
-        }else if(view.getId() == R.id.ttt_button){
-            modifiedTeam.setScrutineeringTTT(Calendar.getInstance().getTime());
-            modifiedTeam.setScrutineeringTTTComment(tttComments.getText().toString());
+            case R.id.ttt_button:
+                modifiedTeam.setScrutineeringTTT(Calendar.getInstance().getTime());
+                modifiedTeam.setScrutineeringTTTComment(tttComments.getText().toString());
+                openConfirmPassTestDialog(modifiedTeam);
+                break;
 
-        }else if(view.getId() == R.id.nt_button){
-            modifiedTeam.setScrutineeringNT(Calendar.getInstance().getTime());
-            modifiedTeam.setScrutineeringNTComment(aiComments.getText().toString());
+            case R.id.nt_button:
+                modifiedTeam.setScrutineeringNT(Calendar.getInstance().getTime());
+                modifiedTeam.setScrutineeringNTComment(aiComments.getText().toString());
+                openConfirmPassTestDialog(modifiedTeam);
+                break;
 
-        }else if(view.getId() == R.id.rt_button){
-            modifiedTeam.setScrutineeringRT(Calendar.getInstance().getTime());
-            modifiedTeam.setScrutineeringRTComment(aiComments.getText().toString());
+            case R.id.rt_button:
+                modifiedTeam.setScrutineeringRT(Calendar.getInstance().getTime());
+                modifiedTeam.setScrutineeringRTComment(aiComments.getText().toString());
+                openConfirmPassTestDialog(modifiedTeam);
+                break;
 
-        }else if(view.getId() == R.id.bt_button){
-            modifiedTeam.setScrutineeringBT(Calendar.getInstance().getTime());
-            modifiedTeam.setScrutineeringBTComment(aiComments.getText().toString());
+            case R.id.bt_button:
+                modifiedTeam.setScrutineeringBT(Calendar.getInstance().getTime());
+                modifiedTeam.setScrutineeringBTComment(aiComments.getText().toString());
+                openConfirmPassTestDialog(modifiedTeam);
+                break;
+
+            case R.id.ai_comments:
+                openAddCommentDialog(R.id.ai_comments);
+                break;
+
+            case R.id.bt_comments:
+                openAddCommentDialog(R.id.bt_comments);
+                break;
+
+            case R.id.ei_comments:
+                openAddCommentDialog(R.id.ei_comments);
+                break;
+
+            case R.id.mi_comments:
+                openAddCommentDialog(R.id.mi_comments);
+                break;
+
+            case R.id.rt_comments:
+                openAddCommentDialog(R.id.rt_comments);
+                break;
+
+            case R.id.ttt_comments:
+                openAddCommentDialog(R.id.ttt_comments);
+                break;
         }
+    }
 
-        //Open confirm dialog
+    private void openConfirmPassTestDialog(Team modifiedTeam){
         FragmentManager fm = getFragmentManager();
         ConfirmPassTestDialog confirmPassTestDialog = ConfirmPassTestDialog
                 .newInstance(presenter, team, modifiedTeam);
         confirmPassTestDialog.show(fm, "confirmPassTestDialog");
+    }
+
+    private void openAddCommentDialog(int viewClicked){
+        FragmentManager fm = getFragmentManager();
+        AddCommentDialog addCommentDialog = AddCommentDialog.newInstance(presenter, team, viewClicked);
+        addCommentDialog.show(fm, "addCommentDialog");
     }
 
     @Override

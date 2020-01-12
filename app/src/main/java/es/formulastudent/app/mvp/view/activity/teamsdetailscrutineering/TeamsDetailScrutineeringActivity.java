@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -139,14 +138,6 @@ public class TeamsDetailScrutineeringActivity extends GeneralActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return true;
-    }
-
-
-    @Override
-    public void onBackPressed()
-    {
-        Toast.makeText(this, "Save comments before leaving this activity", Toast.LENGTH_LONG).show();
-        super.onBackPressed();  // optional depending on your needs
     }
 
 
