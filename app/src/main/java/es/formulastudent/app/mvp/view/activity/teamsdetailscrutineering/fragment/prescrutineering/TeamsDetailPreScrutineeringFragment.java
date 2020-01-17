@@ -17,11 +17,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Calendar;
-
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
+import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.egresschrono.EgressChronoActivity;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
@@ -33,12 +33,13 @@ import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragment
 import info.androidhive.fontawesome.FontTextView;
 
 
-public class TeamsDetailPreScrutineeringFragment extends Fragment implements View.OnClickListener, TeamsDetailFragment, SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener {
+public class TeamsDetailPreScrutineeringFragment extends Fragment implements View.OnClickListener, TeamsDetailFragment, SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener, View.OnLongClickListener {
 
     private static final int NFC_REQUEST_CODE = 101;
     private static final int CHRONO_CODE = 102;
 
     private Team team;
+    private User loggedUser;
 
     //Presenter
     private TeamsDetailScrutineeringPresenter presenter;
@@ -54,9 +55,10 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
 
 
 
-    public TeamsDetailPreScrutineeringFragment(Team team, TeamsDetailScrutineeringPresenter presenter) {
+    public TeamsDetailPreScrutineeringFragment(Team team, TeamsDetailScrutineeringPresenter presenter, User loggedUser) {
         this.team = team;
         this.presenter = presenter;
+        this.loggedUser = loggedUser;
     }
 
     @Override
@@ -68,6 +70,7 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         preScrutineeringCheckIcon = view.findViewById(R.id.pre_scrutineering_check);
+        preScrutineeringCheckIcon.setOnLongClickListener(this);
         prescrutineeringComments = view.findViewById(R.id.pre_scrutineering_comments);
         prescrutineeringComments.setOnClickListener(this);
         preScrutineeringButton = view.findViewById(R.id.pre_scrutineering_button);
@@ -93,7 +96,7 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
     private void loadData() {
 
         //PS: Icon check, Button and Comments
-        if (team.getScrutineeringPS() == null) {
+        if (!team.getScrutineeringPS()) {
             preScrutineeringCheckIcon.setVisibility(View.INVISIBLE);
             preScrutineeringButton.setVisibility(View.VISIBLE);
 
@@ -112,7 +115,7 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
 
             //Clone team and update it
             Team modifiedTeam = team.clone();
-            modifiedTeam.setScrutineeringPS(Calendar.getInstance().getTime());
+            modifiedTeam.setScrutineeringPS(true);
             modifiedTeam.setScrutineeringPSComment(prescrutineeringComments.getText().toString());
 
             //Open confirm dialog
@@ -159,5 +162,21 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
         Intent intent = new Intent(getContext(), EgressChronoActivity.class);
         intent.putExtra("prescrutineering_register", selectedRegister);
         getActivity().startActivityForResult(intent, CHRONO_CODE);
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        if(this.loggedUser.getRole().equals(UserRole.ADMINISTRATOR)
+                || this.loggedUser.getRole().equals(UserRole.OFFICIAL_STAFF)
+                || this.loggedUser.getRole().equals(UserRole.OFFICIAL_SCRUTINEER)
+                || this.loggedUser.getRole().equals(UserRole.OFFICIAL_MARSHALL)){
+
+            Team modifiedTeam = team.clone();
+            modifiedTeam.setScrutineeringPS(false);
+            presenter.updateTeam(modifiedTeam, team);
+
+        }
+
+        return false;
     }
 }

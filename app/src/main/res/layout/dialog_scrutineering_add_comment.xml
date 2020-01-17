@@ -19,5 +19,5 @@
         android:textSize="14sp"
         android:background="@drawable/text_area_rounded"
         android:gravity="top"/>
-    
+
 </LinearLayout>

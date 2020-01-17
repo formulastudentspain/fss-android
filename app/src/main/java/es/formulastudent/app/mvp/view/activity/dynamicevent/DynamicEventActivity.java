@@ -34,7 +34,6 @@ public class DynamicEventActivity extends GeneralActivity implements
         DynamicEventPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int NFC_REQUEST_CODE = 101;
-    private static final int CHRONO_CODE = 102;
 
     EventType eventType;
 
@@ -156,13 +155,7 @@ public class DynamicEventActivity extends GeneralActivity implements
                 Intent i = new Intent(this, NFCReaderActivity.class);
                 startActivityForResult(i, NFC_REQUEST_CODE);
             }
-
-
         }
-
-
-
-
     }
 
     @Override

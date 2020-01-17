@@ -4,7 +4,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,14 +52,14 @@ public class Team implements Serializable, Cloneable {
     private Car car;
 
     //Passes
-    private Date scrutineeringPS; //Pre-Scrutineering (C, DC, E, DE)
-    private Date scrutineeringAI; //Accumulation Inspection (E, DE)
-    private Date scrutineeringEI; //Electrical Inspection (E, DE)
-    private Date scrutineeringMI; //Mechanical Inspection (C, DC, E, DE)
-    private Date scrutineeringTTT; //Tilt Table Test (C, DC, E, DE)
-    private Date scrutineeringNT; //Noise Test (C, DC)
-    private Date scrutineeringRT; //Rain Test (E, DE)
-    private Date scrutineeringBT; //Brake Test (C, DC, E, DE)
+    private Boolean scrutineeringPS; //Pre-Scrutineering (C, DC, E, DE)
+    private Boolean scrutineeringAI; //Accumulation Inspection (E, DE)
+    private Boolean scrutineeringEI; //Electrical Inspection (E, DE)
+    private Boolean scrutineeringMI; //Mechanical Inspection (C, DC, E, DE)
+    private Boolean scrutineeringTTT; //Tilt Table Test (C, DC, E, DE)
+    private Boolean scrutineeringNT; //Noise Test (C, DC)
+    private Boolean scrutineeringRT; //Rain Test (E, DE)
+    private Boolean scrutineeringBT; //Brake Test (C, DC, E, DE)
 
     //Comments
     private String scrutineeringPSComment; //Pre-Scrutineering (C, DC, E, DE)
@@ -73,16 +72,16 @@ public class Team implements Serializable, Cloneable {
     private String scrutineeringBTComment; //Brake Test (C, DC, E, DE)
     
     //Fee transponder
-    private Date transponderFeeGiven;
-    private Date transponderItemGiven;
-    private Date transponderItemReturned;
-    private Date transponderFeeReturned;
+    private Boolean transponderFeeGiven;
+    private Boolean transponderItemGiven;
+    private Boolean transponderItemReturned;
+    private Boolean transponderFeeReturned;
 
     //Fee energy meter
-    private Date energyMeterFeeGiven;
-    private Date energyMeterItemGiven;
-    private Date energyMeterItemReturned;
-    private Date energyMeterFeeReturned;
+    private Boolean energyMeterFeeGiven;
+    private Boolean energyMeterItemGiven;
+    private Boolean energyMeterItemReturned;
+    private Boolean energyMeterFeeReturned;
 
 
 
@@ -102,14 +101,14 @@ public class Team implements Serializable, Cloneable {
         car.setType((String)carMap.get("type"));
         this.car = car;
 
-        this.scrutineeringPS = object.getDate(Team.SCRUTINEERING_PS);
-        this.scrutineeringAI = object.getDate(Team.SCRUTINEERING_AI);
-        this.scrutineeringEI = object.getDate(Team.SCRUTINEERING_EI);
-        this.scrutineeringMI = object.getDate(Team.SCRUTINEERING_MI);
-        this.scrutineeringTTT = object.getDate(Team.SCRUTINEERING_TTT);
-        this.scrutineeringNT = object.getDate(Team.SCRUTINEERING_NT);
-        this.scrutineeringRT = object.getDate(Team.SCRUTINEERING_RT);
-        this.scrutineeringBT = object.getDate(Team.SCRUTINEERING_BT);
+        this.scrutineeringPS = object.getBoolean(Team.SCRUTINEERING_PS);
+        this.scrutineeringAI = object.getBoolean(Team.SCRUTINEERING_AI);
+        this.scrutineeringEI = object.getBoolean(Team.SCRUTINEERING_EI);
+        this.scrutineeringMI = object.getBoolean(Team.SCRUTINEERING_MI);
+        this.scrutineeringTTT = object.getBoolean(Team.SCRUTINEERING_TTT);
+        this.scrutineeringNT = object.getBoolean(Team.SCRUTINEERING_NT);
+        this.scrutineeringRT = object.getBoolean(Team.SCRUTINEERING_RT);
+        this.scrutineeringBT = object.getBoolean(Team.SCRUTINEERING_BT);
 
         this.scrutineeringPSComment = object.getString(Team.SCRUTINEERING_PS_COMMENT);
         this.scrutineeringAIComment = object.getString(Team.SCRUTINEERING_AI_COMMENT);
@@ -120,15 +119,15 @@ public class Team implements Serializable, Cloneable {
         this.scrutineeringRTComment = object.getString(Team.SCRUTINEERING_RT_COMMENT);
         this.scrutineeringBTComment = object.getString(Team.SCRUTINEERING_BT_COMMENT);
         
-        this.transponderFeeGiven = object.getDate(Team.TRANSPONDER_FEE_GIVEN);
-        this.transponderItemGiven = object.getDate(Team.TRANSPONDER_ITEM_GIVEN);
-        this.transponderItemReturned = object.getDate(Team.TRANSPONDER_ITEM_RETURNED);
-        this.transponderFeeReturned = object.getDate(Team.TRANSPONDER_FEE_RETURNED);
+        this.transponderFeeGiven = object.getBoolean(Team.TRANSPONDER_FEE_GIVEN);
+        this.transponderItemGiven = object.getBoolean(Team.TRANSPONDER_ITEM_GIVEN);
+        this.transponderItemReturned = object.getBoolean(Team.TRANSPONDER_ITEM_RETURNED);
+        this.transponderFeeReturned = object.getBoolean(Team.TRANSPONDER_FEE_RETURNED);
 
-        this.energyMeterFeeGiven = object.getDate(Team.ENERGY_METER_FEE_GIVEN);
-        this.energyMeterItemGiven = object.getDate(Team.ENERGY_METER_ITEM_GIVEN);
-        this.energyMeterItemReturned = object.getDate(Team.ENERGY_METER_ITEM_RETURNED);
-        this.energyMeterFeeReturned = object.getDate(Team.ENERGY_METER_FEE_RETURNED);
+        this.energyMeterFeeGiven = object.getBoolean(Team.ENERGY_METER_FEE_GIVEN);
+        this.energyMeterItemGiven = object.getBoolean(Team.ENERGY_METER_ITEM_GIVEN);
+        this.energyMeterItemReturned = object.getBoolean(Team.ENERGY_METER_ITEM_RETURNED);
+        this.energyMeterFeeReturned = object.getBoolean(Team.ENERGY_METER_FEE_RETURNED);
 
     }
 
@@ -264,67 +263,67 @@ public class Team implements Serializable, Cloneable {
         this.car = car;
     }
 
-    public Date getScrutineeringPS() {
+    public Boolean getScrutineeringPS() {
         return scrutineeringPS;
     }
 
-    public void setScrutineeringPS(Date scrutineeringPS) {
+    public void setScrutineeringPS(Boolean scrutineeringPS) {
         this.scrutineeringPS = scrutineeringPS;
     }
 
-    public Date getScrutineeringAI() {
+    public Boolean getScrutineeringAI() {
         return scrutineeringAI;
     }
 
-    public void setScrutineeringAI(Date scrutineeringAI) {
+    public void setScrutineeringAI(Boolean scrutineeringAI) {
         this.scrutineeringAI = scrutineeringAI;
     }
 
-    public Date getScrutineeringEI() {
+    public Boolean getScrutineeringEI() {
         return scrutineeringEI;
     }
 
-    public void setScrutineeringEI(Date scrutineeringEI) {
+    public void setScrutineeringEI(Boolean scrutineeringEI) {
         this.scrutineeringEI = scrutineeringEI;
     }
 
-    public Date getScrutineeringMI() {
+    public Boolean getScrutineeringMI() {
         return scrutineeringMI;
     }
 
-    public void setScrutineeringMI(Date scrutineeringMI) {
+    public void setScrutineeringMI(Boolean scrutineeringMI) {
         this.scrutineeringMI = scrutineeringMI;
     }
 
-    public Date getScrutineeringTTT() {
+    public Boolean getScrutineeringTTT() {
         return scrutineeringTTT;
     }
 
-    public void setScrutineeringTTT(Date scrutineeringTTT) {
+    public void setScrutineeringTTT(Boolean scrutineeringTTT) {
         this.scrutineeringTTT = scrutineeringTTT;
     }
 
-    public Date getScrutineeringNT() {
+    public Boolean getScrutineeringNT() {
         return scrutineeringNT;
     }
 
-    public void setScrutineeringNT(Date scrutineeringNT) {
+    public void setScrutineeringNT(Boolean scrutineeringNT) {
         this.scrutineeringNT = scrutineeringNT;
     }
 
-    public Date getScrutineeringRT() {
+    public Boolean getScrutineeringRT() {
         return scrutineeringRT;
     }
 
-    public void setScrutineeringRT(Date scrutineeringRT) {
+    public void setScrutineeringRT(Boolean scrutineeringRT) {
         this.scrutineeringRT = scrutineeringRT;
     }
 
-    public Date getScrutineeringBT() {
+    public Boolean getScrutineeringBT() {
         return scrutineeringBT;
     }
 
-    public void setScrutineeringBT(Date scrutineeringBT) {
+    public void setScrutineeringBT(Boolean scrutineeringBT) {
         this.scrutineeringBT = scrutineeringBT;
     }
 
@@ -396,67 +395,67 @@ public class Team implements Serializable, Cloneable {
         return ScrutineeringTest.getTestsByCarType(this.getCar().getType());
     }
 
-    public Date getTransponderFeeGiven() {
+    public Boolean getTransponderFeeGiven() {
         return transponderFeeGiven;
     }
 
-    public void setTransponderFeeGiven(Date transponderFeeGiven) {
+    public void setTransponderFeeGiven(Boolean transponderFeeGiven) {
         this.transponderFeeGiven = transponderFeeGiven;
     }
 
-    public Date getTransponderItemGiven() {
+    public Boolean getTransponderItemGiven() {
         return transponderItemGiven;
     }
 
-    public void setTransponderItemGiven(Date transponderItemGiven) {
+    public void setTransponderItemGiven(Boolean transponderItemGiven) {
         this.transponderItemGiven = transponderItemGiven;
     }
 
-    public Date getTransponderItemReturned() {
+    public Boolean getTransponderItemReturned() {
         return transponderItemReturned;
     }
 
-    public void setTransponderItemReturned(Date transponderItemReturned) {
+    public void setTransponderItemReturned(Boolean transponderItemReturned) {
         this.transponderItemReturned = transponderItemReturned;
     }
 
-    public Date getTransponderFeeReturned() {
+    public Boolean getTransponderFeeReturned() {
         return transponderFeeReturned;
     }
 
-    public void setTransponderFeeReturned(Date transponderFeeReturned) {
+    public void setTransponderFeeReturned(Boolean transponderFeeReturned) {
         this.transponderFeeReturned = transponderFeeReturned;
     }
 
-    public Date getEnergyMeterFeeGiven() {
+    public Boolean getEnergyMeterFeeGiven() {
         return energyMeterFeeGiven;
     }
 
-    public void setEnergyMeterFeeGiven(Date energyMeterFeeGiven) {
+    public void setEnergyMeterFeeGiven(Boolean energyMeterFeeGiven) {
         this.energyMeterFeeGiven = energyMeterFeeGiven;
     }
 
-    public Date getEnergyMeterItemGiven() {
+    public Boolean getEnergyMeterItemGiven() {
         return energyMeterItemGiven;
     }
 
-    public void setEnergyMeterItemGiven(Date energyMeterItemGiven) {
+    public void setEnergyMeterItemGiven(Boolean energyMeterItemGiven) {
         this.energyMeterItemGiven = energyMeterItemGiven;
     }
 
-    public Date getEnergyMeterItemReturned() {
+    public Boolean getEnergyMeterItemReturned() {
         return energyMeterItemReturned;
     }
 
-    public void setEnergyMeterItemReturned(Date energyMeterItemReturned) {
+    public void setEnergyMeterItemReturned(Boolean energyMeterItemReturned) {
         this.energyMeterItemReturned = energyMeterItemReturned;
     }
 
-    public Date getEnergyMeterFeeReturned() {
+    public Boolean getEnergyMeterFeeReturned() {
         return energyMeterFeeReturned;
     }
 
-    public void setEnergyMeterFeeReturned(Date energyMeterFeeReturned) {
+    public void setEnergyMeterFeeReturned(Boolean energyMeterFeeReturned) {
         this.energyMeterFeeReturned = energyMeterFeeReturned;
     }
 }

@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,9 @@ public class AdminOpsPresenter {
 
     public void importTeamsAndDrivers(){
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2000);
+
         final Map<String, Team> teams = new HashMap<>();
         final Map<String, Team> persistedTeams = new HashMap<>();
 
@@ -100,6 +104,27 @@ public class AdminOpsPresenter {
 
                     //Team name
                     team.setName(teamName);
+
+                    //Scrutineering values
+                    team.setScrutineeringPS(false);
+                    team.setScrutineeringAI(false);
+                    team.setScrutineeringEI(false);
+                    team.setScrutineeringMI(false);
+                    team.setScrutineeringTTT(false);
+                    team.setScrutineeringNT(false);
+                    team.setScrutineeringRT(false);
+                    team.setScrutineeringBT(false);
+                    
+                    //Fee status
+                    team.setTransponderFeeGiven(false);
+                    team.setTransponderFeeReturned(false);
+                    team.setTransponderItemGiven(false);
+                    team.setTransponderItemReturned(false);
+                    team.setEnergyMeterFeeGiven(false);
+                    team.setEnergyMeterFeeReturned(false);
+                    team.setEnergyMeterItemGiven(false);
+                    team.setEnergyMeterItemReturned(false);
+
 
                     //Car type
                     Cell cellCarType = row.getCell(1);

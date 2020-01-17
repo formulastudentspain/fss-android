@@ -116,7 +116,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
 
         //First, retrieve all the teams depending on the race type
-        teamBO.retrieveAllTeams(carType, new BusinessCallback() {
+        teamBO.retrieveTeams(carType, null, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 

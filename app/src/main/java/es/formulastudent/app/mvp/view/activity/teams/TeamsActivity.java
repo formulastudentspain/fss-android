@@ -2,6 +2,9 @@ package es.formulastudent.app.mvp.view.activity.teams;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +31,8 @@ public class TeamsActivity extends GeneralActivity implements TeamsPresenter.Vie
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView recyclerView;
     private TeamsAdapter adapter;
+    private MenuItem filterItem;
+
 
 
     @Override
@@ -36,7 +41,10 @@ public class TeamsActivity extends GeneralActivity implements TeamsPresenter.Vie
         setContentView(R.layout.activity_teams);
         super.onCreate(savedInstanceState);
 
+
         initViews();
+        setSupportActionBar(toolbar);
+
     }
 
     @Override
@@ -124,14 +132,43 @@ public class TeamsActivity extends GeneralActivity implements TeamsPresenter.Vie
     }
 
     @Override
+    public void filtersActivated(Boolean activated) {
+        if(filterItem != null){
+            if(activated){
+                filterItem.setIcon(R.drawable.ic_filter_active);
+            }else{
+                filterItem.setIcon(R.drawable.ic_filter_inactive);
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_dynamic_event, menu);
+
+        //Search menu item
+        filterItem = menu.findItem(R.id.filter_results);
+        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                presenter.filterIconClicked();
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    @Override
     public void onRefresh() {
-        presenter.retrieveBriefingRegisterList();
+        presenter.retrieveTeamsList();
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        presenter.retrieveBriefingRegisterList();
+        presenter.retrieveTeamsList();
     }
 
 }

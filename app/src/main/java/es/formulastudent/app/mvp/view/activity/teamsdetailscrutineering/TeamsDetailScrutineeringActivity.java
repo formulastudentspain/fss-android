@@ -50,7 +50,7 @@ public class TeamsDetailScrutineeringActivity extends GeneralActivity implements
         //Get selected team
         team = (Team) getIntent().getSerializableExtra("selectedTeam");
 
-        tabAdapter = new TabAdapter(getSupportFragmentManager(), team, presenter);
+        tabAdapter = new TabAdapter(getSupportFragmentManager(), team, presenter, loggedUser);
         viewPager = findViewById(R.id.pager);
         viewPager.setAdapter(tabAdapter);
 

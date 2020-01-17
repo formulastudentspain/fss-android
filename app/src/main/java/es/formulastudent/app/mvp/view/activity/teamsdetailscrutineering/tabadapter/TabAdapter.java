@@ -5,35 +5,39 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import es.formulastudent.app.mvp.data.model.Team;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringPresenter;
-import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragment.scrutineering.TeamsDetailScrutineeringFragment;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragment.prescrutineering.TeamsDetailPreScrutineeringFragment;
+import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.fragment.scrutineering.TeamsDetailScrutineeringFragment;
 
 public class TabAdapter extends FragmentStatePagerAdapter {
 
     private Team team;
     private TeamsDetailScrutineeringPresenter presenter;
+    private User loggedUser;
 
     //Fragments
     private TeamsDetailScrutineeringFragment teamsDetailScrutineeringFragment;
     private TeamsDetailPreScrutineeringFragment teamsDetailPreScrutineeringFragment;
 
 
-    public TabAdapter(FragmentManager fm, Team team, TeamsDetailScrutineeringPresenter presenter) {
+    public TabAdapter(FragmentManager fm, Team team, TeamsDetailScrutineeringPresenter presenter, User loggedUser) {
         super(fm);
         this.team = team;
         this.presenter = presenter;
+        this.loggedUser = loggedUser;
+
     }
 
     @Override
     public Fragment getItem(int i) {
 
         if(i == 0){
-            teamsDetailPreScrutineeringFragment = new TeamsDetailPreScrutineeringFragment(team, presenter);
+            teamsDetailPreScrutineeringFragment = new TeamsDetailPreScrutineeringFragment(team, presenter, loggedUser);
             return teamsDetailPreScrutineeringFragment;
 
         }else{
-            teamsDetailScrutineeringFragment = new TeamsDetailScrutineeringFragment(team, presenter);
+            teamsDetailScrutineeringFragment = new TeamsDetailScrutineeringFragment(team, presenter, loggedUser);
             return teamsDetailScrutineeringFragment;
 
         }

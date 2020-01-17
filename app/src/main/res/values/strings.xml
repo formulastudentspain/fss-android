@@ -298,5 +298,13 @@
     <string name="teams_dialog_fee_next_step_title">Done</string>
     <string name="teams_dialog_fee_next_step_description">Are you sure you want to set this state as done?</string>
 
+    <!-- Filtering values for Fees -->
+    <string-array name="fee_state_values">
+        <item>-</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 
 </resources>

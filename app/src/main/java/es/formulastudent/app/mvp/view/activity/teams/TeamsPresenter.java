@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
@@ -13,6 +15,7 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog;
 import es.formulastudent.app.mvp.view.activity.teamsdetailfee.TeamsDetailFeeActivity;
 import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringActivity;
 
@@ -27,6 +30,7 @@ public class TeamsPresenter implements RecyclerViewClickListener {
     //Data
     List<Team> allTeamsList = new ArrayList<>();
     List<Team> filteredTeamsList = new ArrayList<>();
+    Map<String, String> filters = new HashMap<>();
 
 
     public TeamsPresenter(TeamsPresenter.View view, Context context, TeamBO teamBO) {
@@ -39,13 +43,15 @@ public class TeamsPresenter implements RecyclerViewClickListener {
     /**
      * Retrieve Briefing registers
      */
-     void retrieveBriefingRegisterList() {
+     public void retrieveTeamsList() {
+
+         view.filtersActivated(!filters.keySet().isEmpty());
 
         //Show loading
         view.showLoading();
 
         //Call Briefing business
-         teamBO.retrieveAllTeams(null, new BusinessCallback() {
+        teamBO.retrieveTeams(null, filters, new BusinessCallback() {
 
              @Override
              public void onSuccess(ResponseDTO responseDTO) {
@@ -99,11 +105,23 @@ public class TeamsPresenter implements RecyclerViewClickListener {
         }
     }
 
+    /**
+     * Open the filtering dialog
+     */
+    void filterIconClicked(){
+
+        FilterTeamsDialog filterTeamsDialog = FilterTeamsDialog.newInstance(this, filters);
+        filterTeamsDialog.show(((TeamsActivity)view.getActivity()).getSupportFragmentManager(), "addCommentDialog");
+    }
+
 
     public List<Team> getTeamsList() {
         return filteredTeamsList;
     }
 
+    public void setFilters(Map<String, String> filters) {
+        this.filters = filters;
+    }
 
     public interface View {
 
@@ -134,6 +152,12 @@ public class TeamsPresenter implements RecyclerViewClickListener {
          * Refresh items in list
          */
         void refreshBriefingRegisterItems();
+
+        /**
+         * Method to know if the filters are activated
+         * @param activated
+         */
+        void filtersActivated(Boolean activated);
 
     }
 

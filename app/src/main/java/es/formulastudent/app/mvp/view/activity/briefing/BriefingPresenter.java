@@ -195,7 +195,7 @@ public class BriefingPresenter implements RecyclerViewClickListener {
         view.showLoading();
 
         //Call business to retrieve teams
-        teamBO.retrieveAllTeams(null, new BusinessCallback() {
+        teamBO.retrieveTeams(null, null, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {

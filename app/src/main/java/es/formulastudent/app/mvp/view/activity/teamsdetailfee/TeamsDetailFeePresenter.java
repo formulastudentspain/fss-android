@@ -5,8 +5,6 @@ import android.app.Activity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
@@ -54,32 +52,31 @@ public class TeamsDetailFeePresenter {
         //Show loading
         view.showLoading();
 
-        Date now = Calendar.getInstance().getTime();
 
         switch (feeItem){
             case TRANSPONDER_FEE_GIVEN:
-                team.setTransponderFeeGiven(now);
+                team.setTransponderFeeGiven(true);
                 break;
             case TRANSPONDER_GIVEN:
-                team.setTransponderItemGiven(now);
+                team.setTransponderItemGiven(true);
                 break;
             case TRANSPONDER_RETURNED:
-                team.setTransponderItemReturned(now);
+                team.setTransponderItemReturned(true);
                 break;
             case TRANSPONDER_FEE_RETURNED:
-                team.setTransponderFeeReturned(now);
+                team.setTransponderFeeReturned(true);
                 break;
             case ENERGY_METER_FEE_GIVEN:
-                team.setEnergyMeterFeeGiven(now);
+                team.setEnergyMeterFeeGiven(true);
                 break;
             case ENERGY_METER_GIVEN:
-                team.setEnergyMeterItemGiven(now);
+                team.setEnergyMeterItemGiven(true);
                 break;
             case ENERGY_METER_RETURNED:
-                team.setEnergyMeterItemReturned(now);
+                team.setEnergyMeterItemReturned(true);
                 break;
             case ENERGY_METER_FEE_RETURNED:
-                team.setEnergyMeterFeeReturned(now);
+                team.setEnergyMeterFeeReturned(true);
                 break;
         }
 

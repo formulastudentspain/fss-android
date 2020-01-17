@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import es.formulastudent.app.R;
@@ -55,6 +57,10 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 2001);
+        Date nullDate = cal.getTime();
+
         Team register = teamsList.get(position);
 
         TeamsViewHolder teamsViewHolder = (TeamsViewHolder)holder;
@@ -67,7 +73,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         //AI
         if(tests.contains(ScrutineeringTest.ACCUMULATION_INSPECTION)){
             teamsViewHolder.aiTest.setVisibility(View.VISIBLE);
-            if(register.getScrutineeringAI() != null){
+            if(register.getScrutineeringAI()){
                 teamsViewHolder.aiTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
                 teamsViewHolder.aiTest.setTextColor(context.getResources().getColor(R.color.md_grey_200));
@@ -79,7 +85,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         //BT
         if(tests.contains(ScrutineeringTest.BRAKE_TEST)){
             teamsViewHolder.btTest.setVisibility(View.VISIBLE);
-            if(register.getScrutineeringBT() != null){
+            if(register.getScrutineeringBT()){
                 teamsViewHolder.btTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
                 teamsViewHolder.btTest.setTextColor(context.getResources().getColor(R.color.md_grey_200));
@@ -91,7 +97,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         //EI
         if(tests.contains(ScrutineeringTest.ELECTRICAL_INSPECTION)){
             teamsViewHolder.eiTest.setVisibility(View.VISIBLE);
-            if(register.getScrutineeringEI() != null){
+            if(register.getScrutineeringEI()){
                 teamsViewHolder.eiTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
                 teamsViewHolder.eiTest.setTextColor(context.getResources().getColor(R.color.md_grey_200));
@@ -103,7 +109,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         //MI
         if(tests.contains(ScrutineeringTest.MECHANICAL_INSPECTION)){
             teamsViewHolder.miTest.setVisibility(View.VISIBLE);
-            if(register.getScrutineeringMI() != null){
+            if(register.getScrutineeringMI()){
                 teamsViewHolder.miTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
                 teamsViewHolder.miTest.setTextColor(context.getResources().getColor(R.color.md_grey_200));
@@ -115,7 +121,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         //NT
         if(tests.contains(ScrutineeringTest.NOISE_TEST)){
             teamsViewHolder.ntTest.setVisibility(View.VISIBLE);
-            if(register.getScrutineeringNT() != null){
+            if(register.getScrutineeringNT()){
                 teamsViewHolder.ntTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
                 teamsViewHolder.ntTest.setTextColor(context.getResources().getColor(R.color.md_grey_200));
@@ -127,7 +133,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         //PS
         if(tests.contains(ScrutineeringTest.PRE_SCRUTINEERING)){
             teamsViewHolder.psTest.setVisibility(View.VISIBLE);
-            if(register.getScrutineeringPS() != null){
+            if(register.getScrutineeringPS()){
                 teamsViewHolder.psTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
                 teamsViewHolder.psTest.setTextColor(context.getResources().getColor(R.color.md_grey_200));
@@ -139,7 +145,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         //RT
         if(tests.contains(ScrutineeringTest.RAIN_TEST)){
             teamsViewHolder.rtTest.setVisibility(View.VISIBLE);
-            if(register.getScrutineeringRT() != null){
+            if(register.getScrutineeringRT()){
                 teamsViewHolder.rtTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
                 teamsViewHolder.rtTest.setTextColor(context.getResources().getColor(R.color.md_grey_200));
@@ -151,7 +157,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         //TTT
         if(tests.contains(ScrutineeringTest.TILT_TABLE_TEST)){
             teamsViewHolder.tttTest.setVisibility(View.VISIBLE);
-            if(register.getScrutineeringTTT() != null){
+            if(register.getScrutineeringTTT()){
                 teamsViewHolder.tttTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
                 teamsViewHolder.tttTest.setTextColor(context.getResources().getColor(R.color.md_grey_200));
@@ -166,19 +172,19 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         teamsViewHolder.transponderState3.setText("3");
         teamsViewHolder.transponderState4.setText("4");
 
-        if(register.getTransponderFeeGiven() != null){
+        if(register.getTransponderFeeGiven()){
             teamsViewHolder.transponderState1.setText(R.string.fa_check_circle);
         }
         
-        if(register.getTransponderItemGiven() != null){
+        if(register.getTransponderItemGiven()){
             teamsViewHolder.transponderState2.setText(R.string.fa_check_circle);
         }
         
-        if(register.getTransponderItemReturned() != null){
+        if(register.getTransponderItemReturned()){
             teamsViewHolder.transponderState3.setText(R.string.fa_check_circle);
         }
         
-        if(register.getTransponderFeeReturned() != null){
+        if(register.getTransponderFeeReturned()){
             teamsViewHolder.transponderState4.setText(R.string.fa_check_circle);
         }
 
@@ -194,19 +200,19 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             teamsViewHolder.energyMeterState3.setText("3");
             teamsViewHolder.energyMeterState4.setText("4");
 
-            if(register.getEnergyMeterFeeGiven() != null){
+            if(register.getEnergyMeterFeeGiven()){
                 teamsViewHolder.energyMeterState1.setText(R.string.fa_check_circle);
             }
 
-            if(register.getEnergyMeterItemGiven() != null){
+            if(register.getEnergyMeterItemGiven()){
                 teamsViewHolder.energyMeterState2.setText(R.string.fa_check_circle);
             }
 
-            if(register.getEnergyMeterItemReturned() != null){
+            if(register.getEnergyMeterItemReturned()){
                 teamsViewHolder.energyMeterState3.setText(R.string.fa_check_circle);
             }
 
-            if(register.getEnergyMeterFeeReturned() != null){
+            if(register.getEnergyMeterFeeReturned()){
                 teamsViewHolder.energyMeterState4.setText(R.string.fa_check_circle);
             }
 

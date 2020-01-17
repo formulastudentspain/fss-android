@@ -1,5 +1,7 @@
 package es.formulastudent.app.mvp.data.business.team;
 
+import java.util.Map;
+
 import javax.annotation.Nullable;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
@@ -13,7 +15,7 @@ public interface TeamBO {
      * @param carType, if null, all teams will be returned
      * @param callback
      */
-    void retrieveAllTeams(@Nullable String carType, BusinessCallback callback);
+    void retrieveTeams(@Nullable String carType, Map<String, String> filters, BusinessCallback callback);
 
 
     /**
