@@ -17,7 +17,6 @@ import java.util.List;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.Car;
-import es.formulastudent.app.mvp.data.model.Country;
 import es.formulastudent.app.mvp.data.model.ScrutineeringTest;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
@@ -221,7 +220,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         //Country flag
-        Picasso.get().load(Country.GERMANY.getFlagURL()).into(teamsViewHolder.countryFlag);
+        Picasso.get().load(register.getCountry().getFlagURL()).into(teamsViewHolder.countryFlag);
 
     }
 

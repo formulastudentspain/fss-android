@@ -41,6 +41,8 @@ public class Team implements Serializable, Cloneable {
     public static final String TRANSPONDER_ITEM_GIVEN = "transponderItemGiven";
     public static final String TRANSPONDER_ITEM_RETURNED = "transponderItemReturned";
     public static final String TRANSPONDER_FEE_RETURNED = "transponderFeeReturned";
+    public static final String COUNTRY = "country";
+
 
 
 
@@ -50,6 +52,7 @@ public class Team implements Serializable, Cloneable {
     private String ID;
     private String name;
     private Car car;
+    private Country country;
 
     //Passes
     private Boolean scrutineeringPS; //Pre-Scrutineering (C, DC, E, DE)
@@ -129,6 +132,8 @@ public class Team implements Serializable, Cloneable {
         this.energyMeterItemReturned = object.getBoolean(Team.ENERGY_METER_ITEM_RETURNED);
         this.energyMeterFeeReturned = object.getBoolean(Team.ENERGY_METER_FEE_RETURNED);
 
+        this.country = Country.getByName(object.getString(Team.COUNTRY));
+
     }
 
     public Map<String, Object> toDocumentData(){
@@ -136,6 +141,7 @@ public class Team implements Serializable, Cloneable {
         Map<String, Object> docData = new HashMap<>();
         docData.put(Team.NAME, this.getName());
         docData.put(Team.CAR, this.getCar());
+        docData.put(Team.COUNTRY, this.getCountry().getName());
 
         docData.put(Team.SCRUTINEERING_PS, this.getScrutineeringPS());
         docData.put(Team.SCRUTINEERING_AI, this.getScrutineeringAI());
@@ -164,6 +170,7 @@ public class Team implements Serializable, Cloneable {
         docData.put(Team.ENERGY_METER_ITEM_GIVEN, this.getEnergyMeterItemGiven());
         docData.put(Team.ENERGY_METER_ITEM_RETURNED, this.getEnergyMeterItemReturned());
         docData.put(Team.ENERGY_METER_FEE_RETURNED, this.getEnergyMeterFeeReturned());
+
 
         return docData;
     }
@@ -457,5 +464,13 @@ public class Team implements Serializable, Cloneable {
 
     public void setEnergyMeterFeeReturned(Boolean energyMeterFeeReturned) {
         this.energyMeterFeeReturned = energyMeterFeeReturned;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
     }
 }

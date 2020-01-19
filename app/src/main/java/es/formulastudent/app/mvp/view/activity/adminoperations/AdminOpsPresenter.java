@@ -23,6 +23,7 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Car;
+import es.formulastudent.app.mvp.data.model.Country;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
@@ -144,6 +145,11 @@ public class AdminOpsPresenter {
                     Cell cellCarNumber = row.getCell(5);
                     Double carNumber = cellCarNumber.getNumericCellValue();
                     car.setNumber(carNumber.longValue());
+
+                    //Country
+                    Cell cellCountry = row.getCell(6);
+                    String country = cellCountry.getStringCellValue().trim();
+                    team.setCountry(Country.getByName(country));
 
                     team.setCar(car);
 

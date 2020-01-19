@@ -67,6 +67,50 @@ public enum Country implements Serializable {
         }
 
 
+        public static Country getByName(String name){
+
+                if(name.equals(UNITED_KINGDOM.getName())){
+                        return UNITED_KINGDOM;
+
+                }else if(name.equals(AUSTRIA.getName())){
+                        return AUSTRIA;
+
+                }else if(name.equals(PORTUGAL.getName())){
+                        return PORTUGAL;
+
+                }else if(name.equals(SLOVAKIA.getName())){
+                        return SLOVAKIA;
+
+                }else if(name.equals(ITALY.getName())){
+                        return ITALY;
+
+                }else if(name.equals(ICELAND.getName())){
+                        return ICELAND;
+
+                }else if(name.equals(POLAND.getName())){
+                        return POLAND;
+
+                }else if(name.equals(NETHERLANDS.getName())){
+                        return NETHERLANDS;
+
+                }else if(name.equals(SWITZERLAND.getName())){
+                        return SWITZERLAND;
+
+                }else if(name.equals(FRANCE.getName())){
+                        return FRANCE;
+
+                }else if(name.equals(CANADA.getName())){
+                        return CANADA;
+
+                }else if(name.equals(GERMANY.getName())){
+                        return GERMANY;
+
+                }else if(name.equals(SPAIN.getName())){
+                        return SPAIN;
+                }
+                return SPAIN;
+        }
+
         public String getName() {
                 return name;
         }
