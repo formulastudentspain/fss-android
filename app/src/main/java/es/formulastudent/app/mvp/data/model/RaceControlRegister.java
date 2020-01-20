@@ -21,7 +21,7 @@ public abstract class RaceControlRegister implements Serializable {
     //Database constants
     public static final String CAR_NUMBER = "carNumber";
     public static final String CAR_TYPE = "carType";
-    public static final String COUNTRY = "country";
+    public static final String FLAG_URL = "flagURL";
     public static final String CURRENT_STATE = "currentState";
     public static final String CURRENT_STATE_DATE = "userID";
     public static final String ORDER = "order";
@@ -34,7 +34,7 @@ public abstract class RaceControlRegister implements Serializable {
     private String ID;
     private String carType;
     private Long carNumber;
-    private String country;
+    private String flagURL;
     private Date currentStateDate;
     private Long order;
     private RaceControlState currentState;
@@ -52,7 +52,7 @@ public abstract class RaceControlRegister implements Serializable {
         Map<String, Object> docData = new HashMap<>();
         docData.put(RaceControlRegister.CAR_NUMBER, this.carNumber);
         docData.put(RaceControlRegister.CAR_TYPE, this.carType);
-        docData.put(RaceControlRegister.COUNTRY, this.country);
+        docData.put(RaceControlRegister.FLAG_URL, this.flagURL);
         docData.put(RaceControlRegister.CURRENT_STATE, this.currentState.getAcronym());
         docData.put(RaceControlRegister.CURRENT_STATE_DATE, this.currentStateDate == null ? null : new Timestamp(this.currentStateDate));
         docData.put(RaceControlRegister.ORDER, this.order);
@@ -69,7 +69,7 @@ public abstract class RaceControlRegister implements Serializable {
         this.ID = object.getId();
         this.carNumber = object.getLong(RaceControlRegister.CAR_NUMBER);
         this.carType = object.getString(RaceControlRegister.CAR_TYPE);
-        this.country = object.getString(RaceControlRegister.COUNTRY);
+        this.flagURL = object.getString(RaceControlRegister.FLAG_URL);
         this.currentStateDate = object.getDate(RaceControlRegister.CURRENT_STATE_DATE);
         this.order = object.getLong(RaceControlRegister.ORDER);
         this.stateNA = object.getDate(RaceControlRegister.RC_STATE_NOT_AVAILABLE);
@@ -138,12 +138,12 @@ public abstract class RaceControlRegister implements Serializable {
         this.carNumber = carNumber;
     }
 
-    public String getCountry() {
-        return country;
+    public String getFlagURL() {
+        return flagURL;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setFlagURL(String flagURL) {
+        this.flagURL = flagURL;
     }
 
     public Date getCurrentStateDate() {

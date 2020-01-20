@@ -193,6 +193,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
             register.setCarType(raceType);
             register.setRunFinal(RaceControlRegister.RACE_TYPE_FINAL.equals(raceType));
             register.setCurrentStateDate(Calendar.getInstance().getTime());
+            register.setFlagURL(item.getFlagURL());
             register.setOrder(currentMaxIndex);
             register.setCurrentState(RaceControlState.NOT_AVAILABLE);
             batch.set(nycRef, register.toObjectData());

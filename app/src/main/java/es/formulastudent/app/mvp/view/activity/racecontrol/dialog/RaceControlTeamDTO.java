@@ -8,6 +8,7 @@ public class RaceControlTeamDTO {
     private String carName;
     private Boolean alreadyAdded;
     private Boolean selected;
+    private String flagURL;
 
     public RaceControlTeamDTO(){}
 
@@ -15,6 +16,7 @@ public class RaceControlTeamDTO {
         this.alreadyAdded = alreadyAdded;
         this.carNumber = team.getCar().getNumber();
         this.carName = team.getName();
+        this.flagURL = team.getCountry().getFlagURL();
     }
 
     public Long getCarNumber() {
@@ -47,5 +49,13 @@ public class RaceControlTeamDTO {
 
     public void setSelected(Boolean selected) {
         this.selected = selected;
+    }
+
+    public String getFlagURL() {
+        return flagURL;
+    }
+
+    public void setFlagURL(String flagURL) {
+        this.flagURL = flagURL;
     }
 }
