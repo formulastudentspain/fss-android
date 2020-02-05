@@ -12,6 +12,7 @@ public class ConfigConstants {
     public static final String FIREBASE_TABLE_TEAM_MEMBERS = "DEV_TEAM_MEMBER";
     public static final String FIREBASE_TABLE_EVENT_CONTROL_EGRESS = "DEV_EVENT_CONTROL_EGRESS";
     public static final String FIREBASE_TABLE_USER = "DEV_USER";
+    public static final String FIREBASE_TABLE_CONE_CONTROL = "DEV_CONE_CONTROL";
 
 
 }
