@@ -1,22 +1,15 @@
 package es.formulastudent.app.mvp.data.business.racecontrol.impl;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -74,34 +67,30 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
 
         ListenerRegistration registration = query.orderBy(RaceControlRegisterEndurance.ORDER, Query.Direction.ASCENDING)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value,
-                                        @Nullable FirebaseFirestoreException e) {
+                .addSnapshotListener((value, e) -> {
 
-                        //Response object
-                        ResponseDTO responseDTO = new ResponseDTO();
+                    //Response object
+                    ResponseDTO responseDTO = new ResponseDTO();
 
-                        if (e != null) {
-                            responseDTO.setError(R.string.rc_realtime_error_retrieving_message);
-                            callback.onFailure(responseDTO);
-                            return;
-                        }
-
-                        List<RaceControlRegisterEndurance> result = new ArrayList<>();
-                        List<String> states = (List<String>)filters.get("states");
-
-                        for (QueryDocumentSnapshot doc : value) {
-                            RaceControlRegisterEndurance register = new RaceControlRegisterEndurance(doc);
-                            if(states != null && states.contains(register.getCurrentState().getAcronym())){
-                                result.add(register);
-                            }
-
-                        }
-
-                        responseDTO.setData(result);
-                        callback.onSuccess(responseDTO);
+                    if (e != null) {
+                        responseDTO.setError(R.string.rc_realtime_error_retrieving_message);
+                        callback.onFailure(responseDTO);
+                        return;
                     }
+
+                    List<RaceControlRegisterEndurance> result = new ArrayList<>();
+                    List<String> states = (List<String>)filters.get("states");
+
+                    for (QueryDocumentSnapshot doc : value) {
+                        RaceControlRegisterEndurance register = new RaceControlRegisterEndurance(doc);
+                        if(states != null && states.contains(register.getCurrentState().getAcronym())){
+                            result.add(register);
+                        }
+
+                    }
+
+                    responseDTO.setData(result);
+                    callback.onSuccess(responseDTO);
                 });
 
         return registration;
@@ -175,6 +164,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
 
         final ResponseDTO responseDTO = new ResponseDTO();
+        Date now = Calendar.getInstance().getTime();
 
         // Get a new write batch
         WriteBatch batch = firebaseFirestore.batch();
@@ -192,27 +182,22 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
             register.setCarNumber(item.getCarNumber());
             register.setCarType(raceType);
             register.setRunFinal(RaceControlRegister.RACE_TYPE_FINAL.equals(raceType));
-            register.setCurrentStateDate(Calendar.getInstance().getTime());
+            register.setCurrentStateDate(now);
             register.setFlagURL(item.getFlagURL());
             register.setOrder(currentMaxIndex);
             register.setCurrentState(RaceControlState.NOT_AVAILABLE);
+            register.setStateNA(now);
             batch.set(nycRef, register.toObjectData());
         }
 
 
         // Commit the batch
-        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                responseDTO.setInfo(R.string.rc_create_info_message);
-                callback.onSuccess(responseDTO);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                responseDTO.setError(R.string.rc_create_error_message);
-                callback.onFailure(responseDTO);
-            }
+        batch.commit().addOnSuccessListener(aVoid -> {
+            responseDTO.setInfo(R.string.rc_create_info_message);
+            callback.onSuccess(responseDTO);
+        }).addOnFailureListener(e -> {
+            responseDTO.setError(R.string.rc_create_error_message);
+            callback.onFailure(responseDTO);
         });
     }
 
@@ -233,28 +218,22 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                 .whereEqualTo(RaceControlRegisterEndurance.CAR_TYPE, carType)
                 .orderBy(RaceControlRegisterEndurance.ORDER, Query.Direction.ASCENDING)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                .addOnSuccessListener(queryDocumentSnapshots -> {
 
-                        //Add results to list
-                        List<RaceControlRegisterEndurance> result = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            RaceControlRegisterEndurance register = new RaceControlRegisterEndurance(document);
-                            result.add(register);
-                        }
-
-                        responseDTO.setData(result);
-                        responseDTO.setInfo(R.string.rc_info_retrieving_message);
-                        callback.onSuccess(responseDTO);
-
+                    //Add results to list
+                    List<RaceControlRegisterEndurance> result = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        RaceControlRegisterEndurance register = new RaceControlRegisterEndurance(document);
+                        result.add(register);
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.rc_error_retrieving_message);
-                        callback.onFailure(responseDTO);
-                    }
+
+                    responseDTO.setData(result);
+                    responseDTO.setInfo(R.string.rc_info_retrieving_message);
+                    callback.onSuccess(responseDTO);
+
+                }).addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.rc_error_retrieving_message);
+                    callback.onFailure(responseDTO);
                 });
 
     }
@@ -263,10 +242,48 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
     public void updateRaceControlState(RaceControlRegister register, RaceControlEvent event, RaceControlState newState, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
+        Date now = Calendar.getInstance().getTime();
 
         //Update currentState and currentStateDate with the new value
         register.setCurrentState(newState);
-        register.setCurrentStateDate(Calendar.getInstance().getTime());
+        register.setCurrentStateDate(now);
+
+        //Update the state date
+        switch (newState){
+            case DNF:
+                register.setStateDNF(now);
+                break;
+            case WAITING_AREA:
+                ((RaceControlRegisterEndurance)register).setStateWaitingArea(now);
+                break;
+            case SCRUTINEERING:
+                ((RaceControlRegisterEndurance)register).setStateScrutineering(now);
+                break;
+            case RUN_LATER:
+                ((RaceControlRegisterEndurance)register).setStateRunLater(now);
+                break;
+            case READY_TO_RACE_1D:
+                ((RaceControlRegisterEndurance)register).setStateReadyToRace1D(now);
+                break;
+            case READY_TO_RACE_2D:
+                ((RaceControlRegisterEndurance)register).setStateReadyToRace2D(now);
+                break;
+            case RACING_1D:
+                ((RaceControlRegisterEndurance)register).setStateRacing1D(now);
+                break;
+            case RACING_2D:
+                ((RaceControlRegisterEndurance)register).setStateRacing2D(now);
+                break;
+            case NOT_AVAILABLE:
+                register.setStateNA(now);
+                break;
+            case FIXING:
+                ((RaceControlRegisterEndurance)register).setStateFixing(now);
+                break;
+            case FINISHED:
+                register.setStateFinished(now);
+                break;
+        }
 
         //Cast the data depending on the Race Type
         Map<String, Object> data = null;
@@ -277,21 +294,15 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         //Call Firebase to update
         firebaseFirestore.collection(event.getFirebaseTable()).document(register.getID())
                 .update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        responseDTO.setInfo(R.string.rc_info_update_message);
-                        callback.onSuccess(responseDTO);
+                .addOnSuccessListener(aVoid -> {
+                    responseDTO.setInfo(R.string.rc_info_update_message);
+                    callback.onSuccess(responseDTO);
 
-                    }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setInfo(R.string.rc_error_update_message);
-                        callback.onFailure(responseDTO);
+                .addOnFailureListener(e -> {
+                    responseDTO.setInfo(R.string.rc_error_update_message);
+                    callback.onFailure(responseDTO);
 
-                    }
                 });
     }
 }

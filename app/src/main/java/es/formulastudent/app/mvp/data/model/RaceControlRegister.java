@@ -23,7 +23,7 @@ public abstract class RaceControlRegister implements Serializable {
     public static final String CAR_TYPE = "carType";
     public static final String FLAG_URL = "flagURL";
     public static final String CURRENT_STATE = "currentState";
-    public static final String CURRENT_STATE_DATE = "userID";
+    public static final String CURRENT_STATE_DATE = "currentStateDate";
     public static final String ORDER = "order";
     public static final String RC_STATE_DNF = "rcDNF";
     public static final String RC_STATE_FINISHED = "rcFinished";
