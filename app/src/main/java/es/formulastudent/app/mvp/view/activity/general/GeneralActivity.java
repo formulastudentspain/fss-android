@@ -33,12 +33,14 @@ import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.activity.adminoperations.AdminOpsActivity;
 import es.formulastudent.app.mvp.view.activity.briefing.BriefingActivity;
+import es.formulastudent.app.mvp.view.activity.conecontrol.ConeControlWelcomeActivity;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventActivity;
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityExitDialog;
 import es.formulastudent.app.mvp.view.activity.general.dialog.GeneralActivityLoadingDialog;
@@ -211,6 +213,28 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
+        /********** Cone control ************/
+
+        //Cone control
+        PrimaryDrawerItem coneControl = new PrimaryDrawerItem()
+                .withEnabled(false)
+                .withName(R.string.drawer_menu_cone_control)
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+        //Race Control: Endurance
+        FontDrawable enduranceIconCC = new FontDrawable(this, R.string.fa_flag_checkered_solid, true, false);
+        enduranceIconCC.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
+        PrimaryDrawerItem ccEndurance = new PrimaryDrawerItem()
+                .withIdentifier(80021)
+                .withLevel(2)
+                .withIcon(enduranceIconCC)
+                .withName(R.string.drawer_menu_staff_endurance_efficiency)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
 
         /********** Access control ************/
 
@@ -371,6 +395,10 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     rcEndurance,
                     new DividerDrawerItem(),
 
+                    coneControl,
+                    ccEndurance,
+                    new DividerDrawerItem(),
+
                     userManagement,
                     drivers,volunteers,
                     new DividerDrawerItem(),
@@ -390,6 +418,10 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     raceControl,
                     // rcSkidpad, rcAcceleration, rcAutocross,
                     rcEndurance,
+                    new DividerDrawerItem(),
+
+                    coneControl,
+                    ccEndurance,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -435,6 +467,10 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     raceControl,
                     // rcSkidpad, rcAcceleration, rcAutocross,
                     rcEndurance,
+                    new DividerDrawerItem(),
+
+                    coneControl,
+                    ccEndurance,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -577,6 +613,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }else if(drawerItem.getIdentifier() == 10021){ //Race Control Endurance
             Intent intent = new Intent(this, RaceControlWelcomeActivity.class);
             intent.putExtra("eventType", RaceControlEvent.ENDURANCE);
+            this.startActivity(intent);
+            finish();
+
+        } else if(drawerItem.getIdentifier() == 80021){ //Cone Control Endurance
+            Intent intent = new Intent(this, ConeControlWelcomeActivity.class);
+            intent.putExtra("eventType", ConeControlEvent.ENDURANCE);
             this.startActivity(intent);
             finish();
 

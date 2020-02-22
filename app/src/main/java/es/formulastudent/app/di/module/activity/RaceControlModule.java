@@ -19,11 +19,13 @@ public class RaceControlModule {
     private RaceControlPresenter.View view;
     private RaceControlEvent raceControlEvent;
     private String raceType;
+    private String raceArea;
 
-    public RaceControlModule(RaceControlPresenter.View view, RaceControlEvent raceControlEvent, String raceType) {
+    public RaceControlModule(RaceControlPresenter.View view, RaceControlEvent raceControlEvent, String raceType, String raceArea) {
         this.view = view;
         this.raceControlEvent = raceControlEvent;
         this.raceType = raceType;
+        this.raceArea = raceArea;
     }
 
     @Provides
@@ -38,7 +40,7 @@ public class RaceControlModule {
 
     @Provides
     public RaceControlPresenter providePresenter(RaceControlPresenter.View categoryView, Context context, RaceControlBO raceControlBO, TeamMemberBO teamMemberBO, BriefingBO briefingBO, DynamicEventBO dynamicEventBO) {
-        return new RaceControlPresenter(categoryView, context, raceControlEvent, raceType, raceControlBO, teamMemberBO, briefingBO, dynamicEventBO);
+        return new RaceControlPresenter(categoryView, context, raceControlEvent, raceType, raceArea, raceControlBO, teamMemberBO, briefingBO, dynamicEventBO);
     }
 
 

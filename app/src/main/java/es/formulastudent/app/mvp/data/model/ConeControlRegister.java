@@ -1,10 +1,14 @@
 package es.formulastudent.app.mvp.data.model;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class ConeControlRegister implements Serializable {
 
@@ -23,6 +27,15 @@ public class ConeControlRegister implements Serializable {
     public static final String IS_RACING = "isRacing";
     public static final String TRAFFIC_CONES = "trafficCones";
     public static final String OFF_COURSES = "offCourses";
+    public static final String LOG_CONES = "cones";
+    public static final String LOG_OFFCOURSES = "offcourses";
+    public static final String LOG_DATE = "date";
+    public static final String LOG = "log";
+
+
+
+
+
 
 
     private String id;
@@ -33,8 +46,13 @@ public class ConeControlRegister implements Serializable {
     private Boolean isRacing;
     private Long trafficCones;
     private Long offCourses;
+    private List<ConeControlRegisterLog> logs;
 
-    //TODO listado con registros para log
+    //Values to draw the item in the list, not to persist
+    private int state = 0; //0=active, 1=modifying, 2=saving
+    private int currentConesCount;
+    private int currentOffCourseCount;
+
 
 
     public ConeControlRegister(DocumentSnapshot documentSnapshot) {
@@ -48,7 +66,24 @@ public class ConeControlRegister implements Serializable {
         this.trafficCones = documentSnapshot.getLong(ConeControlRegister.TRAFFIC_CONES);
         this.offCourses = documentSnapshot.getLong(ConeControlRegister.OFF_COURSES);
 
+        //Log
+        List<Map<String, Object>> logRegisters = (List<Map<String, Object>>) documentSnapshot.get("log");
+
+        List<ConeControlRegisterLog> logs = new ArrayList<>();
+        if(logRegisters != null){
+            for(Map<String, Object> logRegister: logRegisters){
+                ConeControlRegisterLog log = new ConeControlRegisterLog();
+                log.setCones((Long) logRegister.get(LOG_CONES));
+                log.setOffcourses((Long) logRegister.get(LOG_OFFCOURSES));
+                Timestamp timestamp = (Timestamp) logRegister.get(LOG_DATE);
+                log.setDate(timestamp.toDate());
+                logs.add(log);
+            }
+        }
+
+        this.logs = logs;
     }
+
 
     public Map<String, Object> toObjectData(){
 
@@ -62,7 +97,13 @@ public class ConeControlRegister implements Serializable {
         docData.put(ConeControlRegister.TRAFFIC_CONES, this.trafficCones);
         docData.put(ConeControlRegister.OFF_COURSES, this.offCourses);
 
+        docData.put(ConeControlRegister.LOG, this.logs);
+
         return docData;
+    }
+
+    public ConeControlRegister() {
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
@@ -128,4 +169,37 @@ public class ConeControlRegister implements Serializable {
     public void setOffCourses(Long offCourses) {
         this.offCourses = offCourses;
     }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public int getCurrentConesCount() {
+        return currentConesCount;
+    }
+
+    public void setCurrentConesCount(int currentConesCount) {
+        this.currentConesCount = currentConesCount;
+    }
+
+    public int getCurrentOffCourseCount() {
+        return currentOffCourseCount;
+    }
+
+    public void setCurrentOffCourseCount(int currentOffCourseCount) {
+        this.currentOffCourseCount = currentOffCourseCount;
+    }
+
+    public List<ConeControlRegisterLog> getLogs() {
+        return logs;
+    }
+
+    public void setLogs(List<ConeControlRegisterLog> logs) {
+        this.logs = logs;
+    }
+
 }

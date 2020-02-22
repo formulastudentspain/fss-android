@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,19 +26,20 @@ import es.formulastudent.app.di.component.DaggerRaceControlComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.RaceControlModule;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
-import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.racecontrol.recyclerview.RaceControlAdapter;
 
 
-public class RaceControlActivity extends GeneralActivity implements
+public class
+RaceControlActivity extends GeneralActivity implements
         RaceControlPresenter.View, View.OnClickListener{
 
     private static final int NFC_REQUEST_CODE = 101;
 
     RaceControlEvent rcEvent; //Endurance, AutoX, Acceleration, Skidpad
     String raceType; //Electric, Combustion or Final
+    String rcArea;
 
     //Real-time register listener
     ListenerRegistration registerListener;
@@ -52,7 +53,9 @@ public class RaceControlActivity extends GeneralActivity implements
     private RaceControlAdapter rcAdapter;
     private FloatingActionButton buttonAddVehicle;
     private MenuItem filterItem;
-    private LinearLayout typeColor;
+    private TextView areaTextView;
+    private TextView roundTextView;
+
 
 
 
@@ -65,9 +68,12 @@ public class RaceControlActivity extends GeneralActivity implements
         String raceType = getIntent().getStringExtra("rc_type");
         this.raceType = raceType;
 
+        String rcArea = getIntent().getStringExtra("rc_area");
+        this.rcArea = rcArea;
+
         //Get the event type (Endurance, AutoX...)
         RaceControlEvent rcEvent = (RaceControlEvent) getIntent().getSerializableExtra("eventType");
-        setupComponent(FSSApp.getApp().component(), rcEvent, raceType);
+        setupComponent(FSSApp.getApp().component(), rcEvent, raceType, rcArea);
         this.rcEvent = rcEvent;
 
         initViews();
@@ -82,12 +88,12 @@ public class RaceControlActivity extends GeneralActivity implements
      * Inject dependencies method
      * @param appComponent
      */
-    protected void setupComponent(AppComponent appComponent, @NotNull RaceControlEvent rcEvent, String raceType) {
+    protected void setupComponent(AppComponent appComponent, @NotNull RaceControlEvent rcEvent, String raceType, String rcArea) {
 
         DaggerRaceControlComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(this))
-                .raceControlModule(new RaceControlModule(this, rcEvent, raceType))
+                .raceControlModule(new RaceControlModule(this, rcEvent, raceType, rcArea))
                 .build()
                 .inject(this);
     }
@@ -105,22 +111,13 @@ public class RaceControlActivity extends GeneralActivity implements
         buttonAddVehicle = findViewById(R.id.button_add_vehicle);
         buttonAddVehicle.setOnClickListener(this);
 
-        //Type color (that small line below the toolbar)
-        typeColor = findViewById(R.id.typeColor);
-        switch (raceType) {
-            case RaceControlRegister.RACE_TYPE_ELECTRIC:
-                typeColor.setBackgroundColor(getResources().getColor(R.color.md_blue_300));
-                break;
-            case RaceControlRegister.RACE_TYPE_COMBUSTION:
-                typeColor.setBackgroundColor(getResources().getColor(R.color.md_deep_orange_600));
-                break;
-            case RaceControlRegister.RACE_TYPE_FINAL:
-                typeColor.setBackgroundColor(getResources().getColor(R.color.md_yellow_500));
-                break;
-            default:
-                typeColor.setBackgroundColor(getResources().getColor(R.color.md_grey_900));
-                break;
-        }
+        //Round
+        roundTextView = findViewById(R.id.round_number);
+        roundTextView.setText(raceType);
+
+        //Area
+        areaTextView = findViewById(R.id.area);
+        areaTextView.setText(rcArea);
 
         //Add toolbar
         setToolbarTitle(getString(rcEvent.getRaceTypes().get(raceType)));

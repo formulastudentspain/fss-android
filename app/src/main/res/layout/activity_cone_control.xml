@@ -23,6 +23,7 @@
         </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
+            android:id="@+id/typeColor"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -49,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1"
-                    android:textSize="20sp"
+                    android:textSize="28sp"
                     android:layout_centerInParent="true"
                     android:textColor="@color/md_white_1000"/>
 
@@ -62,19 +63,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="AREA"
+                    android:text="SECTOR"
                     android:textSize="10sp"
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/md_white_1000"/>
 
                 <TextView
-                    android:id="@+id/area"
+                    android:id="@+id/sector_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1"
-                    android:textSize="20sp"
+                    android:textSize="28sp"
                     android:layout_centerInParent="true"
                     android:textColor="@color/md_white_1000"/>
+
             </RelativeLayout>
         </LinearLayout>
 
@@ -95,14 +97,6 @@
 
 
     </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_add_vehicle"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_user_list_add"
-        android:layout_margin="16dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

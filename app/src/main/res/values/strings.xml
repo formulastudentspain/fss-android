@@ -30,6 +30,8 @@
     <string name="drawer_menu_staff_statistics">Statistics</string>
     <string name="drawer_menu_staff_admin_operations">Admin operations</string>
     <string name="drawer_menu_teams">Teams</string>
+    <string name="drawer_menu_cone_control">CONE CONTROL</string>
+
 
 
     <!-- Login -->
@@ -215,9 +217,6 @@
     <string name="rc_dialog_add_team_title">Add team</string>
     <string name="rc_dialog_add_team_button">Add</string>
     <string name="rc_endurance_title">Race Control: Endurance</string>
-    <string name="rc_endurance_electric_title">RC: Endurance Electric</string>
-    <string name="rc_endurance_combustion_title">RC: Endurance Combustion</string>
-    <string name="rc_endurance_final_title">RC: Endurance Final</string>
     <string name="rc_update_state_success_message">State change successfully from %1$s to %2$s</string>
     <string name="rc_realtime_error_retrieving_message">Error retrieving real-time Race Control registers</string>
     <string name="rc_teams_error_message">Error retrieving race control teams</string>
@@ -225,8 +224,8 @@
     <string name="rc_create_info_message">Race control registers created successfully</string>
     <string name="rc_error_retrieving_message">Error retrieving Race Control registers</string>
     <string name="rc_info_retrieving_message">Race control registers retrieved successfully</string>
-    <string name="rc_info_update_message">Error updating race control registers</string>
-    <string name="rc_error_update_message">Race control register updated successfully</string>
+    <string name="rc_info_update_message">Race control register updated successfully</string>
+    <string name="rc_error_update_message">Error updating race control registers</string>
     <string name="rc_area_waiting_area">Waiting area</string>
     <string name="rc_area_scrutineering">Scrutineering</string>
     <string name="rc_area_racing1">Racing 1</string>
@@ -297,6 +296,16 @@
     <string name="teams_dialog_fee_next_button_ok">Done</string>
     <string name="teams_dialog_fee_next_step_title">Done</string>
     <string name="teams_dialog_fee_next_step_description">Are you sure you want to set this state as done?</string>
+
+    <!-- Cone Control-->
+    <string name="cc_endurance_title">Cone Control: Endurance</string>
+    <string name="cc_endurance_round_1">CC Endurance: Round 1</string>
+    <string name="cc_endurance_round_2">CC Endurance: Round 2</string>
+    <string name="cc_endurance_round_final">CC Endurance: Final</string>
+    <string name="cone_control_create_success">Cones created successfully</string>
+    <string name="cone_control_create_error">Error creating cone registers</string>
+    <string name="cc_realtime_error_retrieving_message">Error retrieving real-time Cone Control registers</string>
+
 
     <!-- Filtering values for Fees -->
     <string-array name="fee_state_values">

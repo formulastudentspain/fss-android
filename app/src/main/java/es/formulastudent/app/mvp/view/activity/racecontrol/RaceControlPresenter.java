@@ -44,6 +44,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
     //Race Control Event Type
     RaceControlEvent rcEventType;
     String raceType;
+    String raceArea;
 
     //Dependencies
     private View view;
@@ -62,12 +63,11 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
 
     //Filtering values
-    private String selectedArea;
     private Long selectedCarNumber;
 
 
     public RaceControlPresenter(RaceControlPresenter.View view, Context context, RaceControlEvent rcEventType,
-                                String raceType, RaceControlBO raceControlBO, TeamMemberBO teamMemberBO, BriefingBO briefingBO, DynamicEventBO dynamicEventBO) {
+                                String raceType, String raceArea, RaceControlBO raceControlBO, TeamMemberBO teamMemberBO, BriefingBO briefingBO, DynamicEventBO dynamicEventBO) {
         this.view = view;
         this.context = context;
         this.rcEventType = rcEventType;
@@ -76,7 +76,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
         this.briefingBO = briefingBO;
         this.dynamicEventBO = dynamicEventBO;
         this.raceType = raceType;
-        this.selectedArea = context.getString(R.string.rc_area_all);
+        this.raceArea = raceArea;
     }
 
 
@@ -98,28 +98,28 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
         //Select states fot the selected area
         List<String> states = new ArrayList<>();
-        if(context.getString(R.string.rc_area_waiting_area).equals(selectedArea)){
+        if(context.getString(R.string.rc_area_waiting_area).equals(raceArea)){
             states.addAll(Arrays.asList(
                     RaceControlState.NOT_AVAILABLE.getAcronym()));
 
-        }else if(context.getString(R.string.rc_area_scrutineering).equals(selectedArea)){
+        }else if(context.getString(R.string.rc_area_scrutineering).equals(raceArea)){
             states.addAll(Arrays.asList(
                     RaceControlState.WAITING_AREA.getAcronym(),
                     RaceControlState.FIXING.getAcronym(),
                     RaceControlState.SCRUTINEERING.getAcronym()));
 
-        }else if(context.getString(R.string.rc_area_racing1).equals(selectedArea)){
+        }else if(context.getString(R.string.rc_area_racing1).equals(raceArea)){
             states.addAll(Arrays.asList(
                     RaceControlState.SCRUTINEERING.getAcronym(),
                     RaceControlState.READY_TO_RACE_1D.getAcronym()));
 
-        }else if(context.getString(R.string.rc_area_racing2).equals(selectedArea)){
+        }else if(context.getString(R.string.rc_area_racing2).equals(raceArea)){
             states.addAll(Arrays.asList(
                     RaceControlState.RACING_1D.getAcronym(),
                     RaceControlState.READY_TO_RACE_2D.getAcronym(),
                     RaceControlState.RACING_2D.getAcronym()));
 
-        }else if(selectedArea == null || context.getString(R.string.rc_area_all).equals(selectedArea)) {
+        }else if(raceArea == null || context.getString(R.string.rc_area_all).equals(raceArea)) {
             states.addAll(Arrays.asList(
                     RaceControlState.NOT_AVAILABLE.getAcronym(),
                     RaceControlState.WAITING_AREA.getAcronym(),
@@ -284,16 +284,15 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
         //Opening filtering dialog
         FragmentManager fm = ((RaceControlActivity)view.getActivity()).getSupportFragmentManager();
         FilteringRegistersDialog createFilteringDialog = FilteringRegistersDialog
-                .newInstance(RaceControlPresenter.this, selectedCarNumber, selectedArea);
+                .newInstance(RaceControlPresenter.this, selectedCarNumber);
         createFilteringDialog.show(fm, "rc_filtering_dialog");
 
     }
 
-    public void setFilteringValues(String selectedArea, Long selectedCarNumber){
-        this.selectedArea = selectedArea;
+    public void setFilteringValues(Long selectedCarNumber){
         this.selectedCarNumber = selectedCarNumber;
 
-        view.filtersActivated((selectedArea != null && !selectedArea.equals(context.getString(R.string.rc_area_all)))|| selectedCarNumber != null);
+        view.filtersActivated(selectedCarNumber != null);
     }
 
 

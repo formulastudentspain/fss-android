@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="4dp"
+    tools:context=".mvp.view.activity.teammember.TeamMemberActivity">
+
+
+    <LinearLayout
+        android:id="@+id/sectorContainer"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:background="@drawable/rc_state_rounded_borders_selector">
+
+        <TextView
+            android:id="@+id/sectorNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="1"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

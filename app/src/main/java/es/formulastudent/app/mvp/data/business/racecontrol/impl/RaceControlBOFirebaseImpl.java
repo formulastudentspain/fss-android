@@ -16,6 +16,7 @@ import java.util.Map;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Car;
@@ -30,10 +31,12 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
     private FirebaseFirestore firebaseFirestore;
     private TeamBO teamBO;
+    private ConeControlBO coneControlBO;
 
-    public RaceControlBOFirebaseImpl(FirebaseFirestore firebaseFirestore, TeamBO teamBO) {
+    public RaceControlBOFirebaseImpl(FirebaseFirestore firebaseFirestore, TeamBO teamBO, ConeControlBO coneControlBO) {
         this.firebaseFirestore = firebaseFirestore;
         this.teamBO = teamBO;
+        this.coneControlBO = coneControlBO;
     }
 
     @Override
@@ -193,8 +196,26 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
         // Commit the batch
         batch.commit().addOnSuccessListener(aVoid -> {
+
+            //Now create cones
+            for(RaceControlTeamDTO item: raceControlTeamDTOList){
+                coneControlBO.createConeControlForAllSectors(
+                        item.getCarNumber(), item.getFlagURL(),  raceType, 7, new BusinessCallback() {
+                            @Override
+                            public void onSuccess(ResponseDTO responseDTO) {
+                                //DO NOTHING
+                            }
+
+                            @Override
+                            public void onFailure(ResponseDTO responseDTO) {
+                                //DO NOTHING
+                            }
+                        });
+            }
+
             responseDTO.setInfo(R.string.rc_create_info_message);
             callback.onSuccess(responseDTO);
+
         }).addOnFailureListener(e -> {
             responseDTO.setError(R.string.rc_create_error_message);
             callback.onFailure(responseDTO);
@@ -248,6 +269,8 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         register.setCurrentState(newState);
         register.setCurrentStateDate(now);
 
+        boolean activateCones = false;
+
         //Update the state date
         switch (newState){
             case DNF:
@@ -270,9 +293,11 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                 break;
             case RACING_1D:
                 ((RaceControlRegisterEndurance)register).setStateRacing1D(now);
+                activateCones = true;
                 break;
             case RACING_2D:
                 ((RaceControlRegisterEndurance)register).setStateRacing2D(now);
+                activateCones = true;
                 break;
             case NOT_AVAILABLE:
                 register.setStateNA(now);
@@ -291,11 +316,26 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
             data = ((RaceControlRegisterEndurance) register).toObjectData();
         }
 
+        final boolean enableCones = activateCones;
         //Call Firebase to update
         firebaseFirestore.collection(event.getFirebaseTable()).document(register.getID())
                 .update(data)
                 .addOnSuccessListener(aVoid -> {
                     responseDTO.setInfo(R.string.rc_info_update_message);
+
+                    //Enable/disable cones for the selected car
+                    coneControlBO.enableOrDisableConeControlRegistersByTeam(register.getCarNumber(), enableCones, new BusinessCallback() {
+                        @Override
+                        public void onSuccess(ResponseDTO responseDTO) {
+                            //TODO add things
+                        }
+
+                        @Override
+                        public void onFailure(ResponseDTO responseDTO) {
+                            //TODO add things
+                        }
+                    });
+
                     callback.onSuccess(responseDTO);
 
                 })

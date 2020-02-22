@@ -13,6 +13,8 @@ import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.auth.impl.AuthBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.briefing.impl.BriefingBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
+import es.formulastudent.app.mvp.data.business.conecontrol.impl.ConeControlBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.impl.DynamicEventBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
@@ -112,8 +114,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public RaceControlBO provideRaceControlBO(FirebaseFirestore firebaseFirestore, TeamBO teamBO) {
-        return new RaceControlBOFirebaseImpl(firebaseFirestore, teamBO);
+    public RaceControlBO provideRaceControlBO(FirebaseFirestore firebaseFirestore, TeamBO teamBO, ConeControlBO coneControlBO) {
+        return new RaceControlBOFirebaseImpl(firebaseFirestore, teamBO, coneControlBO);
     }
 
     /**
@@ -134,5 +136,15 @@ public class BusinessModule {
     @Provides
     public ImageBO provideImageUploaderBO(FirebaseStorage firebaseStorage) {
         return new ImageBOFirebaseImpl(firebaseStorage);
+    }
+
+    /**
+     * Provide Cone control business
+     * @param firebaseFirestore
+     * @return
+     */
+    @Provides
+    public ConeControlBO provideConeControlBO(FirebaseFirestore firebaseFirestore) {
+        return new ConeControlBOFirebaseImpl(firebaseFirestore);
     }
 }
