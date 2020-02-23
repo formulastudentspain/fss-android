@@ -19,7 +19,6 @@ public interface ConeControlBO {
     ListenerRegistration getConeControlRegistersRealTime(Map<String, Object> filters, BusinessCallback callback);
 
 
-
     /**
      * Create a register for each sector for the selected team
      *
@@ -47,4 +46,15 @@ public interface ConeControlBO {
      * @param callback
      */
     void enableOrDisableConeControlRegistersByTeam(Long carNumber, boolean enable, BusinessCallback callback);
+
+
+    /**
+     * Get all registers by race round
+     * @param raceRound
+     * @param callback
+     */
+    void getConeControlRegistersByRaceRound(String raceRound, BusinessCallback callback);
+
+
+
 }

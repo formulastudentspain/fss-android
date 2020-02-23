@@ -203,13 +203,25 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_margin="16dp"
-        android:gravity="center|bottom"
-        >
+        android:gravity="center|bottom">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/md_grey_300"
+            app:rippleColor="@color/md_grey_300"
+            app:backgroundTint="@color/md_white_1000"
+            app:strokeColor="@color/md_grey_300"
+            android:enabled="false"
+            android:text="START"/>
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/go_button"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -220,7 +232,7 @@
             app:backgroundTint="@color/md_white_1000"
             app:strokeColor="@color/md_red_500"
             android:text="START"/>
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>
 

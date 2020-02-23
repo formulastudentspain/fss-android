@@ -170,37 +170,20 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
-/*
-        //Race Control: Skidpad
-        PrimaryDrawerItem rcSkidpad = new PrimaryDrawerItem()
-                .withIdentifier(10018)
-                .withLevel(2)
-                .withName(R.string.drawer_menu_staff_skidpad)
-                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
-
-        //Race Control: Acceleration
-        PrimaryDrawerItem rcAcceleration = new PrimaryDrawerItem()
-                .withIdentifier(10019)
-                .withLevel(2)
-                .withName(R.string.drawer_menu_staff_acceleration)
-                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
-
 
         //Race Control: Autocross
+        FontDrawable autocrossIconRC = new FontDrawable(this, R.string.fa_stopwatch_solid, true, false);
+        autocrossIconRC.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem rcAutocross = new PrimaryDrawerItem()
-                .withIdentifier(10020)
+                .withIdentifier(10022)
                 .withLevel(2)
+                .withIcon(autocrossIconRC)
                 .withName(R.string.drawer_menu_staff_autocross)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-*/
+
         //Race Control: Endurance
         FontDrawable enduranceIconRC = new FontDrawable(this, R.string.fa_flag_checkered_solid, true, false);
         enduranceIconRC.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
@@ -223,7 +206,21 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-        //Race Control: Endurance
+
+        //Cone Control: Autocross
+        FontDrawable autocrossIconCC = new FontDrawable(this, R.string.fa_stopwatch_solid, true, false);
+        autocrossIconCC.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
+        PrimaryDrawerItem ccAutocross = new PrimaryDrawerItem()
+                .withIdentifier(80022)
+                .withLevel(2)
+                .withIcon(autocrossIconCC)
+                .withName(R.string.drawer_menu_staff_autocross)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Cone Control: Endurance
         FontDrawable enduranceIconCC = new FontDrawable(this, R.string.fa_flag_checkered_solid, true, false);
         enduranceIconCC.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem ccEndurance = new PrimaryDrawerItem()
@@ -234,6 +231,8 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
+
+
 
 
         /********** Access control ************/
@@ -391,11 +390,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     new DividerDrawerItem(),
 
                     raceControl,
-                   // rcSkidpad, rcAcceleration, rcAutocross,
+                    rcAutocross,
                     rcEndurance,
                     new DividerDrawerItem(),
 
                     coneControl,
+                    ccAutocross,
                     ccEndurance,
                     new DividerDrawerItem(),
 
@@ -416,12 +416,13 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     new DividerDrawerItem(),
 
                     raceControl,
-                    // rcSkidpad, rcAcceleration, rcAutocross,
+                    rcAutocross,
                     rcEndurance,
                     new DividerDrawerItem(),
 
                     coneControl,
                     ccEndurance,
+                    ccAutocross,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -465,11 +466,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     new DividerDrawerItem(),
 
                     raceControl,
-                    // rcSkidpad, rcAcceleration, rcAutocross,
+                    rcAutocross,
                     rcEndurance,
                     new DividerDrawerItem(),
 
                     coneControl,
+                    ccAutocross,
                     ccEndurance,
                     new DividerDrawerItem(),
 

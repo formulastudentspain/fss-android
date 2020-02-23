@@ -150,4 +150,31 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
 
     }
 
+    @Override
+    public void getConeControlRegistersByRaceRound(String raceRound, BusinessCallback callback) {
+        final ResponseDTO responseDTO = new ResponseDTO();
+
+        Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_CONE_CONTROL);
+        query = query.whereEqualTo(ConeControlRegister.RACE_ROUND, raceRound);
+
+        query.orderBy(ConeControlRegister.CAR_NUMBER, Query.Direction.ASCENDING)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    //Add results to list
+                    List<ConeControlRegister> result = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        ConeControlRegister register = new ConeControlRegister(document);
+                        result.add(register);
+                    }
+                    responseDTO.setData(result);
+                    //TODO
+                    callback.onSuccess(responseDTO);
+
+                }).addOnFailureListener(e -> {
+                    //TODO
+                    callback.onFailure(responseDTO);
+                });
+    }
+
 }

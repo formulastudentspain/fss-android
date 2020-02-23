@@ -115,6 +115,9 @@
         <activity
             android:name=".mvp.view.activity.conecontrol.ConeControlActivity">
         </activity>
+        <activity
+            android:name=".mvp.view.activity.conecontrolstats.ConeControlStatsActivity">
+        </activity>
 
     </application>
 

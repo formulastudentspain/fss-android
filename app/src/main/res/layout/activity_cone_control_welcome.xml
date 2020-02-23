@@ -9,7 +9,6 @@
 
     <include layout="@layout/activity_toolbar" />
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -113,12 +112,23 @@
         android:paddingEnd="12dp"
         android:paddingStart="12dp"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_margin="16dp"
         android:gravity="center|bottom">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/md_grey_300"
+            app:rippleColor="@color/md_grey_300"
+            app:backgroundTint="@color/md_white_1000"
+            app:strokeColor="@color/md_grey_300"
+            android:enabled="false"
+            android:text="START"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/go_button"
@@ -129,7 +139,8 @@
             app:rippleColor="@color/md_red_500"
             app:backgroundTint="@color/md_white_1000"
             app:strokeColor="@color/md_red_500"
+            android:visibility="gone"
             android:text="START"/>
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
 

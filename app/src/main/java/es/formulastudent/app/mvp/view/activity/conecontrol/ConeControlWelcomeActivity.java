@@ -2,6 +2,9 @@ package es.formulastudent.app.mvp.view.activity.conecontrol;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -19,14 +22,16 @@ import es.formulastudent.app.di.component.DaggerConeControlWelcomeComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.view.activity.conecontrol.recyclerview.SectorAdapter;
+import es.formulastudent.app.mvp.view.activity.conecontrolstats.ConeControlStatsActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
 
 public class ConeControlWelcomeActivity extends GeneralActivity implements View.OnClickListener, RecyclerViewClickListener {
 
-    private static final int NUM_SECTORS = 9;
+    private static final int NUM_SECTORS = 7;
 
+    private MenuItem filterItem;
     private ConeControlEvent ccEvent;
     private Integer selectedSector;
     private String selectedRound;
@@ -78,7 +83,6 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
 
         goButton = findViewById(R.id.go_button);
         goButton.setOnClickListener(this);
-        goButton.setEnabled(false);
 
         round1 = findViewById(R.id.button_round1);
         round1.setOnClickListener(this);
@@ -141,7 +145,7 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
             round1.setSelected(false);
             round2.setSelected(false);
             roundFinal.setSelected(true);
-            selectedRound = "final";
+            selectedRound = "Final";
             this.checkEnableButton();
 
         }else if(view.getId()==R.id.go_button){
@@ -157,9 +161,9 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
 
     private void checkEnableButton() {
         if(selectedSector==null || selectedRound==null){
-            goButton.setEnabled(false);
+            goButton.setVisibility(View.GONE);
         }else{
-            goButton.setEnabled(true);
+            goButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -175,6 +179,23 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
 
         this.selectedSector = position+1;
         this.checkEnableButton();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_cone_control_stats, menu);
+
+        //Search menu item
+        filterItem = menu.findItem(R.id.cone_control_stats);
+        filterItem.setOnMenuItemClickListener( menuItem -> {
+            Intent intent = new Intent(this, ConeControlStatsActivity.class);
+            startActivity(intent);
+
+            return true;
+        });
+
+        return true;
     }
 }
 

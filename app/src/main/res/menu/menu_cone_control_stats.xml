@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/cone_control_stats"
+        android:icon="@drawable/ic_stats"
+        android:title="Stats"
+        app:showAsAction="always"/>
+
+</menu>
