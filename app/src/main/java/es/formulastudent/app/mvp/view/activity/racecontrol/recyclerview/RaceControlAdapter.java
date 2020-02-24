@@ -16,7 +16,7 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlRegisterEndurance;
-import es.formulastudent.app.mvp.data.model.RaceControlState;
+import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickListener;
 
@@ -90,7 +90,7 @@ public class RaceControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             raceControlViewHolder.state1.setVisibility(View.VISIBLE);
 
             //Get state 1 object
-            RaceControlState state1 = RaceControlState.getStateByAcronym(register.getCurrentState().getStates().get(0));
+            RaceControlEnduranceState state1 = RaceControlEnduranceState.getStateByAcronym(register.getCurrentState().getStates().get(0));
             raceControlViewHolder.state1.setBackgroundColor(context.getResources().getColor(state1.getColor()));
             raceControlViewHolder.state1Label.setText(state1.getAcronym());
             raceControlViewHolder.state1Icon.setImageResource(state1.getIcon());
@@ -103,7 +103,7 @@ public class RaceControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             raceControlViewHolder.state2.setVisibility(View.VISIBLE);
 
             //Get state 2 object
-            RaceControlState state2 = RaceControlState.getStateByAcronym(register.getCurrentState().getStates().get(1));
+            RaceControlEnduranceState state2 = RaceControlEnduranceState.getStateByAcronym(register.getCurrentState().getStates().get(1));
             raceControlViewHolder.state2.setBackgroundColor(context.getResources().getColor(state2.getColor()));
             raceControlViewHolder.state2Label.setText(state2.getAcronym());
             raceControlViewHolder.state2Icon.setImageResource(state2.getIcon());

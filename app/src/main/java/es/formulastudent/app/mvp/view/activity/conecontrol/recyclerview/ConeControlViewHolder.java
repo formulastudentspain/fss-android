@@ -67,8 +67,6 @@ public class ConeControlViewHolder extends RecyclerView.ViewHolder implements Vi
         saveButton.setOnClickListener(this);
         saveButtonDisabled = itemView.findViewById(R.id.save_button_disabled);
         carNumber = itemView.findViewById(R.id.carNumber);
-
-
     }
 
     @Override

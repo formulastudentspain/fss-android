@@ -37,7 +37,7 @@ public abstract class RaceControlRegister implements Serializable {
     private String flagURL;
     private Date currentStateDate;
     private Long order;
-    private RaceControlState currentState;
+    private RaceControlEnduranceState currentState;
     private Boolean runFinal;
 
     //States
@@ -78,38 +78,38 @@ public abstract class RaceControlRegister implements Serializable {
         this.runFinal = object.getBoolean(RaceControlRegister.RUN_FINAL);
 
         String stateAcronym = object.getString(RaceControlRegister.CURRENT_STATE);
-        if(stateAcronym.equals(RaceControlState.NOT_AVAILABLE.getAcronym())){
-            this.currentState = RaceControlState.NOT_AVAILABLE;
+        if(stateAcronym.equals(RaceControlEnduranceState.NOT_AVAILABLE.getAcronym())){
+            this.currentState = RaceControlEnduranceState.NOT_AVAILABLE;
 
-        } else if(stateAcronym.equals(RaceControlState.WAITING_AREA.getAcronym())){
-            this.currentState = RaceControlState.WAITING_AREA;
+        } else if(stateAcronym.equals(RaceControlEnduranceState.WAITING_AREA.getAcronym())){
+            this.currentState = RaceControlEnduranceState.WAITING_AREA;
 
-        }else if(stateAcronym.equals(RaceControlState.SCRUTINEERING.getAcronym())){
-            this.currentState = RaceControlState.SCRUTINEERING;
+        }else if(stateAcronym.equals(RaceControlEnduranceState.SCRUTINEERING.getAcronym())){
+            this.currentState = RaceControlEnduranceState.SCRUTINEERING;
 
-        }else if(stateAcronym.equals(RaceControlState.FIXING.getAcronym())){
-            this.currentState = RaceControlState.FIXING;
+        }else if(stateAcronym.equals(RaceControlEnduranceState.FIXING.getAcronym())){
+            this.currentState = RaceControlEnduranceState.FIXING;
 
-        }else if(stateAcronym.equals(RaceControlState.READY_TO_RACE_1D.getAcronym())){
-            this.currentState = RaceControlState.READY_TO_RACE_1D;
+        }else if(stateAcronym.equals(RaceControlEnduranceState.READY_TO_RACE_1D.getAcronym())){
+            this.currentState = RaceControlEnduranceState.READY_TO_RACE_1D;
 
-        }else if(stateAcronym.equals(RaceControlState.RACING_1D.getAcronym())){
-            this.currentState = RaceControlState.RACING_1D;
+        }else if(stateAcronym.equals(RaceControlEnduranceState.RACING_1D.getAcronym())){
+            this.currentState = RaceControlEnduranceState.RACING_1D;
 
-        }else if(stateAcronym.equals(RaceControlState.READY_TO_RACE_2D.getAcronym())){
-            this.currentState = RaceControlState.READY_TO_RACE_2D;
+        }else if(stateAcronym.equals(RaceControlEnduranceState.READY_TO_RACE_2D.getAcronym())){
+            this.currentState = RaceControlEnduranceState.READY_TO_RACE_2D;
 
-        }else if(stateAcronym.equals(RaceControlState.RACING_2D.getAcronym())){
-            this.currentState = RaceControlState.RACING_2D;
+        }else if(stateAcronym.equals(RaceControlEnduranceState.RACING_2D.getAcronym())){
+            this.currentState = RaceControlEnduranceState.RACING_2D;
 
-        }else if(stateAcronym.equals(RaceControlState.FINISHED.getAcronym())){
-            this.currentState = RaceControlState.FINISHED;
+        }else if(stateAcronym.equals(RaceControlEnduranceState.FINISHED.getAcronym())){
+            this.currentState = RaceControlEnduranceState.FINISHED;
 
-        }else if(stateAcronym.equals(RaceControlState.DNF.getAcronym())){
-            this.currentState = RaceControlState.DNF;
+        }else if(stateAcronym.equals(RaceControlEnduranceState.DNF.getAcronym())){
+            this.currentState = RaceControlEnduranceState.DNF;
 
-        }else if(stateAcronym.equals(RaceControlState.RUN_LATER.getAcronym())){
-            this.currentState = RaceControlState.RUN_LATER;
+        }else if(stateAcronym.equals(RaceControlEnduranceState.RUN_LATER.getAcronym())){
+            this.currentState = RaceControlEnduranceState.RUN_LATER;
 
         }
     }
@@ -178,11 +178,11 @@ public abstract class RaceControlRegister implements Serializable {
         this.stateFinished = stateFinished;
     }
 
-    public RaceControlState getCurrentState() {
+    public RaceControlEnduranceState getCurrentState() {
         return currentState;
     }
 
-    public void setCurrentState(RaceControlState currentState) {
+    public void setCurrentState(RaceControlEnduranceState currentState) {
         this.currentState = currentState;
     }
 

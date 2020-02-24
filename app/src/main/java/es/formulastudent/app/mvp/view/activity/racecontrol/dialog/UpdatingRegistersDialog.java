@@ -14,7 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
-import es.formulastudent.app.mvp.data.model.RaceControlState;
+import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
 import es.formulastudent.app.mvp.view.activity.racecontrol.RaceControlPresenter;
 
 public class UpdatingRegistersDialog extends DialogFragment implements View.OnClickListener {
@@ -127,37 +127,37 @@ public class UpdatingRegistersDialog extends DialogFragment implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.rc_state_NA:
-                presenter.updateRegister(register, event, RaceControlState.NOT_AVAILABLE);
+                presenter.updateRegister(register, event, RaceControlEnduranceState.NOT_AVAILABLE);
                 break;
             case R.id.rc_state_WA:
-                presenter.updateRegister(register, event, RaceControlState.WAITING_AREA);
+                presenter.updateRegister(register, event, RaceControlEnduranceState.WAITING_AREA);
                 break;
             case R.id.rc_state_SCR:
-                presenter.updateRegister(register, event, RaceControlState.SCRUTINEERING);
+                presenter.updateRegister(register, event, RaceControlEnduranceState.SCRUTINEERING);
                 break;
             case R.id.rc_state_FIX:
-                presenter.updateRegister(register, event, RaceControlState.FIXING);
+                presenter.updateRegister(register, event, RaceControlEnduranceState.FIXING);
                 break;
             case R.id.rc_state_RR1D:
-                presenter.updateRegister(register, event, RaceControlState.READY_TO_RACE_1D);
+                presenter.updateRegister(register, event, RaceControlEnduranceState.READY_TO_RACE_1D);
                 break;
             case R.id.rc_state_R1D:
-                presenter.updateRegister(register, event, RaceControlState.RACING_1D);
+                presenter.updateRegister(register, event, RaceControlEnduranceState.RACING_1D);
                 break;
             case R.id.rc_state_RR2D:
-                presenter.updateRegister(register, event, RaceControlState.READY_TO_RACE_2D);
+                presenter.updateRegister(register, event, RaceControlEnduranceState.READY_TO_RACE_2D);
                 break;
             case R.id.rc_state_R2D:
-                presenter.updateRegister(register, event, RaceControlState.RACING_2D);
+                presenter.updateRegister(register, event, RaceControlEnduranceState.RACING_2D);
                 break;
             case R.id.rc_state_FIN:
-                presenter.updateRegister(register, event, RaceControlState.FINISHED);
+                presenter.updateRegister(register, event, RaceControlEnduranceState.FINISHED);
                 break;
             case R.id.rc_state_RL:
-                presenter.updateRegister(register, event, RaceControlState.RUN_LATER);
+                presenter.updateRegister(register, event, RaceControlEnduranceState.RUN_LATER);
                 break;
             case R.id.rc_state_DNF:
-                presenter.updateRegister(register, event, RaceControlState.DNF);
+                presenter.updateRegister(register, event, RaceControlEnduranceState.DNF);
                 break;
         }
 

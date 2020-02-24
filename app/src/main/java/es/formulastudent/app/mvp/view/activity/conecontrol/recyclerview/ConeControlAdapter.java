@@ -130,7 +130,6 @@ public class ConeControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-
         return 0;
     }
 
@@ -141,7 +140,6 @@ public class ConeControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void restoreStates(Bundle inState) {
         viewBinderHelper.restoreStates(inState);
     }
-
 
 }
 

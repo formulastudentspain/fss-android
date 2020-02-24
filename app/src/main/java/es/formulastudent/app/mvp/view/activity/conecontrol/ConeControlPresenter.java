@@ -19,7 +19,7 @@ import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.data.model.ConeControlRegisterLog;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
-import es.formulastudent.app.mvp.data.model.RaceControlState;
+import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
 
@@ -38,7 +38,7 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
     //Data
     List<ConeControlRegister> coneControlRegisterList = new ArrayList<>();
     ListenerRegistration registration;
-    RaceControlState newState = null;
+    RaceControlEnduranceState newState = null;
     RaceControlRegister register = null;
 
 
@@ -61,9 +61,11 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
         ConeControlRegister register = coneControlRegisterList.get(position);
 
         if(view.getId() == R.id.minus_cone){
-            register.setCurrentConesCount(register.getCurrentConesCount()-1);
-            register.setState(1);
-            refreshList();
+            if(register.getCurrentConesCount()>0){
+                register.setCurrentConesCount(register.getCurrentConesCount()-1);
+                register.setState(1);
+                refreshList();
+            }
 
         }else if(view.getId() == R.id.add_cone){
             register.setCurrentConesCount(register.getCurrentConesCount()+1);
@@ -71,9 +73,11 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
             refreshList();
 
         }else if(view.getId() == R.id.minus_off_course){
-            register.setCurrentOffCourseCount(register.getCurrentOffCourseCount()-1);
-            register.setState(1);
-            refreshList();
+            if(register.getCurrentOffCourseCount()>0){
+                register.setCurrentOffCourseCount(register.getCurrentOffCourseCount()-1);
+                register.setState(1);
+                refreshList();
+            }
 
         }else if(view.getId() == R.id.add_off_course){
             register.setCurrentOffCourseCount(register.getCurrentOffCourseCount()+1);

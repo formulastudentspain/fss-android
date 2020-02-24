@@ -13,7 +13,9 @@ public enum RaceControlEvent implements Serializable {
                 put(RaceControlRegister.RACE_TYPE_ELECTRIC, R.string.rc_endurance_title);
                 put(RaceControlRegister.RACE_TYPE_COMBUSTION, R.string.rc_endurance_title);
                 put(RaceControlRegister.RACE_TYPE_FINAL, R.string.rc_endurance_title);
-        }});
+        }}),
+
+        AUTOCROSS (R.string.rc_autocross_title, EventType.AUTOCROSS,10022L,"DEV_RC_AUTOCROSS", new HashMap<>());
 
 
         private final Integer activityTitle;

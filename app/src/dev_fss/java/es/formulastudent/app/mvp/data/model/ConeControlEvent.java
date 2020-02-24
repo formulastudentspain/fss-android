@@ -13,7 +13,9 @@ public enum ConeControlEvent implements Serializable {
                 put(ConeControlRegister.ROUND_1, R.string.cc_endurance_round_1);
                 put(ConeControlRegister.ROUND_2, R.string.cc_endurance_round_2);
                 put(ConeControlRegister.ROUND_FINAL, R.string.cc_endurance_round_final);
-        }});
+        }}),
+
+        AUTOCROSS (R.string.cc_endurance_title, EventType.AUTOCROSS,80022L,"DEV_CC_AUTOCROSS", new HashMap<>());
 
 
         private final Integer activityTitle;

@@ -52,7 +52,7 @@ import es.formulastudent.app.mvp.view.activity.teams.TeamsActivity;
 import es.formulastudent.app.mvp.view.activity.user.UserActivity;
 import info.androidhive.fontawesome.FontDrawable;
 
-
+//arcaya
 public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
 
 
@@ -507,9 +507,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     logout);
         }
 
-
-       // }
-
         //Build drawer
         drawer = builder.build();
 
@@ -570,21 +567,18 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             finish();
 
         }else if(drawerItem.getIdentifier() == 10015){ //Endurance
-            //FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.ENDURANCE_EFFICIENCY);
             this.startActivity(intent);
             finish();
 
         }else if(drawerItem.getIdentifier() == 10014){ //Autocross
-            //FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.AUTOCROSS);
             this.startActivity(intent);
             finish();
 
         }else if(drawerItem.getIdentifier() == 10012){ //SkidPad
-            //FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.SKIDPAD);
             this.startActivity(intent);
@@ -621,6 +615,18 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         } else if(drawerItem.getIdentifier() == 80021){ //Cone Control Endurance
             Intent intent = new Intent(this, ConeControlWelcomeActivity.class);
             intent.putExtra("eventType", ConeControlEvent.ENDURANCE);
+            this.startActivity(intent);
+            finish();
+
+        }else if(drawerItem.getIdentifier() == 10022){ //Race Control Autocross
+            Intent intent = new Intent(this, RaceControlWelcomeActivity.class);
+            intent.putExtra("eventType", RaceControlEvent.AUTOCROSS);
+            this.startActivity(intent);
+            finish();
+
+        } else if(drawerItem.getIdentifier() == 80022){ //Cone Control Autocross
+            Intent intent = new Intent(this, ConeControlWelcomeActivity.class);
+            intent.putExtra("eventType", ConeControlEvent.AUTOCROSS);
             this.startActivity(intent);
             finish();
 

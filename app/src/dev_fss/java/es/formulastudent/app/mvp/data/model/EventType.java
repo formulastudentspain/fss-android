@@ -1,13 +1,12 @@
 package es.formulastudent.app.mvp.data.model;
 
-import org.apache.poi.ss.formula.functions.Even;
-
 import java.io.Serializable;
 
 public enum EventType implements Serializable {
 
         BRIEFING ("Briefing control", 10001L,"DEV_DYNAMIC_EVENT_CONTROL"),
         PRE_SCRUTINEERING ("Pre-Scrutineering", 10002L, "DEV_DYNAMIC_EVENT_CONTROL"),
+
         PRACTICE_TRACK ("Practice Track control", 10011L, "DEV_DYNAMIC_EVENT_CONTROL"),
         SKIDPAD ("Skidpad control", 10012L, "DEV_DYNAMIC_EVENT_CONTROL"),
         ACCELERATION ("Acceleration control", 10013L, "DEV_DYNAMIC_EVENT_CONTROL"),

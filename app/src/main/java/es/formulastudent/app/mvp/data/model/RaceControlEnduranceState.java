@@ -8,7 +8,7 @@ import java.util.List;
 
 import es.formulastudent.app.R;
 
-public enum RaceControlState implements Serializable {
+public enum RaceControlEnduranceState implements Serializable {
 
         NOT_AVAILABLE (
                 "Not Available",
@@ -105,7 +105,7 @@ public enum RaceControlState implements Serializable {
         private final int color;
         private final int icon;
 
-        RaceControlState(String name, String acronym, List<String> states, int icon, int color) {
+        RaceControlEnduranceState(String name, String acronym, List<String> states, int icon, int color) {
                 this.name = name;
                 this.acronym = acronym;
                 this.states = states;
@@ -134,7 +134,7 @@ public enum RaceControlState implements Serializable {
                 return icon;
         }
 
-        public static RaceControlState getStateByAcronym(String acronym){
+        public static RaceControlEnduranceState getStateByAcronym(String acronym){
 
                 if(acronym.equals(WAITING_AREA.getAcronym())){
                         return WAITING_AREA;

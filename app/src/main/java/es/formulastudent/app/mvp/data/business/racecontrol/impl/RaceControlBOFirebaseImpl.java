@@ -23,7 +23,7 @@ import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlRegisterEndurance;
-import es.formulastudent.app.mvp.data.model.RaceControlState;
+import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.RaceControlTeamDTO;
 
@@ -47,18 +47,21 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
         Query query = firebaseFirestore.collection(event.getFirebaseTable());
 
-        //Race Type filter (electric, combustion and final)
-        if(filters.get("raceType").equals(RaceControlRegister.RACE_TYPE_FINAL)){
-            query = query.whereEqualTo(RaceControlRegister.RUN_FINAL, true);
-
-        }else{
-            query = query.whereEqualTo(RaceControlRegister.RUN_FINAL, false);
-
-            if(filters.get("raceType").equals(RaceControlRegister.RACE_TYPE_ELECTRIC)){
-                query = query.whereEqualTo(RaceControlRegister.CAR_TYPE, Car.CAR_TYPE_ELECTRIC);
+        //ENDURANCE only
+        if(RaceControlEvent.ENDURANCE.equals(event)){
+            //Race Type filter (electric, combustion and final)
+            if(filters.get("raceType").equals(RaceControlRegister.RACE_TYPE_FINAL)){
+                query = query.whereEqualTo(RaceControlRegister.RUN_FINAL, true);
 
             }else{
-                query = query.whereEqualTo(RaceControlRegister.CAR_TYPE, Car.CAR_TYPE_COMBUSTION);
+                query = query.whereEqualTo(RaceControlRegister.RUN_FINAL, false);
+
+                if(filters.get("raceType").equals(RaceControlRegister.RACE_TYPE_ELECTRIC)){
+                    query = query.whereEqualTo(RaceControlRegister.CAR_TYPE, Car.CAR_TYPE_ELECTRIC);
+
+                }else{
+                    query = query.whereEqualTo(RaceControlRegister.CAR_TYPE, Car.CAR_TYPE_COMBUSTION);
+                }
             }
         }
 
@@ -69,8 +72,16 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         }
 
 
-        ListenerRegistration registration = query.orderBy(RaceControlRegisterEndurance.ORDER, Query.Direction.ASCENDING)
-                .addSnapshotListener((value, e) -> {
+        //Order by
+        if(RaceControlEvent.ENDURANCE.equals(event)){
+            query = query.orderBy(RaceControlRegister.ORDER, Query.Direction.ASCENDING);
+
+        }else{
+            query = query.orderBy(RaceControlRegister.CAR_NUMBER, Query.Direction.ASCENDING);
+        }
+
+
+        ListenerRegistration registration = query.addSnapshotListener((value, e) -> {
 
                     //Response object
                     ResponseDTO responseDTO = new ResponseDTO();
@@ -104,8 +115,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
     @Override
     public void getRaceControlTeams(final Map<String, Object> filters, final BusinessCallback callback) {
 
-        final String carType = filters.get("raceType").equals(RaceControlRegister.RACE_TYPE_FINAL) ? null : (String)filters.get("raceType");
-
+        final String carType = RaceControlRegister.RACE_TYPE_FINAL.equals(filters.get("raceType")) ? null : (String)filters.get("raceType");
 
         //First, retrieve all the teams depending on the race type
         teamBO.retrieveTeams(carType, null, new BusinessCallback() {
@@ -151,7 +161,6 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                         callback.onFailure(responseDTO);
                     }
                 });
-
             }
 
             @Override
@@ -188,7 +197,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
             register.setCurrentStateDate(now);
             register.setFlagURL(item.getFlagURL());
             register.setOrder(currentMaxIndex);
-            register.setCurrentState(RaceControlState.NOT_AVAILABLE);
+            register.setCurrentState(RaceControlEnduranceState.NOT_AVAILABLE);
             register.setStateNA(now);
             batch.set(nycRef, register.toObjectData());
         }
@@ -260,7 +269,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
     }
 
     @Override
-    public void updateRaceControlState(RaceControlRegister register, RaceControlEvent event, RaceControlState newState, final BusinessCallback callback) {
+    public void updateRaceControlState(RaceControlRegister register, RaceControlEvent event, RaceControlEnduranceState newState, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date now = Calendar.getInstance().getTime();

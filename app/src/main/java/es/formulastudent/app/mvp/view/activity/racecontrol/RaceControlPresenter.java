@@ -25,9 +25,10 @@ import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
+import es.formulastudent.app.mvp.data.model.RaceControlAutocrossState;
+import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
-import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventGeneralPresenter;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.ConfirmEventRegisterDialog;
@@ -58,7 +59,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
     List<RaceControlRegister> allRaceControlRegisterList = new ArrayList<>();
     List<RaceControlRegister> filteredRaceControlRegisterList = new ArrayList<>();
     ListenerRegistration registration = null;
-    RaceControlState newState = null;
+    RaceControlEnduranceState newState = null;
     RaceControlRegister register = null;
 
 
@@ -96,43 +97,14 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
         //Filters
         Map<String, Object> filters = new HashMap<>();
 
-        //Select states fot the selected area
-        List<String> states = new ArrayList<>();
-        if(context.getString(R.string.rc_area_waiting_area).equals(raceArea)){
-            states.addAll(Arrays.asList(
-                    RaceControlState.NOT_AVAILABLE.getAcronym()));
 
-        }else if(context.getString(R.string.rc_area_scrutineering).equals(raceArea)){
-            states.addAll(Arrays.asList(
-                    RaceControlState.WAITING_AREA.getAcronym(),
-                    RaceControlState.FIXING.getAcronym(),
-                    RaceControlState.SCRUTINEERING.getAcronym()));
+         List<String> states = new ArrayList<>();
+         if(RaceControlEvent.ENDURANCE.equals(rcEventType)){
+             states.addAll(this.getEnduranceStates());
 
-        }else if(context.getString(R.string.rc_area_racing1).equals(raceArea)){
-            states.addAll(Arrays.asList(
-                    RaceControlState.SCRUTINEERING.getAcronym(),
-                    RaceControlState.READY_TO_RACE_1D.getAcronym()));
-
-        }else if(context.getString(R.string.rc_area_racing2).equals(raceArea)){
-            states.addAll(Arrays.asList(
-                    RaceControlState.RACING_1D.getAcronym(),
-                    RaceControlState.READY_TO_RACE_2D.getAcronym(),
-                    RaceControlState.RACING_2D.getAcronym()));
-
-        }else if(raceArea == null || context.getString(R.string.rc_area_all).equals(raceArea)) {
-            states.addAll(Arrays.asList(
-                    RaceControlState.NOT_AVAILABLE.getAcronym(),
-                    RaceControlState.WAITING_AREA.getAcronym(),
-                    RaceControlState.FIXING.getAcronym(),
-                    RaceControlState.SCRUTINEERING.getAcronym(),
-                    RaceControlState.READY_TO_RACE_1D.getAcronym(),
-                    RaceControlState.RACING_1D.getAcronym(),
-                    RaceControlState.READY_TO_RACE_2D.getAcronym(),
-                    RaceControlState.RACING_2D.getAcronym(),
-                    RaceControlState.FINISHED.getAcronym(),
-                    RaceControlState.RUN_LATER.getAcronym(),
-                    RaceControlState.DNF.getAcronym()));
-        }
+         }else if(RaceControlEvent.AUTOCROSS.equals(rcEventType)){
+             states.addAll(this.getAutocrossStates());
+         }
 
          filters.put("states",states);
          filters.put("raceType", raceType);
@@ -146,7 +118,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
              @Override
              public void onSuccess(ResponseDTO responseDTO) {
                      List<RaceControlRegister> results = (List<RaceControlRegister>) responseDTO.getData();
-                     updateEventRegisters(results==null ? new ArrayList<RaceControlRegister>() : results);
+                     updateEventRegisters(results==null ? new ArrayList<>() : results);
              }
 
              @Override
@@ -159,6 +131,65 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
          this.registration = registration;
 
          return registration;
+    }
+
+
+    private List<String> getAutocrossStates() {
+        return new ArrayList<>(Arrays.asList(
+                RaceControlAutocrossState.NOT_AVAILABLE.getAcronym(),
+                RaceControlAutocrossState.RACING_ROUND_1.getAcronym(),
+                RaceControlAutocrossState.FINISHED_ROUND_1.getAcronym(),
+                RaceControlAutocrossState.RACING_ROUND_2.getAcronym(),
+                RaceControlAutocrossState.FINISHED_ROUND_2.getAcronym(),
+                RaceControlAutocrossState.RACING_ROUND_3.getAcronym(),
+                RaceControlAutocrossState.FINISHED_ROUND_3.getAcronym(),
+                RaceControlAutocrossState.RACING_ROUND_4.getAcronym(),
+                RaceControlAutocrossState.FINISHED_ROUND_4.getAcronym(),
+                RaceControlAutocrossState.DNF.getAcronym()));
+    }
+
+
+    private List<String> getEnduranceStates() {
+
+        //Select states for the selected area
+        List<String> states = new ArrayList<>();
+        if(context.getString(R.string.rc_area_waiting_area).equals(raceArea)){
+            states.addAll(Arrays.asList(
+                    RaceControlEnduranceState.NOT_AVAILABLE.getAcronym()));
+
+        }else if(context.getString(R.string.rc_area_scrutineering).equals(raceArea)){
+            states.addAll(Arrays.asList(
+                    RaceControlEnduranceState.WAITING_AREA.getAcronym(),
+                    RaceControlEnduranceState.FIXING.getAcronym(),
+                    RaceControlEnduranceState.SCRUTINEERING.getAcronym()));
+
+        }else if(context.getString(R.string.rc_area_racing1).equals(raceArea)){
+            states.addAll(Arrays.asList(
+                    RaceControlEnduranceState.SCRUTINEERING.getAcronym(),
+                    RaceControlEnduranceState.READY_TO_RACE_1D.getAcronym()));
+
+        }else if(context.getString(R.string.rc_area_racing2).equals(raceArea)){
+            states.addAll(Arrays.asList(
+                    RaceControlEnduranceState.RACING_1D.getAcronym(),
+                    RaceControlEnduranceState.READY_TO_RACE_2D.getAcronym(),
+                    RaceControlEnduranceState.RACING_2D.getAcronym()));
+
+        }else if(raceArea == null || context.getString(R.string.rc_area_all).equals(raceArea)) {
+            states.addAll(Arrays.asList(
+                    RaceControlEnduranceState.NOT_AVAILABLE.getAcronym(),
+                    RaceControlEnduranceState.WAITING_AREA.getAcronym(),
+                    RaceControlEnduranceState.FIXING.getAcronym(),
+                    RaceControlEnduranceState.SCRUTINEERING.getAcronym(),
+                    RaceControlEnduranceState.READY_TO_RACE_1D.getAcronym(),
+                    RaceControlEnduranceState.RACING_1D.getAcronym(),
+                    RaceControlEnduranceState.READY_TO_RACE_2D.getAcronym(),
+                    RaceControlEnduranceState.RACING_2D.getAcronym(),
+                    RaceControlEnduranceState.FINISHED.getAcronym(),
+                    RaceControlEnduranceState.RUN_LATER.getAcronym(),
+                    RaceControlEnduranceState.DNF.getAcronym()));
+        }
+
+        return states;
     }
 
 
@@ -221,9 +252,9 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
         //State 1 clicked
         if(v.getId() == R.id.state1){
-            newState = RaceControlState.getStateByAcronym(register.getCurrentState().getStates().get(0));
+            newState = RaceControlEnduranceState.getStateByAcronym(register.getCurrentState().getStates().get(0));
 
-            if(newState.equals(RaceControlState.READY_TO_RACE_1D) || newState.equals(RaceControlState.READY_TO_RACE_2D)){
+            if(newState.equals(RaceControlEnduranceState.READY_TO_RACE_1D) || newState.equals(RaceControlEnduranceState.READY_TO_RACE_2D)){
                 //Open NFC reader to check driver
                 view.openNFCReader();
 
@@ -234,9 +265,9 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
         //State 2 clicked
         }else if(v.getId() == R.id.state2){
-            newState = RaceControlState.getStateByAcronym(register.getCurrentState().getStates().get(1));
+            newState = RaceControlEnduranceState.getStateByAcronym(register.getCurrentState().getStates().get(1));
 
-            if(newState.equals(RaceControlState.READY_TO_RACE_1D) || newState.equals(RaceControlState.READY_TO_RACE_2D)){
+            if(newState.equals(RaceControlEnduranceState.READY_TO_RACE_1D) || newState.equals(RaceControlEnduranceState.READY_TO_RACE_2D)){
                 //Open NFC reader to check driver
                 view.openNFCReader();
 
@@ -255,7 +286,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
      * @param event
      * @param newState
      */
-    public void updateRegister(final RaceControlRegister register, final RaceControlEvent event, final RaceControlState newState){
+    public void updateRegister(final RaceControlRegister register, final RaceControlEvent event, final RaceControlEnduranceState newState){
 
          final String oldState = register.getCurrentState().getAcronym();
 

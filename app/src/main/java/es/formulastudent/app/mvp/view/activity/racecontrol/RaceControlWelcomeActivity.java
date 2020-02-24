@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
@@ -21,6 +22,9 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
     String selectedRound;
     String selectedArea;
     RaceControlEvent rcEvent;
+
+    LinearLayout buttonsContainer;
+    TextView eventType;
 
     LinearLayout round1;
     LinearLayout round2;
@@ -67,6 +71,17 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
         addDrawer();
         mDrawerIdentifier = rcEvent.getDrawerItemID();
 
+        //Buttons container
+        buttonsContainer = findViewById(R.id.endurance_buttons_container);
+
+        //Event Type text
+        eventType = findViewById(R.id.event_type);
+        if(RaceControlEvent.ENDURANCE.equals(rcEvent)){
+            eventType.setText("ENDURANCE"); //TODO crear un enum con los tipos de evento, los 4
+        }else if(RaceControlEvent.AUTOCROSS.equals(rcEvent)){
+            eventType.setText("AUTOCROSS"); //TODO crear un enum con los tipos de evento, los 4
+        }
+
         //Button for round 1
         round1 = findViewById(R.id.round_1_container);
         round1.setOnClickListener(this);
@@ -102,11 +117,17 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
         //Button START
         buttonSTART = findViewById(R.id.go_button);
         buttonSTART.setOnClickListener(this);
-        buttonSTART.setVisibility(View.GONE);
+
+        if(RaceControlEvent.ENDURANCE.equals(rcEvent)) {
+            buttonSTART.setVisibility(View.GONE);
+            buttonsContainer.setVisibility(View.VISIBLE);
+        }else{
+            buttonSTART.setVisibility(View.VISIBLE);
+            buttonsContainer.setVisibility(View.GONE);
+        }
 
         //Add toolbar title
         setToolbarTitle(getString(rcEvent.getActivityTitle()));
-
     }
 
 
@@ -125,7 +146,6 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
 
     @Override
     public void onClick(View view) {
-
 
         //Round 1
         if(view.getId() == R.id.round_1_container){
@@ -201,10 +221,9 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
             this.startActivity(intent);
         }
 
-        if(selectedRound != null && selectedArea!=null) {
+        if((RaceControlEvent.ENDURANCE.equals(rcEvent) && selectedRound != null && selectedArea!=null)
+            || RaceControlEvent.AUTOCROSS.equals(rcEvent)) {
             buttonSTART.setVisibility(View.VISIBLE);
         }
     }
 }
-
-

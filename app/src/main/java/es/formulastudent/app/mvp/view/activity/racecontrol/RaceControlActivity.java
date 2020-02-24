@@ -64,18 +64,21 @@ RaceControlActivity extends GeneralActivity implements
         setContentView(R.layout.activity_race_control);
         super.onCreate(savedInstanceState);
 
-        //Get race type (Electric, Combustion, Final)
-        String raceType = getIntent().getStringExtra("rc_type");
-        this.raceType = raceType;
-
-        String rcArea = getIntent().getStringExtra("rc_area");
-        this.rcArea = rcArea;
-
         //Get the event type (Endurance, AutoX...)
         RaceControlEvent rcEvent = (RaceControlEvent) getIntent().getSerializableExtra("eventType");
-        setupComponent(FSSApp.getApp().component(), rcEvent, raceType, rcArea);
         this.rcEvent = rcEvent;
 
+        //Only if ENDURANCE
+        if(rcEvent.equals(RaceControlEvent.ENDURANCE)){
+            //Get race type (Electric, Combustion, Final)
+            String raceType = getIntent().getStringExtra("rc_type");
+            this.raceType = raceType;
+
+            String rcArea = getIntent().getStringExtra("rc_area");
+            this.rcArea = rcArea;
+        }
+
+        setupComponent(FSSApp.getApp().component(), rcEvent, raceType, rcArea);
         initViews();
     }
 
@@ -113,14 +116,14 @@ RaceControlActivity extends GeneralActivity implements
 
         //Round
         roundTextView = findViewById(R.id.round_number);
-        roundTextView.setText(raceType);
+        roundTextView.setText(raceType == null ? "-" : raceType);
 
         //Area
         areaTextView = findViewById(R.id.area);
-        areaTextView.setText(rcArea);
+        areaTextView.setText(rcArea == null ? "-" : rcArea);
 
         //Add toolbar
-        setToolbarTitle(getString(rcEvent.getRaceTypes().get(raceType)));
+        setToolbarTitle(getString(rcEvent.getActivityTitle()));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

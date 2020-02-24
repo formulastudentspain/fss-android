@@ -373,77 +373,218 @@
                             android:orientation="horizontal">
 
 
-                            <TextView
-                                android:id="@+id/PS_TEST"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="center_horizontal"
-                                android:text="PS"
-                                android:textSize="23sp" />
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/AI_TEST"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center_horizontal"
-                                android:text="AI"
-                                android:textSize="23sp" />
+                                <TextView
+                                    android:id="@+id/PS_TEST"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_horizontal"
+                                    android:text="PS"
+                                    android:textSize="23sp" />
 
-                            <TextView
-                                android:id="@+id/EI_TEST"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center_horizontal"
-                                android:text="EI"
-                                android:textSize="23sp" />
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/PS_comment_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-8dp"
+                                    android:text="@string/fa_window_minimize"
+                                    android:layout_gravity="center_horizontal"
+                                    android:textColor="@color/md_red_300"
+                                    android:textSize="8sp"
+                                    app:solid_icon="true" />
 
-                            <TextView
-                                android:id="@+id/MI_TEST"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center_horizontal"
-                                android:text="MI"
-                                android:textSize="23sp" />
+                            </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/TTT_TEST"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center_horizontal"
-                                android:text="TT"
-                                android:textSize="23sp" />
 
-                            <TextView
-                                android:id="@+id/NT_TEST"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="center_horizontal"
-                                android:text="NT"
-                                android:textSize="23sp" />
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/RT_TEST"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center_horizontal"
-                                android:text="RT"
-                                android:textSize="23sp" />
+                                <TextView
+                                    android:id="@+id/AI_TEST"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_horizontal"
+                                    android:text="AI"
+                                    android:textSize="23sp" />
 
-                            <TextView
-                                android:id="@+id/BT_TEST"
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/AI_comment_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-8dp"
+                                    android:text="@string/fa_window_minimize"
+                                    android:layout_gravity="center_horizontal"
+                                    android:textColor="@color/md_red_300"
+                                    android:textSize="8sp"
+                                    app:solid_icon="true" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:gravity="center_horizontal"
-                                android:text="BT"
-                                android:textSize="23sp" />
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/EI_TEST"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_horizontal"
+                                    android:text="EI"
+                                    android:textSize="23sp" />
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/EI_comment_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-8dp"
+                                    android:text="@string/fa_window_minimize"
+                                    android:layout_gravity="center_horizontal"
+                                    android:textColor="@color/md_red_300"
+                                    android:textSize="8sp"
+                                    app:solid_icon="true" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/MI_TEST"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_horizontal"
+                                    android:text="MI"
+                                    android:textSize="23sp" />
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/MI_comment_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-8dp"
+                                    android:text="@string/fa_window_minimize"
+                                    android:layout_gravity="center_horizontal"
+                                    android:textColor="@color/md_red_300"
+                                    android:textSize="8sp"
+                                    app:solid_icon="true" />
+                                </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/TTT_TEST"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_horizontal"
+                                    android:text="TT"
+                                    android:textSize="23sp" />
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/TTT_comment_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-8dp"
+                                    android:text="@string/fa_window_minimize"
+                                    android:layout_gravity="center_horizontal"
+                                    android:textColor="@color/md_red_300"
+                                    android:textSize="8sp"
+                                    app:solid_icon="true" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/NT_TEST"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_horizontal"
+                                    android:text="NT"
+                                    android:textSize="23sp" />
+
+                                    <info.androidhive.fontawesome.FontTextView
+                                        android:id="@+id/NT_comment_indicator"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="-8dp"
+                                        android:text="@string/fa_window_minimize"
+                                        android:layout_gravity="center_horizontal"
+                                        android:textColor="@color/md_red_300"
+                                        android:textSize="8sp"
+                                        app:solid_icon="true" />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/RT_TEST"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_horizontal"
+                                    android:text="RT"
+                                    android:textSize="23sp" />
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/RT_comment_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-8dp"
+                                    android:text="@string/fa_window_minimize"
+                                    android:layout_gravity="center_horizontal"
+                                    android:textColor="@color/md_red_300"
+                                    android:textSize="8sp"
+                                    app:solid_icon="true" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/BT_TEST"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_horizontal"
+                                    android:text="BT"
+                                    android:textSize="23sp" />
+
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/BT_comment_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-8dp"
+                                    android:text="@string/fa_window_minimize"
+                                    android:layout_gravity="center_horizontal"
+                                    android:textColor="@color/md_red_300"
+                                    android:textSize="8sp"
+                                    app:solid_icon="true" />
+                            </LinearLayout>
 
                         </LinearLayout>
 
