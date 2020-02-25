@@ -20,10 +20,13 @@ import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Car;
+import es.formulastudent.app.mvp.data.model.RaceControlAutocrossState;
+import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
+import es.formulastudent.app.mvp.data.model.RaceControlRegisterAutocross;
 import es.formulastudent.app.mvp.data.model.RaceControlRegisterEndurance;
-import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
+import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.RaceControlTeamDTO;
 
@@ -77,7 +80,10 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
             query = query.orderBy(RaceControlRegister.ORDER, Query.Direction.ASCENDING);
 
         }else{
-            query = query.orderBy(RaceControlRegister.CAR_NUMBER, Query.Direction.ASCENDING);
+            //carNumber cannot be filtered and sorted at the same time
+            if(carNumber==null){
+                query = query.orderBy(RaceControlRegister.CAR_NUMBER, Query.Direction.ASCENDING);
+            }
         }
 
 
@@ -92,11 +98,18 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                         return;
                     }
 
-                    List<RaceControlRegisterEndurance> result = new ArrayList<>();
+                    List<RaceControlRegister> result = new ArrayList<>();
                     List<String> states = (List<String>)filters.get("states");
 
                     for (QueryDocumentSnapshot doc : value) {
-                        RaceControlRegisterEndurance register = new RaceControlRegisterEndurance(doc);
+
+                        RaceControlRegister register = null;
+                        if(RaceControlEvent.ENDURANCE.equals(event)){
+                            register = new RaceControlRegisterEndurance(doc);
+                        }else if(RaceControlEvent.AUTOCROSS.equals(event)){
+                            register = new RaceControlRegisterAutocross(doc);
+                        }
+
                         if(states != null && states.contains(register.getCurrentState().getAcronym())){
                             result.add(register);
                         }
@@ -185,21 +198,35 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
             currentMaxIndex++;
 
-            // Set the value of 'NYC'
-            DocumentReference nycRef = firebaseFirestore
+            DocumentReference ref = firebaseFirestore
                     .collection(eventType.getFirebaseTable())
                     .document(item.getCarNumber().toString());
 
-            RaceControlRegisterEndurance register = new RaceControlRegisterEndurance();
+            RaceControlRegister register = null;
+            if(RaceControlEvent.ENDURANCE.equals(eventType)){
+                register = new RaceControlRegisterEndurance();
+                register.setCurrentState(RaceControlEnduranceState.NOT_AVAILABLE);
+
+            }else if(RaceControlEvent.AUTOCROSS.equals(eventType)){
+                register = new RaceControlRegisterAutocross();
+                register.setCurrentState(RaceControlAutocrossState.NOT_AVAILABLE);
+            }
+
+            //Common fields
             register.setCarNumber(item.getCarNumber());
             register.setCarType(raceType);
             register.setRunFinal(RaceControlRegister.RACE_TYPE_FINAL.equals(raceType));
             register.setCurrentStateDate(now);
             register.setFlagURL(item.getFlagURL());
             register.setOrder(currentMaxIndex);
-            register.setCurrentState(RaceControlEnduranceState.NOT_AVAILABLE);
             register.setStateNA(now);
-            batch.set(nycRef, register.toObjectData());
+
+            if(RaceControlEvent.ENDURANCE.equals(eventType)){
+                batch.set(ref, ((RaceControlRegisterEndurance)register).toObjectData());
+
+            }else if(RaceControlEvent.AUTOCROSS.equals(eventType)){
+                batch.set(ref, ((RaceControlRegisterAutocross)register).toObjectData());
+            }
         }
 
 
@@ -209,7 +236,12 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
             //Now create cones
             for(RaceControlTeamDTO item: raceControlTeamDTOList){
                 coneControlBO.createConeControlForAllSectors(
-                        item.getCarNumber(), item.getFlagURL(),  raceType, 7, new BusinessCallback() {
+                        eventType.getConeControlEvent(),
+                        item.getCarNumber(),
+                        item.getFlagURL(),
+                        raceType,
+                        7,
+                        new BusinessCallback() {
                             @Override
                             public void onSuccess(ResponseDTO responseDTO) {
                                 //DO NOTHING
@@ -238,15 +270,19 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         //Response object
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        //Get Race type value
-        String carType = (String)filters.get("raceType");
-
         //Get Event type
         RaceControlEvent event = (RaceControlEvent)filters.get("eventType");
 
-        firebaseFirestore.collection(event.getFirebaseTable())
-                .whereEqualTo(RaceControlRegisterEndurance.CAR_TYPE, carType)
-                .orderBy(RaceControlRegisterEndurance.ORDER, Query.Direction.ASCENDING)
+        Query query = firebaseFirestore.collection(event.getFirebaseTable());
+
+        //Get Race type value
+        if(filters.get("raceType") == null){
+            query = query.whereEqualTo(RaceControlRegisterEndurance.CAR_TYPE, filters.get("raceType"));
+        }
+
+
+
+        query.orderBy(RaceControlRegisterEndurance.ORDER, Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
 
@@ -269,7 +305,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
     }
 
     @Override
-    public void updateRaceControlState(RaceControlRegister register, RaceControlEvent event, RaceControlEnduranceState newState, final BusinessCallback callback) {
+    public void updateRaceControlState(RaceControlRegister register, RaceControlEvent event, RaceControlState newState, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date now = Calendar.getInstance().getTime();
@@ -278,54 +314,15 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         register.setCurrentState(newState);
         register.setCurrentStateDate(now);
 
-        boolean activateCones = false;
-
-        //Update the state date
-        switch (newState){
-            case DNF:
-                register.setStateDNF(now);
-                break;
-            case WAITING_AREA:
-                ((RaceControlRegisterEndurance)register).setStateWaitingArea(now);
-                break;
-            case SCRUTINEERING:
-                ((RaceControlRegisterEndurance)register).setStateScrutineering(now);
-                break;
-            case RUN_LATER:
-                ((RaceControlRegisterEndurance)register).setStateRunLater(now);
-                break;
-            case READY_TO_RACE_1D:
-                ((RaceControlRegisterEndurance)register).setStateReadyToRace1D(now);
-                break;
-            case READY_TO_RACE_2D:
-                ((RaceControlRegisterEndurance)register).setStateReadyToRace2D(now);
-                break;
-            case RACING_1D:
-                ((RaceControlRegisterEndurance)register).setStateRacing1D(now);
-                activateCones = true;
-                break;
-            case RACING_2D:
-                ((RaceControlRegisterEndurance)register).setStateRacing2D(now);
-                activateCones = true;
-                break;
-            case NOT_AVAILABLE:
-                register.setStateNA(now);
-                break;
-            case FIXING:
-                ((RaceControlRegisterEndurance)register).setStateFixing(now);
-                break;
-            case FINISHED:
-                register.setStateFinished(now);
-                break;
-        }
-
         //Cast the data depending on the Race Type
         Map<String, Object> data = null;
         if(register instanceof RaceControlRegisterEndurance){
             data = ((RaceControlRegisterEndurance) register).toObjectData();
+
+        }else if(register instanceof RaceControlRegisterAutocross){
+            data = ((RaceControlRegisterAutocross) register).toObjectData();
         }
 
-        final boolean enableCones = activateCones;
         //Call Firebase to update
         firebaseFirestore.collection(event.getFirebaseTable()).document(register.getID())
                 .update(data)
@@ -333,7 +330,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                     responseDTO.setInfo(R.string.rc_info_update_message);
 
                     //Enable/disable cones for the selected car
-                    coneControlBO.enableOrDisableConeControlRegistersByTeam(register.getCarNumber(), enableCones, new BusinessCallback() {
+                    coneControlBO.enableOrDisableConeControlRegistersByTeam(event.getConeControlEvent(), register.getCarNumber(), newState, new BusinessCallback() {
                         @Override
                         public void onSuccess(ResponseDTO responseDTO) {
                             //TODO add things

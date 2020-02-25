@@ -4,8 +4,21 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+
+import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.DNF;
+import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.FINISHED;
+import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.FIXING;
+import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.NOT_AVAILABLE;
+import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.RACING_1D;
+import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.RACING_2D;
+import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.READY_TO_RACE_1D;
+import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.READY_TO_RACE_2D;
+import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.RUN_LATER;
+import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.SCRUTINEERING;
+import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.WAITING_AREA;
 
 public class RaceControlRegisterEndurance extends RaceControlRegister implements Serializable {
 
@@ -30,11 +43,14 @@ public class RaceControlRegisterEndurance extends RaceControlRegister implements
     private Date stateRacing2D;
     private Date stateRunLater;
 
+    private RaceControlEnduranceState currentState;
+
     public RaceControlRegisterEndurance(){}
 
     public Map<String, Object> toObjectData(){
 
         Map<String, Object> docData = super.toObjectData();
+        docData.put(RaceControlRegister.CURRENT_STATE, this.currentState.getAcronym());
         docData.put(RaceControlRegisterEndurance.RC_STATE_WAITING_AREA, this.stateWaitingArea == null ? null : new Timestamp(this.stateWaitingArea));
         docData.put(RaceControlRegisterEndurance.RC_STATE_SCRUTINEERING, this.stateScrutineering == null ? null : new Timestamp(this.stateScrutineering));
         docData.put(RaceControlRegisterEndurance.RC_STATE_FIXING, this.stateFixing == null ? null : new Timestamp(this.stateFixing));
@@ -58,8 +74,86 @@ public class RaceControlRegisterEndurance extends RaceControlRegister implements
         this.stateReadyToRace2D = object.getDate(RaceControlRegisterEndurance.RC_STATE_READY_TO_RACE_2D);
         this.stateRacing2D = object.getDate(RaceControlRegisterEndurance.RC_STATE_RACING_2D);
         this.stateRunLater = object.getDate(RaceControlRegisterEndurance.RC_STATE_RUN_LATER);
+
+        String stateAcronym = object.getString(RaceControlRegister.CURRENT_STATE);
+        if(stateAcronym.equals(RaceControlEnduranceState.NOT_AVAILABLE.getAcronym())){
+            this.currentState = RaceControlEnduranceState.NOT_AVAILABLE;
+
+        } else if(stateAcronym.equals(WAITING_AREA.getAcronym())){
+            this.currentState = WAITING_AREA;
+
+        }else if(stateAcronym.equals(SCRUTINEERING.getAcronym())){
+            this.currentState = SCRUTINEERING;
+
+        }else if(stateAcronym.equals(FIXING.getAcronym())){
+            this.currentState = FIXING;
+
+        }else if(stateAcronym.equals(READY_TO_RACE_1D.getAcronym())){
+            this.currentState = READY_TO_RACE_1D;
+
+        }else if(stateAcronym.equals(RACING_1D.getAcronym())){
+            this.currentState = RACING_1D;
+
+        }else if(stateAcronym.equals(READY_TO_RACE_2D.getAcronym())){
+            this.currentState = READY_TO_RACE_2D;
+
+        }else if(stateAcronym.equals(RACING_2D.getAcronym())){
+            this.currentState = RACING_2D;
+
+        }else if(stateAcronym.equals(FINISHED.getAcronym())){
+            this.currentState = FINISHED;
+
+        }else if(stateAcronym.equals(DNF.getAcronym())){
+            this.currentState = DNF;
+
+        }else if(stateAcronym.equals(RUN_LATER.getAcronym())){
+            this.currentState = RUN_LATER;
+
+        }
     }
 
+
+    @Override
+    public RaceControlState getNextStateAtIndex(int index) {
+        String stateString = this.currentState.getStates().get(index);
+        
+        if(NOT_AVAILABLE.getAcronym().equals(stateString)){
+            return NOT_AVAILABLE;
+            
+        }else if(WAITING_AREA.getAcronym().equals(stateString)){
+            return WAITING_AREA;
+
+        }else if(SCRUTINEERING.getAcronym().equals(stateString)){
+            return SCRUTINEERING;
+
+        }else if(FIXING.getAcronym().equals(stateString)){
+            return FIXING;
+
+        }else if(READY_TO_RACE_1D.getAcronym().equals(stateString)){
+            return READY_TO_RACE_1D;
+
+        }else if(RACING_1D.getAcronym().equals(stateString)){
+            return RACING_1D;
+
+        }else if(READY_TO_RACE_2D.getAcronym().equals(stateString)){
+            return READY_TO_RACE_2D;
+
+        }else if(RACING_2D.getAcronym().equals(stateString)){
+            return RACING_2D;
+
+        }else if(FINISHED.getAcronym().equals(stateString)){
+            return FINISHED;
+
+        }else if(DNF.getAcronym().equals(stateString)){
+            return DNF;
+
+        }else if(RUN_LATER.getAcronym().equals(stateString)){
+            return RUN_LATER;
+        }else{
+            return null;
+        }
+    }
+    
     public Date getStateWaitingArea() {
         return stateWaitingArea;
     }
@@ -123,4 +217,55 @@ public class RaceControlRegisterEndurance extends RaceControlRegister implements
     public void setStateRunLater(Date stateRunLater) {
         this.stateRunLater = stateRunLater;
     }
+
+    @Override
+    public RaceControlEnduranceState getCurrentState() {
+        return currentState;
+    }
+    
+    @Override
+    public void setCurrentState(RaceControlState currentState) {
+        Date now = Calendar.getInstance().getTime();
+
+        this.currentState = (RaceControlEnduranceState) currentState;
+        this.setCurrentStateDate(now);
+
+        //Update the state date
+        switch (this.currentState){
+            case DNF:
+                setStateDNF(now);
+                break;
+            case WAITING_AREA:
+                setStateWaitingArea(now);
+                break;
+            case SCRUTINEERING:
+                setStateScrutineering(now);
+                break;
+            case RUN_LATER:
+                setStateRunLater(now);
+                break;
+            case READY_TO_RACE_1D:
+                setStateReadyToRace1D(now);
+                break;
+            case READY_TO_RACE_2D:
+                setStateReadyToRace2D(now);
+                break;
+            case RACING_1D:
+                setStateRacing1D(now);
+                break;
+            case RACING_2D:
+                setStateRacing2D(now);
+                break;
+            case NOT_AVAILABLE:
+                setStateNA(now);
+                break;
+            case FIXING:
+                setStateFixing(now);
+                break;
+            case FINISHED:
+                setStateFinished(now);
+                break;
+        }
+    }
+
 }

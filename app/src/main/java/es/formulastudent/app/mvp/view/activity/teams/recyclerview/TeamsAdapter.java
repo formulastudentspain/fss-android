@@ -72,6 +72,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         //AI
         if(tests.contains(ScrutineeringTest.ACCUMULATION_INSPECTION)){
             teamsViewHolder.aiTest.setVisibility(View.VISIBLE);
+            teamsViewHolder.aiContainer.setVisibility(View.VISIBLE);
             if(register.getScrutineeringAI()){
                 teamsViewHolder.aiTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
@@ -79,11 +80,13 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }else{
             teamsViewHolder.aiTest.setVisibility(View.GONE);
+            teamsViewHolder.aiContainer.setVisibility(View.GONE);
         }
 
         //BT
         if(tests.contains(ScrutineeringTest.BRAKE_TEST)){
             teamsViewHolder.btTest.setVisibility(View.VISIBLE);
+            teamsViewHolder.btContainer.setVisibility(View.VISIBLE);
             if(register.getScrutineeringBT()){
                 teamsViewHolder.btTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
@@ -91,11 +94,13 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }else{
             teamsViewHolder.btTest.setVisibility(View.GONE);
+            teamsViewHolder.btContainer.setVisibility(View.GONE);
         }
 
         //EI
         if(tests.contains(ScrutineeringTest.ELECTRICAL_INSPECTION)){
             teamsViewHolder.eiTest.setVisibility(View.VISIBLE);
+            teamsViewHolder.eiContainer.setVisibility(View.VISIBLE);
             if(register.getScrutineeringEI()){
                 teamsViewHolder.eiTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
@@ -103,11 +108,13 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }else{
             teamsViewHolder.eiTest.setVisibility(View.GONE);
+            teamsViewHolder.eiContainer.setVisibility(View.GONE);
         }
 
         //MI
         if(tests.contains(ScrutineeringTest.MECHANICAL_INSPECTION)){
             teamsViewHolder.miTest.setVisibility(View.VISIBLE);
+            teamsViewHolder.miContainer.setVisibility(View.VISIBLE);
             if(register.getScrutineeringMI()){
                 teamsViewHolder.miTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
@@ -115,11 +122,13 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }else{
             teamsViewHolder.miTest.setVisibility(View.GONE);
+            teamsViewHolder.miContainer.setVisibility(View.GONE);
         }
 
         //NT
         if(tests.contains(ScrutineeringTest.NOISE_TEST)){
             teamsViewHolder.ntTest.setVisibility(View.VISIBLE);
+            teamsViewHolder.ntContainer.setVisibility(View.VISIBLE);
             if(register.getScrutineeringNT()){
                 teamsViewHolder.ntTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
@@ -127,11 +136,13 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }else{
             teamsViewHolder.ntTest.setVisibility(View.GONE);
+            teamsViewHolder.ntContainer.setVisibility(View.GONE);
         }
 
         //PS
         if(tests.contains(ScrutineeringTest.PRE_SCRUTINEERING)){
             teamsViewHolder.psTest.setVisibility(View.VISIBLE);
+            teamsViewHolder.psContainer.setVisibility(View.VISIBLE);
             if(register.getScrutineeringPS()){
                 teamsViewHolder.psTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
@@ -139,11 +150,13 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }else{
             teamsViewHolder.psTest.setVisibility(View.GONE);
+            teamsViewHolder.psContainer.setVisibility(View.GONE);
         }
 
         //RT
         if(tests.contains(ScrutineeringTest.RAIN_TEST)){
             teamsViewHolder.rtTest.setVisibility(View.VISIBLE);
+            teamsViewHolder.rtContainer.setVisibility(View.VISIBLE);
             if(register.getScrutineeringRT()){
                 teamsViewHolder.rtTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
@@ -151,11 +164,13 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }else{
             teamsViewHolder.rtTest.setVisibility(View.GONE);
+            teamsViewHolder.rtContainer.setVisibility(View.GONE);
         }
 
         //TTT
         if(tests.contains(ScrutineeringTest.TILT_TABLE_TEST)){
             teamsViewHolder.tttTest.setVisibility(View.VISIBLE);
+            teamsViewHolder.tttContainer.setVisibility(View.VISIBLE);
             if(register.getScrutineeringTTT()){
                 teamsViewHolder.tttTest.setTextColor(context.getResources().getColor(R.color.md_grey_600));
             }else{
@@ -163,6 +178,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }else{
             teamsViewHolder.tttTest.setVisibility(View.GONE);
+            teamsViewHolder.tttContainer.setVisibility(View.GONE);
         }
 
         //Fee states: Transponder
@@ -218,6 +234,64 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }else{ //it is not electric, hide Energy Meter elements
             teamsViewHolder.energyMeterContainer.setVisibility(View.INVISIBLE);
         }
+
+        //Comment indicator
+        if(register.getScrutineeringPSComment() != null
+                && !register.getScrutineeringPSComment().isEmpty()){
+            teamsViewHolder.psCommentIndicator.setVisibility(View.VISIBLE);
+        }else{
+            teamsViewHolder.psCommentIndicator.setVisibility(View.GONE);
+        }
+
+        if(register.getScrutineeringAIComment() != null
+                && !register.getScrutineeringAIComment().isEmpty()){
+            teamsViewHolder.aiCommentIndicator.setVisibility(View.VISIBLE);
+        }else{
+            teamsViewHolder.aiCommentIndicator.setVisibility(View.GONE);
+        }
+
+        if(register.getScrutineeringEIComment() != null
+                && !register.getScrutineeringEIComment().isEmpty()){
+            teamsViewHolder.eiCommentIndicator.setVisibility(View.VISIBLE);
+        }else{
+            teamsViewHolder.eiCommentIndicator.setVisibility(View.GONE);
+        }
+
+        if(register.getScrutineeringMIComment() != null
+                && !register.getScrutineeringMIComment().isEmpty()){
+            teamsViewHolder.miCommentIndicator.setVisibility(View.VISIBLE);
+        }else{
+            teamsViewHolder.miCommentIndicator.setVisibility(View.GONE);
+        }
+
+        if(register.getScrutineeringTTTComment() != null
+                && !register.getScrutineeringTTTComment().isEmpty()){
+            teamsViewHolder.tttCommentIndicator.setVisibility(View.VISIBLE);
+        }else{
+            teamsViewHolder.tttCommentIndicator.setVisibility(View.GONE);
+        }
+
+        if(register.getScrutineeringNTComment() != null
+                && !register.getScrutineeringNTComment().isEmpty()){
+            teamsViewHolder.ntCommentIndicator.setVisibility(View.VISIBLE);
+        }else{
+            teamsViewHolder.ntCommentIndicator.setVisibility(View.GONE);
+        }
+
+        if(register.getScrutineeringRTComment() != null
+                && !register.getScrutineeringRTComment().isEmpty()){
+            teamsViewHolder.rtCommentIndicator.setVisibility(View.VISIBLE);
+        }else{
+            teamsViewHolder.rtCommentIndicator.setVisibility(View.GONE);
+        }
+
+        if(register.getScrutineeringBTComment() != null
+                && !register.getScrutineeringBTComment().isEmpty()){
+            teamsViewHolder.btCommentIndicator.setVisibility(View.VISIBLE);
+        }else{
+            teamsViewHolder.btCommentIndicator.setVisibility(View.GONE);
+        }
+
 
         //Country flag
         Picasso.get().load(register.getCountry().getFlagURL()).into(teamsViewHolder.countryFlag);

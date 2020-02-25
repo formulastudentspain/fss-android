@@ -37,7 +37,6 @@ public abstract class RaceControlRegister implements Serializable {
     private String flagURL;
     private Date currentStateDate;
     private Long order;
-    private RaceControlEnduranceState currentState;
     private Boolean runFinal;
 
     //States
@@ -53,7 +52,6 @@ public abstract class RaceControlRegister implements Serializable {
         docData.put(RaceControlRegister.CAR_NUMBER, this.carNumber);
         docData.put(RaceControlRegister.CAR_TYPE, this.carType);
         docData.put(RaceControlRegister.FLAG_URL, this.flagURL);
-        docData.put(RaceControlRegister.CURRENT_STATE, this.currentState.getAcronym());
         docData.put(RaceControlRegister.CURRENT_STATE_DATE, this.currentStateDate == null ? null : new Timestamp(this.currentStateDate));
         docData.put(RaceControlRegister.ORDER, this.order);
         docData.put(RaceControlRegister.RC_STATE_NOT_AVAILABLE, this.stateNA == null ? null : new Timestamp(this.stateNA));
@@ -77,41 +75,6 @@ public abstract class RaceControlRegister implements Serializable {
         this.stateFinished = object.getDate(RaceControlRegister.RC_STATE_FINISHED);
         this.runFinal = object.getBoolean(RaceControlRegister.RUN_FINAL);
 
-        String stateAcronym = object.getString(RaceControlRegister.CURRENT_STATE);
-        if(stateAcronym.equals(RaceControlEnduranceState.NOT_AVAILABLE.getAcronym())){
-            this.currentState = RaceControlEnduranceState.NOT_AVAILABLE;
-
-        } else if(stateAcronym.equals(RaceControlEnduranceState.WAITING_AREA.getAcronym())){
-            this.currentState = RaceControlEnduranceState.WAITING_AREA;
-
-        }else if(stateAcronym.equals(RaceControlEnduranceState.SCRUTINEERING.getAcronym())){
-            this.currentState = RaceControlEnduranceState.SCRUTINEERING;
-
-        }else if(stateAcronym.equals(RaceControlEnduranceState.FIXING.getAcronym())){
-            this.currentState = RaceControlEnduranceState.FIXING;
-
-        }else if(stateAcronym.equals(RaceControlEnduranceState.READY_TO_RACE_1D.getAcronym())){
-            this.currentState = RaceControlEnduranceState.READY_TO_RACE_1D;
-
-        }else if(stateAcronym.equals(RaceControlEnduranceState.RACING_1D.getAcronym())){
-            this.currentState = RaceControlEnduranceState.RACING_1D;
-
-        }else if(stateAcronym.equals(RaceControlEnduranceState.READY_TO_RACE_2D.getAcronym())){
-            this.currentState = RaceControlEnduranceState.READY_TO_RACE_2D;
-
-        }else if(stateAcronym.equals(RaceControlEnduranceState.RACING_2D.getAcronym())){
-            this.currentState = RaceControlEnduranceState.RACING_2D;
-
-        }else if(stateAcronym.equals(RaceControlEnduranceState.FINISHED.getAcronym())){
-            this.currentState = RaceControlEnduranceState.FINISHED;
-
-        }else if(stateAcronym.equals(RaceControlEnduranceState.DNF.getAcronym())){
-            this.currentState = RaceControlEnduranceState.DNF;
-
-        }else if(stateAcronym.equals(RaceControlEnduranceState.RUN_LATER.getAcronym())){
-            this.currentState = RaceControlEnduranceState.RUN_LATER;
-
-        }
     }
 
     public String getID() {
@@ -178,13 +141,6 @@ public abstract class RaceControlRegister implements Serializable {
         this.stateFinished = stateFinished;
     }
 
-    public RaceControlEnduranceState getCurrentState() {
-        return currentState;
-    }
-
-    public void setCurrentState(RaceControlEnduranceState currentState) {
-        this.currentState = currentState;
-    }
 
     public Boolean getRunFinal() {
         return runFinal;
@@ -201,4 +157,10 @@ public abstract class RaceControlRegister implements Serializable {
     public void setStateNA(Date stateNA) {
         this.stateNA = stateNA;
     }
+
+    public abstract RaceControlState getCurrentState();
+
+    public abstract RaceControlState getNextStateAtIndex(int index);
+
+    public abstract void setCurrentState(RaceControlState currentState);
 }

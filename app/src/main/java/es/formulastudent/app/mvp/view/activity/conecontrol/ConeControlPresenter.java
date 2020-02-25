@@ -103,7 +103,7 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
 
 
 
-            coneControlBO.updateConeControlRegister(register, new BusinessCallback() {
+            coneControlBO.updateConeControlRegister(ccEventType, register, new BusinessCallback() {
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
                     coneControlRegisterList.get(position).setState(0);
@@ -133,7 +133,7 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
         filters.put("round", view.getSelectedRound());
 
         //Retrieve race control registers in real-time
-        registration = coneControlBO.getConeControlRegistersRealTime(filters,  new BusinessCallback() {
+        registration = coneControlBO.getConeControlRegistersRealTime(ccEventType, filters,  new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {

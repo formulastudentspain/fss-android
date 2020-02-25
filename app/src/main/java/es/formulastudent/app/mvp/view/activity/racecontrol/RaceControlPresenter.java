@@ -29,6 +29,7 @@ import es.formulastudent.app.mvp.data.model.RaceControlAutocrossState;
 import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
+import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventGeneralPresenter;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.dialog.ConfirmEventRegisterDialog;
@@ -59,7 +60,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
     List<RaceControlRegister> allRaceControlRegisterList = new ArrayList<>();
     List<RaceControlRegister> filteredRaceControlRegisterList = new ArrayList<>();
     ListenerRegistration registration = null;
-    RaceControlEnduranceState newState = null;
+    RaceControlState newState = null;
     RaceControlRegister register = null;
 
 
@@ -96,7 +97,6 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
         //Filters
         Map<String, Object> filters = new HashMap<>();
-
 
          List<String> states = new ArrayList<>();
          if(RaceControlEvent.ENDURANCE.equals(rcEventType)){
@@ -249,10 +249,9 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
          register = filteredRaceControlRegisterList.get(position);
 
-
         //State 1 clicked
         if(v.getId() == R.id.state1){
-            newState = RaceControlEnduranceState.getStateByAcronym(register.getCurrentState().getStates().get(0));
+            newState = register.getNextStateAtIndex(0);
 
             if(newState.equals(RaceControlEnduranceState.READY_TO_RACE_1D) || newState.equals(RaceControlEnduranceState.READY_TO_RACE_2D)){
                 //Open NFC reader to check driver
@@ -265,7 +264,8 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
         //State 2 clicked
         }else if(v.getId() == R.id.state2){
-            newState = RaceControlEnduranceState.getStateByAcronym(register.getCurrentState().getStates().get(1));
+
+            newState = register.getNextStateAtIndex(1);
 
             if(newState.equals(RaceControlEnduranceState.READY_TO_RACE_1D) || newState.equals(RaceControlEnduranceState.READY_TO_RACE_2D)){
                 //Open NFC reader to check driver
@@ -286,7 +286,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
      * @param event
      * @param newState
      */
-    public void updateRegister(final RaceControlRegister register, final RaceControlEvent event, final RaceControlEnduranceState newState){
+    public void updateRegister(final RaceControlRegister register, final RaceControlEvent event, final RaceControlState newState){
 
          final String oldState = register.getCurrentState().getAcronym();
 

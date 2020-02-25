@@ -66,12 +66,7 @@
                 android:text="RR1D - Ready to Race 1D"/>
 
         </LinearLayout>
-
-
     </LinearLayout>
-
-
-
 
 
     <TextView
@@ -84,43 +79,298 @@
         android:text="Select the new state"/>
 
     <ScrollView
+        android:id="@+id/endurance_states_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
+            android:layout_marginStart="16dp"
+            android:orientation="vertical">
+
+            <!-- NA -->
+            <LinearLayout
+                android:id="@+id/rc_state_NA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rc_state_rounded_borders"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_waiting_area" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rc_state_na" />
+            </LinearLayout>
+
+            <!-- WA -->
+            <LinearLayout
+                android:id="@+id/rc_state_WA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rc_state_rounded_borders"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_waiting_area" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rc_state_wa" />
+            </LinearLayout>
+
+
+            <!-- SCR -->
+            <LinearLayout
+                android:id="@+id/rc_state_SCR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rc_state_rounded_borders"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_scrutineering" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rc_state_scr" />
+            </LinearLayout>
+
+
+            <!-- FIX -->
+            <LinearLayout
+                android:id="@+id/rc_state_FIX"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rc_state_rounded_borders"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_fixing" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rc_state_fix" />
+            </LinearLayout>
+
+
+            <!-- RR1D -->
+            <LinearLayout
+                android:id="@+id/rc_state_RR1D"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rc_state_rounded_borders"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_ready_to_race" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rc_state_rr1d" />
+
+            </LinearLayout>
+
+
+            <!-- R1D -->
+            <LinearLayout
+                android:id="@+id/rc_state_R1D"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rc_state_rounded_borders"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_racing" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rc_state_r1d" />
+            </LinearLayout>
+
+
+            <!-- RR2D -->
+            <LinearLayout
+                android:id="@+id/rc_state_RR2D"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rc_state_rounded_borders"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_ready_to_race" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rc_state_rr2d" />
+            </LinearLayout>
+
+
+            <!-- R2D -->
+            <LinearLayout
+                android:id="@+id/rc_state_R2D"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rc_state_rounded_borders"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_racing" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rc_state_r2d" />
+            </LinearLayout>
+
+
+            <!-- FIN -->
+            <LinearLayout
+                android:id="@+id/rc_state_FIN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rc_state_rounded_borders"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_finished" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rc_state_fin" />
+            </LinearLayout>
+
+
+            <!-- RL -->
+            <LinearLayout
+                android:id="@+id/rc_state_RL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rc_state_rounded_borders_critical"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_run_later" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rc_state_rl" />
+            </LinearLayout>
+
+
+            <!-- DNF -->
+            <LinearLayout
+                android:id="@+id/rc_state_DNF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rc_state_rounded_borders_critical"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_dnf" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rc_state_dnf" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+    <ScrollView
+        android:id="@+id/autocross_states_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
 
                 <!-- NA -->
-               <LinearLayout
-                   android:id="@+id/rc_state_NA"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:orientation="horizontal"
-                   android:gravity="center_vertical"
-                   android:padding="8dp"
-                   android:layout_marginBottom="8dp"
-                   android:background="@drawable/rc_state_rounded_borders">
-
-                   <ImageView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:src="@drawable/ic_waiting_area"
-                       android:layout_marginRight="8dp"/>
-
-                   <TextView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:text="@string/rc_state_na"/>
-
-               </LinearLayout>
-
-                <!-- WA -->
                 <LinearLayout
-                    android:id="@+id/rc_state_WA"
+                    android:id="@+id/rc_autocross_state_NA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -133,94 +383,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_waiting_area"
-                        android:layout_marginRight="8dp"/>
+                        android:layout_marginEnd="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/rc_state_wa"/>
-
+                        android:text="@string/rc_autocross_state_na"/>
                 </LinearLayout>
 
-
-                <!-- SCR -->
+                <!-- RR1 -->
                 <LinearLayout
-                    android:id="@+id/rc_state_SCR"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/rc_state_rounded_borders">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_scrutineering"
-                        android:layout_marginRight="8dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rc_state_scr"/>
-
-                </LinearLayout>
-
-
-                <!-- FIX -->
-                <LinearLayout
-                    android:id="@+id/rc_state_FIX"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/rc_state_rounded_borders">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_fixing"
-                        android:layout_marginRight="8dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rc_state_fix"/>
-
-                </LinearLayout>
-
-
-                <!-- RR1D -->
-                <LinearLayout
-                    android:id="@+id/rc_state_RR1D"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/rc_state_rounded_borders">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_ready_to_race"
-                        android:layout_marginRight="8dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rc_state_rr1d"/>
-
-                </LinearLayout>
-
-
-                <!-- R1D -->
-                <LinearLayout
-                    android:id="@+id/rc_state_R1D"
+                    android:id="@+id/rc_autocross_state_RR1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -233,69 +406,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_racing"
-                        android:layout_marginRight="8dp"/>
+                        android:layout_marginEnd="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/rc_state_r1d"/>
-
+                        android:text="@string/rc_autocross_state_racing_round_1"/>
                 </LinearLayout>
 
-
-                <!-- RR2D -->
+                <!-- FR1 -->
                 <LinearLayout
-                    android:id="@+id/rc_state_RR2D"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/rc_state_rounded_borders">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_ready_to_race"
-                        android:layout_marginRight="8dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rc_state_rr2d"/>
-
-                </LinearLayout>
-
-
-                <!-- R2D -->
-                <LinearLayout
-                    android:id="@+id/rc_state_R2D"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/rc_state_rounded_borders">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_racing"
-                        android:layout_marginRight="8dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rc_state_r2d"/>
-
-                </LinearLayout>
-
-
-                <!-- FIN -->
-                <LinearLayout
-                    android:id="@+id/rc_state_FIN"
+                    android:id="@+id/rc_autocross_state_FR1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -308,64 +429,180 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_finished"
-                        android:layout_marginRight="8dp"/>
+                        android:layout_marginEnd="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/rc_state_fin"/>
-
+                        android:text="@string/rc_autocross_state_finished_round_1"/>
                 </LinearLayout>
 
 
-                <!-- RL -->
+                <!-- RR2 -->
                 <LinearLayout
-                    android:id="@+id/rc_state_RL"
+                    android:id="@+id/rc_autocross_state_RR2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:padding="8dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@drawable/rc_state_rounded_borders_critical">
+                    android:background="@drawable/rc_state_rounded_borders">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_run_later"
-                        android:layout_marginRight="8dp"/>
+                        android:src="@drawable/ic_racing"
+                        android:layout_marginEnd="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/rc_state_rl"/>
-
+                        android:text="@string/rc_autocross_state_racing_round_2"/>
                 </LinearLayout>
 
+                <!-- FR2 -->
+                <LinearLayout
+                    android:id="@+id/rc_autocross_state_FR2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_finished"
+                        android:layout_marginEnd="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/md_blue_800"
+                        android:text="@string/rc_autocross_state_finished_round_2"/>
+                </LinearLayout>
+
+
+
+                <!-- RR3 -->
+                <LinearLayout
+                    android:id="@+id/rc_autocross_state_RR3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_racing"
+                        android:layout_marginEnd="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_autocross_state_racing_round_3"/>
+                </LinearLayout>
+
+                <!-- FR3 -->
+                <LinearLayout
+                    android:id="@+id/rc_autocross_state_FR3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_finished"
+                        android:layout_marginEnd="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_autocross_state_finished_round_3"/>
+                </LinearLayout>
+
+
+                <!-- RR4 -->
+                <LinearLayout
+                    android:id="@+id/rc_autocross_state_RR4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_racing"
+                        android:layout_marginEnd="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_autocross_state_racing_round_4"/>
+                </LinearLayout>
+
+                <!-- FR4 -->
+                <LinearLayout
+                    android:id="@+id/rc_autocross_state_FR4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rc_state_rounded_borders">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_finished"
+                        android:layout_marginEnd="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rc_autocross_state_finished_round_4"/>
+                </LinearLayout>
 
                 <!-- DNF -->
                 <LinearLayout
-                    android:id="@+id/rc_state_DNF"
+                    android:id="@+id/rc_autocross_state_DNF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="8dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@drawable/rc_state_rounded_borders_critical">
+                    android:background="@drawable/rc_state_rounded_borders_critical"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_dnf"
-                        android:layout_marginRight="8dp"/>
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_dnf" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/rc_state_dnf"/>
-
+                        android:text="@string/rc_state_dnf" />
                 </LinearLayout>
+
             </LinearLayout>
         </ScrollView>
 </LinearLayout>

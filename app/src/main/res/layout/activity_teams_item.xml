@@ -374,6 +374,7 @@
 
 
                             <LinearLayout
+                                android:id="@+id/ps_container"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -402,6 +403,7 @@
 
 
                             <LinearLayout
+                                android:id="@+id/ai_container"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -429,6 +431,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/ei_container"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -456,6 +459,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/mi_container"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -482,6 +486,7 @@
                                 </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/ttt_container"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -508,6 +513,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/nt_container"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -521,20 +527,21 @@
                                     android:text="NT"
                                     android:textSize="23sp" />
 
-                                    <info.androidhive.fontawesome.FontTextView
-                                        android:id="@+id/NT_comment_indicator"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="-8dp"
-                                        android:text="@string/fa_window_minimize"
-                                        android:layout_gravity="center_horizontal"
-                                        android:textColor="@color/md_red_300"
-                                        android:textSize="8sp"
-                                        app:solid_icon="true" />
+                                <info.androidhive.fontawesome.FontTextView
+                                    android:id="@+id/NT_comment_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-8dp"
+                                    android:text="@string/fa_window_minimize"
+                                    android:layout_gravity="center_horizontal"
+                                    android:textColor="@color/md_red_300"
+                                    android:textSize="8sp"
+                                    app:solid_icon="true" />
                             </LinearLayout>
 
 
                             <LinearLayout
+                                android:id="@+id/rt_container"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -561,6 +568,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/bt_container"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -585,14 +593,10 @@
                                     android:textSize="8sp"
                                     app:solid_icon="true" />
                             </LinearLayout>
-
                         </LinearLayout>
-
                     </LinearLayout>
-
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </FrameLayout>
     </com.chauthai.swipereveallayout.SwipeRevealLayout>
-
 </LinearLayout>

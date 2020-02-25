@@ -244,7 +244,16 @@
     <string name="rc_state_dnf">DNF - Did not finish</string>
 
     <string name="rc_autocross_title">Race Control: Autocross</string>
-
+    <string name="rc_autocross_state_na">NA - Not available</string>
+    <string name="rc_autocross_state_racing_round_1">RR1 - Racing Round 1</string>
+    <string name="rc_autocross_state_finished_round_1">FR1 - Finished Round 1</string>
+    <string name="rc_autocross_state_racing_round_2">RR2 - Racing Round 2</string>
+    <string name="rc_autocross_state_finished_round_2">FR2 - Finished Round 2</string>
+    <string name="rc_autocross_state_racing_round_3">RR3 - Racing Round 3</string>
+    <string name="rc_autocross_state_finished_round_3">FR3 - Finished Round 3</string>
+    <string name="rc_autocross_state_racing_round_4">RR4 - Racing Round 4</string>
+    <string name="rc_autocross_state_finished_round_4">FR4 - Finished Round 4</string>
+    <string name="rc_autocross_state_dnf">DNF - Did not finish</string>
 
 
     <!-- Race Control Welcome-->

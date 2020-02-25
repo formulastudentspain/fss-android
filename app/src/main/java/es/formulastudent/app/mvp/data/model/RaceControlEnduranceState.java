@@ -8,7 +8,7 @@ import java.util.List;
 
 import es.formulastudent.app.R;
 
-public enum RaceControlEnduranceState implements Serializable {
+public enum RaceControlEnduranceState implements Serializable, RaceControlState {
 
         NOT_AVAILABLE (
                 "Not Available",
@@ -105,6 +105,7 @@ public enum RaceControlEnduranceState implements Serializable {
         private final int color;
         private final int icon;
 
+
         RaceControlEnduranceState(String name, String acronym, List<String> states, int icon, int color) {
                 this.name = name;
                 this.acronym = acronym;
@@ -114,59 +115,24 @@ public enum RaceControlEnduranceState implements Serializable {
         }
 
 
+        @Override
         public String getName() {
                 return name;
         }
-
+        @Override
         public String getAcronym() {
                 return acronym;
         }
-
+        @Override
         public List<String> getStates() {
                 return states;
         }
-
+        @Override
         public int getColor() {
                 return color;
         }
-
+        @Override
         public int getIcon() {
                 return icon;
-        }
-
-        public static RaceControlEnduranceState getStateByAcronym(String acronym){
-
-                if(acronym.equals(WAITING_AREA.getAcronym())){
-                        return WAITING_AREA;
-
-                }else if(acronym.equals(SCRUTINEERING.getAcronym())){
-                        return SCRUTINEERING;
-
-                }else if(acronym.equals(FIXING.getAcronym())){
-                        return FIXING;
-
-                }else if(acronym.equals(READY_TO_RACE_1D.getAcronym())){
-                        return READY_TO_RACE_1D;
-
-                }else if(acronym.equals(RACING_1D.getAcronym())){
-                        return RACING_1D;
-
-                }else if(acronym.equals(READY_TO_RACE_2D.getAcronym())){
-                        return READY_TO_RACE_2D;
-
-                }else if(acronym.equals(RACING_2D.getAcronym())) {
-                        return RACING_2D;
-
-                }else if(acronym.equals(FINISHED.getAcronym())) {
-                        return FINISHED;
-
-                }else if(acronym.equals(DNF.getAcronym())) {
-                        return DNF;
-
-                }else if(acronym.equals(RUN_LATER.getAcronym())) {
-                        return RUN_LATER;
-                }
-
-                return null;
         }
 }

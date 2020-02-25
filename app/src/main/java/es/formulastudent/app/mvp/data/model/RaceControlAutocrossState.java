@@ -7,70 +7,70 @@ import java.util.List;
 
 import es.formulastudent.app.R;
 
-public enum RaceControlAutocrossState implements Serializable {
+public enum RaceControlAutocrossState implements Serializable, RaceControlState {
 
         NOT_AVAILABLE (
                 "Not Available",
                 "NA",
                 new ArrayList<>(Collections.singletonList("RR1")),
                 R.drawable.ic_not_available,
-                R.color.md_white_1000
+                R.color.md_grey_300
         ),
 
         RACING_ROUND_1 (
                 "Racing Round 1",
                 "RR1",
                 new ArrayList<>(Collections.singletonList("FR1")),
-                R.drawable.ic_waiting_area,
-                R.color.md_grey_300
+                R.drawable.ic_racing,
+                R.color.md_green_200
         ),
 
         FINISHED_ROUND_1 (
                 "Finished Round 1",
                 "FR1",
                 new ArrayList<>(Collections.singletonList("RR2")),
-                R.drawable.ic_scrutineering,
-                R.color.md_orange_100
+                R.drawable.ic_finished,
+                R.color.md_blue_100
         ),
 
         RACING_ROUND_2 (
                 "Racing Round 2",
                 "RR2",
                 new ArrayList<>(Collections.singletonList("FR2")),
-                R.drawable.ic_waiting_area,
-                R.color.md_grey_300
+                R.drawable.ic_racing,
+                R.color.md_green_200
         ),
 
         FINISHED_ROUND_2 (
                 "Finished Round 2",
                 "FR2",
                 new ArrayList<>(Collections.singletonList("RR3")),
-                R.drawable.ic_scrutineering,
-                R.color.md_orange_100
+                R.drawable.ic_finished,
+                R.color.md_blue_100
         ),
 
         RACING_ROUND_3 (
                 "Racing Round 3",
                 "RR3",
                 new ArrayList<>(Collections.singletonList("FR3")),
-                R.drawable.ic_waiting_area,
-                R.color.md_grey_300
+                R.drawable.ic_racing,
+                R.color.md_green_200
         ),
 
         FINISHED_ROUND_3 (
                 "Finished Round 3",
                 "FR3",
                 new ArrayList<>(Collections.singletonList("RR4")),
-                R.drawable.ic_scrutineering,
-                R.color.md_orange_100
+                R.drawable.ic_finished,
+                R.color.md_blue_100
         ),
 
         RACING_ROUND_4 (
                 "Racing Round 1",
                 "RR4",
                 new ArrayList<>(Collections.singletonList("FR4")),
-                R.drawable.ic_waiting_area,
-                R.color.md_grey_300
+                R.drawable.ic_racing,
+                R.color.md_green_200
         ),
 
         FINISHED_ROUND_4 (
@@ -78,7 +78,7 @@ public enum RaceControlAutocrossState implements Serializable {
                 "FR4",
                 new ArrayList<>(Collections.<String>emptyList()),
                 R.drawable.ic_scrutineering,
-                R.color.md_orange_100
+                R.color.md_blue_600
         ),
 
         DNF (
@@ -105,27 +105,28 @@ public enum RaceControlAutocrossState implements Serializable {
                 this.color = color;
         }
 
+        @Override
         public String getName() {
                 return name;
         }
-
+        @Override
         public String getAcronym() {
                 return acronym;
         }
-
+        @Override
         public List<String> getStates() {
                 return states;
         }
-
+        @Override
         public int getColor() {
                 return color;
         }
-
+        @Override
         public int getIcon() {
                 return icon;
         }
 
-        public static RaceControlAutocrossState getStateByAcronym(String acronym){
+        public RaceControlState getStateByAcronym(String acronym){
 
                 if(acronym.equals(NOT_AVAILABLE.getAcronym())){
                         return NOT_AVAILABLE;

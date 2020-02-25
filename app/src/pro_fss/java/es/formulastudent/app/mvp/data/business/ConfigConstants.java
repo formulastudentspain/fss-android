@@ -12,7 +12,6 @@ public class ConfigConstants {
     public static final String FIREBASE_TABLE_USER_ROLE = "FSS_USER_ROLE";
     public static final String FIREBASE_TABLE_EVENT_CONTROL_EGRESS = "FSS_EGRESS";
     public static final String FIREBASE_TABLE_DYNAMIC_EVENTS = "FSS_DYNAMIC_EVENT_CONTROL";
-    public static final String FIREBASE_TABLE_CONE_CONTROL = "FSS_CONE_CONTROL";
 
 
 

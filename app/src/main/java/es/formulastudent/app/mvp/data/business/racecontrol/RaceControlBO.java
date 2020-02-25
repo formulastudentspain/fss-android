@@ -9,7 +9,7 @@ import java.util.Map;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
-import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
+import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.RaceControlTeamDTO;
 
 public interface RaceControlBO {
@@ -59,6 +59,6 @@ public interface RaceControlBO {
      * @param newState
      * @param callback
      */
-    void updateRaceControlState(RaceControlRegister register, RaceControlEvent event, RaceControlEnduranceState newState, BusinessCallback callback);
+    void updateRaceControlState(RaceControlRegister register, RaceControlEvent event, RaceControlState newState, BusinessCallback callback);
 
 }

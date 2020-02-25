@@ -13,10 +13,9 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 import java.util.List;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlRegisterEndurance;
-import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
+import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewLongClickListener;
 
@@ -64,33 +63,16 @@ public class RaceControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         raceControlViewHolder.currentStateName.setText(register.getCurrentState().getName());
 
 
-        //Little line below in order to see easily the type of cars
-        if(register.getRunFinal()){
-            raceControlViewHolder.typeColor.setBackgroundColor(context.getResources().getColor(R.color.md_grey_900));
-
-        }else{
-            switch (register.getCarType()) {
-                case Car.CAR_TYPE_COMBUSTION:
-                    raceControlViewHolder.typeColor.setBackgroundColor(context.getResources().getColor(R.color.md_red_100));
-                    break;
-
-                case Car.CAR_TYPE_ELECTRIC:
-                    raceControlViewHolder.typeColor.setBackgroundColor(context.getResources().getColor(R.color.md_blue_100));
-                    break;
-            }
-        }
-
-
         //Set color and icon
         raceControlViewHolder.stateIcon.setImageResource(register.getCurrentState().getIcon());
         raceControlViewHolder.stateColor.setBackgroundColor(context.getResources().getColor(register.getCurrentState().getColor()));
 
 
-        if(register.getCurrentState().getStates().size()>0) {
+        if(!register.getCurrentState().getStates().isEmpty()) {
             raceControlViewHolder.state1.setVisibility(View.VISIBLE);
 
             //Get state 1 object
-            RaceControlEnduranceState state1 = RaceControlEnduranceState.getStateByAcronym(register.getCurrentState().getStates().get(0));
+            RaceControlState state1 = register.getNextStateAtIndex(0);
             raceControlViewHolder.state1.setBackgroundColor(context.getResources().getColor(state1.getColor()));
             raceControlViewHolder.state1Label.setText(state1.getAcronym());
             raceControlViewHolder.state1Icon.setImageResource(state1.getIcon());
@@ -103,7 +85,7 @@ public class RaceControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             raceControlViewHolder.state2.setVisibility(View.VISIBLE);
 
             //Get state 2 object
-            RaceControlEnduranceState state2 = RaceControlEnduranceState.getStateByAcronym(register.getCurrentState().getStates().get(1));
+            RaceControlState state2 = register.getNextStateAtIndex(1);
             raceControlViewHolder.state2.setBackgroundColor(context.getResources().getColor(state2.getColor()));
             raceControlViewHolder.state2Label.setText(state2.getAcronym());
             raceControlViewHolder.state2Icon.setImageResource(state2.getIcon());
@@ -142,8 +124,6 @@ public class RaceControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void closeSwipeRow(String id){
         viewBinderHelper.closeLayout(id);
     }
-
-
 }
 
 

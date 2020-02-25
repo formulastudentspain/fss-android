@@ -38,7 +38,7 @@ public class ConeControlStatsPresenter {
         view.showLoading();
 
         //Call Event business
-        coneControlBO.getConeControlRegistersByRaceRound(raceRound, new BusinessCallback() {
+        coneControlBO.getConeControlRegistersByRaceRound(null,raceRound, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
