@@ -51,15 +51,15 @@ public class ConeControlActivity extends GeneralActivity implements ConeControlP
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_cone_control);
         super.onCreate(savedInstanceState);
-        setupComponent(FSSApp.getApp().component(), null, raceType);
-
-        //Get selected values
-        selectedRound = getIntent().getStringExtra("selectedRound");
-        selectedSector = (long)getIntent().getIntExtra("selectedSector", 0);
 
         //Get the event type (Endurance, AutoX, Skidpad, Acceleration)
         ConeControlEvent ccEvent = (ConeControlEvent) getIntent().getSerializableExtra("eventType");
         this.ccEvent = ccEvent;
+        setupComponent(FSSApp.getApp().component(), ccEvent, raceType);
+
+        //Get selected values
+        selectedRound = getIntent().getStringExtra("selectedRound");
+        selectedSector = (long)getIntent().getIntExtra("selectedSector", 0);
 
         initViews();
     }

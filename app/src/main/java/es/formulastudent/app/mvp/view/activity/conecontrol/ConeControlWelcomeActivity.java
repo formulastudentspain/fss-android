@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +44,8 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
     private LinearLayout roundFinal;
     private SectorAdapter sectorAdapter;
     private RecyclerView sectorRecyclerView;
+    private LinearLayout roundContainer;
+    private TextView eventTypeText;
 
     Map<Integer, Boolean> sectors = new HashMap<>();
 
@@ -80,6 +83,18 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
         //Add drawer
         addDrawer();
         mDrawerIdentifier = ccEvent.getDrawerItemID();
+
+        //Hide/show rounds depending on the event type
+        roundContainer = findViewById(R.id.roundContainer);
+        if(ConeControlEvent.AUTOCROSS.equals(ccEvent)){
+            roundContainer.setVisibility(View.GONE);
+
+        }else if(ConeControlEvent.ENDURANCE.equals(ccEvent)){
+            roundContainer.setVisibility(View.VISIBLE);
+        }
+
+        eventTypeText = findViewById(R.id.eventType);
+        eventTypeText.setText(ccEvent.getName());
 
         goButton = findViewById(R.id.go_button);
         goButton.setOnClickListener(this);
@@ -160,11 +175,21 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
     }
 
     private void checkEnableButton() {
-        if(selectedSector==null || selectedRound==null){
-            goButton.setVisibility(View.GONE);
-        }else{
-            goButton.setVisibility(View.VISIBLE);
+
+        if(ConeControlEvent.ENDURANCE.equals(ccEvent)){
+            if(selectedSector==null || selectedRound==null){
+                goButton.setVisibility(View.GONE);
+            }else{
+                goButton.setVisibility(View.VISIBLE);
+            }
+        }else if(ConeControlEvent.AUTOCROSS.equals(ccEvent)){
+            if(selectedSector==null){
+                goButton.setVisibility(View.GONE);
+            }else{
+                goButton.setVisibility(View.VISIBLE);
+            }
         }
+
     }
 
     @Override

@@ -234,6 +234,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         batch.commit().addOnSuccessListener(aVoid -> {
 
             //Now create cones
+
             for(RaceControlTeamDTO item: raceControlTeamDTOList){
                 coneControlBO.createConeControlForAllSectors(
                         eventType.getConeControlEvent(),

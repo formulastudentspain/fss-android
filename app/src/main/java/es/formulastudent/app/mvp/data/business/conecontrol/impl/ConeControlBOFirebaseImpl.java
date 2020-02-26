@@ -41,8 +41,10 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
         //Event type
         Query query = firebaseFirestore.collection(event.getFirebaseTable());
 
-        //Race Type filter (electric, combustion and final)
-        query = query.whereEqualTo(ConeControlRegister.RACE_ROUND, filters.get("round"));
+        if(ConeControlEvent.ENDURANCE.equals(event)){
+            //Race Type filter (electric, combustion and final)
+            query = query.whereEqualTo(ConeControlRegister.RACE_ROUND, filters.get("round"));
+        }
 
         //Sector
         query = query.whereEqualTo(ConeControlRegister.SECTOR_NUMBER, filters.get("sector"));
