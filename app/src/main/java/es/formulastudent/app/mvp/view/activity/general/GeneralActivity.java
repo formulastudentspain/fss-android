@@ -171,6 +171,19 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
+        //Race Control: Skidpad
+        FontDrawable skidpadIconRC = new FontDrawable(this, R.string.fa_infinity_solid, true, false);
+        skidpadIconRC.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
+        PrimaryDrawerItem rcSkidpad = new PrimaryDrawerItem()
+                .withIdentifier(10023)
+                .withLevel(2)
+                .withIcon(skidpadIconRC)
+                .withName(R.string.drawer_menu_staff_skidpad)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
         //Race Control: Autocross
         FontDrawable autocrossIconRC = new FontDrawable(this, R.string.fa_stopwatch_solid, true, false);
         autocrossIconRC.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
@@ -204,6 +217,19 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withName(R.string.drawer_menu_cone_control)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+
+        //Cone Control: Skidpad
+        FontDrawable skidpadIconCC = new FontDrawable(this, R.string.fa_infinity_solid, true, false);
+        skidpadIconCC.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
+        PrimaryDrawerItem ccSkidpad = new PrimaryDrawerItem()
+                .withIdentifier(80023)
+                .withLevel(2)
+                .withIcon(skidpadIconCC)
+                .withName(R.string.drawer_menu_staff_skidpad)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
 
@@ -390,11 +416,13 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     new DividerDrawerItem(),
 
                     raceControl,
+                    rcSkidpad,
                     rcAutocross,
                     rcEndurance,
                     new DividerDrawerItem(),
 
                     coneControl,
+                    ccSkidpad,
                     ccAutocross,
                     ccEndurance,
                     new DividerDrawerItem(),
@@ -416,13 +444,15 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     new DividerDrawerItem(),
 
                     raceControl,
+                    rcSkidpad,
                     rcAutocross,
                     rcEndurance,
                     new DividerDrawerItem(),
 
                     coneControl,
-                    ccEndurance,
+                    ccSkidpad,
                     ccAutocross,
+                    ccEndurance,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -624,9 +654,21 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             this.startActivity(intent);
             finish();
 
+        }else if(drawerItem.getIdentifier() == 10023){ //Race Control Skidpad
+            Intent intent = new Intent(this, RaceControlWelcomeActivity.class);
+            intent.putExtra("eventType", RaceControlEvent.SKIDPAD);
+            this.startActivity(intent);
+            finish();
+
         } else if(drawerItem.getIdentifier() == 80022){ //Cone Control Autocross
             Intent intent = new Intent(this, ConeControlWelcomeActivity.class);
             intent.putExtra("eventType", ConeControlEvent.AUTOCROSS);
+            this.startActivity(intent);
+            finish();
+
+        } else if(drawerItem.getIdentifier() == 80023){ //Cone Control Skidpad
+            Intent intent = new Intent(this, ConeControlWelcomeActivity.class);
+            intent.putExtra("eventType", ConeControlEvent.SKIDPAD);
             this.startActivity(intent);
             finish();
 

@@ -255,6 +255,9 @@
     <string name="rc_autocross_state_finished_round_4">FR4 - Finished Round 4</string>
     <string name="rc_autocross_state_dnf">DNF - Did not finish</string>
 
+    <string name="rc_skidpad_title">Race Control: Skidpad</string>
+
+
 
     <!-- Race Control Welcome-->
     <string name="rc_welcome_button_electric">Electric</string>
@@ -319,6 +322,7 @@
     <string name="cc_realtime_error_retrieving_message">Error retrieving real-time Cone Control registers</string>
 
     <string name="cc_autocross_title">Cone Control: Autocross</string>
+    <string name="cc_skidpad_title">Cone Control: Skidpad</string>
 
 
 

@@ -59,7 +59,7 @@ public class ConeControlActivity extends GeneralActivity implements ConeControlP
 
         //Get selected values
         selectedRound = getIntent().getStringExtra("selectedRound");
-        selectedSector = (long)getIntent().getIntExtra("selectedSector", 0);
+        selectedSector = (long)getIntent().getIntExtra("selectedSector", -1);
 
         initViews();
     }
@@ -95,9 +95,9 @@ public class ConeControlActivity extends GeneralActivity implements ConeControlP
 
         //Titles
         sectorNumber = findViewById(R.id.sector_number);
-        sectorNumber.setText(String.valueOf(selectedSector));
+        sectorNumber.setText(selectedSector==-1 ? "-" : String.valueOf(selectedSector));
         roundNumber = findViewById(R.id.round_number);
-        roundNumber.setText(selectedRound);
+        roundNumber.setText(selectedRound==null ? "-" : selectedRound);
 
 
         //Add toolbar

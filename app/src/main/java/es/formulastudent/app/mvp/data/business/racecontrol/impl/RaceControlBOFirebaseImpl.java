@@ -106,7 +106,8 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                         RaceControlRegister register = null;
                         if(RaceControlEvent.ENDURANCE.equals(event)){
                             register = new RaceControlRegisterEndurance(doc);
-                        }else if(RaceControlEvent.AUTOCROSS.equals(event)){
+                        }else if(RaceControlEvent.AUTOCROSS.equals(event)
+                                || RaceControlEvent.SKIDPAD.equals(event)){
                             register = new RaceControlRegisterAutocross(doc);
                         }
 
@@ -207,7 +208,8 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                 register = new RaceControlRegisterEndurance();
                 register.setCurrentState(RaceControlEnduranceState.NOT_AVAILABLE);
 
-            }else if(RaceControlEvent.AUTOCROSS.equals(eventType)){
+            }else if(RaceControlEvent.AUTOCROSS.equals(eventType)
+                    || RaceControlEvent.SKIDPAD.equals(eventType)){
                 register = new RaceControlRegisterAutocross();
                 register.setCurrentState(RaceControlAutocrossState.NOT_AVAILABLE);
             }
@@ -224,7 +226,8 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
             if(RaceControlEvent.ENDURANCE.equals(eventType)){
                 batch.set(ref, ((RaceControlRegisterEndurance)register).toObjectData());
 
-            }else if(RaceControlEvent.AUTOCROSS.equals(eventType)){
+            }else if(RaceControlEvent.AUTOCROSS.equals(eventType)
+                || RaceControlEvent.SKIDPAD.equals(eventType)){
                 batch.set(ref, ((RaceControlRegisterAutocross)register).toObjectData());
             }
         }

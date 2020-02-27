@@ -7,7 +7,8 @@ import es.formulastudent.app.R;
 public enum RaceControlEvent implements Serializable {
 
         ENDURANCE (R.string.rc_endurance_title, EventType.ENDURANCE_EFFICIENCY,10021L,"DEV_RC_ENDURANCE", ConeControlEvent.ENDURANCE),
-        AUTOCROSS (R.string.rc_autocross_title, EventType.AUTOCROSS,10022L,"DEV_RC_AUTOCROSS", ConeControlEvent.AUTOCROSS);
+        AUTOCROSS (R.string.rc_autocross_title, EventType.AUTOCROSS,10022L,"DEV_RC_AUTOCROSS", ConeControlEvent.AUTOCROSS),
+        SKIDPAD (R.string.rc_skidpad_title, EventType.SKIDPAD,10023L,"DEV_RC_SKIDPAD", ConeControlEvent.SKIDPAD);
 
 
         private final Integer activityTitle;

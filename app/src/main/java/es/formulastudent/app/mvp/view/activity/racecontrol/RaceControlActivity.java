@@ -262,7 +262,5 @@ RaceControlActivity extends GeneralActivity implements
 
         //Refresh again the list after resuming activity
         registerListener = presenter.retrieveRegisterList();
-
     }
-
 }

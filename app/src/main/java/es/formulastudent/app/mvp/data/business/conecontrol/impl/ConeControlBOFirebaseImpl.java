@@ -21,8 +21,6 @@ import es.formulastudent.app.mvp.data.model.RaceControlAutocrossState;
 import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 
-import static es.formulastudent.app.mvp.data.model.ConeControlEvent.AUTOCROSS;
-import static es.formulastudent.app.mvp.data.model.ConeControlEvent.ENDURANCE;
 import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.RACING_1D;
 import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.RACING_2D;
 
@@ -47,7 +45,10 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
         }
 
         //Sector
-        query = query.whereEqualTo(ConeControlRegister.SECTOR_NUMBER, filters.get("sector"));
+        if(ConeControlEvent.ENDURANCE.equals(event) ||ConeControlEvent.AUTOCROSS.equals(event)){
+            query = query.whereEqualTo(ConeControlRegister.SECTOR_NUMBER, filters.get("sector"));
+        }
+
 
         //Only registers that are racing
         query = query.whereEqualTo(ConeControlRegister.IS_RACING, true);
@@ -87,8 +88,11 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
         if(ConeControlEvent.ENDURANCE.equals(event)){
             registerList = this.createEnduranceConeControlRegisters(numberOfSectors, carNumber, flagURL, raceRound);
 
-        }else if(AUTOCROSS.equals(event)){
+        }else if(ConeControlEvent.AUTOCROSS.equals(event)){
             registerList = this.createAutocrossConeControlRegisters(numberOfSectors, carNumber, flagURL);
+
+        }else if(ConeControlEvent.SKIDPAD.equals(event)){
+            registerList = this.createSkidPadConeControlRegisters(carNumber, flagURL);
         }
 
         WriteBatch batch = firebaseFirestore.batch();
@@ -149,6 +153,23 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
         return registerList;
     }
 
+    private List<ConeControlRegister> createSkidPadConeControlRegisters(Long carNumber, String flagURL) {
+        List<ConeControlRegister> registerList = new ArrayList<>();
+        for(int raceRound=1; raceRound<=4; raceRound++){
+            ConeControlRegister register = new ConeControlRegister();
+            register.setCarNumber(carNumber);
+            register.setFlagURL(flagURL);
+            register.setIsRacing(false);
+            register.setOffCourses(0L);
+            register.setSectorNumber(null);
+            register.setTrafficCones(0L);
+            register.setRaceRound(String.valueOf(raceRound));
+            registerList.add(register);
+        }
+
+        return registerList;
+    }
+
     @Override
     public void updateConeControlRegister(ConeControlEvent event, ConeControlRegister register, BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
@@ -170,10 +191,10 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
     @Override
     public void enableOrDisableConeControlRegistersByTeam(ConeControlEvent ccEvent, Long carNumber, RaceControlState state, BusinessCallback callback){
 
-        if(AUTOCROSS.equals(ccEvent)){
+        if(ConeControlEvent.AUTOCROSS.equals(ccEvent) || ConeControlEvent.SKIDPAD.equals(ccEvent)){
             this.enableOrDisableConeControlRegistersByTeam(ccEvent, carNumber, (RaceControlAutocrossState) state, callback);
 
-        }else if(ENDURANCE.equals(ccEvent)){
+        }else if(ConeControlEvent.ENDURANCE.equals(ccEvent)){
             this.enableOrDisableConeControlRegistersByTeam(ccEvent, carNumber, (RaceControlEnduranceState) state, callback);
         }
 

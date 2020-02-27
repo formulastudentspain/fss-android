@@ -102,7 +102,8 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
          if(RaceControlEvent.ENDURANCE.equals(rcEventType)){
              states.addAll(this.getEnduranceStates());
 
-         }else if(RaceControlEvent.AUTOCROSS.equals(rcEventType)){
+         }else if(RaceControlEvent.AUTOCROSS.equals(rcEventType)
+                 || RaceControlEvent.SKIDPAD.equals(rcEventType)){
              states.addAll(this.getAutocrossStates());
          }
 

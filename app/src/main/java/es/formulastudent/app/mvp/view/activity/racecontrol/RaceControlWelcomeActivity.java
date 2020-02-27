@@ -80,6 +80,8 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
             eventType.setText("ENDURANCE"); //TODO crear un enum con los tipos de evento, los 4
         }else if(RaceControlEvent.AUTOCROSS.equals(rcEvent)){
             eventType.setText("AUTOCROSS"); //TODO crear un enum con los tipos de evento, los 4
+        }else if(RaceControlEvent.SKIDPAD.equals(rcEvent)){
+            eventType.setText("SKIDPAD"); //TODO crear un enum con los tipos de evento, los 4
         }
 
         //Button for round 1
@@ -222,7 +224,8 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
         }
 
         if((RaceControlEvent.ENDURANCE.equals(rcEvent) && selectedRound != null && selectedArea!=null)
-            || RaceControlEvent.AUTOCROSS.equals(rcEvent)) {
+                || RaceControlEvent.AUTOCROSS.equals(rcEvent)
+                || RaceControlEvent.SKIDPAD.equals(rcEvent)) {
             buttonSTART.setVisibility(View.VISIBLE);
         }
     }

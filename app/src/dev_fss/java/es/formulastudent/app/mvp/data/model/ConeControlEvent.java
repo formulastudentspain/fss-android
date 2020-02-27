@@ -8,9 +8,12 @@ public enum ConeControlEvent implements Serializable {
 
         ENDURANCE ("Endurance",R.string.cc_endurance_title, EventType.ENDURANCE_EFFICIENCY,80021L,"DEV_CC_ENDURANCE"),
 
-        AUTOCROSS ("Autocross", R.string.cc_autocross_title, EventType.AUTOCROSS,80022L,"DEV_CC_AUTOCROSS");
+        AUTOCROSS ("Autocross", R.string.cc_autocross_title, EventType.AUTOCROSS,80022L,"DEV_CC_AUTOCROSS"),
 
-        private final String name;
+        SKIDPAD ("SkidPad", R.string.cc_skidpad_title, EventType.SKIDPAD,80023L,"DEV_CC_SKIDPAD");
+
+
+    private final String name;
         private final Integer activityTitle;
         private final Long drawerItemID;
         private final String firebaseTable;

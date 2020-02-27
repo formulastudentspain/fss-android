@@ -85,7 +85,8 @@ public class UpdatingRegistersDialog extends DialogFragment implements View.OnCl
             initializeEnduranceValues(rootView);
             enduranceContainer.setVisibility(View.VISIBLE);
 
-        }else if(RaceControlEvent.AUTOCROSS.equals(event)){
+        }else if(RaceControlEvent.AUTOCROSS.equals(event)
+            || RaceControlEvent.SKIDPAD.equals(event)){
             initializeAutocrossValues(rootView);
             autocrossContainer.setVisibility(View.VISIBLE);
         }
@@ -180,7 +181,8 @@ public class UpdatingRegistersDialog extends DialogFragment implements View.OnCl
         if(RaceControlEvent.ENDURANCE.equals(event)){
             onEnduranceStateClick(view);
 
-        }else if(RaceControlEvent.AUTOCROSS.equals(event)){
+        }else if(RaceControlEvent.AUTOCROSS.equals(event)
+            || RaceControlEvent.SKIDPAD.equals(event)){
             onAutocrossStateClick(view);
         }
 

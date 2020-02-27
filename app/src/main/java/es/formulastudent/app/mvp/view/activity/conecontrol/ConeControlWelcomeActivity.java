@@ -45,6 +45,7 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
     private SectorAdapter sectorAdapter;
     private RecyclerView sectorRecyclerView;
     private LinearLayout roundContainer;
+    private LinearLayout sectorContainer;
     private TextView eventTypeText;
 
     Map<Integer, Boolean> sectors = new HashMap<>();
@@ -84,13 +85,18 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
         addDrawer();
         mDrawerIdentifier = ccEvent.getDrawerItemID();
 
-        //Hide/show rounds depending on the event type
+        //Hide/show rounds and sectors depending on the event type
         roundContainer = findViewById(R.id.roundContainer);
+        sectorContainer = findViewById(R.id.sectorContainer);
         if(ConeControlEvent.AUTOCROSS.equals(ccEvent)){
             roundContainer.setVisibility(View.GONE);
 
         }else if(ConeControlEvent.ENDURANCE.equals(ccEvent)){
             roundContainer.setVisibility(View.VISIBLE);
+
+        }else if(ConeControlEvent.SKIDPAD.equals(ccEvent)){
+            sectorContainer.setVisibility(View.GONE);
+            roundContainer.setVisibility(View.GONE);
         }
 
         eventTypeText = findViewById(R.id.eventType);
@@ -118,10 +124,10 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
         sectorRecyclerView.setAdapter(sectorAdapter);
         sectorRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
 
+        checkEnableButton();
 
         //Add toolbar title
         setToolbarTitle(getString(ccEvent.getActivityTitle()));
-
     }
 
 
@@ -188,6 +194,8 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
             }else{
                 goButton.setVisibility(View.VISIBLE);
             }
+        }else if(ConeControlEvent.SKIDPAD.equals(ccEvent)){
+            goButton.setVisibility(View.VISIBLE);
         }
 
     }
