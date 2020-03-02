@@ -9,6 +9,7 @@ import java.util.List;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Role;
@@ -25,6 +26,7 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
     private Context context;
     private TeamMemberBO teamMemberBO;
     private TeamBO teamBO;
+    private BriefingBO briefingBO;
 
     //Data
     private List<TeamMember> allTeamMemberList = new ArrayList<>();
@@ -32,11 +34,13 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
 
 
 
-    public TeamMemberPresenter(TeamMemberPresenter.View view, Context context, TeamMemberBO teamMemberBO, TeamBO teamBO) {
+    public TeamMemberPresenter(TeamMemberPresenter.View view, Context context,
+                               TeamMemberBO teamMemberBO, TeamBO teamBO, BriefingBO briefingBO) {
         this.view = view;
         this.context = context;
         this.teamMemberBO = teamMemberBO;
         this.teamBO = teamBO;
+        this.briefingBO = briefingBO;
     }
 
 
@@ -76,6 +80,42 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
         });
     }
 
+
+    void onNFCTagDetected(final String tagNFC){
+
+        //Show loading
+        view.showLoading();
+
+        teamMemberBO.retrieveTeamMemberByNFCTag(tagNFC, new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+
+                TeamMember teamMember = (TeamMember) responseDTO.getData();
+
+                briefingBO.checkBriefingByUser(teamMember.getID(), new BusinessCallback() {
+                    @Override
+                    public void onSuccess(ResponseDTO responseDTO) {
+                        Boolean briefingAvailable = (Boolean) responseDTO.getData();
+
+
+                    }
+
+                    @Override
+                    public void onFailure(ResponseDTO responseDTO) {
+                        //TODO
+                    }
+                });
+
+                view.hideLoading();
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                view.createMessage(responseDTO.getError());
+                view.hideLoading();
+            }
+        });
+    }
 
 
 

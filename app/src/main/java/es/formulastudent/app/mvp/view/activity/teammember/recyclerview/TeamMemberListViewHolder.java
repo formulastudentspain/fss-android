@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.chip.Chip;
+
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
@@ -15,10 +17,13 @@ public class TeamMemberListViewHolder extends RecyclerView.ViewHolder implements
     ImageView profileImage;
     TextView userName;
     TextView userTeam;
-    ImageView roleImage;
     ImageView registeredImage;
     LinearLayout rowContent;
     RecyclerViewClickListener itemListener;
+
+    Chip driverChip;
+    Chip esoChip;
+    Chip asrChip;
 
 
     public TeamMemberListViewHolder(View itemView, RecyclerViewClickListener itemListener) {
@@ -26,9 +31,11 @@ public class TeamMemberListViewHolder extends RecyclerView.ViewHolder implements
         profileImage =  itemView.findViewById(R.id.user_profile_image);
         userName =  itemView.findViewById(R.id.user_name);
         userTeam =  itemView.findViewById(R.id.user_team);
-        roleImage =  itemView.findViewById(R.id.user_role_image);
         registeredImage = itemView.findViewById(R.id.user_registered_image);
         rowContent = itemView.findViewById(R.id.user_row_container);
+        driverChip = itemView.findViewById(R.id.chipDriver);
+        esoChip = itemView.findViewById(R.id.chipEso);
+        asrChip = itemView.findViewById(R.id.chipAsr);
         this.itemListener = itemListener;
         itemView.setOnClickListener(this);
     }

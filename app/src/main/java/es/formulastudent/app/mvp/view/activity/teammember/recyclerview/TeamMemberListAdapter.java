@@ -1,10 +1,12 @@
 package es.formulastudent.app.mvp.view.activity.teammember.recyclerview;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -50,12 +52,47 @@ public class TeamMemberListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         TeamMember teamMember = timelineItemList.get(position);
 
         TeamMemberListViewHolder teamMemberListViewHolder = (TeamMemberListViewHolder)holder;
+
         teamMemberListViewHolder.userName.setText(teamMember.getName());
         teamMemberListViewHolder.userTeam.setText(teamMember.getTeam());
         Picasso.get().load(teamMember.getPhotoUrl()).into(teamMemberListViewHolder.profileImage);
 
-        if(true){ //teamMember.getRole()==driver
-            teamMemberListViewHolder.roleImage.setImageResource(R.drawable.ic_user_role_driver);
+        //Roles
+        if(teamMember.getDriver()){
+            teamMemberListViewHolder.driverChip.setVisibility(View.VISIBLE);
+        }else{
+            teamMemberListViewHolder.driverChip.setVisibility(View.GONE);
+        }
+
+        if(teamMember.getESO()){
+            teamMemberListViewHolder.esoChip.setVisibility(View.VISIBLE);
+        }else{
+            teamMemberListViewHolder.esoChip.setVisibility(View.GONE);
+        }
+
+        if(teamMember.getASR()){
+            teamMemberListViewHolder.asrChip.setVisibility(View.VISIBLE);
+        }else{
+            teamMemberListViewHolder.asrChip.setVisibility(View.GONE);
+        }
+
+        //Certified Roles
+        if(teamMember.getCertifiedDriver()){
+            teamMemberListViewHolder.driverChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_red_50)));
+        }else{
+            teamMemberListViewHolder.driverChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_grey_200)));
+        }
+
+        if(teamMember.getCertifiedESO()){
+            teamMemberListViewHolder.esoChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_green_50)));
+        }else{
+            teamMemberListViewHolder.esoChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_grey_200)));
+        }
+
+        if(teamMember.getCertifiedASR()){
+            teamMemberListViewHolder.asrChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_blue_50)));
+        }else{
+            teamMemberListViewHolder.asrChip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.md_grey_200)));
         }
 
         if(teamMember.getNFCTag()==null || teamMember.getNFCTag().isEmpty()){

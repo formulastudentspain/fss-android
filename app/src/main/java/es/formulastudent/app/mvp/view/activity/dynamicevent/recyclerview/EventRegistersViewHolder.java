@@ -17,7 +17,6 @@ public class EventRegistersViewHolder extends RecyclerView.ViewHolder implements
 
     private final static int EVENT_TYPE_PRESCRUTINEERING = 1;
 
-
     ImageView profileImage;
     TextView userName;
     TextView userTeam;

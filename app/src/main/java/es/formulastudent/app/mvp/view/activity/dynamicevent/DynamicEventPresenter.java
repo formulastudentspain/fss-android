@@ -18,7 +18,6 @@ import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
-import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.Team;
@@ -266,12 +265,12 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
         if(teamMember != null && teamMember.getID() != null) {
 
             //If the teamMember exists, retrieve its briefing registers
-            briefingBO.retrieveBriefingRegistersByUserAndDates(from, to, teamMember.getID(), new BusinessCallback() {
+            briefingBO.checkBriefingByUser(teamMember.getID(), new BusinessCallback() {
 
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
 
-                    List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
+                    Boolean briefingAvailable = (Boolean) responseDTO.getData();
 
                     //Hide loading
                     view.hideLoading();
@@ -279,7 +278,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
                     //With all the information, we create the dialog
                     FragmentManager fm = ((DynamicEventActivity)view.getActivity()).getSupportFragmentManager();
                     ConfirmEventRegisterDialog createUserDialog = ConfirmEventRegisterDialog
-                            .newInstance(DynamicEventPresenter.this, teamMember, !briefingRegisters.isEmpty());
+                            .newInstance(DynamicEventPresenter.this, teamMember, briefingAvailable);
 
                     //Show the dialog
                     createUserDialog.show(fm, "fragment_event_confirm");

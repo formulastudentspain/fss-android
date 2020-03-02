@@ -8,7 +8,13 @@
     tools:context=".mvp.view.activity.teammemberdetail.TeamMemberDetailActivity"
     >
 
-    <include layout="@layout/activity_toolbar" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +23,7 @@
         <ImageView
             android:id="@+id/user_detail_background"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="120dp"
             android:scaleType="fitXY"
             android:src="@mipmap/drawer_background"/>
 
@@ -26,7 +32,7 @@
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="95dp"
+            android:layout_marginTop="55dp"
             app:civ_border_color="@color/md_white_1000"
             app:civ_border_width="2dp"
             android:src="@color/md_black_1000" />
@@ -40,6 +46,9 @@
             android:alpha="0.5"
             android:src="@drawable/ic_camera" />
     </RelativeLayout>
+
+
+
 
     <TextView
         android:id="@+id/user_detail_name"
@@ -58,6 +67,157 @@
         android:layout_gravity="center_horizontal"
         android:text="Euskal Herriko Scuderia"
         />
+
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/user_roles_chip_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipDriver"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/md_red_50"
+            android:text="Driver"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipEso"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/md_green_50"
+            android:text="ESO"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipAsr"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/md_blue_50"
+            android:text="ASR"/>
+    </com.google.android.material.chip.ChipGroup>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"
+        android:text="Documents" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <info.androidhive.fontawesome.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fa_times_circle_solid"
+            android:textColor="@color/md_red_300"
+            android:textSize="20sp"
+            app:solid_icon="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Driving license" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <info.androidhive.fontawesome.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fa_times_circle_solid"
+            android:textColor="@color/md_red_300"
+            android:textSize="20sp"
+            app:solid_icon="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Electrical battery certificate" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <info.androidhive.fontawesome.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fa_times_circle_solid"
+            android:textColor="@color/md_red_300"
+            android:textSize="20sp"
+            app:solid_icon="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Autonomous vehicle certificate" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"
+        android:text="Last briefing" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <info.androidhive.fontawesome.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fa_times_circle_solid"
+            android:textColor="@color/md_red_300"
+            android:textSize="20sp"
+            app:solid_icon="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="35 hours ago" />
+
+    </LinearLayout>
+
+
+
 
     <LinearLayout
         android:layout_width="wrap_content"

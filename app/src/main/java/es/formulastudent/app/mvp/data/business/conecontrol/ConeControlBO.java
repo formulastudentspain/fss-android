@@ -3,6 +3,7 @@ package es.formulastudent.app.mvp.data.business.conecontrol;
 
 import com.google.firebase.firestore.ListenerRegistration;
 
+import java.io.IOException;
 import java.util.Map;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
@@ -57,4 +58,11 @@ public interface ConeControlBO {
      */
     void getConeControlRegistersByRaceRound(ConeControlEvent event, String raceRound, BusinessCallback callback);
 
+    /**
+     * Export cones and off courses to Excel
+     * @param event
+     * @param callback
+     * @throws IOException
+     */
+    void exportConesToExcel(ConeControlEvent event, BusinessCallback callback) throws IOException;
 }

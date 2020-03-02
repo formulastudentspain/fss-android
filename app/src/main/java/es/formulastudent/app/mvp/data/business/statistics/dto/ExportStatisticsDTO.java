@@ -9,6 +9,7 @@ public class ExportStatisticsDTO {
     private EventType eventType;
     private Date exportDate;
     private String fullFilePath;
+    private String description;
 
     public EventType getEventType() {
         return eventType;
@@ -32,5 +33,13 @@ public class ExportStatisticsDTO {
 
     public void setFullFilePath(String fullFilePath) {
         this.fullFilePath = fullFilePath;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

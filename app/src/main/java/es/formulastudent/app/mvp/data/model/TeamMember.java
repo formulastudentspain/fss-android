@@ -21,6 +21,12 @@ public class TeamMember implements Serializable {
     public static final String ROLE = "role";
     public static final String ROLE_ID = "roleID";
     public static final String CAR_NUMBER = "carNumber";
+    public static final String IS_DRIVER = "isDriver";
+    public static final String IS_ESO = "isEso";
+    public static final String IS_ASR = "isAsr";
+    public static final String CERTIFIED_DRIVER = "certifiedDriver";
+    public static final String CERTIFIED_ESO = "certifiedEso";
+    public static final String CERTIFIED_ASR = "certifiedAsr";
 
 
     private String ID;
@@ -33,6 +39,14 @@ public class TeamMember implements Serializable {
     private String role;
     private String roleID;
     private Long carNumber;
+
+    //Role
+    private Boolean isDriver = false;
+    private Boolean isESO = false;
+    private Boolean isASR = false;
+    private Boolean certifiedDriver = false;
+    private Boolean certifiedESO = false;
+    private Boolean certifiedASR = false;
 
 
     public TeamMember(String ID, String name, String mail, String photoUrl, String NFCTag, String role, String roleID) {
@@ -56,6 +70,12 @@ public class TeamMember implements Serializable {
         this.role = object.getString(TeamMember.ROLE);
         this.roleID = object.getString(TeamMember.ROLE_ID);
         this.carNumber = object.getLong(TeamMember.CAR_NUMBER);
+        this.isDriver = object.getBoolean(TeamMember.IS_DRIVER);
+        this.isESO = object.getBoolean(TeamMember.IS_ESO);
+        this.isASR = object.getBoolean(TeamMember.IS_ASR);
+        this.certifiedDriver = object.getBoolean(TeamMember.CERTIFIED_DRIVER);
+        this.certifiedESO = object.getBoolean(TeamMember.CERTIFIED_ESO);
+        this.certifiedASR = object.getBoolean(TeamMember.CERTIFIED_ASR);
     }
 
     public Map<String, Object> toDocumentData(){
@@ -70,6 +90,12 @@ public class TeamMember implements Serializable {
         docData.put(TeamMember.USER_IMAGE, this.getPhotoUrl());
         docData.put(TeamMember.TAG_NFC, this.getNFCTag());
         docData.put(TeamMember.CAR_NUMBER, this.getCarNumber());
+        docData.put(TeamMember.IS_DRIVER, this.getDriver());
+        docData.put(TeamMember.IS_ESO, this.getESO());
+        docData.put(TeamMember.IS_ASR, this.getASR());
+        docData.put(TeamMember.CERTIFIED_DRIVER, this.getCertifiedDriver());
+        docData.put(TeamMember.CERTIFIED_ESO, this.getCertifiedESO());
+        docData.put(TeamMember.CERTIFIED_ASR, this.getCertifiedASR());
 
         return docData;
     }
@@ -162,5 +188,53 @@ public class TeamMember implements Serializable {
 
     public void setCarNumber(Long carNumber) {
         this.carNumber = carNumber;
+    }
+
+    public Boolean getDriver() {
+        return isDriver;
+    }
+
+    public void setDriver(Boolean driver) {
+        isDriver = driver;
+    }
+
+    public Boolean getESO() {
+        return isESO;
+    }
+
+    public void setESO(Boolean ESO) {
+        isESO = ESO;
+    }
+
+    public Boolean getASR() {
+        return isASR;
+    }
+
+    public void setASR(Boolean ASR) {
+        isASR = ASR;
+    }
+
+    public Boolean getCertifiedDriver() {
+        return certifiedDriver;
+    }
+
+    public void setCertifiedDriver(Boolean certifiedDriver) {
+        this.certifiedDriver = certifiedDriver;
+    }
+
+    public Boolean getCertifiedESO() {
+        return certifiedESO;
+    }
+
+    public void setCertifiedESO(Boolean certifiedESO) {
+        this.certifiedESO = certifiedESO;
+    }
+
+    public Boolean getCertifiedASR() {
+        return certifiedASR;
+    }
+
+    public void setCertifiedASR(Boolean certifiedASR) {
+        this.certifiedASR = certifiedASR;
     }
 }

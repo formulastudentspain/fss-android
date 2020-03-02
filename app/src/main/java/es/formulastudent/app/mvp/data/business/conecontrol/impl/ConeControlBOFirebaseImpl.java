@@ -1,5 +1,9 @@
 package es.formulastudent.app.mvp.data.business.conecontrol.impl;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.os.Environment;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -7,14 +11,31 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
+import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDTO;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlAutocrossState;
@@ -27,9 +48,11 @@ import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.RAC
 public class ConeControlBOFirebaseImpl implements ConeControlBO {
 
     private FirebaseFirestore firebaseFirestore;
+    private Context context;
 
-    public ConeControlBOFirebaseImpl(FirebaseFirestore firebaseFirestore) {
+    public ConeControlBOFirebaseImpl(FirebaseFirestore firebaseFirestore, Context context) {
         this.firebaseFirestore = firebaseFirestore;
+        this.context = context;
     }
 
     @Override
@@ -309,7 +332,10 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
         final ResponseDTO responseDTO = new ResponseDTO();
 
         Query query = firebaseFirestore.collection(event.getFirebaseTable());
-        query = query.whereEqualTo(ConeControlRegister.RACE_ROUND, raceRound);
+
+        if(ConeControlEvent.ENDURANCE.equals(event) && raceRound != null){
+            query = query.whereEqualTo(ConeControlRegister.RACE_ROUND, raceRound);
+        }
 
         query.orderBy(ConeControlRegister.CAR_NUMBER, Query.Direction.ASCENDING)
                 .get()
@@ -331,4 +357,130 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
                 });
     }
 
+
+
+    @Override
+    public void exportConesToExcel(ConeControlEvent event, BusinessCallback callback) throws IOException {
+        ResponseDTO result = new ResponseDTO();
+        AssetManager mngr = context.getAssets();
+        final InputStream is = mngr.open("template_export_fss.xls");
+
+        this.getConeControlRegistersByRaceRound(event, null, new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                List<ConeControlRegister> listToExport = (List<ConeControlRegister>) responseDTO.getData();
+
+                int columnNum = 0;
+
+                try {
+
+                    Workbook wb = new HSSFWorkbook(is);
+                    Sheet sheet = wb.getSheetAt(0);
+                    wb.setSheetName(0, event.getName() + " cones");
+
+
+                    // ** HEADERS ** //
+
+                    //Car number
+                    Row row = sheet.createRow(4);
+                    Cell cell = row.createCell(columnNum);
+                    cell.setCellValue("Car");
+
+                    //Round
+                    cell = row.createCell(++columnNum);
+                    cell.setCellValue("Round");
+
+
+                    //Sector
+                    if (ConeControlEvent.ENDURANCE.equals(event)
+                            || ConeControlEvent.AUTOCROSS.equals(event)) {
+                        cell = row.createCell(++columnNum);
+                        cell.setCellValue("Sector");
+                    }
+
+                    //Cones
+                    cell = row.createCell(++columnNum);
+                    cell.setCellValue("Cones");
+
+                    //OffCourses
+                    cell = row.createCell(++columnNum);
+                    cell.setCellValue("Off Courses");
+
+
+                    /*
+                        Test Data Values
+                    */
+                    int rowNum = 5;
+
+                    for (ConeControlRegister register : listToExport) {
+
+                        //Init values
+                        columnNum = 0;
+                        row = sheet.createRow(rowNum);
+
+                        //Car number
+                        cell = row.createCell(columnNum);
+                        cell.setCellValue(register.getCarNumber());
+
+                        //Round
+                        cell = row.createCell(++columnNum);
+                        cell.setCellValue(register.getRaceRound());
+
+
+                        //Sector
+                        if (ConeControlEvent.ENDURANCE.equals(event)
+                                || ConeControlEvent.AUTOCROSS.equals(event)) {
+                            cell = row.createCell(++columnNum);
+                            cell.setCellValue(register.getSectorNumber());
+                        }
+
+                        //Cones
+                        cell = row.createCell(++columnNum);
+                        cell.setCellValue(register.getTrafficCones());
+
+                        //OffCourses
+                        cell = row.createCell(++columnNum);
+                        cell.setCellValue(register.getOffCourses());
+
+                        rowNum++;
+                    }
+
+                    //Get File Name
+                    DateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    String nameFile = "Cones" + "_" + sdf.format(timestamp);
+
+                    //Create Directory
+                    String rootDirectoryName = Environment.getExternalStorageDirectory() + "";
+                    File subDirectory = new File(rootDirectoryName, "FSS/" + event.getName());
+                    subDirectory.mkdirs();
+
+                    //Create File
+                    OutputStream stream = new FileOutputStream(rootDirectoryName + "/" + "FSS/" + event.getName() + "/" + nameFile + ".xls");
+
+                    wb.write(stream);
+                    stream.close();
+                    wb.close();
+
+
+                    ExportStatisticsDTO exportStatisticsDTO = new ExportStatisticsDTO();
+                    exportStatisticsDTO.setExportDate(Calendar.getInstance().getTime());
+                    exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/FSS/" + event.getName() + "/" + nameFile + ".xls");
+                    exportStatisticsDTO.setDescription(event.getName() + " Cones");
+
+                    result.setData(exportStatisticsDTO);
+
+                    callback.onSuccess(result);
+
+                }catch (IOException e){
+                    //TODO
+                }
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                //TODO
+            }
+        });
+    }
 }

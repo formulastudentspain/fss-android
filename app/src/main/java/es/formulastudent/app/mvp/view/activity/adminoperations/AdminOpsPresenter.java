@@ -229,15 +229,27 @@ public class AdminOpsPresenter {
                 }
 
 
-                //UserRole
-                teamMember.setRole("DRIVER");
+                //TeamMember role
+                Cell cellRole = row.getCell(4);
+                if(cellRole != null){
+                    String[] roles = cellRole.getStringCellValue().split("/");
+                    for(String role: roles){
+                        if(role.trim().equals("DRIVER")){
+                            teamMember.setDriver(true);
+                        }else if(role.trim().equals("ESO")){
+                            teamMember.setESO(true);
+                        }else if(role.trim().equals("TEAM LEADER")){
+                            teamMember.setASR(true);
+                        }
+                    }
+                }
 
                 //Profile image
                 teamMember.setPhotoUrl(context.getString(R.string.default_image_url));
 
                 teamMembers.add(teamMember);
 
-                index ++;
+                index++;
             }
 
             //Save all teamMembers

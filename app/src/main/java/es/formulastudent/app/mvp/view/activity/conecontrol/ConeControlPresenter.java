@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.google.firebase.firestore.ListenerRegistration;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -15,6 +16,8 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
+import es.formulastudent.app.mvp.data.business.mailsender.MailSender;
+import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDTO;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.data.model.ConeControlRegisterLog;
@@ -27,12 +30,12 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
 
     //Cone Control Event Type
     ConeControlEvent ccEventType;
-    String raceType;
 
     //Dependencies
     private View view;
     private Context context;
     private ConeControlBO coneControlBO;
+    private MailSender mailSender;
 
 
     //Data
@@ -47,13 +50,13 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
     private Long selectedCarNumber;
 
 
-    public ConeControlPresenter(ConeControlPresenter.View view, Context context, ConeControlEvent ccEventType, String raceType, ConeControlBO coneControlBO) {
+    public ConeControlPresenter(ConeControlPresenter.View view, Context context, ConeControlEvent ccEventType, ConeControlBO coneControlBO, MailSender mailSender) {
         this.view = view;
         this.context = context;
         this.ccEventType = ccEventType;
         this.coneControlBO = coneControlBO;
-        this.raceType = raceType;
         this.selectedArea = context.getString(R.string.rc_area_all);
+        this.mailSender = mailSender;
     }
 
     @Override
@@ -180,6 +183,28 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
 
     public List<ConeControlRegister> getEventRegisterList() {
         return coneControlRegisterList;
+    }
+
+
+    public void exportConesToExcel(ConeControlEvent ccEvent) {
+
+        try {
+            coneControlBO.exportConesToExcel(ccEvent, new BusinessCallback() {
+                @Override
+                public void onSuccess(ResponseDTO responseDTO) {
+                    ExportStatisticsDTO exportStatisticsDTO = (ExportStatisticsDTO) responseDTO.getData();
+                    mailSender.sendMail(exportStatisticsDTO);
+                }
+
+                @Override
+                public void onFailure(ResponseDTO responseDTO) {
+                    //TODO
+                }
+            });
+        }catch (IOException e){
+            //TODO
+        }
+
     }
 
 

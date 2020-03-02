@@ -347,23 +347,18 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-        //TeamMember management: Drivers
+        //TeamMember management: Team members
+        FontDrawable teamMembersIcon = new FontDrawable(this, R.string.fa_users_solid, true, false);
+        teamMembersIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem drivers = new PrimaryDrawerItem()
                 .withIdentifier(10020)
                 .withLevel(2)
-                .withName(R.string.drawer_menu_staff_users_management_drivers)
+                .withName(R.string.drawer_menu_staff_users_management_team_members)
+                .withIcon(teamMembersIcon)
                 .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
-        //TeamMember management: ESOS
-        PrimaryDrawerItem esos = new PrimaryDrawerItem()
-                .withIdentifier(10025)
-                .withLevel(2)
-                .withName(R.string.drawer_menu_staff_users_management_esos)
-                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
-                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
-                .withOnDrawerItemClickListener(this);
 
         //TeamMember management: Volunteers
         FontDrawable volunteersIcon = new FontDrawable(this, R.string.fa_laugh, false, false);
@@ -396,9 +391,13 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
 
         //Logout
+        FontDrawable logoutIcon = new FontDrawable(this, R.string.fa_sign_out_alt_solid, true, false);
+        logoutIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
         PrimaryDrawerItem logout = new PrimaryDrawerItem()
                 .withIdentifier(30006)
+                .withIcon(logoutIcon)
                 .withName(R.string.drawer_menu_common_logout)
+                .withLevel(2)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 

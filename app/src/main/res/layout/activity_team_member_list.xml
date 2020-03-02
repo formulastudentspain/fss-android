@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mvp.view.activity.timeline.TimelineActivity"
-    >
+    tools:context=".mvp.view.activity.teammember.TeamMemberActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,19 +14,38 @@
 
         <include layout="@layout/activity_toolbar" />
 
-        <EditText
-            android:id="@+id/search_user_field"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="8dp"
-            android:paddingStart="16dp"
-            android:maxLines="1"
-            android:inputType="textPersonName"
-            android:hint="Search team member"
-            android:background="@drawable/activity_user_list_filter_input"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <EditText
+                android:id="@+id/search_user_field"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="16dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingStart="16dp"
+                android:maxLines="1"
+                android:inputType="textPersonName"
+                android:hint="Search team member"
+                android:background="@drawable/activity_user_list_filter_input"/>
+
+            <ImageView
+                android:id="@+id/teamMemberSearchNFC"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="16dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_user_nfc_not_registered"/>
+
+        </LinearLayout>
+
+
 
         <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"

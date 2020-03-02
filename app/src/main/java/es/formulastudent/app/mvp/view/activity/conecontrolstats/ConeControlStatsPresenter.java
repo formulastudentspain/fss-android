@@ -11,6 +11,7 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
 import es.formulastudent.app.mvp.data.business.conecontrol.dto.ConeControlStatsDTO;
+import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.view.activity.conecontrolstats.recyclerview.ConeControlStatsAdapter;
 
@@ -20,11 +21,13 @@ public class ConeControlStatsPresenter {
     //Dependencies
     private View view;
     private ConeControlBO coneControlBO;
+    ConeControlEvent ccEvent;
 
 
-    public ConeControlStatsPresenter(ConeControlStatsPresenter.View view, ConeControlBO coneControlBO) {
+    public ConeControlStatsPresenter(ConeControlStatsPresenter.View view, ConeControlBO coneControlBO, ConeControlEvent ccEvent) {
         this.view = view;
         this.coneControlBO = coneControlBO;
+        this.ccEvent = ccEvent;
     }
 
 
@@ -38,7 +41,7 @@ public class ConeControlStatsPresenter {
         view.showLoading();
 
         //Call Event business
-        coneControlBO.getConeControlRegistersByRaceRound(null,raceRound, new BusinessCallback() {
+        coneControlBO.getConeControlRegistersByRaceRound(ccEvent, raceRound, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {

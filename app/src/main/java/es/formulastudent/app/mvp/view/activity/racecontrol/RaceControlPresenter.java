@@ -22,7 +22,6 @@ import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
-import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlAutocrossState;
@@ -394,12 +393,12 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
         if(teamMember != null && teamMember.getID() != null) {
 
             //If the teamMember exists, retrieve its briefing registers
-            briefingBO.retrieveBriefingRegistersByUserAndDates(from, to, teamMember.getID(), new BusinessCallback() {
+            briefingBO.checkBriefingByUser(teamMember.getID(), new BusinessCallback() {
 
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
 
-                    List<BriefingRegister> briefingRegisters = (List<BriefingRegister>) responseDTO.getData();
+                    Boolean briefingAvailable = (Boolean) responseDTO.getData();
 
                     //Hide loading
                     view.hideLoading();
@@ -407,7 +406,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
                     //With all the information, we create the dialog
                     FragmentManager fm = ((RaceControlActivity)view.getActivity()).getSupportFragmentManager();
                     ConfirmEventRegisterDialog createUserDialog = ConfirmEventRegisterDialog
-                            .newInstance(RaceControlPresenter.this, teamMember, !briefingRegisters.isEmpty());
+                            .newInstance(RaceControlPresenter.this, teamMember, briefingAvailable);
 
                     //Show the dialog
                     createUserDialog.show(fm, "fragment_event_confirm");

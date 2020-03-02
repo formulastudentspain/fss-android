@@ -29,7 +29,6 @@ public class ConeControlActivity extends GeneralActivity implements ConeControlP
 
 
     ConeControlEvent ccEvent; //Endurance, AutoX, Acceleration, Skidpad
-    String raceType; //Electric, Combustion or Final
     Long selectedSector;
     String selectedRound;
 
@@ -55,7 +54,7 @@ public class ConeControlActivity extends GeneralActivity implements ConeControlP
         //Get the event type (Endurance, AutoX, Skidpad, Acceleration)
         ConeControlEvent ccEvent = (ConeControlEvent) getIntent().getSerializableExtra("eventType");
         this.ccEvent = ccEvent;
-        setupComponent(FSSApp.getApp().component(), ccEvent, raceType);
+        setupComponent(FSSApp.getApp().component(), ccEvent);
 
         //Get selected values
         selectedRound = getIntent().getStringExtra("selectedRound");
@@ -73,12 +72,12 @@ public class ConeControlActivity extends GeneralActivity implements ConeControlP
      * Inject dependencies method
      * @param appComponent
      */
-    protected void setupComponent(AppComponent appComponent, @NotNull ConeControlEvent ccEvent, String raceType) {
+    protected void setupComponent(AppComponent appComponent, @NotNull ConeControlEvent ccEvent) {
 
         DaggerConeControlComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(this))
-                .coneControlModule(new ConeControlModule(this, ccEvent, raceType))
+                .coneControlModule(new ConeControlModule(this, ccEvent))
                 .build()
                 .inject(this);
     }

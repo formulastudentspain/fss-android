@@ -28,12 +28,10 @@ public interface BriefingBO {
 
     /**
      * Retrieve briefing registers by user and dates
-     * @param from
-     * @param to
      * @param userID
      * @param callback
      */
-    void retrieveBriefingRegistersByUserAndDates(Date from, Date to, String userID, BusinessCallback callback);
+    void checkBriefingByUser(String userID, BusinessCallback callback);
 
 
     /**

@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -40,6 +43,7 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
     private ImageView userNFCImage;
     private TextView userNFCTag;
     private TextView teamName;
+    private MenuItem filterItem;
 
     //Selected teamMember
     TeamMember teamMember;
@@ -75,7 +79,7 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
     private void initViews(){
 
         //Add toolbar title
-        setToolbarTitle(getString(R.string.activity_user_detail_label));
+        setToolbarTitle(getString(R.string.activity_team_members_detail_title));
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -136,6 +140,24 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
         }else if(view.getId() == R.id.user_detail_profile_image){
             dispatchTakePictureIntent();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_user_detail, menu);
+
+        //Search menu item
+        filterItem = menu.findItem(R.id.filter_results);
+        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Toast.makeText(TeamMemberDetailActivity.this, "Open Edit dialog",Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        return true;
     }
 
     @Override

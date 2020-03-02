@@ -1,6 +1,9 @@
 package es.formulastudent.app.mvp.view.activity.conecontrol;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,25 +13,32 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerConeControlWelcomeComponent;
 import es.formulastudent.app.di.module.ContextModule;
+import es.formulastudent.app.di.module.activity.ConeControlModule;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.view.activity.conecontrol.recyclerview.SectorAdapter;
-import es.formulastudent.app.mvp.view.activity.conecontrolstats.ConeControlStatsActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 
 
-public class ConeControlWelcomeActivity extends GeneralActivity implements View.OnClickListener, RecyclerViewClickListener {
+public class ConeControlWelcomeActivity extends GeneralActivity implements ConeControlPresenter.View, View.OnClickListener, RecyclerViewClickListener {
+
+    @Inject
+    ConeControlPresenter presenter;
 
     private static final int NUM_SECTORS = 7;
 
@@ -63,6 +73,8 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
 
         initViews();
         setSupportActionBar(toolbar);
+
+        checkWritePermissions();
     }
 
     /**
@@ -74,6 +86,7 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
         DaggerConeControlWelcomeComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(this))
+                .coneControlModule(new ConeControlModule(this, ccEvent))
                 .build()
                 .inject(this);
     }
@@ -222,13 +235,74 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
         //Search menu item
         filterItem = menu.findItem(R.id.cone_control_stats);
         filterItem.setOnMenuItemClickListener( menuItem -> {
-            Intent intent = new Intent(this, ConeControlStatsActivity.class);
-            startActivity(intent);
+
+            if(checkWritePermissions()){
+                presenter.exportConesToExcel(ccEvent);
+            }
 
             return true;
         });
 
         return true;
+    }
+
+
+    //TODO
+    private boolean checkWritePermissions(){
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        16);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    @Override
+    public Activity getActivity() {
+        return null;
+    }
+
+    @Override
+    public void refreshEventRegisterItems() {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public String getSelectedRound() {
+        return null;
+    }
+
+    @Override
+    public Long getSelectedSector() {
+        return null;
     }
 }
 

@@ -21,6 +21,8 @@ import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.egress.impl.EgressBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.imageuploader.impl.ImageBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.mailsender.MailSender;
+import es.formulastudent.app.mvp.data.business.mailsender.MailSenderImpl;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.business.racecontrol.impl.RaceControlBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
@@ -31,9 +33,10 @@ import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.business.teammember.impl.TeamMemberBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.business.user.impl.UserBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.model.User;
 
 
-@Module(includes = {FirebaseModule.class, ContextModule.class})
+@Module(includes = {FirebaseModule.class, ContextModule.class, SharedPreferencesModule.class})
 public class BusinessModule {
 
     /**
@@ -141,10 +144,22 @@ public class BusinessModule {
     /**
      * Provide Cone control business
      * @param firebaseFirestore
+     * @param context
      * @return
      */
     @Provides
-    public ConeControlBO provideConeControlBO(FirebaseFirestore firebaseFirestore) {
-        return new ConeControlBOFirebaseImpl(firebaseFirestore);
+    public ConeControlBO provideConeControlBO(FirebaseFirestore firebaseFirestore, Context context) {
+        return new ConeControlBOFirebaseImpl(firebaseFirestore, context);
+    }
+
+    /**
+     * Provide mail sender
+     * @param loggedUser
+     * @param context
+     * @return
+     */
+    @Provides
+    public MailSender provideMailSender(User loggedUser, Context context) {
+        return new MailSenderImpl(context, loggedUser);
     }
 }

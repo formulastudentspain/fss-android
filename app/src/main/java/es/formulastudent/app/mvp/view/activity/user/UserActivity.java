@@ -118,7 +118,7 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
         qrCodeReaderButton.setOnClickListener(this);
 
         //Add toolbar title
-        setToolbarTitle(getString(R.string.activity_user_list_label));
+        setToolbarTitle(getString(R.string.activity_volunteers_title));
     }
 
 

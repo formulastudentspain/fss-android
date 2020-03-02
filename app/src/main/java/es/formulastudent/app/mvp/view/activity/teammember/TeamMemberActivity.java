@@ -1,10 +1,13 @@
 package es.formulastudent.app.mvp.view.activity.teammember;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +28,7 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.TeamMemberListModule;
 import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.Team;
+import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.teammember.dialog.CreateTeamMemberDialog;
 import es.formulastudent.app.mvp.view.activity.teammember.recyclerview.TeamMemberListAdapter;
@@ -32,6 +36,7 @@ import es.formulastudent.app.mvp.view.activity.teammember.recyclerview.TeamMembe
 
 public class TeamMemberActivity extends GeneralActivity implements TeamMemberPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
 
+    private static final int NFC_REQUEST_CODE = 101;
 
     @Inject
     TeamMemberPresenter presenter;
@@ -42,6 +47,8 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
     private TeamMemberListAdapter teamMemberListAdapter;
     private FloatingActionButton buttonAddUser;
     private EditText searchUser;
+    private ImageView searchByNFC;
+
 
 
     @Override
@@ -72,7 +79,6 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
     protected void onResume(){
         super.onResume();
         presenter.retrieveUsers();
-
     }
 
 
@@ -105,9 +111,11 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
         //Search user edit text
         searchUser = findViewById(R.id.search_user_field);
         searchUser.addTextChangedListener(this);
+        searchByNFC = findViewById(R.id.teamMemberSearchNFC);
+        searchByNFC.setOnClickListener(this);
 
         //Add toolbar title
-        setToolbarTitle(getString(R.string.activity_user_list_label));
+        setToolbarTitle(getString(R.string.activity_team_members_title));
     }
 
 
@@ -137,7 +145,30 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
     public void onClick(View view) {
         if(view.getId() == R.id.button_add_user){
             presenter.openCreateTeamMemberDialog();
+
+        }else if(view.getId() == R.id.teamMemberSearchNFC){
+            openNFCReader();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //NFC reader
+        if (requestCode == NFC_REQUEST_CODE) {
+            if(resultCode == Activity.RESULT_OK){
+                String result = data.getStringExtra("result");
+                presenter.onNFCTagDetected(result);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
+
+    public void openNFCReader() {
+        Intent i = new Intent(this, NFCReaderActivity.class);
+        startActivityForResult(i, NFC_REQUEST_CODE);
     }
 
 

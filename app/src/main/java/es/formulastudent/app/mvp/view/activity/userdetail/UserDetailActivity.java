@@ -56,7 +56,6 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     //Selected user
     User user;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
@@ -87,7 +86,7 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     private void initViews(){
 
         //Add toolbar title
-        setToolbarTitle(getString(R.string.activity_user_detail_label));
+        setToolbarTitle(getString(R.string.activity_volunteers_detail_title));
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
