@@ -2,6 +2,7 @@ package es.formulastudent.app.mvp.view.activity.teammemberdetail;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,10 +11,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -23,9 +31,15 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerTeamMemberDetailComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.TeamMemberDetailModule;
+import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.teammember.dialog.CreateEditTeamMemberDialog;
+import info.androidhive.fontawesome.FontTextView;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 
 public class TeamMemberDetailActivity extends GeneralActivity implements TeamMemberDetailPresenter.View, View.OnClickListener {
@@ -44,9 +58,23 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
     private TextView userNFCTag;
     private TextView teamName;
     private MenuItem filterItem;
+    private Chip chipDriver;
+    private Chip chipESO;
+    private Chip chipASR;
+    private LinearLayout driverDocument;
+    private LinearLayout esoDocument;
+    private LinearLayout asrDocument;
+    private FontTextView driverDocumentIcon;
+    private FontTextView esoDocumentIcon;
+    private FontTextView asrDocumentIcon;
+    private MaterialButton buttonChecked;
+    private FontTextView lastBriefingIcon;
+    private TextView lastBriefingText;
+
 
     //Selected teamMember
     TeamMember teamMember;
+    boolean lastBriefing;
 
 
     @Override
@@ -56,9 +84,13 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
         super.onCreate(savedInstanceState);
 
         teamMember = (TeamMember) getIntent().getSerializableExtra("selectedTeamMember");
+        lastBriefing = getIntent().getBooleanExtra("lastBriefing", false);
 
         initViews();
+        initData();
     }
+
+
 
 
     /**
@@ -94,12 +126,37 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
         userNFCImage = findViewById(R.id.user_detail_nfc_image);
         userNFCImage.setOnClickListener(this);
 
+
+        //Role chips
+        chipDriver = findViewById(R.id.chipDriver);
+        chipESO = findViewById(R.id.chipEso);
+        chipASR = findViewById(R.id.chipAsr);
+        driverDocument = findViewById(R.id.driverDocument);
+        esoDocument = findViewById(R.id.esoDocument);
+        asrDocument = findViewById(R.id.asrDocument);
+        driverDocumentIcon = findViewById(R.id.driverDocumentIcon);
+        esoDocumentIcon = findViewById(R.id.esoDocumentIcon);
+        asrDocumentIcon = findViewById(R.id.asrDocumentIcon);
+
+        //Last briefing
+        lastBriefingIcon = findViewById(R.id.lastBriefingIcon);
+        lastBriefingText = findViewById(R.id.lastBriefingText);
+
+        //Button checked
+        buttonChecked = findViewById(R.id.checkedButton);
+        buttonChecked.setOnClickListener(this);
+    }
+
+    private void initData() {
+
         //Set data
         userName.setText(teamMember.getName());
         teamName.setText(teamMember.getTeam());
+
+        //Photo URL
         Picasso.get().load(teamMember.getPhotoUrl()).into(userProfilePhoto);
 
-
+        //Registered
         if(teamMember.getNFCTag()!=null && !teamMember.getNFCTag().isEmpty()){
             userNFCImage.setImageResource(R.drawable.ic_user_nfc_registered);
             userNFCTag.setText(teamMember.getNFCTag());
@@ -107,6 +164,60 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
             userNFCImage.setImageResource(R.drawable.ic_user_nfc_not_registered);
             userNFCTag.setText("Not registered");
         }
+
+        //Roles
+        if(teamMember.getDriver()!=null && teamMember.getDriver()){
+            if(teamMember.getCertifiedDriver()!=null && teamMember.getCertifiedDriver()){
+                chipDriver.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.md_red_50)));
+                driverDocumentIcon.setText(R.string.fa_check_circle_solid);
+                driverDocumentIcon.setTextColor(getResources().getColor(R.color.md_green_400));
+                buttonChecked.setVisibility(GONE);
+            }else{
+                chipDriver.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.md_grey_200)));
+            }
+            chipDriver.setVisibility(VISIBLE);
+            driverDocument.setVisibility(VISIBLE);
+        }else{
+            chipDriver.setVisibility(GONE);
+            driverDocument.setVisibility(GONE);
+        }
+        if(teamMember.getESO()!=null && teamMember.getESO()){
+            if(teamMember.getCertifiedESO()!=null && teamMember.getCertifiedESO()){
+                chipESO.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.md_green_50)));
+                esoDocumentIcon.setText(R.string.fa_check_circle_solid);
+                esoDocumentIcon.setTextColor(getResources().getColor(R.color.md_green_400));
+                buttonChecked.setVisibility(GONE);
+            }else{
+                chipESO.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.md_grey_200)));
+            }
+            chipESO.setVisibility(VISIBLE);
+            esoDocument.setVisibility(VISIBLE);
+        }else{
+            chipESO.setVisibility(GONE);
+            esoDocument.setVisibility(GONE);
+        }
+        if(teamMember.getASR()!=null && teamMember.getASR()){
+            if(teamMember.getCertifiedASR()!=null && teamMember.getCertifiedASR()){
+                chipASR.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.md_blue_50)));
+                asrDocumentIcon.setText(R.string.fa_check_circle_solid);
+                asrDocumentIcon.setTextColor(getResources().getColor(R.color.md_green_400));
+                buttonChecked.setVisibility(GONE);
+            }else{
+                chipASR.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.md_grey_200)));
+            }
+            chipASR.setVisibility(VISIBLE);
+            asrDocument.setVisibility(VISIBLE);
+        }else{
+            chipASR.setVisibility(GONE);
+            asrDocument.setVisibility(GONE);
+        }
+
+        if(lastBriefing){
+            lastBriefingIcon.setText(R.string.fa_check_circle_solid);
+            lastBriefingIcon.setTextColor(getResources().getColor(R.color.md_green_400));
+            lastBriefingText.setText("<24 hours ago");
+        }
+
     }
 
 
@@ -135,10 +246,31 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.user_detail_nfc_image){
-            presenter.checkMaxNumDrivers();
+            if(isAllDataFilled()){
+                presenter.checkMaxNumDrivers();
+            }
 
         }else if(view.getId() == R.id.user_detail_profile_image){
             dispatchTakePictureIntent();
+
+        }else if(view.getId() == R.id.checkedButton){
+            presenter.checkDocuments(teamMember);
+        }
+    }
+
+    private boolean isAllDataFilled() {
+        if(teamMember.getPhotoUrl().equals(getString(R.string.default_image_url))){
+            createMessage(R.string.team_member_error_photo_mandatory);
+            return false;
+
+        }else if(!teamMember.getCertifiedDriver()
+                && !teamMember.getCertifiedESO()
+                && !teamMember.getCertifiedASR()){
+            createMessage(R.string.team_member_error_documents_mandatory);
+            return false;
+
+        }else{
+            return true;
         }
     }
 
@@ -152,13 +284,16 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
         filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Toast.makeText(TeamMemberDetailActivity.this, "Open Edit dialog",Toast.LENGTH_SHORT).show();
+                presenter.openEditTeamMemberDialog();
                 return true;
             }
         });
 
         return true;
     }
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -199,6 +334,19 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
     }
 
     @Override
+    public void updateTeamMemberInfo(TeamMember teamMember) {
+        this.teamMember = teamMember;
+        initData();
+    }
+
+    @Override
+    public void showEditTeamMemberDialog(List<Team> teams) {
+        FragmentManager fm = getSupportFragmentManager();
+        CreateEditTeamMemberDialog createEditTeamMemberDialog = CreateEditTeamMemberDialog.newInstance(presenter, this, teams, teamMember);
+        createEditTeamMemberDialog.show(fm, "fragment_edit_name");
+    }
+
+    @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
@@ -216,7 +364,4 @@ public class TeamMemberDetailActivity extends GeneralActivity implements TeamMem
         onBackPressed();
         return true;
     }
-
-
-
 }

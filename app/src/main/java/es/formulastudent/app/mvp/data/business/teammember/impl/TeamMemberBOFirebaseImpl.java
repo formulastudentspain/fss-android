@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
+import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
 public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
@@ -62,13 +64,18 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
 
 
     @Override
-    public void retrieveTeamMembers(final BusinessCallback callback) {
+    public void retrieveTeamMembers(Team filterTeam, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS);
+
+        //Filter by team
+        if(filterTeam != null && !"".equals(filterTeam.getID())){
+            query = query.whereEqualTo(TeamMember.TEAM_ID, filterTeam.getID());
+        }
+
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -128,7 +135,6 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
         final ResponseDTO responseDTO = new ResponseDTO();
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
-                .whereEqualTo(TeamMember.ROLE, "DRIVER")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 

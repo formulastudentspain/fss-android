@@ -11,11 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:textStyle="bold"
-        android:text="@string/dialog_create_user_field_name"/>
+        android:text="@string/dialog_create_user_field_name"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/create_user_name"
@@ -24,14 +24,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:paddingBottom="8dp"
+        android:background="@drawable/activity_user_list_filter_input"
+        android:hint="Type name"
+        android:inputType="textCapWords"
+        android:maxLines="1"
+        android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingEnd="8dp"
-        android:paddingStart="16dp"
-        android:maxLines="1"
-        android:inputType="textPersonName"
-        android:hint="Type name"
-        android:background="@drawable/activity_user_list_filter_input"/>
+        android:paddingBottom="8dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,8 +39,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:textStyle="bold"
-        android:text="@string/dialog_create_user_field_mail"/>
+        android:text="@string/dialog_create_user_field_mail"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/create_user_mail"
@@ -49,22 +49,22 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:paddingBottom="8dp"
+        android:background="@drawable/activity_user_list_filter_input"
+        android:hint="Type mail"
+        android:inputType="textPersonName"
+        android:maxLines="1"
+        android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingEnd="8dp"
-        android:paddingStart="16dp"
-        android:maxLines="1"
-        android:inputType="textPersonName"
-        android:hint="Type mail"
-        android:background="@drawable/activity_user_list_filter_input"/>
+        android:paddingBottom="8dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:textStyle="bold"
-        android:text="@string/dialog_create_user_field_team"/>
+        android:text="@string/dialog_create_user_field_team"
+        android:textStyle="bold" />
 
     <Spinner
         android:id="@+id/create_user_team"
@@ -72,24 +72,35 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        />
+        android:layout_marginBottom="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:textStyle="bold"
-        android:text="@string/dialog_create_user_field_role"/>
+        android:text="@string/dialog_create_user_field_role"
+        android:textStyle="bold" />
 
-    <Spinner
-        android:id="@+id/create_user_role"
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/checkboxRolDriver"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        />
+        android:text="Driver" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/checkboxRolESO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="ESO" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/checkboxRolASR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="ASR" />
 
 </LinearLayout>

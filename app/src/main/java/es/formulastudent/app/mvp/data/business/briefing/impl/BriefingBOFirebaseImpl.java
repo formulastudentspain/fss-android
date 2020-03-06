@@ -150,7 +150,6 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
                             }
                         }
 
-                        responseDTO.setData(result);
                         callback.onSuccess(responseDTO);
                         responseDTO.setInfo(R.string.briefing_messages_retrieve_registers_info);
                     }

@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,11 +29,11 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerTeamMemberListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.TeamMemberListModule;
-import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
-import es.formulastudent.app.mvp.view.activity.teammember.dialog.CreateTeamMemberDialog;
+import es.formulastudent.app.mvp.view.activity.teammember.dialog.CreateEditTeamMemberDialog;
+import es.formulastudent.app.mvp.view.activity.teammember.dialog.FilterTeamMembersDialog;
 import es.formulastudent.app.mvp.view.activity.teammember.recyclerview.TeamMemberListAdapter;
 
 
@@ -49,6 +52,8 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
     private EditText searchUser;
     private ImageView searchByNFC;
 
+    private MenuItem filterItem;
+
 
 
     @Override
@@ -58,7 +63,8 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
         super.onCreate(savedInstanceState);
 
         initViews();
-        presenter.retrieveUsers();
+        setSupportActionBar(toolbar);
+        presenter.retrieveTeamMembers();
     }
 
     /**
@@ -78,7 +84,8 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
     @Override
     protected void onResume(){
         super.onResume();
-        presenter.retrieveUsers();
+        searchUser.setText("");
+        presenter.retrieveTeamMembers();
     }
 
 
@@ -93,7 +100,7 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
 
         //Add drawer
         addDrawer();
-        mDrawerIdentifier = 10003L;
+        mDrawerIdentifier = 10020L;
 
         //Recycler view
         mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
@@ -116,6 +123,35 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
 
         //Add toolbar title
         setToolbarTitle(getString(R.string.activity_team_members_title));
+    }
+
+    @Override
+    public void filtersActivated(Boolean activated) {
+        if(filterItem != null){
+            if(activated){
+                filterItem.setIcon(R.drawable.ic_filter_active);
+            }else{
+                filterItem.setIcon(R.drawable.ic_filter_inactive);
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_dynamic_event, menu);
+
+        //Search menu item
+        filterItem = menu.findItem(R.id.filter_results);
+        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                presenter.filterIconClicked();
+                return false;
+            }
+        });
+
+        return true;
     }
 
 
@@ -173,10 +209,17 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
 
 
     @Override
-    public void showCreateTeamMemberDialog(List<Team> teams, List<Role> roles) {
+    public void showCreateTeamMemberDialog(List<Team> teams) {
         FragmentManager fm = getSupportFragmentManager();
-        CreateTeamMemberDialog createTeamMemberDialog = CreateTeamMemberDialog.newInstance(presenter, this, teams, roles);
-        createTeamMemberDialog.show(fm, "fragment_edit_name");
+        CreateEditTeamMemberDialog createEditTeamMemberDialog = CreateEditTeamMemberDialog.newInstance(presenter, this, teams, null);
+        createEditTeamMemberDialog.show(fm, "fragment_edit_name");
+    }
+
+    @Override
+    public void showFilteringDialog(List<Team> teams) {
+        FilterTeamMembersDialog filterTeamMembersDialog = FilterTeamMembersDialog.newInstance(presenter,this, teams, presenter.getSelectedTeamToFilter());
+        filterTeamMembersDialog.show(getSupportFragmentManager(), "addCommentDialog");
+
     }
 
     @Override
@@ -192,6 +235,6 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
 
     @Override
     public void onRefresh() {
-        presenter.retrieveUsers();
+        presenter.retrieveTeamMembers();
     }
 }

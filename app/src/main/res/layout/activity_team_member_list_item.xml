@@ -61,12 +61,18 @@ tools:context=".mvp.view.activity.dynamicevent.DynamicEventActivity">
                             android:layout_height="wrap_content"
                             android:textColor="@color/accent"
                             android:textSize="16sp"
+                            android:scrollHorizontally="true"
+                            android:ellipsize="end"
+                            android:maxLines="1"
                             android:text="David Perez Conde"/>
 
                         <TextView
                             android:id="@+id/user_team"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:scrollHorizontally="true"
+                            android:ellipsize="end"
+                            android:maxLines="1"
                             android:text="Applus+ IDIADA"/>
 
 

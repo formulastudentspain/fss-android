@@ -12,14 +12,12 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
-import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.data.model.TeamMemberRole;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.teammemberdetail.TeamMemberDetailActivity;
 
-public class TeamMemberPresenter implements RecyclerViewClickListener {
+public class TeamMemberPresenter implements RecyclerViewClickListener, TeamMemberGeneralPresenter {
 
     //Dependencies
     private View view;
@@ -31,6 +29,7 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
     //Data
     private List<TeamMember> allTeamMemberList = new ArrayList<>();
     private List<TeamMember> filteredTeamMemberList = new ArrayList<>();
+    private Team selectedTeamToFilter;
 
 
 
@@ -57,13 +56,16 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
 
 
 
-    void retrieveUsers(){
+    public void retrieveTeamMembers(){
+
+        //Set filtering icon
+        view.filtersActivated(selectedTeamToFilter!=null && !"".equals(selectedTeamToFilter.getID()));
 
         //show loading
         view.showLoading();
 
         //call business to retrieve users
-        teamMemberBO.retrieveTeamMembers(new BusinessCallback() {
+        teamMemberBO.retrieveTeamMembers(selectedTeamToFilter, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
@@ -141,21 +143,42 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
 
         TeamMember selectedTeamMember = filteredTeamMemberList.get(position);
 
-        Intent intent = new Intent(context, TeamMemberDetailActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("selectedTeamMember", selectedTeamMember);
-        context.startActivity(intent);
+        view.showLoading();
+        briefingBO.checkBriefingByUser(selectedTeamMember.getID(), new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                view.hideLoading();
 
+                Boolean lastBriefing = (Boolean) responseDTO.getData();
+
+                Intent intent = new Intent(context, TeamMemberDetailActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("selectedTeamMember", selectedTeamMember);
+                intent.putExtra("lastBriefing", lastBriefing);
+                context.startActivity(intent);
+
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                view.hideLoading();
+            }
+        });
     }
 
 
-    public void createUser(TeamMember teamMember){
+
+    public void updateOrCreateTeamMember(TeamMember teamMember){
+        createUser(teamMember);
+    }
+
+    private void createUser(TeamMember teamMember){
 
         teamMemberBO.createTeamMember(teamMember, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 //Update list
-                retrieveUsers();
+                retrieveTeamMembers();
                 view.createMessage(R.string.team_member_create_info);
             }
 
@@ -181,7 +204,7 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
                 view.hideLoading();
 
                 List<Team> teams = (List<Team>) responseDTO.getData();
-                view.showCreateTeamMemberDialog(teams, TeamMemberRole.getAll());
+                view.showCreateTeamMemberDialog(teams);
             }
 
             @Override
@@ -197,8 +220,43 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
     }
 
 
+    public void filterIconClicked() {
+
+        //Show loading
+        view.showLoading();
+
+        //Call business to retrieve teams
+        teamBO.retrieveTeams(null, null, new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+
+                //Hide loading
+                view.hideLoading();
+
+                List<Team> teams = (List<Team>) responseDTO.getData();
+                view.showFilteringDialog(teams);
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                view.createMessage(R.string.team_member_get_teams_error);
+            }
+        });
+
+
+    }
+
+    public Team getSelectedTeamToFilter() {
+        return selectedTeamToFilter;
+    }
+
+    public void setSelectedTeamToFilter(Team selectedTeamToFilter) {
+        this.selectedTeamToFilter = selectedTeamToFilter;
+    }
 
     public interface View {
+
+        void filtersActivated(Boolean activated);
 
         /**
          * On retrieved timeline items
@@ -229,9 +287,14 @@ public class TeamMemberPresenter implements RecyclerViewClickListener {
         /**
          * Show create user dialog
          * @param teams
-         * @param roles
          */
-        void showCreateTeamMemberDialog(List<Team> teams, List<Role> roles);
+        void showCreateTeamMemberDialog(List<Team> teams);
+
+        /**
+         * Show filtering dialog
+         * @param teams
+         */
+        void showFilteringDialog(List<Team> teams);
     }
 
 }

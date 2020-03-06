@@ -26,6 +26,7 @@ public class TeamMemberListViewHolder extends RecyclerView.ViewHolder implements
     Chip asrChip;
 
 
+
     public TeamMemberListViewHolder(View itemView, RecyclerViewClickListener itemListener) {
         super(itemView);
         profileImage =  itemView.findViewById(R.id.user_profile_image);

@@ -217,7 +217,7 @@ public class StatisticsBOImpl implements StatisticsBO {
         final InputStream is = mngr.open("template_export_fss.xls");
 
 
-        teamMemberBO.retrieveTeamMembers(new BusinessCallback() {
+        teamMemberBO.retrieveTeamMembers(null, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 ResponseDTO responseDTOExport = new ResponseDTO();

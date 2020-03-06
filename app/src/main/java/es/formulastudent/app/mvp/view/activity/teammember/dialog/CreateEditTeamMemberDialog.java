@@ -11,54 +11,50 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.List;
-import java.util.UUID;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.data.model.TeamMemberRole;
-import es.formulastudent.app.mvp.view.activity.general.spinneradapters.RolesSpinnerAdapter;
 import es.formulastudent.app.mvp.view.activity.general.spinneradapters.TeamsSpinnerAdapter;
-import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberPresenter;
+import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberGeneralPresenter;
 
-public class CreateTeamMemberDialog extends DialogFragment {
+public class CreateEditTeamMemberDialog extends DialogFragment {
 
-    private TeamMemberPresenter presenter;
+    private TeamMemberGeneralPresenter presenter;
     private Context context;
     private AlertDialog dialog;
 
     //View components
     private EditText userName;
     private EditText userMail;
-
-    private Spinner availableRoles;
-    private RolesSpinnerAdapter rolesAdapter;
+    private AppCompatCheckBox driverCheckbox;
+    private AppCompatCheckBox esoCheckbox;
+    private AppCompatCheckBox asrCheckbox;
 
     private Spinner availableTeams;
     private TeamsSpinnerAdapter teamsAdapter;
 
     //Spinner values
     List<Team> teams;
-    List<Role> roles;
+    TeamMember teamMember;
 
     //Selected values
     private Team selectedTeam;
-    private TeamMemberRole selectedRole;
 
 
-    public CreateTeamMemberDialog() {}
+    public CreateEditTeamMemberDialog() {}
 
-    public static CreateTeamMemberDialog newInstance(TeamMemberPresenter presenter, Context context,
-                                                     List<Team> teams, List<Role> roles) {
-        CreateTeamMemberDialog frag = new CreateTeamMemberDialog();
+    public static CreateEditTeamMemberDialog newInstance(TeamMemberGeneralPresenter presenter, Context context,
+                                                         List<Team> teams, TeamMember teamMember) {
+        CreateEditTeamMemberDialog frag = new CreateEditTeamMemberDialog();
         frag.setPresenter(presenter);
         frag.setContext(context);
-        frag.setRoles(roles);
         frag.setTeams(teams);
+        frag.setTeamMember(teamMember);
 
         return frag;
     }
@@ -74,7 +70,6 @@ public class CreateTeamMemberDialog extends DialogFragment {
         // Get view components
         userName = rootView.findViewById(R.id.create_user_name);
         userMail = rootView.findViewById(R.id.create_user_mail);
-        availableRoles = rootView.findViewById(R.id.create_user_role);
 
        //Teams
         availableTeams = rootView.findViewById(R.id.create_user_team);
@@ -92,35 +87,59 @@ public class CreateTeamMemberDialog extends DialogFragment {
         });
 
         //Roles
-        availableRoles = rootView.findViewById(R.id.create_user_role);
-        rolesAdapter = new RolesSpinnerAdapter(context, android.R.layout.simple_spinner_item, roles);
-        availableRoles.setAdapter(rolesAdapter);
-        availableRoles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        driverCheckbox = rootView.findViewById(R.id.checkboxRolDriver);
+        esoCheckbox = rootView.findViewById(R.id.checkboxRolESO);
+        asrCheckbox = rootView.findViewById(R.id.checkboxRolASR);
 
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                TeamMemberRole role = (TeamMemberRole) rolesAdapter.getItem(position);
-                selectedRole = role;
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapter) {  }
-        });
+
+        if(teamMember != null){
+            setFieldsToEdit();
+        }
 
 
         builder.setView(rootView)
-                .setTitle(R.string.dialog_create_user_title)
+                .setTitle(teamMember==null ? R.string.dialog_create_user_title : R.string.dialog_edit_user_title)
 
                 //Action buttons
-                .setPositiveButton(R.string.dialog_create_user_button_create, null)
+                .setPositiveButton(teamMember==null ? R.string.dialog_create_user_button_create : R.string.dialog_edit_user_button_edit, null)
                 .setNegativeButton(R.string.dialog_create_user_button_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        CreateTeamMemberDialog.this.getDialog().cancel();
+                        CreateEditTeamMemberDialog.this.getDialog().cancel();
                     }
                 });
 
          dialog = builder.create();
 
          return dialog;
+    }
+
+    private void setFieldsToEdit() {
+
+        //Name and mail
+        userName.setText(teamMember.getName());
+        userMail.setText(teamMember.getMail());
+        userMail.setEnabled(false);
+
+        //Team
+        for(int i = 0; i<teams.size(); i++){
+            if(teamMember.getTeamID().equals(teams.get(i).getID())){
+                availableTeams.setSelection(i);
+                break;
+            }
+        }
+        availableTeams.setEnabled(false);
+
+        //Roles
+        driverCheckbox.setChecked(teamMember.getDriver());
+        esoCheckbox.setChecked(teamMember.getESO());
+        asrCheckbox.setChecked(teamMember.getASR());
+
+        //If the user role has validated the documents, cannot be changed
+        if(teamMember.getCertifiedDriver() || teamMember.getCertifiedESO() || teamMember.getCertifiedASR()){
+            driverCheckbox.setEnabled(false);
+            esoCheckbox.setEnabled(false);
+            asrCheckbox.setEnabled(false);
+        }
     }
 
     private boolean validateFields(){
@@ -150,23 +169,27 @@ public class CreateTeamMemberDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
 
-                TeamMember teamMember = new TeamMember();
+                if(teamMember == null){ //Creating
+                    teamMember = new TeamMember();
+                    teamMember.setPhotoUrl(getString(R.string.default_image_url));
+                }
+
 
                 if(validateFields()){
                     String userNameValue = userName.getText().toString();
                     String userMailValue = userMail.getText().toString();
 
-                    teamMember.setID(UUID.randomUUID().toString());
                     teamMember.setName(userNameValue);
-                    teamMember.setTeam(selectedTeam.getName());
+                    teamMember.setTeam(selectedTeam.getCar().getNumber() + " - " + selectedTeam.getName());
                     teamMember.setTeamID(selectedTeam.getID());
                     teamMember.setMail(userMailValue);
-                    teamMember.setRole(selectedRole.getName());
-                    teamMember.setRoleID(null);
-                    teamMember.setPhotoUrl(getString(R.string.default_image_url));
+
+                    teamMember.setDriver(driverCheckbox.isChecked());
+                    teamMember.setESO(esoCheckbox.isChecked());
+                    teamMember.setASR(asrCheckbox.isChecked());
 
                     //Call business
-                    presenter.createUser(teamMember);
+                    presenter.updateOrCreateTeamMember(teamMember);
 
                     //Close dialog
                     dialog.dismiss();
@@ -176,19 +199,17 @@ public class CreateTeamMemberDialog extends DialogFragment {
     }
 
 
-    public void setPresenter(TeamMemberPresenter presenter) {
+    public void setPresenter(TeamMemberGeneralPresenter presenter) {
         this.presenter = presenter;
     }
     public void setContext(Context context){
         this.context = context;
     }
-
     public void setTeams(List<Team> teams) {
         this.teams = teams;
     }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setTeamMember(TeamMember teamMember) {
+        this.teamMember = teamMember;
     }
 }
 

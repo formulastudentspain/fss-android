@@ -74,6 +74,16 @@
     <string name="team_member_error_creating_user">Error creating team member</string>
     <string name="team_member_update_info">Team member updated successfully</string>
     <string name="team_member_update_error">Error updating team member</string>
+    <string name="team_member_dialog_roles">Roles</string>
+    <string name="team_member_edit_roles_dialog_title">Edit team member</string>
+    <string name="team_member_edit_roles_dialog_positive">Edit</string>
+    <string name="team_member_error_photo_mandatory">Please take a photo to the team member</string>
+    <string name="team_member_error_documents_mandatory">Please check the team member documents</string>
+
+    <!-- Filter team member dialog -->
+    <string name="team_member_dialog_filter_button">Filter</string>
+    <string name="team_member_dialog_filter_title">Filter team members</string>
+
 
 
     <!-- Volunteers -->

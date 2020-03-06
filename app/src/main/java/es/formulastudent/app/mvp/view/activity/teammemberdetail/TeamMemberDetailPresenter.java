@@ -9,21 +9,26 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
+import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
+import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberGeneralPresenter;
 
 
-public class TeamMemberDetailPresenter {
+public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
 
     //Dependencies
     private View view;
     private TeamMemberBO teamMemberBO;
     private ImageBO imageBO;
+    private TeamBO teamBO;
 
-    public TeamMemberDetailPresenter(TeamMemberDetailPresenter.View view, TeamMemberBO teamMemberBO, ImageBO imageBO) {
+    public TeamMemberDetailPresenter(TeamMemberDetailPresenter.View view, TeamMemberBO teamMemberBO, ImageBO imageBO, TeamBO teamBO) {
         this.view = view;
         this.teamMemberBO = teamMemberBO;
         this.imageBO = imageBO;
+        this.teamBO = teamBO;
     }
 
     void onNFCTagDetected(final TeamMember teamMember, final String tagNFC){
@@ -70,6 +75,28 @@ public class TeamMemberDetailPresenter {
                 view.hideLoadingIcon();
             }
         });
+    }
+
+    public void checkDocuments(TeamMember teamMember){
+
+        teamMember.setCertifiedASR(true);
+        teamMember.setCertifiedDriver(true);
+        teamMember.setCertifiedESO(true);
+
+        view.showLoading();
+        teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                view.updateTeamMemberInfo(teamMember);
+                view.hideLoadingIcon();
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                view.hideLoadingIcon();
+            }
+        });
+
     }
 
 
@@ -143,7 +170,44 @@ public class TeamMemberDetailPresenter {
 
     }
 
+    public void updateOrCreateTeamMember(TeamMember teamMember){
+        teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                view.updateTeamMemberInfo(teamMember);
+                view.createMessage(responseDTO.getInfo());
+            }
 
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                view.createMessage(responseDTO.getError());
+            }
+        });
+    }
+
+    public void openEditTeamMemberDialog(){
+
+        //Show loading
+        view.showLoading();
+
+        //Call business to retrieve teams
+        teamBO.retrieveTeams(null, null, new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+
+                //Hide loading
+                view.hideLoadingIcon();
+
+                List<Team> teams = (List<Team>) responseDTO.getData();
+                view.showEditTeamMemberDialog(teams);
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                view.createMessage(R.string.team_member_get_teams_error);
+            }
+        });
+    }
 
     public interface View {
 
@@ -189,6 +253,17 @@ public class TeamMemberDetailPresenter {
          * Open NFC Reader Activity
          */
         void openNFCReader();
+
+        /**
+         * Update team member info
+         */
+        void updateTeamMemberInfo(TeamMember teamMember);
+
+        /**
+         * Show edit team member dialog
+         * @param teams
+         */
+        void showEditTeamMemberDialog(List<Team> teams);
     }
 
 }

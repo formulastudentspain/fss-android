@@ -216,7 +216,7 @@ public class AdminOpsPresenter {
                 String teamName = cellTeamName.getStringCellValue();
                 Team team = teams.get(teamName);
                 teamMember.setTeamID(team.getID());
-                teamMember.setTeam(team.getName());
+                teamMember.setTeam(team.getCar().getNumber() + " - " + team.getName());
                 teamMember.setCarNumber(team.getCar().getNumber());
 
                 //TeamMember mail
