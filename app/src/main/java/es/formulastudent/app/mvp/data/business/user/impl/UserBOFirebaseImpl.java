@@ -18,19 +18,15 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
-import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 
 public class UserBOFirebaseImpl implements UserBO {
 
-
     private FirebaseFirestore firebaseFirestore;
-    private AuthBO authBO;
 
-    public UserBOFirebaseImpl(FirebaseFirestore firebaseFirestore, AuthBO authBO) {
+    public UserBOFirebaseImpl(FirebaseFirestore firebaseFirestore) {
         this.firebaseFirestore = firebaseFirestore;
-        this.authBO = authBO;
     }
 
     @Override
@@ -72,41 +68,26 @@ public class UserBOFirebaseImpl implements UserBO {
 
     @Override
     public void createUser(final User user, final BusinessCallback callback) {
-
         final Map<String, Object> docData = user.toDocumentData();
 
-        authBO.createUser(user.getMail(), new BusinessCallback() {
-
-            @Override
-            public void onSuccess(final ResponseDTO responseDTO) {
-
-                firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER)
-                        .document(user.getID())
-                        .set(docData)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                responseDTO.setInfo(R.string.user_create_info);
-                                callback.onSuccess(responseDTO);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                responseDTO.setError(R.string.user_create_error);
-                                callback.onFailure(responseDTO);
-                            }
-                        });
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                responseDTO.setError(R.string.user_create_error);
-                callback.onFailure(responseDTO);
-            }
-        });
-
-
+        ResponseDTO responseDTO = new ResponseDTO();
+        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER)
+                .document(user.getID())
+                .set(docData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        responseDTO.setInfo(R.string.user_create_info);
+                        callback.onSuccess(responseDTO);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        responseDTO.setError(R.string.user_create_error);
+                        callback.onFailure(responseDTO);
+                    }
+                });
     }
 
     @Override

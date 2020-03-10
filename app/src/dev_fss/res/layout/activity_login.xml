@@ -4,61 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/login_wallpaper"
     android:orientation="vertical"
-    tools:context=".mvp.view.activity.login.LoginActivity"
-    android:background="@mipmap/login_wallpaper">
+    tools:context=".mvp.view.activity.login.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="16dp"
         android:layout_weight="3"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/fss_white"/>
+            android:src="@mipmap/fss_white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:textColor="@color/md_white_1000"
             android:layout_gravity="center_horizontal"
-            android:text="DEV_EDITION"/>
+            android:text="DEV_EDITION"
+            android:textColor="@color/md_white_1000"
+            android:textSize="32sp" />
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="8"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_weight="8">
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="320dp"
+            android:background="@drawable/activity_login_rounded_background"
             android:orientation="vertical"
-            android:padding="32dp"
-            android:background="@drawable/activity_login_rounded_background">
+            android:padding="32dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/login_activity_login"
                 android:layout_gravity="center_horizontal"
-                android:textSize="20sp"
-                android:layout_marginBottom="40dp"/>
+                android:layout_marginBottom="40dp"
+                android:text="@string/login_activity_login"
+                android:textSize="20sp" />
 
             <ProgressBar
                 android:id="@+id/loading_status"
                 style="?android:attr/progressBarStyleLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/login_layout"
@@ -79,16 +79,16 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="8dp"
-                        android:src="@drawable/ic_mail_black"/>
+                        android:src="@drawable/ic_mail_black" />
 
 
                     <EditText
                         android:id="@+id/login_mail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/login_activity_mail"
                         android:inputType="textEmailAddress"
-                        android:textSize="16sp"
-                        android:hint="@string/login_activity_mail"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
 
 
@@ -103,15 +103,15 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="8dp"
-                        android:src="@drawable/ic_lock_black"/>
+                        android:src="@drawable/ic_lock_black" />
 
                     <EditText
                         android:id="@+id/login_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
+                        android:hint="@string/login_activity_password"
                         android:inputType="textPassword"
-                        android:hint="@string/login_activity_password"/>
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -121,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:background="@drawable/activity_login_rounded_button"
-                    android:text="@string/login_activity_login"/>
+                    android:text="@string/login_activity_login" />
             </LinearLayout>
 
         </LinearLayout>
@@ -130,10 +130,34 @@
             android:id="@+id/login_forgot_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
             android:text="@string/login_activity_forgot_password"
-            android:textColor="@color/md_white_1000"/>
+            android:textColor="@color/md_white_1000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/login_activity_not_registered"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/md_white_1000" />
+
+        <TextView
+            android:id="@+id/register_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="@string/login_activity_register_link"
+            android:textColor="@color/accent" />
+
     </LinearLayout>
 
 </LinearLayout>

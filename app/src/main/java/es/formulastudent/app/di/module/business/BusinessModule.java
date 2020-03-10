@@ -78,8 +78,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public AuthBO provideAuthBO(FirebaseAuth firebaseAuth) {
-        return new AuthBOFirebaseImpl(firebaseAuth);
+    public AuthBO provideAuthBO(FirebaseAuth firebaseAuth, UserBO userBO) {
+        return new AuthBOFirebaseImpl(firebaseAuth, userBO);
     }
 
 
@@ -127,8 +127,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public UserBO provideUserBO(FirebaseFirestore firebaseFirestore, AuthBO authBO) {
-        return new UserBOFirebaseImpl(firebaseFirestore, authBO);
+    public UserBO provideUserBO(FirebaseFirestore firebaseFirestore) {
+        return new UserBOFirebaseImpl(firebaseFirestore);
     }
 
     /**

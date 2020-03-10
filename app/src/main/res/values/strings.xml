@@ -44,6 +44,24 @@
     <string name="login_business_email_mandatory">Enter your mail account in order to send you the password recover mail</string>
     <string name="login_business_create_user_success">User created successfully to do login</string>
     <string name="login_business_create_user_failure">Error creating user to login</string>
+    <string name="login_business_create_user_email_existing">The email address is already in use by another account.</string>
+    <string name="login_activity_full_name">Full name</string>
+    <string name="login_activity_re_password">Re-password</string>
+    <string name="login_activity_register">REGISTER</string>
+    <string name="login_activity_not_registered">Don\'t have an account?</string>
+    <string name="login_activity_register_link">Register</string>
+    <string name="login_activity_user_not_activated">User created successfully but not activated, please contact an official.</string>
+    <string name="login_Activity_mandatory_field">This field is mandatory</string>
+    <string name="login_Activity_password_not_match">The password is different</string>
+    <string name="login_Activity_min_password_six">Min. 6 characters</string>
+
+
+
+
+
+
+
+
 
 
     <!-- Team Member -->
@@ -338,7 +356,6 @@
 
     <string name="cc_autocross_title">Cone Control: Autocross</string>
     <string name="cc_skidpad_title">Cone Control: Skidpad</string>
-
 
 
     <!-- Filtering values for Fees -->

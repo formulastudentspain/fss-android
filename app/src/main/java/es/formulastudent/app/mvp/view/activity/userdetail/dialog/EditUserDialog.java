@@ -73,10 +73,13 @@ public class EditUserDialog extends DialogFragment {
         List<Role> roles = new ArrayList<>();
         int selectedRoleIndex = 0;
         int roleIndex = 0;
+
         for(String roleString: loggedUser.getRole().getManagedRoles()){
             roles.add(UserRole.getRoleByName(roleString));
-            if(roleString.equals(selectedUser.getRole().getName())){
-                selectedRoleIndex = roleIndex;
+            if(selectedUser.getRole()!=null) {
+                if (roleString.equals(selectedUser.getRole().getName())) {
+                    selectedRoleIndex = roleIndex;
+                }
             }
             roleIndex++;
         }

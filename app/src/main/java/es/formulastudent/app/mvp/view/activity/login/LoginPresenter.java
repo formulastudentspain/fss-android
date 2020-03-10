@@ -46,17 +46,25 @@ public class LoginPresenter {
             public void onSuccess(ResponseDTO responseDTO) {
                 if(responseDTO.getData()!=null){
 
-                    //If teamMember exists in database, we store it in local storage
+                    //If user exists in database, we store it in local storage
                     User user = (User) responseDTO.getData();
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(SharedPreferencesModule.PREFS_CURRENT_USER, new Gson().toJson(user));
-                    editor.commit();
 
-                    //Start Timeline activity
-                    Intent myIntent = new Intent(context, WelcomeActivity.class);
-                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(myIntent);
-                    view.finishView();
+                    //User not activated, cannot do login
+                    if(user.getRole() == null){
+                        view.createMessage(R.string.login_activity_user_not_activated);
+                        view.hideLoadingIcon();
+
+                    }else{
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(SharedPreferencesModule.PREFS_CURRENT_USER, new Gson().toJson(user));
+                        editor.commit();
+
+                        //Start Timeline activity
+                        Intent myIntent = new Intent(context, WelcomeActivity.class);
+                        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(myIntent);
+                        view.finishView();
+                    }
 
                 }else{ //The teamMember is created for Login, but not in users table
                     view.hideLoadingIcon();

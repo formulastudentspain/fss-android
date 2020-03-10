@@ -203,15 +203,21 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         }
 
 
-        userRole.setText(user.getRole().getName().toUpperCase());
-        userRole.setTextColor(getResources().getColor(user.getRole().getColor()));
+        if(user.getRole() != null){
+            userRole.setText(user.getRole().getName().toUpperCase());
+            userRole.setTextColor(getResources().getColor(user.getRole().getColor()));
 
-        //For Officials, in bold
-        if(user.getRole().equals(UserRole.ADMINISTRATOR) || user.getRole().equals(UserRole.OFFICIAL_MARSHALL)
-                || user.getRole().equals(UserRole.OFFICIAL_SCRUTINEER) || user.getRole().equals(UserRole.OFFICIAL_STAFF)){
-            userRole.setTypeface(null, Typeface.BOLD);
+            //For Officials, in bold
+            if(user.getRole().equals(UserRole.ADMINISTRATOR) || user.getRole().equals(UserRole.OFFICIAL_MARSHALL)
+                    || user.getRole().equals(UserRole.OFFICIAL_SCRUTINEER) || user.getRole().equals(UserRole.OFFICIAL_STAFF)){
+                userRole.setTypeface(null, Typeface.BOLD);
 
+            }else{
+                userRole.setTypeface(null, Typeface.NORMAL);
+            }
         }else{
+            userRole.setText("PENDING");
+            userRole.setTextColor(getResources().getColor(R.color.md_yellow_600));
             userRole.setTypeface(null, Typeface.NORMAL);
         }
     }

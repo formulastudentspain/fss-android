@@ -54,15 +54,22 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         UserListViewHolder userListViewHolder = (UserListViewHolder)holder;
         userListViewHolder.userName.setText(user.getName());
-        userListViewHolder.userRole.setText(role.getName().toUpperCase());
-        userListViewHolder.userRole.setTextColor(context.getResources().getColor(role.getColor()));
 
-        //For Officials, in bold
-        if(role.equals(UserRole.ADMINISTRATOR) || role.equals(UserRole.OFFICIAL_MARSHALL)
-                || role.equals(UserRole.OFFICIAL_SCRUTINEER) || role.equals(UserRole.OFFICIAL_STAFF)){
-            userListViewHolder.userRole.setTypeface(null, Typeface.BOLD);
+        if(role!=null) {
+            userListViewHolder.userRole.setText(role.getName().toUpperCase());
+            userListViewHolder.userRole.setTextColor(context.getResources().getColor(role.getColor()));
 
+            //For Officials, in bold
+            if (role.equals(UserRole.ADMINISTRATOR) || role.equals(UserRole.OFFICIAL_MARSHALL)
+                    || role.equals(UserRole.OFFICIAL_SCRUTINEER) || role.equals(UserRole.OFFICIAL_STAFF)) {
+                userListViewHolder.userRole.setTypeface(null, Typeface.BOLD);
+
+            } else {
+                userListViewHolder.userRole.setTypeface(null, Typeface.NORMAL);
+            }
         }else{
+            userListViewHolder.userRole.setText("PENDING");
+            userListViewHolder.userRole.setTextColor(context.getResources().getColor(R.color.md_yellow_600));
             userListViewHolder.userRole.setTypeface(null, Typeface.NORMAL);
         }
 

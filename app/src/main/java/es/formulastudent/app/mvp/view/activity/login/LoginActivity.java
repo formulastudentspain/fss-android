@@ -1,6 +1,7 @@
 package es.formulastudent.app.mvp.view.activity.login;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -23,10 +24,12 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.LoginModule;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
+import es.formulastudent.app.mvp.view.activity.loginregister.RegisterActivity;
 
 
 public class LoginActivity extends GeneralActivity implements LoginPresenter.View, View.OnClickListener{
 
+    private final int REGISTER_REQUEST_CODE = 1;
 
     @Inject
     LoginPresenter presenter;
@@ -36,6 +39,7 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
     private EditText passwordEditText;
     private Button loginButton;
     private TextView forgotPasswordTextView;
+    private TextView registerTextView;
     private ProgressBar loadingProgressBar;
     private LinearLayout loginLayout;
     FirebaseAuth mAuth;
@@ -99,6 +103,10 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
         //Loading icon
         loadingProgressBar = findViewById(R.id.loading_status);
 
+        //Register link
+        registerTextView = findViewById(R.id.register_link);
+        registerTextView.setOnClickListener(this);
+
         //Login layout
         loginLayout = findViewById(R.id.login_layout);
 
@@ -146,7 +154,20 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
         }else if(view.getId() == R.id.login_forgot_password){
             presenter.forgotPassword(mailEditText.getText().toString());
 
+        }else if(view.getId() == R.id.register_link){
+            Intent intent = new Intent(this, RegisterActivity.class);
+            startActivityForResult(intent, REGISTER_REQUEST_CODE);
         }
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == REGISTER_REQUEST_CODE){
+            if(resultCode == Activity.RESULT_OK){
+                createMessage(R.string.login_activity_user_not_activated);
+            }
+        }
+    }//onActivityResult
 }

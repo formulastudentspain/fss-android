@@ -48,7 +48,7 @@ public class User implements Serializable {
         Map<String, Object> docData = new HashMap<>();
         docData.put(User.NAME, this.getName());
         docData.put(User.MAIL, this.getMail());
-        docData.put(User.ROLE, this.getRole().getName());
+        docData.put(User.ROLE, this.getRole()==null ? null : this.getRole().getName());
         docData.put(User.USER_IMAGE, this.getPhotoUrl());
         docData.put(User.CELL_PHONE, this.getCellPhone());
         docData.put(User.WALKIE, this.getWalkie());
