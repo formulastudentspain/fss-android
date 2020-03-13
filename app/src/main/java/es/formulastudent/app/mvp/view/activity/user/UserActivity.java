@@ -94,7 +94,7 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
 
         //Add drawer
         addDrawer();
-        mDrawerIdentifier = 10003L;
+        mDrawerIdentifier = 10026L;
 
         //Recycler view
         mSwipeRefreshLayout = findViewById(R.id.swipeLayout);

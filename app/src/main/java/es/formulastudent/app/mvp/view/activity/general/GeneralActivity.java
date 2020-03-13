@@ -430,8 +430,8 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     drivers,volunteers,
                     new DividerDrawerItem(),
 
-                    staffStatistics,
-                    adminOperations,
+                    //staffStatistics,
+                    //adminOperations,
                     logout);
 
 
