@@ -9,6 +9,7 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
+import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.view.activity.login.LoginPresenter;
 
@@ -28,8 +29,9 @@ public class LoginModule {
 
     @Provides
     public LoginPresenter providePresenter(LoginPresenter.View categoryView, Context context,
-                                           AuthBO authBO, UserBO userBO, SharedPreferences sharedPreferences) {
-        return new LoginPresenter(categoryView, context, authBO, userBO, sharedPreferences);
+                                           AuthBO authBO, UserBO userBO, TeamBO teamBO,
+                                           SharedPreferences sharedPreferences) {
+        return new LoginPresenter(categoryView, context, authBO, userBO, teamBO, sharedPreferences);
     }
 
 }

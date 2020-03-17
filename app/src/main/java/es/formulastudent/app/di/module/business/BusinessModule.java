@@ -23,6 +23,8 @@ import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.imageuploader.impl.ImageBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.mailsender.MailSender;
 import es.formulastudent.app.mvp.data.business.mailsender.MailSenderImpl;
+import es.formulastudent.app.mvp.data.business.parameter.ParameterBO;
+import es.formulastudent.app.mvp.data.business.parameter.impl.ParameterBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.business.racecontrol.impl.RaceControlBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
@@ -31,6 +33,8 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.team.impl.TeamBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.business.teammember.impl.TeamMemberBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.ticket.TicketBO;
+import es.formulastudent.app.mvp.data.business.ticket.impl.TicketBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.business.user.impl.UserBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.model.User;
@@ -161,5 +165,28 @@ public class BusinessModule {
     @Provides
     public MailSender provideMailSender(User loggedUser, Context context) {
         return new MailSenderImpl(context, loggedUser);
+    }
+
+
+    /**
+     * Provide Ticket business
+     * @param firebaseFirestore
+     * @param context
+     * @return
+     */
+    @Provides
+    public TicketBO provideTicketBO(FirebaseFirestore firebaseFirestore, ParameterBO parameterBO, Context context) {
+        return new TicketBOFirebaseImpl(firebaseFirestore, parameterBO, context);
+    }
+
+
+    /**
+     * Provide parameter business
+     * @param firebaseFirestore
+     * @return
+     */
+    @Provides
+    public ParameterBO provideParameterBO(FirebaseFirestore firebaseFirestore) {
+        return new ParameterBOFirebaseImpl(firebaseFirestore);
     }
 }

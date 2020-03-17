@@ -28,6 +28,7 @@
     <string name="drawer_menu_staff_admin_operations">Admin operations</string>
     <string name="drawer_menu_teams">Teams</string>
     <string name="drawer_menu_cone_control">CONE CONTROL</string>
+    <string name="drawer_menu_scrutineering_ticket">Scrutineering tickets</string>
 
 
 
@@ -54,13 +55,6 @@
     <string name="login_Activity_mandatory_field">This field is mandatory</string>
     <string name="login_Activity_password_not_match">The password is different</string>
     <string name="login_Activity_min_password_six">Min. 6 characters</string>
-
-
-
-
-
-
-
 
 
 
@@ -103,12 +97,9 @@
     <string name="team_member_dialog_filter_title">Filter team members</string>
 
 
-
     <!-- Volunteers -->
     <string name="activity_volunteers_detail_title">Volunteer</string>
     <string name="activity_volunteers_title">Volunteers</string>
-
-
 
 
     <!-- Create user dialog -->
@@ -363,6 +354,21 @@
 
     <string name="cc_autocross_title">Cone Control: Autocross</string>
     <string name="cc_skidpad_title">Cone Control: Skidpad</string>
+
+
+    <!-- Tickets -->
+    <string name="ticket_activity_title">Tickets</string>
+    <string name="ticket_activity_error_retrieving_tickets">Error retrieving real-time tickets</string>
+    <string name="ticket_activity_error_create">Error creating ticket</string>
+    <string name="ticket_activity_info_create">Ticket successfully created</string>
+    <string name="ticket_activity_already_created">Ticket already created</string>
+    <string name="ticket_activity_already_passed">Test already passed. Congrats!</string>
+
+
+
+
+    <!-- Parameters -->
+    <string name="ticket_activity_error_retrieving_parameter">Error retrieving parameter in real-time</string>
 
 
     <!-- Filtering values for Fees -->

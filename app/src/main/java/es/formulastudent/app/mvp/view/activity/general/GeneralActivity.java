@@ -49,6 +49,7 @@ import es.formulastudent.app.mvp.view.activity.racecontrol.RaceControlWelcomeAct
 import es.formulastudent.app.mvp.view.activity.statistics.StatisticsActivity;
 import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberActivity;
 import es.formulastudent.app.mvp.view.activity.teams.TeamsActivity;
+import es.formulastudent.app.mvp.view.activity.ticketcreator.TicketCreatorActivity;
 import es.formulastudent.app.mvp.view.activity.user.UserActivity;
 import es.formulastudent.app.mvp.view.activity.welcome.WelcomeActivity;
 import info.androidhive.fontawesome.FontDrawable;
@@ -390,6 +391,30 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
+        //Scrutineering tickets (SCRUTINEERS)
+        FontDrawable scrutineeringTicketProcessorIcon = new FontDrawable(this, R.string.fa_ticket_alt_solid, true, false);
+        scrutineeringTicketProcessorIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
+        PrimaryDrawerItem scrutineeringTicketProcessor = new PrimaryDrawerItem()
+                .withIdentifier(50020)
+                .withLevel(2)
+                .withIcon(scrutineeringTicketProcessorIcon)
+                .withName(R.string.drawer_menu_scrutineering_ticket)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
+        //Scrutineering tickets (TEAM_LEADER)
+        FontDrawable scrutineeringTicketCreatorIcon = new FontDrawable(this, R.string.fa_ticket_alt_solid, true, false);
+        scrutineeringTicketCreatorIcon.setTextColor(ContextCompat.getColor(this, R.color.md_grey_700));
+        PrimaryDrawerItem scrutineeringTicketCreator = new PrimaryDrawerItem()
+                .withIdentifier(50021)
+                .withLevel(2)
+                .withIcon(scrutineeringTicketCreatorIcon)
+                .withName(R.string.drawer_menu_scrutineering_ticket)
+                .withDisabledTextColor(Color.parseColor(TITLE_DRAWER_ITEM_COLOR))
+                .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
+                .withOnDrawerItemClickListener(this);
+
 
         //Logout
         FontDrawable logoutIcon = new FontDrawable(this, R.string.fa_sign_out_alt_solid, true, false);
@@ -409,6 +434,8 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                     eventControl,
                     briefing,
                     teams,
+                    scrutineeringTicketProcessor,
+                    scrutineeringTicketCreator,
                     new DividerDrawerItem(),
 
                     raceAccess,
@@ -464,9 +491,8 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }else if(loggedUser.getRole().equals(UserRole.SCRUTINEER)){
             builder.addDrawerItems(
 
-                    eventControl,
-                    briefing,
                     teams,
+                    scrutineeringTicketProcessor,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -516,6 +542,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             builder.addDrawerItems(
 
                     teams,
+                    scrutineeringTicketProcessor,
                     new DividerDrawerItem(),
 
                     userManagement,
@@ -532,6 +559,14 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
                     userManagement,
                     drivers,volunteers,
+                    new DividerDrawerItem(),
+
+                    logout);
+
+        }else if(loggedUser.getRole().equals(UserRole.TEAM_LEADER)){
+            builder.addDrawerItems(
+
+                    scrutineeringTicketCreator,
                     new DividerDrawerItem(),
 
                     logout);
@@ -644,6 +679,12 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             intent = new Intent(this, UserActivity.class);
 
         }else if(drawerItem.getIdentifier() == 70001){ //Teams
+            intent = new Intent(this, TeamsActivity.class);
+
+        } else if(drawerItem.getIdentifier() == 50021){ //Scrutineering Ticket Creator
+            intent = new Intent(this, TicketCreatorActivity.class);
+
+        }else if(drawerItem.getIdentifier() == 50020){ //Scrutineering Ticket Processor
             intent = new Intent(this, TeamsActivity.class);
         }
 

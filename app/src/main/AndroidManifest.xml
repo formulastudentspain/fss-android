@@ -117,5 +117,8 @@
         <activity
             android:name=".mvp.view.activity.loginregister.RegisterActivity">
         </activity>
+        <activity
+            android:name=".mvp.view.activity.ticketcreator.TicketCreatorActivity">
+        </activity>
     </application>
 </manifest>

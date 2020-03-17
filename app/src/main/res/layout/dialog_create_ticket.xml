@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".mvp.view.activity.dynamicevent.DynamicEventActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"
+        android:text="Select a ticket type:"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ps_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:visibility="gone"
+            android:background="@drawable/rc_state_rounded_borders_selector"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/ps_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pre-Scrutineering"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textColor="@color/primary" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/ps_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textColor="@color/primary"
+            android:visibility="gone"
+            android:textSize="9sp" />
+
+        <LinearLayout
+            android:id="@+id/ai_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:background="@drawable/rc_state_rounded_borders_selector"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/ai_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Accumulation Inspection"
+                android:textColor="@color/primary"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/ai_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textColor="@color/primary"
+            android:visibility="gone"
+            android:textSize="9sp" />
+
+        <LinearLayout
+            android:id="@+id/ei_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:background="@drawable/rc_state_rounded_borders_selector"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/ei_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Electrical Inspection"
+                android:textColor="@color/primary"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/ei_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:visibility="gone"
+            android:textColor="@color/primary"
+            android:textSize="9sp" />
+
+        <LinearLayout
+            android:id="@+id/mi_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:background="@drawable/rc_state_rounded_borders_selector"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/mi_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mechanical Inspection"
+                android:textColor="@color/primary"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/mi_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:visibility="gone"
+            android:textColor="@color/primary"
+            android:textSize="9sp" />
+
+        <LinearLayout
+            android:id="@+id/ttt_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:background="@drawable/rc_state_rounded_borders_selector"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/ttt_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tilt Table Test"
+                android:textColor="@color/primary"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/ttt_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:visibility="gone"
+            android:textColor="@color/primary"
+            android:textSize="9sp" />
+
+        <LinearLayout
+            android:id="@+id/nt_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:background="@drawable/rc_state_rounded_borders_selector"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/nt_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Noise Test"
+                android:textColor="@color/primary"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/nt_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:visibility="gone"
+            android:textColor="@color/primary"
+            android:textSize="9sp" />
+
+        <LinearLayout
+            android:id="@+id/rt_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:background="@drawable/rc_state_rounded_borders_selector"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/rt_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rain Test"
+                android:textColor="@color/primary"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/rt_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:visibility="gone"
+            android:textColor="@color/primary"
+            android:textSize="9sp" />
+
+        <LinearLayout
+            android:id="@+id/bt_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:background="@drawable/rc_state_rounded_borders_selector"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/bt_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Brake Test"
+                android:textColor="@color/primary"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/bt_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:visibility="gone"
+            android:textColor="@color/primary"
+            android:textSize="9sp" />
+    </LinearLayout>
+</LinearLayout>
+

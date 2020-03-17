@@ -18,6 +18,7 @@ public class User implements Serializable {
     public static final String ROLE = "role";
     public static final String WALKIE = "walkie";
     public static final String CELL_PHONE = "cellPhone";
+    public static final String TEAM_ID = "teamId";
 
 
     private String ID;
@@ -27,6 +28,8 @@ public class User implements Serializable {
     private UserRole role;
     private Long walkie;
     private Long cellPhone;
+    private String teamId; //just for team leaders
+    private Team team; //just for team leaders (not persisted)
 
 
 
@@ -37,6 +40,7 @@ public class User implements Serializable {
         this.photoUrl = object.getString(User.USER_IMAGE);
         this.cellPhone = object.getLong(User.CELL_PHONE);
         this.walkie = object.getLong(User.WALKIE);
+        this.teamId = object.getString(User.TEAM_ID);
 
         //Getting role from enum
         String roleString = object.getString(TeamMember.ROLE);
@@ -52,6 +56,7 @@ public class User implements Serializable {
         docData.put(User.USER_IMAGE, this.getPhotoUrl());
         docData.put(User.CELL_PHONE, this.getCellPhone());
         docData.put(User.WALKIE, this.getWalkie());
+        docData.put(User.TEAM_ID, this.getTeamId());
 
         return docData;
     }
@@ -120,5 +125,21 @@ public class User implements Serializable {
 
     public void setCellPhone(Long cellPhone) {
         this.cellPhone = cellPhone;
+    }
+
+    public String getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

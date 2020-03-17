@@ -51,6 +51,12 @@ public enum UserRole implements Serializable, Role {
                 "Official Scrutineer",
                 new ArrayList<>(Collections.singletonList("Scrutineer")),
                 R.color.md_orange_800
+        ),
+
+        TEAM_LEADER(
+                "Team Leader",
+                new ArrayList<>(Collections.<String>emptyList()),
+                R.color.md_green_500
         );
 
         private final String name;
@@ -86,6 +92,9 @@ public enum UserRole implements Serializable, Role {
 
                 }else if(OFFICIAL_STAFF.getName().equals(name)){
                         return OFFICIAL_STAFF;
+
+                }else if(TEAM_LEADER.getName().equals(name)){
+                        return TEAM_LEADER;
                 }
 
                 return null;

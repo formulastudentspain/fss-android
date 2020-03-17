@@ -14,7 +14,9 @@ import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
+import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.welcome.WelcomeActivity;
 
@@ -26,15 +28,17 @@ public class LoginPresenter {
     private Context context;
     private AuthBO authBO;
     private UserBO userBO;
+    private TeamBO teamBO;
     private SharedPreferences sharedPreferences;
     private InputMethodManager imm;
 
-    public LoginPresenter(LoginPresenter.View view, Context context, AuthBO authBO, UserBO userBO,
+    public LoginPresenter(LoginPresenter.View view, Context context, AuthBO authBO, UserBO userBO, TeamBO teamBO,
                           SharedPreferences sharedPreferences) {
         this.view = view;
         this.context = context;
         this.authBO = authBO;
         this.userBO = userBO;
+        this.teamBO = teamBO;
         this.sharedPreferences = sharedPreferences;
     }
 
@@ -55,11 +59,32 @@ public class LoginPresenter {
                         view.hideLoadingIcon();
 
                     }else{
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(SharedPreferencesModule.PREFS_CURRENT_USER, new Gson().toJson(user));
-                        editor.commit();
+                        if(user.getTeamId() != null){ //Is a Team Leader
 
-                        //Start Timeline activity
+                            teamBO.retrieveTeamById(user.getTeamId(), new BusinessCallback() {
+                                @Override
+                                public void onSuccess(ResponseDTO responseDTO) {
+                                    Team team = (Team) responseDTO.getData();
+                                    user.setTeam(team);
+
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString(SharedPreferencesModule.PREFS_CURRENT_USER, new Gson().toJson(user));
+                                    editor.apply();
+                                }
+
+                                @Override
+                                public void onFailure(ResponseDTO responseDTO) {
+                                    //TODO
+                                }
+                            });
+
+                        }else{ //Is a Volunteer
+
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(SharedPreferencesModule.PREFS_CURRENT_USER, new Gson().toJson(user));
+                            editor.apply();
+                        }
+
                         Intent myIntent = new Intent(context, WelcomeActivity.class);
                         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(myIntent);
@@ -77,8 +102,6 @@ public class LoginPresenter {
                 view.createMessage(responseDTO.getError());
             }
         });
-
-
     }
 
 
