@@ -36,7 +36,8 @@ public class FilterTeamMembersDialog extends DialogFragment {
     private Team selectedTeam;
 
 
-    public FilterTeamMembersDialog() {}
+    public FilterTeamMembersDialog() {
+    }
 
     public static FilterTeamMembersDialog newInstance(TeamMemberPresenter presenter, Context context,
                                                       List<Team> teams, Team selectedTeam) {
@@ -73,15 +74,17 @@ public class FilterTeamMembersDialog extends DialogFragment {
                 Team team = teamsAdapter.getItem(position);
                 selectedTeam = team;
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapter) {  }
+            public void onNothingSelected(AdapterView<?> adapter) {
+            }
         });
 
 
         //Set selected Team
-        if(selectedTeam!=null){
-            for(int i = 0; i<teams.size(); i++){
-                if(selectedTeam.getID().equals(teams.get(i).getID())){
+        if (selectedTeam != null) {
+            for (int i = 0; i < teams.size(); i++) {
+                if (selectedTeam.getID().equals(teams.get(i).getID())) {
                     availableTeams.setSelection(i);
                     break;
                 }
@@ -90,24 +93,25 @@ public class FilterTeamMembersDialog extends DialogFragment {
 
 
         builder.setView(rootView)
-                .setTitle(R.string.team_member_dialog_filter_title)
+            .setTitle(R.string.team_member_dialog_filter_title)
 
-                //Action buttons
-                .setPositiveButton(R.string.team_member_dialog_filter_button, null)
-                .setNegativeButton(R.string.dialog_create_user_button_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        FilterTeamMembersDialog.this.getDialog().cancel();
-                    }
-                });
+            //Action buttons
+            .setPositiveButton(R.string.team_member_dialog_filter_button, null)
+            .setNeutralButton("Clear", null)
+            .setNegativeButton(R.string.dialog_create_user_button_cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    FilterTeamMembersDialog.this.getDialog().cancel();
+                }
+            });
 
-         dialog = builder.create();
+        dialog = builder.create();
 
-         return dialog;
+        return dialog;
     }
 
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
@@ -118,17 +122,29 @@ public class FilterTeamMembersDialog extends DialogFragment {
                 FilterTeamMembersDialog.this.getDialog().dismiss();
             }
         });
+
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.setSelectedTeamToFilter(null);
+                presenter.retrieveTeamMembers();
+                FilterTeamMembersDialog.this.getDialog().dismiss();
+            }
+        });
     }
 
     public void setPresenter(TeamMemberPresenter presenter) {
         this.presenter = presenter;
     }
-    public void setContext(Context context){
+
+    public void setContext(Context context) {
         this.context = context;
     }
+
     public void setTeams(List<Team> teams) {
         this.teams = teams;
     }
+
     public void setSelectedTeam(Team selectedTeam) {
         this.selectedTeam = selectedTeam;
     }

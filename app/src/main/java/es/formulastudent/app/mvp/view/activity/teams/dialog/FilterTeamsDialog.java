@@ -95,7 +95,7 @@ public class FilterTeamsDialog extends DialogFragment implements CompoundButton.
         builder.setView(rootView)
                 .setTitle(R.string.dynamic_event_filtering_dialog_title)
                 .setPositiveButton(R.string.dynamic_event_filtering_dialog_filter_button,null)
-                .setNeutralButton("Clear filters", null)
+                .setNeutralButton("Clear", null)
                 .setNegativeButton(R.string.dynamic_event_filtering_dialog_cancel_button, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             FilterTeamsDialog.this.getDialog().cancel();

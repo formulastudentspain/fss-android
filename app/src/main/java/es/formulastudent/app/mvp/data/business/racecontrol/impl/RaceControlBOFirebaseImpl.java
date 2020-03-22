@@ -74,7 +74,6 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
             query = query.whereEqualTo(RaceControlRegister.CAR_NUMBER, carNumber);
         }
 
-
         //Order by
         if(RaceControlEvent.ENDURANCE.equals(event)){
             query = query.orderBy(RaceControlRegister.ORDER, Query.Direction.ASCENDING);
@@ -95,7 +94,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                     if (e != null) {
                         responseDTO.setError(R.string.rc_realtime_error_retrieving_message);
                         callback.onFailure(responseDTO);
-                        return;
+                        e.printStackTrace();
                     }
 
                     List<RaceControlRegister> result = new ArrayList<>();

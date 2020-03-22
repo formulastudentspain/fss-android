@@ -260,7 +260,6 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
         cal.set(Calendar.HOUR_OF_DAY, 5);
         cal.set(Calendar.SECOND, 0);
 
-        Date from = cal.getTime(); //current day at 05:00am
 
         if(teamMember != null && teamMember.getID() != null) {
 

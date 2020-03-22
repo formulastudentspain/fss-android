@@ -34,4 +34,23 @@
         android:hint="Type number"
         android:background="@drawable/activity_user_list_filter_input"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"
+        android:text="Finished cars"/>
+
+    <Switch
+        android:id="@+id/filtering_finished_cars"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="Show finished cars" />
+
+
 </LinearLayout>

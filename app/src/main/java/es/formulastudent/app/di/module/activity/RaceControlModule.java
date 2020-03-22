@@ -6,14 +6,13 @@ import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
-import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
-import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
+import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
-import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.racecontrol.RaceControlPresenter;
 
-@Module(includes = {ContextModule.class, BusinessModule.class})
+@Module(includes = {ContextModule.class, BusinessModule.class, SharedPreferencesModule.class})
 public class RaceControlModule {
 
     private RaceControlPresenter.View view;
@@ -39,8 +38,10 @@ public class RaceControlModule {
     }
 
     @Provides
-    public RaceControlPresenter providePresenter(RaceControlPresenter.View categoryView, Context context, RaceControlBO raceControlBO, TeamMemberBO teamMemberBO, BriefingBO briefingBO, DynamicEventBO dynamicEventBO) {
-        return new RaceControlPresenter(categoryView, context, raceControlEvent, raceType, raceArea, raceControlBO, teamMemberBO, briefingBO, dynamicEventBO);
+    public RaceControlPresenter providePresenter(RaceControlPresenter.View categoryView,
+                                                 Context context, RaceControlBO raceControlBO, User user) {
+        return new RaceControlPresenter(
+            categoryView, context, raceControlEvent, raceType, raceArea, raceControlBO, user);
     }
 
 

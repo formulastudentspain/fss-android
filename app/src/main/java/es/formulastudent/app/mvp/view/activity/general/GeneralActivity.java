@@ -50,6 +50,7 @@ import es.formulastudent.app.mvp.view.activity.statistics.StatisticsActivity;
 import es.formulastudent.app.mvp.view.activity.teammember.TeamMemberActivity;
 import es.formulastudent.app.mvp.view.activity.teams.TeamsActivity;
 import es.formulastudent.app.mvp.view.activity.user.UserActivity;
+import es.formulastudent.app.mvp.view.activity.welcome.WelcomeActivity;
 import info.androidhive.fontawesome.FontDrawable;
 
 //arcaya
@@ -578,111 +579,76 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             return false;
         }
 
-
+        Intent intent = null;
         if(drawerItem.getIdentifier() == 10020){ //TeamMember management
-            Intent intent = new Intent(this, TeamMemberActivity.class);
-            this.startActivity(intent);
-            finish();
+            intent = new Intent(this, TeamMemberActivity.class);
 
         }else if(drawerItem.getIdentifier() == 10001){ //Briefing
-            Intent intent = new Intent(this, BriefingActivity.class);
-            this.startActivity(intent);
-            finish();
+            intent = new Intent(this, BriefingActivity.class);
 
         }else if(drawerItem.getIdentifier() == 10013){ //Acceleration
-            Intent intent = new Intent(this, DynamicEventActivity.class);
+            intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.ACCELERATION);
-            this.startActivity(intent);
-            finish();
 
         }else if(drawerItem.getIdentifier() == 10015){ //Endurance
-            Intent intent = new Intent(this, DynamicEventActivity.class);
+            intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.ENDURANCE_EFFICIENCY);
-            this.startActivity(intent);
-            finish();
 
         }else if(drawerItem.getIdentifier() == 10014){ //Autocross
-            Intent intent = new Intent(this, DynamicEventActivity.class);
+            intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.AUTOCROSS);
-            this.startActivity(intent);
-            finish();
 
         }else if(drawerItem.getIdentifier() == 10012){ //SkidPad
-            Intent intent = new Intent(this, DynamicEventActivity.class);
+            intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.SKIDPAD);
-            this.startActivity(intent);
-            finish();
 
         }else if(drawerItem.getIdentifier() == 10011){ //Practice Track
-            Intent intent = new Intent(this, DynamicEventActivity.class);
+            intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.PRACTICE_TRACK);
-            this.startActivity(intent);
-            finish();
 
         }else if(drawerItem.getIdentifier() == 30006){ //Logout
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(this, LoginActivity.class);
-            this.startActivity(intent);
-            finish();
+            intent = new Intent(this, LoginActivity.class);
 
         }else if(drawerItem.getIdentifier() == 10016){ //Statistics
-            Intent intent = new Intent(this, StatisticsActivity.class);
-            this.startActivity(intent);
-            finish();
+            intent = new Intent(this, StatisticsActivity.class);
 
         }else if(drawerItem.getIdentifier() == 10017) { //Admin operations
-            Intent intent = new Intent(this, AdminOpsActivity.class);
-            this.startActivity(intent);
-            finish();
+            intent = new Intent(this, AdminOpsActivity.class);
 
         }else if(drawerItem.getIdentifier() == 10021){ //Race Control Endurance
-            Intent intent = new Intent(this, RaceControlWelcomeActivity.class);
+            intent = new Intent(this, RaceControlWelcomeActivity.class);
             intent.putExtra("eventType", RaceControlEvent.ENDURANCE);
-            this.startActivity(intent);
-            finish();
 
         } else if(drawerItem.getIdentifier() == 80021){ //Cone Control Endurance
-            Intent intent = new Intent(this, ConeControlWelcomeActivity.class);
+            intent = new Intent(this, ConeControlWelcomeActivity.class);
             intent.putExtra("eventType", ConeControlEvent.ENDURANCE);
-            this.startActivity(intent);
-            finish();
 
         }else if(drawerItem.getIdentifier() == 10022){ //Race Control Autocross
-            Intent intent = new Intent(this, RaceControlWelcomeActivity.class);
+            intent = new Intent(this, RaceControlWelcomeActivity.class);
             intent.putExtra("eventType", RaceControlEvent.AUTOCROSS);
-            this.startActivity(intent);
-            finish();
 
         }else if(drawerItem.getIdentifier() == 10023){ //Race Control Skidpad
-            Intent intent = new Intent(this, RaceControlWelcomeActivity.class);
+            intent = new Intent(this, RaceControlWelcomeActivity.class);
             intent.putExtra("eventType", RaceControlEvent.SKIDPAD);
-            this.startActivity(intent);
-            finish();
 
         } else if(drawerItem.getIdentifier() == 80022){ //Cone Control Autocross
-            Intent intent = new Intent(this, ConeControlWelcomeActivity.class);
+            intent = new Intent(this, ConeControlWelcomeActivity.class);
             intent.putExtra("eventType", ConeControlEvent.AUTOCROSS);
-            this.startActivity(intent);
-            finish();
 
         } else if(drawerItem.getIdentifier() == 80023){ //Cone Control Skidpad
-            Intent intent = new Intent(this, ConeControlWelcomeActivity.class);
+            intent = new Intent(this, ConeControlWelcomeActivity.class);
             intent.putExtra("eventType", ConeControlEvent.SKIDPAD);
-            this.startActivity(intent);
-            finish();
 
         }else if(drawerItem.getIdentifier() == 10026){ //Users
-            Intent intent = new Intent(this, UserActivity.class);
-            this.startActivity(intent);
-            finish();
+            intent = new Intent(this, UserActivity.class);
 
         }else if(drawerItem.getIdentifier() == 70001){ //Teams
-            Intent intent = new Intent(this, TeamsActivity.class);
-            this.startActivity(intent);
-            finish();
+            intent = new Intent(this, TeamsActivity.class);
         }
 
-
+        this.startActivity(intent);
+        super.finish();
 
         return false;
     }
@@ -729,13 +695,18 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
     public void onBackPressed() {
         if(isTaskRoot()){
 
-            //Open exit dialog
-            GeneralActivityExitDialog exitDialog = GeneralActivityExitDialog.newInstance(this);
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.add(exitDialog, "exit_dialog");
-            ft.commitAllowingStateLoss();
-
+            if(this instanceof WelcomeActivity){
+                //Open exit dialog
+                GeneralActivityExitDialog exitDialog = GeneralActivityExitDialog.newInstance(this);
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.add(exitDialog, "exit_dialog");
+                ft.commitAllowingStateLoss();
+            }else{
+                Intent intent = new Intent(this, WelcomeActivity.class);
+                this.startActivity(intent);
+                finish();
+            }
         }else{
             super.onBackPressed();
         }
@@ -757,5 +728,17 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
                 drawer.openDrawer();
             }
         }
+    }
+
+    @Override
+    public void finish(){
+        super.finish();
+        overridePendingTransition(R.anim.close_activity_slide_out, R.anim.close_activity_slide_in);
+    }
+
+    @Override
+    public void startActivity(Intent intent){
+        super.startActivity(intent);
+        overridePendingTransition(R.anim.open_activity_slide_out, R.anim.open_activity_slide_in);
     }
 }

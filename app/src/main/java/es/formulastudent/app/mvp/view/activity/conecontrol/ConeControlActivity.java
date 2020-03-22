@@ -92,6 +92,7 @@ public class ConeControlActivity extends GeneralActivity implements ConeControlP
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
+
         //Titles
         sectorNumber = findViewById(R.id.sector_number);
         sectorNumber.setText(selectedSector==-1 ? "-" : String.valueOf(selectedSector));

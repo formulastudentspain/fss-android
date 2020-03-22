@@ -1,7 +1,6 @@
 package es.formulastudent.app.mvp.view.activity.racecontrol;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +25,6 @@ import es.formulastudent.app.di.component.DaggerRaceControlComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.RaceControlModule;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
-import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.racecontrol.recyclerview.RaceControlAdapter;
 
@@ -34,8 +32,6 @@ import es.formulastudent.app.mvp.view.activity.racecontrol.recyclerview.RaceCont
 public class
 RaceControlActivity extends GeneralActivity implements
         RaceControlPresenter.View, View.OnClickListener{
-
-    private static final int NFC_REQUEST_CODE = 101;
 
     RaceControlEvent rcEvent; //Endurance, AutoX, Acceleration, Skidpad
     String raceType; //Electric, Combustion or Final
@@ -109,6 +105,21 @@ RaceControlActivity extends GeneralActivity implements
         recyclerView.setAdapter(rcAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 || dy < 0 && buttonAddVehicle.isShown())
+                    buttonAddVehicle.hide();
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                    buttonAddVehicle.show();
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
 
         //Add vehicle button
         buttonAddVehicle = findViewById(R.id.button_add_vehicle);
@@ -152,24 +163,6 @@ RaceControlActivity extends GeneralActivity implements
     public void refreshEventRegisterItems() {
         rcAdapter.notifyDataSetChanged();
         this.hideLoading();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        //NFC reader
-        if (requestCode == NFC_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                String result = data.getStringExtra("result");
-                presenter.onNFCTagDetected(result);
-            }
-        }
-    }
-
-    @Override
-    public void openNFCReader(){
-        Intent i = new Intent(this, NFCReaderActivity.class);
-        startActivityForResult(i, NFC_REQUEST_CODE);
     }
 
 

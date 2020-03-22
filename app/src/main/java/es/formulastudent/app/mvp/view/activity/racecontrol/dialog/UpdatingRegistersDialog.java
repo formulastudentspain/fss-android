@@ -28,8 +28,9 @@ public class UpdatingRegistersDialog extends DialogFragment implements View.OnCl
         rcStateButton_R1D, rcStateButton_RR2D, rcStateButton_R2D, rcStateButton_FIN, rcStateButton_RL, rcStateButton_DNF;
 
     //Autocross states
-    private LinearLayout rcStateAutocrossNA, rcStateAutocrossRR1, rcStateAutocrossFR1, rcStateAutocrossRR2,
-            rcStateAutocrossFR2, rcStateAutocrossRR3, rcStateAutocrossFR3, rcStateAutocrossRR4, rcStateAutocrossFR4, rcStateAutocrossDNF;
+    private LinearLayout rcStateAutocrossNA, rcStateAutocrossRR1, rcStateAutocrossFR1, rcStateAutocrossDNF1, rcStateAutocrossRR2,
+        rcStateAutocrossFR2, rcStateAutocrossDNF2, rcStateAutocrossRR3, rcStateAutocrossFR3,
+        rcStateAutocrossDNF3, rcStateAutocrossRR4, rcStateAutocrossFR4, rcStateAutocrossDNF4;
 
     private ScrollView autocrossContainer;
     private ScrollView enduranceContainer;
@@ -114,11 +115,17 @@ public class UpdatingRegistersDialog extends DialogFragment implements View.OnCl
         rcStateAutocrossFR1 = rootView.findViewById(R.id.rc_autocross_state_FR1);
         rcStateAutocrossFR1.setOnClickListener(this);
 
+        rcStateAutocrossDNF1 = rootView.findViewById(R.id.rc_autocross_state_DNF1);
+        rcStateAutocrossDNF1.setOnClickListener(this);
+
         rcStateAutocrossRR2 = rootView.findViewById(R.id.rc_autocross_state_RR2);
         rcStateAutocrossRR2.setOnClickListener(this);
 
         rcStateAutocrossFR2 = rootView.findViewById(R.id.rc_autocross_state_FR2);
         rcStateAutocrossFR2.setOnClickListener(this);
+
+        rcStateAutocrossDNF2 = rootView.findViewById(R.id.rc_autocross_state_DNF2);
+        rcStateAutocrossDNF2.setOnClickListener(this);
 
         rcStateAutocrossRR3 = rootView.findViewById(R.id.rc_autocross_state_RR3);
         rcStateAutocrossRR3.setOnClickListener(this);
@@ -126,14 +133,17 @@ public class UpdatingRegistersDialog extends DialogFragment implements View.OnCl
         rcStateAutocrossFR3 = rootView.findViewById(R.id.rc_autocross_state_FR3);
         rcStateAutocrossFR3.setOnClickListener(this);
 
+        rcStateAutocrossDNF3 = rootView.findViewById(R.id.rc_autocross_state_DNF3);
+        rcStateAutocrossDNF3.setOnClickListener(this);
+
         rcStateAutocrossRR4 = rootView.findViewById(R.id.rc_autocross_state_RR4);
         rcStateAutocrossRR4.setOnClickListener(this);
 
         rcStateAutocrossFR4 = rootView.findViewById(R.id.rc_autocross_state_FR4);
         rcStateAutocrossFR4.setOnClickListener(this);
 
-        rcStateAutocrossDNF = rootView.findViewById(R.id.rc_autocross_state_DNF);
-        rcStateAutocrossDNF.setOnClickListener(this);
+        rcStateAutocrossDNF4 = rootView.findViewById(R.id.rc_autocross_state_DNF4);
+        rcStateAutocrossDNF4.setOnClickListener(this);
     }
 
 
@@ -240,11 +250,17 @@ public class UpdatingRegistersDialog extends DialogFragment implements View.OnCl
             case R.id.rc_autocross_state_FR1:
                 presenter.updateRegister(register, event, RaceControlAutocrossState.FINISHED_ROUND_1);
                 break;
+            case R.id.rc_autocross_state_DNF1:
+                presenter.updateRegister(register, event, RaceControlAutocrossState.DNF_ROUND_1);
+                break;
             case R.id.rc_autocross_state_RR2:
                 presenter.updateRegister(register, event, RaceControlAutocrossState.RACING_ROUND_2);
                 break;
             case R.id.rc_autocross_state_FR2:
                 presenter.updateRegister(register, event, RaceControlAutocrossState.FINISHED_ROUND_2);
+                break;
+            case R.id.rc_autocross_state_DNF2:
+                presenter.updateRegister(register, event, RaceControlAutocrossState.DNF_ROUND_2);
                 break;
             case R.id.rc_autocross_state_RR3:
                 presenter.updateRegister(register, event, RaceControlAutocrossState.RACING_ROUND_3);
@@ -252,14 +268,17 @@ public class UpdatingRegistersDialog extends DialogFragment implements View.OnCl
             case R.id.rc_autocross_state_FR3:
                 presenter.updateRegister(register, event, RaceControlAutocrossState.FINISHED_ROUND_3);
                 break;
+            case R.id.rc_autocross_state_DNF3:
+                presenter.updateRegister(register, event, RaceControlAutocrossState.DNF_ROUND_3);
+                break;
             case R.id.rc_autocross_state_RR4:
                 presenter.updateRegister(register, event, RaceControlAutocrossState.RACING_ROUND_4);
                 break;
             case R.id.rc_autocross_state_FR4:
                 presenter.updateRegister(register, event, RaceControlAutocrossState.FINISHED_ROUND_4);
                 break;
-            case R.id.rc_autocross_state_DNF:
-                presenter.updateRegister(register, event, RaceControlAutocrossState.DNF);
+            case R.id.rc_autocross_state_DNF4:
+                presenter.updateRegister(register, event, RaceControlAutocrossState.DNF_ROUND_4);
                 break;
         }
     }

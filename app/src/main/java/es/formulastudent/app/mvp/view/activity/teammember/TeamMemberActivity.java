@@ -1,7 +1,5 @@
 package es.formulastudent.app.mvp.view.activity.teammember;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,7 +28,6 @@ import es.formulastudent.app.di.component.DaggerTeamMemberListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.TeamMemberListModule;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.activity.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.teammember.dialog.CreateEditTeamMemberDialog;
 import es.formulastudent.app.mvp.view.activity.teammember.dialog.FilterTeamMembersDialog;
@@ -39,7 +36,6 @@ import es.formulastudent.app.mvp.view.activity.teammember.recyclerview.TeamMembe
 
 public class TeamMemberActivity extends GeneralActivity implements TeamMemberPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final int NFC_REQUEST_CODE = 101;
 
     @Inject
     TeamMemberPresenter presenter;
@@ -64,7 +60,6 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
 
         initViews();
         setSupportActionBar(toolbar);
-        presenter.retrieveTeamMembers();
     }
 
     /**
@@ -110,6 +105,21 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
         recyclerView.setAdapter(teamMemberListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 || dy < 0 && buttonAddUser.isShown())
+                    buttonAddUser.hide();
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                    buttonAddUser.show();
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
 
         //Add user button
         buttonAddUser = findViewById(R.id.button_add_user);
@@ -181,30 +191,7 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
     public void onClick(View view) {
         if(view.getId() == R.id.button_add_user){
             presenter.openCreateTeamMemberDialog();
-
-        }else if(view.getId() == R.id.teamMemberSearchNFC){
-            openNFCReader();
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        //NFC reader
-        if (requestCode == NFC_REQUEST_CODE) {
-            if(resultCode == Activity.RESULT_OK){
-                String result = data.getStringExtra("result");
-                presenter.onNFCTagDetected(result);
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
-        }
-    }
-
-    public void openNFCReader() {
-        Intent i = new Intent(this, NFCReaderActivity.class);
-        startActivityForResult(i, NFC_REQUEST_CODE);
     }
 
 

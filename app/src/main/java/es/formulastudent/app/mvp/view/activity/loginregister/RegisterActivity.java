@@ -133,8 +133,14 @@ public class RegisterActivity extends GeneralActivity implements RegisterPresent
             }
 
         }else if(view.getId() == R.id.back_arrow){
-            finish();
+            onBackPressed();
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.close_activity_slide_out, R.anim.close_activity_slide_in);
     }
 }

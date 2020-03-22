@@ -28,7 +28,7 @@ import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventPresenter;
 import es.formulastudent.app.mvp.view.activity.general.spinneradapters.TeamsSpinnerAdapter;
 
-public class FilteringRegistersDialog extends DialogFragment implements ChipGroup.OnCheckedChangeListener{
+public class FilteringRegistersDialog extends DialogFragment implements ChipGroup.OnCheckedChangeListener {
 
     private AlertDialog dialog;
 
@@ -50,7 +50,8 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
     //Presenter
     private DynamicEventPresenter presenter;
 
-    public FilteringRegistersDialog() {}
+    public FilteringRegistersDialog() {
+    }
 
     public static FilteringRegistersDialog newInstance(DynamicEventPresenter presenter, List<Team> teams,
                                                        String selectedTeamID, Long selectedCarNumber, String selectedDay) {
@@ -76,13 +77,14 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
         initializeValues();
 
         builder.setView(rootView)
-                    .setTitle(R.string.dynamic_event_filtering_dialog_title)
-                    .setPositiveButton(R.string.dynamic_event_filtering_dialog_filter_button,null)
-                    .setNegativeButton(R.string.dynamic_event_filtering_dialog_cancel_button, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            FilteringRegistersDialog.this.getDialog().cancel();
-                        }
-                    });
+            .setTitle(R.string.dynamic_event_filtering_dialog_title)
+            .setNeutralButton("Clear", null)
+            .setPositiveButton(R.string.dynamic_event_filtering_dialog_filter_button, null)
+            .setNegativeButton(R.string.dynamic_event_filtering_dialog_cancel_button, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    FilteringRegistersDialog.this.getDialog().cancel();
+                }
+            });
 
         dialog = builder.create();
         return dialog;
@@ -91,45 +93,45 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
     private void initializeValues() {
 
         //Teams
-        if(selectedTeamID != null && selectedTeamID != "-1"){
-            for(Team team: teams){
-                if(team.getID().equalsIgnoreCase(selectedTeamID)){
+        if (selectedTeamID != null && selectedTeamID != "-1") {
+            for (Team team : teams) {
+                if (team.getID().equalsIgnoreCase(selectedTeamID)) {
                     int teamPosition = teamsAdapter.getPosition(team);
                     teamsSpinner.setSelection(teamPosition);
 
                     break;
                 }
             }
-        }else{
+        } else {
             teamsSpinner.setSelection(0);
         }
 
         //Car number
-        if(selectedCarNumber != null){
+        if (selectedCarNumber != null) {
             carNumberField.setText(selectedCarNumber.toString());
-        }else{
+        } else {
             carNumberField.setText("");
         }
 
         //Chips
-        if(selectedDay != null){
-            if(selectedDay.equalsIgnoreCase(getString(R.string.competition_day_wed))){ //wednesday
-                ((Chip)dayListGroup.getChildAt(0)).setChecked(true);
-            }else if(selectedDay.equalsIgnoreCase(getString(R.string.competition_day_thu))){ //thursday
-                ((Chip)dayListGroup.getChildAt(1)).setChecked(true);
-            }else if(selectedDay.equalsIgnoreCase(getString(R.string.competition_day_fri))){ //friday
-                ((Chip)dayListGroup.getChildAt(2)).setChecked(true);
-            }else if(selectedDay.equalsIgnoreCase(getString(R.string.competition_day_sat))){ //saturday
-                ((Chip)dayListGroup.getChildAt(3)).setChecked(true);
-            }else if(selectedDay.equalsIgnoreCase(getString(R.string.competition_day_sun))){ //friday
-                ((Chip)dayListGroup.getChildAt(4)).setChecked(true);
+        if (selectedDay != null) {
+            if (selectedDay.equalsIgnoreCase(getString(R.string.competition_day_wed))) { //wednesday
+                ((Chip) dayListGroup.getChildAt(0)).setChecked(true);
+            } else if (selectedDay.equalsIgnoreCase(getString(R.string.competition_day_thu))) { //thursday
+                ((Chip) dayListGroup.getChildAt(1)).setChecked(true);
+            } else if (selectedDay.equalsIgnoreCase(getString(R.string.competition_day_fri))) { //friday
+                ((Chip) dayListGroup.getChildAt(2)).setChecked(true);
+            } else if (selectedDay.equalsIgnoreCase(getString(R.string.competition_day_sat))) { //saturday
+                ((Chip) dayListGroup.getChildAt(3)).setChecked(true);
+            } else if (selectedDay.equalsIgnoreCase(getString(R.string.competition_day_sun))) { //friday
+                ((Chip) dayListGroup.getChildAt(4)).setChecked(true);
             }
-        }else{ //all
-            ((Chip)dayListGroup.getChildAt(5)).setChecked(true);
+        } else { //all
+            ((Chip) dayListGroup.getChildAt(5)).setChecked(true);
         }
     }
 
-    private void initializeElements(View rootView){
+    private void initializeElements(View rootView) {
 
         //Teams spinner
         teamsSpinner = rootView.findViewById(R.id.dynamic_event_team_spinner);
@@ -142,8 +144,10 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
                 Team team = teamsAdapter.getItem(position);
                 selectedTeamID = team.getID();
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapter) {  }
+            public void onNothingSelected(AdapterView<?> adapter) {
+            }
         });
 
 
@@ -157,34 +161,40 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
 
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                try{
+                try {
                     //Get car number value
                     String carNumString = carNumberField.getText().toString();
-                    if(carNumString.isEmpty()){
+                    if (carNumString.isEmpty()) {
                         selectedCarNumber = null;
-                    }else{
+                    } else {
                         selectedCarNumber = Long.parseLong(carNumberField.getText().toString());
                     }
 
                     //Set values for filtering
                     presenter.setFilteringValues(selectedDateFrom, selectedDateTo, selectedDay, selectedTeamID, selectedCarNumber);
-
-                    //Do filter
                     presenter.retrieveRegisterList();
-
-                    //Close dialog
                     dialog.dismiss();
 
-                }catch(Exception e){
+                } catch (Exception e) {
                     carNumberField.setError("Invalid car number");
                 }
+            }
+        });
+
+
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.setFilteringValues(null, null, null, null, null);
+                presenter.retrieveRegisterList();
+                dialog.dismiss();
             }
         });
     }
@@ -194,36 +204,36 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
         DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         String competitionDayStr = null;
 
-        if(selectedChipId == R.id.dynamic_event_chip_wed){
+        if (selectedChipId == R.id.dynamic_event_chip_wed) {
             competitionDayStr = getString(R.string.competition_day_wed);
             selectedDay = getString(R.string.competition_day_wed);
 
-        }else if(selectedChipId == R.id.dynamic_event_chip_thu){
+        } else if (selectedChipId == R.id.dynamic_event_chip_thu) {
             competitionDayStr = getString(R.string.competition_day_thu);
             selectedDay = getString(R.string.competition_day_thu);
 
-        }else if(selectedChipId == R.id.dynamic_event_chip_fri){
+        } else if (selectedChipId == R.id.dynamic_event_chip_fri) {
             competitionDayStr = getString(R.string.competition_day_fri);
             selectedDay = getString(R.string.competition_day_fri);
 
-        }else if(selectedChipId == R.id.dynamic_event_chip_sat){
+        } else if (selectedChipId == R.id.dynamic_event_chip_sat) {
             competitionDayStr = getString(R.string.competition_day_sat);
             selectedDay = getString(R.string.competition_day_sat);
 
-        }else if(selectedChipId == R.id.dynamic_event_chip_sun){
+        } else if (selectedChipId == R.id.dynamic_event_chip_sun) {
             competitionDayStr = getString(R.string.competition_day_sun);
             selectedDay = getString(R.string.competition_day_sun);
 
-        }else{ //all
+        } else { //all
             selectedDateFrom = null;
             selectedDateTo = null;
             selectedDay = null;
         }
 
         //Get From and To dates
-        if(competitionDayStr != null){
+        if (competitionDayStr != null) {
 
-            try{
+            try {
                 Date competitionDate = sdf.parse(competitionDayStr);
 
                 //From
@@ -244,7 +254,7 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
                 selectedDateFrom = calFrom.getTime();
                 selectedDateTo = calTo.getTime();
 
-            }catch (ParseException pe){
+            } catch (ParseException pe) {
                 //Show error message
                 presenter.createMessage(R.string.briefing_messages_parsing_dates_error);
             }

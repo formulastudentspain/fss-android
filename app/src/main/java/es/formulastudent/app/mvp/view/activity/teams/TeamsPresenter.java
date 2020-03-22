@@ -87,22 +87,22 @@ public class TeamsPresenter implements RecyclerViewClickListener {
     public void recyclerViewListClicked(android.view.View v, int position) {
 
         Team selectedTeam = filteredTeamsList.get(position);
-
+        Intent intent = null;
         //Open Scrutineering
          if(v.getId() == R.id.scrutineering_button){
-             Intent intent = new Intent(context, TeamsDetailScrutineeringActivity.class);
+             intent = new Intent(context, TeamsDetailScrutineeringActivity.class);
              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-             intent.putExtra("selectedTeam", selectedTeam);
-             context.startActivity(intent);
          }
 
         //Open Fee
         if(v.getId() == R.id.fee_button){
-            Intent intent = new Intent(context, TeamsDetailFeeActivity.class);
+            intent = new Intent(context, TeamsDetailFeeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("selectedTeam", selectedTeam);
-            context.startActivity(intent);
         }
+
+        intent.putExtra("selectedTeam", selectedTeam);
+        context.startActivity(intent);
+
     }
 
     /**

@@ -106,7 +106,7 @@
         android:id="@+id/button_add_user"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="bottom|center_horizontal"
         android:src="@drawable/ic_user_list_add"
         android:layout_margin="16dp"/>
 

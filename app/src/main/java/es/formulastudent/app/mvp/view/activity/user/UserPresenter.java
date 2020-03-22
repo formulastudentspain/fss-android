@@ -9,7 +9,6 @@ import java.util.List;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
-import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
@@ -23,7 +22,6 @@ public class UserPresenter implements RecyclerViewClickListener {
     private View view;
     private Context context;
     private UserBO userBO;
-    private TeamBO teamBO;
 
     //Data
     private List<User> allUsersList = new ArrayList<>();
@@ -31,11 +29,10 @@ public class UserPresenter implements RecyclerViewClickListener {
 
 
 
-    public UserPresenter(UserPresenter.View view, Context context, UserBO userBO, TeamBO teamBO) {
+    public UserPresenter(UserPresenter.View view, Context context, UserBO userBO) {
         this.view = view;
         this.context = context;
         this.userBO = userBO;
-        this.teamBO = teamBO;
     }
 
 

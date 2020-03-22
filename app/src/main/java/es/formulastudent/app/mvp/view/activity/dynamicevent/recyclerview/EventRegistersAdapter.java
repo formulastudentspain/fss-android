@@ -64,7 +64,6 @@ public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         eventRegistersViewHolder.userName.setText(register.getUser());
         eventRegistersViewHolder.userTeam.setText(register.getTeam());
         eventRegistersViewHolder.registerDate.setText(sdf.format(register.getDate()));
-        eventRegistersViewHolder.carNumber.setText(register.getCarNumber().toString());
 
         Picasso.get().load(register.getUserImage()).into(eventRegistersViewHolder.profileImage);
 

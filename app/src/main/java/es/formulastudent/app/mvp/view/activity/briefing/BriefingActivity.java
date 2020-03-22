@@ -98,6 +98,21 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
         recyclerView.setAdapter(registersAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 || dy < 0 && buttonAddRegister.isShown())
+                    buttonAddRegister.hide();
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                    buttonAddRegister.show();
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
 
         //Add briefing register button
         buttonAddRegister = findViewById(R.id.button_add_briefing_register);
@@ -174,10 +189,11 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
         //NFC reader
         if (requestCode == NFC_REQUEST_CODE) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 String result = data.getStringExtra("result");
                 presenter.onNFCTagDetected(result);
             }

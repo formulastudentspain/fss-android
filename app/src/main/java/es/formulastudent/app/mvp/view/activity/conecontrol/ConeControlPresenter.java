@@ -64,11 +64,9 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
         ConeControlRegister register = coneControlRegisterList.get(position);
 
         if(view.getId() == R.id.minus_cone){
-            if(register.getCurrentConesCount()>0){
-                register.setCurrentConesCount(register.getCurrentConesCount()-1);
-                register.setState(1);
-                refreshList();
-            }
+            register.setCurrentConesCount(register.getCurrentConesCount()-1);
+            register.setState(1);
+            refreshList();
 
         }else if(view.getId() == R.id.add_cone){
             register.setCurrentConesCount(register.getCurrentConesCount()+1);
@@ -76,11 +74,9 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
             refreshList();
 
         }else if(view.getId() == R.id.minus_off_course){
-            if(register.getCurrentOffCourseCount()>0){
-                register.setCurrentOffCourseCount(register.getCurrentOffCourseCount()-1);
-                register.setState(1);
-                refreshList();
-            }
+            register.setCurrentOffCourseCount(register.getCurrentOffCourseCount()-1);
+            register.setState(1);
+            refreshList();
 
         }else if(view.getId() == R.id.add_off_course){
             register.setCurrentOffCourseCount(register.getCurrentOffCourseCount()+1);

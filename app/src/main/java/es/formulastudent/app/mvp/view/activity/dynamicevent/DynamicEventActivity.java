@@ -96,6 +96,21 @@ public class DynamicEventActivity extends GeneralActivity implements
         recyclerView.setAdapter(registersAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 || dy < 0 && buttonAddRegister.isShown())
+                    buttonAddRegister.hide();
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                    buttonAddRegister.show();
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
 
         //Add acceleration register button
         buttonAddRegister = findViewById(R.id.button_add_acceleration_register);
@@ -146,15 +161,8 @@ public class DynamicEventActivity extends GeneralActivity implements
     public void onClick(View view) {
 
         if(view.getId() == R.id.button_add_acceleration_register){
-
-            //Endurance control is done from Race Control
-            if(eventType.equals(EventType.ENDURANCE_EFFICIENCY)){
-                createMessage(R.string.dynamic_event_message_info_controlled_from_race_control);
-
-            }else{
-                Intent i = new Intent(this, NFCReaderActivity.class);
-                startActivityForResult(i, NFC_REQUEST_CODE);
-            }
+            Intent i = new Intent(this, NFCReaderActivity.class);
+            startActivityForResult(i, NFC_REQUEST_CODE);
         }
     }
 

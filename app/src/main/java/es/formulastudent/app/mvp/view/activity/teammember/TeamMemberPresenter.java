@@ -83,45 +83,13 @@ public class TeamMemberPresenter implements RecyclerViewClickListener, TeamMembe
     }
 
 
-    void onNFCTagDetected(final String tagNFC){
-
-        //Show loading
-        view.showLoading();
-
-        teamMemberBO.retrieveTeamMemberByNFCTag(tagNFC, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-
-                TeamMember teamMember = (TeamMember) responseDTO.getData();
-
-                briefingBO.checkBriefingByUser(teamMember.getID(), new BusinessCallback() {
-                    @Override
-                    public void onSuccess(ResponseDTO responseDTO) {
-                        Boolean briefingAvailable = (Boolean) responseDTO.getData();
-
-
-                    }
-
-                    @Override
-                    public void onFailure(ResponseDTO responseDTO) {
-                        //TODO
-                    }
-                });
-
-                view.hideLoading();
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
-                view.hideLoading();
-            }
-        });
-    }
-
-
 
     public void filterUsers(String query){
+
+        if(allTeamMemberList.isEmpty()){
+            return;
+        }
+
 
         //Clear the list
         filteredTeamMemberList.clear();

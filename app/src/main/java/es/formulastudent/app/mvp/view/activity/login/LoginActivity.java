@@ -157,6 +157,7 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
         }else if(view.getId() == R.id.register_link){
             Intent intent = new Intent(this, RegisterActivity.class);
             startActivityForResult(intent, REGISTER_REQUEST_CODE);
+            overridePendingTransition(R.anim.open_activity_slide_out, R.anim.open_activity_slide_in);
         }
 
     }
