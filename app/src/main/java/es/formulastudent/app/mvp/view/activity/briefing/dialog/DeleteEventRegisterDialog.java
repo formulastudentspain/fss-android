@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 import es.formulastudent.app.R;
@@ -13,10 +14,11 @@ import es.formulastudent.app.mvp.view.activity.briefing.BriefingPresenter;
 
 public class DeleteEventRegisterDialog extends DialogFragment {
 
-    BriefingPresenter presenter;
-    EventRegister register;
+    private BriefingPresenter presenter;
+    private EventRegister register;
 
-    public DeleteEventRegisterDialog() {}
+    public DeleteEventRegisterDialog() {
+    }
 
     public static DeleteEventRegisterDialog newInstance(BriefingPresenter presenter, EventRegister register) {
         DeleteEventRegisterDialog frag = new DeleteEventRegisterDialog();
@@ -25,6 +27,7 @@ public class DeleteEventRegisterDialog extends DialogFragment {
         return frag;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -32,19 +35,19 @@ public class DeleteEventRegisterDialog extends DialogFragment {
         String message = getString(R.string.dynamic_event_delete_register_dialog_message);
 
         builder.setTitle(getString(R.string.dynamic_event_delete_register_dialog_title))
-                .setMessage(message)
-                .setPositiveButton(R.string.dynamic_event_delete_register_dialog_delete_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        presenter.deleteBriefingRegister(register.getID());
-                    }
-                })
-                .setNegativeButton(R.string.dynamic_event_delete_register_dialog_cancel_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        DeleteEventRegisterDialog.this.dismiss();
-                    }
-                });
+            .setMessage(message)
+            .setPositiveButton(R.string.dynamic_event_delete_register_dialog_delete_button, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    presenter.deleteBriefingRegister(register.getID());
+                }
+            })
+            .setNegativeButton(R.string.dynamic_event_delete_register_dialog_cancel_button, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    DeleteEventRegisterDialog.this.dismiss();
+                }
+            });
 
         return builder.create();
     }

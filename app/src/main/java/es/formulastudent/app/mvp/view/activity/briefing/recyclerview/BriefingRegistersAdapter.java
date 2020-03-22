@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.ViewBinderHelper;
@@ -23,13 +24,9 @@ import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerV
 
 public class BriefingRegistersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    // This object helps you save/restore the open/close state of each view
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-
     private List<BriefingRegister> briefingRegisterList;
     private Context context;
-    private LayoutInflater mLayoutInflater;
-
     private RecyclerViewClickListener clickListener;
 
 
@@ -39,21 +36,20 @@ public class BriefingRegistersAdapter extends RecyclerView.Adapter<RecyclerView.
         this.clickListener = clickListener;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        mLayoutInflater = LayoutInflater.from(context);
+        LayoutInflater mLayoutInflater = LayoutInflater.from(context);
         viewBinderHelper.setOpenOnlyOne(true);
 
-        View view;
-
-        view = mLayoutInflater.inflate(R.layout.activity_briefing_list_item, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.activity_briefing_list_item, parent, false);
         return new BriefingRegistersViewHolder(view, clickListener);
 
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         BriefingRegister register = briefingRegisterList.get(position);
 

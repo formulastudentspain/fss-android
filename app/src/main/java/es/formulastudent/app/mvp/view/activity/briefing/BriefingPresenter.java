@@ -1,11 +1,8 @@
 package es.formulastudent.app.mvp.view.activity.briefing;
 
 import android.app.Activity;
-import android.content.Context;
 
 import androidx.fragment.app.FragmentManager;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +18,7 @@ import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.briefing.dialog.ConfirmBriefingRegisterDialog;
 import es.formulastudent.app.mvp.view.activity.briefing.dialog.DeleteEventRegisterDialog;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
@@ -30,16 +28,14 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
     //Dependencies
     private View view;
-    private Context context;
-    private FirebaseAuth firebaseAuth;
     private TeamBO teamBO;
     private BriefingBO briefingBO;
     private TeamMemberBO teamMemberBO;
+    private User loggedUser;
 
 
     //Data
-    List<BriefingRegister> allBriefingRegisterList = new ArrayList<>();
-    List<BriefingRegister> filteredBriefingRegisterList = new ArrayList<>();
+    private List<BriefingRegister> filteredBriefingRegisterList = new ArrayList<>();
 
     //Selected chip to filter
     private Date selectedDateFrom;
@@ -49,25 +45,22 @@ public class BriefingPresenter implements RecyclerViewClickListener {
     private String selectedTeamID;
 
 
-    public BriefingPresenter(BriefingPresenter.View view, Context context, TeamBO teamBO, BriefingBO briefingBO, TeamMemberBO teamMemberBO, FirebaseAuth firebaseAuth) {
+    public BriefingPresenter(BriefingPresenter.View view, TeamBO teamBO,
+                             BriefingBO briefingBO, TeamMemberBO teamMemberBO,
+                             User loggedUser) {
         this.view = view;
-        this.context = context;
         this.teamBO = teamBO;
         this.briefingBO = briefingBO;
         this.teamMemberBO = teamMemberBO;
-        this.firebaseAuth = firebaseAuth;
+        this.loggedUser = loggedUser;
     }
 
-    /**
-     * Create Briefing registry
-     * @param teamMember
-     */
-     public void createRegistry(TeamMember teamMember){
 
-        //Show loading
+    public void createRegistry(TeamMember teamMember) {
+
         view.showLoading();
 
-        briefingBO.createBriefingRegistry(teamMember, firebaseAuth.getCurrentUser().getEmail(), new BusinessCallback() {
+        briefingBO.createBriefingRegistry(teamMember, loggedUser.getMail(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 retrieveBriefingRegisterList();
@@ -75,7 +68,6 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //Hide loading and show error
                 view.hideLoading();
                 view.createMessage(responseDTO.getError());
             }
@@ -83,40 +75,33 @@ public class BriefingPresenter implements RecyclerViewClickListener {
     }
 
 
-    /**
-     * Retrieve Briefing registers
-     */
-     void retrieveBriefingRegisterList() {
+    @SuppressWarnings("unchecked")
+    void retrieveBriefingRegisterList() {
 
-        //Show loading
         view.showLoading();
 
         //Call Briefing business
-         briefingBO.retrieveBriefingRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, new BusinessCallback() {
+        briefingBO.retrieveBriefingRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, new BusinessCallback() {
 
-             @Override
-             public void onSuccess(ResponseDTO responseDTO) {
-                     List<BriefingRegister> results = (List<BriefingRegister>) responseDTO.getData();
-                     if(results == null){
-                         results = new ArrayList<>();
-                     }
-                     updateBriefingRegisters(results);
-             }
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                List<BriefingRegister> results = (List<BriefingRegister>) responseDTO.getData();
+                if (results == null) {
+                    results = new ArrayList<>();
+                }
+                updateBriefingRegisters(results);
+            }
 
-             @Override
-             public void onFailure(ResponseDTO responseDTO) {
-                 //Show error message
-                 view.createMessage(responseDTO.getError());
-             }
-         });
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                view.hideLoading();
+                view.createMessage(responseDTO.getError());
+            }
+        });
     }
 
 
-    public void updateBriefingRegisters(List<BriefingRegister> items){
-        //Update all-register-list
-        this.allBriefingRegisterList.clear();
-        this.allBriefingRegisterList.addAll(items);
-
+    private void updateBriefingRegisters(List<BriefingRegister> items) {
         //Update and refresh filtered-register-list
         this.filteredBriefingRegisterList.clear();
         this.filteredBriefingRegisterList.addAll(items);
@@ -124,11 +109,10 @@ public class BriefingPresenter implements RecyclerViewClickListener {
     }
 
 
-    /**
-     * Delete briefing register given a register ID
-     * @param id
-     */
+
     public void deleteBriefingRegister(String id) {
+
+        view.showLoading();
 
         //Call business to delete Briefing registers
         briefingBO.deleteBriefingRegister(id, new BusinessCallback() {
@@ -142,64 +126,50 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //Show error message
+                view.hideLoading();
                 view.createMessage(responseDTO.getError());
             }
         });
 
-     }
+    }
 
 
+    void onNFCTagDetected(String tag) {
 
-    /**
-     * Retrieve user by NFC tag after read
-     * @param tag
-     */
-    void onNFCTagDetected(String tag){
-
-        //Show loading
         view.showLoading();
 
         teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
-                //Hide loading
                 view.hideLoading();
 
-                TeamMember teamMember = (TeamMember)responseDTO.getData();
+                TeamMember teamMember = (TeamMember) responseDTO.getData();
 
-                FragmentManager fm = ((BriefingActivity)view.getActivity()).getSupportFragmentManager();
+                FragmentManager fm = ((BriefingActivity) view.getActivity()).getSupportFragmentManager();
                 ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog.newInstance(BriefingPresenter.this, teamMember);
                 createUserDialog.show(fm, "fragment_briefing_confirm");
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //Hide loading
                 view.hideLoading();
-
-                //Show error message
                 view.createMessage(responseDTO.getError());
             }
         });
     }
 
 
-    /**
-     * Retrieve teams from database
-     */
-    void retrieveTeams(){
+    @SuppressWarnings("unchecked")
+    void retrieveTeams() {
 
-        //Show loading
         view.showLoading();
 
-        //Call business to retrieve teams
         teamBO.retrieveTeams(null, null, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                List<Team> teams = (List<Team>)responseDTO.getData();
+                List<Team> teams = (List<Team>) responseDTO.getData();
 
                 //Add "All" option
                 Team teamAll = new Team("-1", "All");
@@ -210,7 +180,6 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //Show error message
                 view.createMessage(responseDTO.getError());
             }
 
@@ -220,39 +189,37 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
-        if(v.getId() == R.id.delete_run_button){
+        if (v.getId() == R.id.delete_run_button) {
             BriefingRegister selectedRegister = filteredBriefingRegisterList.get(position);
             openConfirmDeleteRegister(selectedRegister);
         }
     }
 
 
-    public void openConfirmDeleteRegister(EventRegister register){
+    private void openConfirmDeleteRegister(EventRegister register) {
         //With all the information, we open the dialog
-        FragmentManager fm = ((BriefingActivity)view.getActivity()).getSupportFragmentManager();
+        FragmentManager fm = ((BriefingActivity) view.getActivity()).getSupportFragmentManager();
         DeleteEventRegisterDialog deleteEventRegisterDialog = DeleteEventRegisterDialog.newInstance(this, register);
         deleteEventRegisterDialog.show(fm, "delete_event_confirm");
     }
 
 
-    public List<BriefingRegister> getBriefingRegisterList() {
+    List<BriefingRegister> getBriefingRegisterList() {
         return filteredBriefingRegisterList;
     }
 
-    public void setSelectedDateFrom(Date selectedDateFrom) {
+    void setSelectedDateFrom(Date selectedDateFrom) {
         this.selectedDateFrom = selectedDateFrom;
     }
 
-    public void setSelectedDateTo(Date selectedDateTo) {
+    void setSelectedDateTo(Date selectedDateTo) {
         this.selectedDateTo = selectedDateTo;
     }
 
 
-    public void setSelectedTeamID(String selectedTeamID) {
+    void setSelectedTeamID(String selectedTeamID) {
         this.selectedTeamID = selectedTeamID;
     }
-
-
 
 
     public interface View {
@@ -261,9 +228,10 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
         /**
          * Show message to user
-         * @param message
+         * @param message to be displayed
+         * @param args for the message
          */
-        void createMessage(Integer message, Object...args);
+        void createMessage(Integer message, Object... args);
 
         /**
          * Finish current activity

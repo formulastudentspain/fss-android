@@ -210,8 +210,6 @@ public class TeamMemberPresenter implements RecyclerViewClickListener, TeamMembe
                 view.createMessage(R.string.team_member_get_teams_error);
             }
         });
-
-
     }
 
     public Team getSelectedTeamToFilter() {

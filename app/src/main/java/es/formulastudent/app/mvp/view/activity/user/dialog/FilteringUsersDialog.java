@@ -13,7 +13,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.view.activity.racecontrol.RaceControlPresenter;
+import es.formulastudent.app.mvp.view.activity.user.UserPresenter;
 
 public class FilteringUsersDialog extends DialogFragment implements ChipGroup.OnCheckedChangeListener{
 
@@ -30,11 +30,12 @@ public class FilteringUsersDialog extends DialogFragment implements ChipGroup.On
 
 
     //Presenter
-    private RaceControlPresenter presenter;
+    private UserPresenter presenter;
 
     public FilteringUsersDialog() {}
 
-    public static FilteringUsersDialog newInstance(RaceControlPresenter presenter, String selectedRole, Boolean cellPhoneSelected, Boolean walkieSelected) {
+    public static FilteringUsersDialog newInstance(UserPresenter presenter, String selectedRole,
+                                                   Boolean cellPhoneSelected, Boolean walkieSelected) {
         FilteringUsersDialog frag = new FilteringUsersDialog();
         frag.setPresenter(presenter);
         frag.setSelectedRole(selectedRole);
@@ -124,7 +125,7 @@ public class FilteringUsersDialog extends DialogFragment implements ChipGroup.On
               //  presenter.setFilteringValues(selectedArea, selectedCarNumber);
 
                 //Do filter
-                presenter.retrieveRegisterList();
+                //presenter.retrieveRegisterList();
 
                 //Close dialog
                 dialog.dismiss();
@@ -154,7 +155,7 @@ public class FilteringUsersDialog extends DialogFragment implements ChipGroup.On
 
     }
 
-    public void setPresenter(RaceControlPresenter presenter) {
+    public void setPresenter(UserPresenter presenter) {
         this.presenter = presenter;
     }
 

@@ -1,5 +1,7 @@
 package es.formulastudent.app.mvp.data.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
@@ -257,6 +259,7 @@ public class Team implements Serializable, Cloneable {
         this.name = name;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return name;

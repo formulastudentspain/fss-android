@@ -8,6 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -19,6 +22,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import es.formulastudent.app.FSSApp;
@@ -27,9 +32,11 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerUserListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.UserListModule;
+import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.qrreader.QRReaderActivity;
 import es.formulastudent.app.mvp.view.activity.user.dialog.CreateUserDialog;
+import es.formulastudent.app.mvp.view.activity.user.dialog.FilteringUsersDialog;
 import es.formulastudent.app.mvp.view.activity.user.recyclerview.UserListAdapter;
 import info.androidhive.fontawesome.FontTextView;
 
@@ -49,6 +56,9 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
     private EditText searchUser;
     private FontTextView qrCodeReaderButton;
 
+    private MenuItem filterItem;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +67,7 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
         super.onCreate(savedInstanceState);
 
         initViews();
+        setSupportActionBar(toolbar);
         requestPermissions();
         presenter.retrieveUsers();
     }
@@ -144,6 +155,36 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
         }
     }
 
+    @Override
+    public void filtersActivated(Boolean activated) {
+        if(filterItem != null){
+            if(activated){
+                filterItem.setIcon(R.drawable.ic_filter_active);
+            }else{
+                filterItem.setIcon(R.drawable.ic_filter_inactive);
+            }
+        }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_dynamic_event, menu);
+
+        //Search menu item
+        filterItem = menu.findItem(R.id.filter_results);
+        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                presenter.filterIconClicked();
+                return false;
+            }
+        });
+
+        return true;
+    }
+
 
     @Override
     public void refreshUserItems() {
@@ -189,6 +230,13 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
         FragmentManager fm = getSupportFragmentManager();
         CreateUserDialog createUserDialog = CreateUserDialog.newInstance(presenter, this, loggedUser);
         createUserDialog.show(fm, "fragment_edit_name");
+    }
+
+    @Override
+    public void showFilteringDialog(List<Team> teams) {
+        FilteringUsersDialog filteringUsersDialog = FilteringUsersDialog.newInstance(presenter,null, null, null);
+        filteringUsersDialog.show(getSupportFragmentManager(), "filterUserDialog");
+
     }
 
     @Override

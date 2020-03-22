@@ -9,7 +9,9 @@ import java.util.List;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
@@ -22,6 +24,7 @@ public class UserPresenter implements RecyclerViewClickListener {
     private View view;
     private Context context;
     private UserBO userBO;
+    private TeamBO teamBO;
 
     //Data
     private List<User> allUsersList = new ArrayList<>();
@@ -29,10 +32,11 @@ public class UserPresenter implements RecyclerViewClickListener {
 
 
 
-    public UserPresenter(UserPresenter.View view, Context context, UserBO userBO) {
+    public UserPresenter(UserPresenter.View view, Context context, UserBO userBO, TeamBO teamBO) {
         this.view = view;
         this.context = context;
         this.userBO = userBO;
+        this.teamBO = teamBO;
     }
 
 
@@ -50,6 +54,9 @@ public class UserPresenter implements RecyclerViewClickListener {
 
 
     void retrieveUsers(){
+
+        //Set filtering icon
+        //view.filtersActivated(selectedTeamToFilter!=null && !"".equals(selectedTeamToFilter.getID()));
 
         //show loading
         view.showLoading();
@@ -88,6 +95,30 @@ public class UserPresenter implements RecyclerViewClickListener {
 
         //Refresh list
         this.view.refreshUserItems();
+    }
+
+    public void filterIconClicked() {
+
+        //Show loading
+        view.showLoading();
+
+        //Call business to retrieve teams
+        teamBO.retrieveTeams(null, null, new BusinessCallback() {
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+
+                //Hide loading
+                view.hideLoading();
+
+                List<Team> teams = (List<Team>) responseDTO.getData();
+                view.showFilteringDialog(teams);
+            }
+
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                view.createMessage(R.string.team_member_get_teams_error);
+            }
+        });
     }
 
 
@@ -134,6 +165,8 @@ public class UserPresenter implements RecyclerViewClickListener {
 
     public interface View {
 
+        void filtersActivated(Boolean activated);
+
         /**
          * On retrieved timeline items
          */
@@ -169,6 +202,8 @@ public class UserPresenter implements RecyclerViewClickListener {
          * Show create user dialog
          */
         void showCreateUserDialog();
+
+        void showFilteringDialog(List<Team> teams);
     }
 
 }

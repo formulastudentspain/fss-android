@@ -18,14 +18,12 @@ public class BriefingRegistersViewHolder extends RecyclerView.ViewHolder impleme
     TextView userName;
     TextView userTeam;
     TextView registerDate;
-
-    //Swipe components
     SwipeRevealLayout swipeRevealLayout;
-    CardView deleteBriefingLayout;
 
-    RecyclerViewClickListener clickListener;
+    private RecyclerViewClickListener clickListener;
 
-    public BriefingRegistersViewHolder(View itemView, RecyclerViewClickListener clickListener) {
+
+    BriefingRegistersViewHolder(View itemView, RecyclerViewClickListener clickListener) {
         super(itemView);
         swipeRevealLayout = itemView.findViewById(R.id.swipeLayout);
         profileImage =  itemView.findViewById(R.id.user_profile_image);
@@ -34,9 +32,8 @@ public class BriefingRegistersViewHolder extends RecyclerView.ViewHolder impleme
         registerDate = itemView.findViewById(R.id.briefing_item_date);
         this.clickListener = clickListener;
 
-
         //Swipe components
-        deleteBriefingLayout = itemView.findViewById(R.id.delete_run_button);
+        CardView deleteBriefingLayout = itemView.findViewById(R.id.delete_run_button);
         deleteBriefingLayout.setOnClickListener(this);
     }
 

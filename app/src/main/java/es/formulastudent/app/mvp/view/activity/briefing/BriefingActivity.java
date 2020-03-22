@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -47,12 +48,10 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
 
     //View components
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView recyclerView;
     private BriefingRegistersAdapter registersAdapter;
     private TeamsSpinnerAdapter teamsAdapter;
     private FloatingActionButton buttonAddRegister;
     private Spinner teamsSpinner;
-    private ChipGroup dayListGroup;
 
 
     @Override
@@ -70,10 +69,7 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
         return this;
     }
 
-    /**
-     * Inject dependencies method
-     * @param appComponent
-     */
+
     protected void setupComponent(AppComponent appComponent) {
 
         DaggerBriefingComponent.builder()
@@ -93,7 +89,7 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
         //Recycler view
         mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         registersAdapter = new BriefingRegistersAdapter(presenter.getBriefingRegisterList(), this, presenter);
         recyclerView.setAdapter(registersAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -101,13 +97,13 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0 || dy < 0 && buttonAddRegister.isShown())
                     buttonAddRegister.hide();
             }
 
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE)
                     buttonAddRegister.show();
                 super.onScrollStateChanged(recyclerView, newState);
@@ -123,7 +119,7 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
         presenter.retrieveTeams();
 
         //Chip Group
-        dayListGroup = findViewById(R.id.briefing_chip_group);
+        ChipGroup dayListGroup = findViewById(R.id.briefing_chip_group);
         dayListGroup.setOnCheckedChangeListener(this);
 
         //Add toolbar title
@@ -140,8 +136,10 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 Team team = teamsAdapter.getItem(position);
-                presenter.setSelectedTeamID(team.getID());
-                presenter.retrieveBriefingRegisterList();
+                if(team != null){
+                    presenter.setSelectedTeamID(team.getID());
+                    presenter.retrieveBriefingRegisterList();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapter) {  }
@@ -158,7 +156,7 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
 
     @Override
     public void finishView() {
-
+        super.finish();
     }
 
     @Override
@@ -196,9 +194,6 @@ public class BriefingActivity extends GeneralActivity implements ChipGroup.OnChe
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getStringExtra("result");
                 presenter.onNFCTagDetected(result);
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
             }
         }
     }
