@@ -335,7 +335,11 @@
     <string name="user_role_staff">Staff</string>
     <string name="user_role_scrutineer">Scrutineer</string>
     <string name="user_role_marshall">Marshall</string>
-    <string name="user_role_official">Official</string>
+    <string name="user_role_official_staff">Official Staff</string>
+    <string name="user_role_official_scrutineer">Official Scrutineer</string>
+    <string name="user_role_official_marshall">Official Marshall</string>
+    <string name="user_role_administrator">Administrator</string>
+
     <string name="user_role_all">All</string>
     <string name="user_role_area">Roles</string>
     <string name="user_with_walkie">Walkie</string>

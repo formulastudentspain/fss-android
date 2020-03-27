@@ -18,96 +18,13 @@
         android:text="@string/user_role_area"/>
 
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/user_roles_chip_group"
+    <Spinner
+        android:id="@+id/roles_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/user_list_role_staff"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:text="@string/user_role_staff"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/user_list_role_scrutineer"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:text="@string/user_role_scrutineer"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/user_list_role_marshall"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:text="@string/user_role_marshall"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/user_list_role_official"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:text="@string/user_role_official"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/user_list_role_all"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:checked="true"
-            android:text="@string/user_role_all"/>
-
-    </com.google.android.material.chip.ChipGroup>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:textStyle="bold"
-        android:text="@string/user_items"/>
-
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/user_list_with_items"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/user_list_with_cell_phone"
-            style="@style/Widget.MaterialComponents.Chip.Entry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:chipIcon="@drawable/ic_cell_phone_off"
-            app:closeIconEnabled="false"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:text="@string/user_with_cellphone"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/user_list_with_walkie"
-            style="@style/Widget.MaterialComponents.Chip.Entry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:chipIcon="@drawable/ic_walkie_talkie_off"
-            app:closeIconEnabled="false"
-            app:chipBackgroundColor="@color/material_chip_background"
-            android:text="@string/user_with_walkie"/>
-
-
-    </com.google.android.material.chip.ChipGroup>
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp">
+    </Spinner>
 
 </LinearLayout>

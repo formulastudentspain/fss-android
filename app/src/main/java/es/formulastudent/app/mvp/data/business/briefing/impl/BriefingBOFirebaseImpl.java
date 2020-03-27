@@ -11,8 +11,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.greenrobot.greendao.annotation.NotNull;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -119,7 +117,7 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
     }
 
     @Override
-    public void checkBriefingByUser(@NotNull String userID, final BusinessCallback callback) {
+    public void checkBriefingByUser(String userID, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
 

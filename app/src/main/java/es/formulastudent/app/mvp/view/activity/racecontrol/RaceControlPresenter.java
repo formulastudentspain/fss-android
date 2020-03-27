@@ -105,7 +105,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
          }
 
          filters.put("states",states);
-         filters.put("raceType", raceType);
+         filters.put("raceRound", raceType);
          filters.put("eventType", rcEventType);
          filters.put("carNumber", selectedCarNumber);
          filters.put("showFinishedCars", showFinishedCars);
@@ -202,7 +202,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
         view.showLoading();
 
         Map<String, Object> filters = new HashMap<>();
-        filters.put("raceType", raceType);
+        filters.put("raceRound", raceType);
         filters.put("eventType", rcEventType);
 
         //Call business to retrieve teams

@@ -20,6 +20,7 @@ import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.UserRole;
 
 public class UserBOFirebaseImpl implements UserBO {
 
@@ -30,12 +31,17 @@ public class UserBOFirebaseImpl implements UserBO {
     }
 
     @Override
-    public void retrieveUsers(final BusinessCallback callback) {
+    public void retrieveUsers(UserRole selectedRole, final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER)
-                .orderBy(User.NAME, Query.Direction.ASCENDING)
+        Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER);
+
+        if(selectedRole != null){
+            query = query.whereEqualTo(User.ROLE, selectedRole.getName());
+        }
+
+        query.orderBy(User.NAME, Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 

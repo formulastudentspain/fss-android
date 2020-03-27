@@ -11,16 +11,16 @@ import java.util.Map;
 public abstract class RaceControlRegister implements Serializable {
 
     //RaceControl Event Type
-    public static final String RACE_TYPE_ELECTRIC = Car.CAR_TYPE_ELECTRIC;
-    public static final String RACE_TYPE_COMBUSTION = Car.CAR_TYPE_COMBUSTION;
+    public static final String RACE_ROUND_1 = "1";
+    public static final String RACE_ROUND_2 = "2";
     public static final String RACE_TYPE_ELECTRIC_DRIVERLESS = Car.CAR_TYPE_AUTONOMOUS_ELECTRIC;
     public static final String RACE_TYPE_COMBUSTION_DRIVERLESS = Car.CAR_TYPE_AUTONOMOUS_COMBUSTION;
-    public static final String RACE_TYPE_FINAL = "Final";
+    public static final String RACE_ROUND_FINAL = "Final";
 
 
     //Database constants
     public static final String CAR_NUMBER = "carNumber";
-    public static final String CAR_TYPE = "carType";
+    public static final String ROUND = "round";
     public static final String FLAG_URL = "flagURL";
     public static final String CURRENT_STATE = "currentState";
     public static final String CURRENT_STATE_DATE = "currentStateDate";
@@ -28,16 +28,14 @@ public abstract class RaceControlRegister implements Serializable {
     public static final String RC_STATE_DNF = "rcDNF";
     public static final String RC_STATE_FINISHED = "rcFinished";
     public static final String RC_STATE_NOT_AVAILABLE = "rcNotAvailable";
-    public static final String RUN_FINAL = "runFinal";
 
 
     private String ID;
-    private String carType;
+    private String round;
     private Long carNumber;
     private String flagURL;
     private Date currentStateDate;
     private Long order;
-    private Boolean runFinal;
 
     //States
     private Date stateNA;
@@ -50,14 +48,13 @@ public abstract class RaceControlRegister implements Serializable {
 
         Map<String, Object> docData = new HashMap<>();
         docData.put(RaceControlRegister.CAR_NUMBER, this.carNumber);
-        docData.put(RaceControlRegister.CAR_TYPE, this.carType);
+        docData.put(RaceControlRegister.ROUND, this.round);
         docData.put(RaceControlRegister.FLAG_URL, this.flagURL);
         docData.put(RaceControlRegister.CURRENT_STATE_DATE, this.currentStateDate == null ? null : new Timestamp(this.currentStateDate));
         docData.put(RaceControlRegister.ORDER, this.order);
         docData.put(RaceControlRegister.RC_STATE_NOT_AVAILABLE, this.stateNA == null ? null : new Timestamp(this.stateNA));
         docData.put(RaceControlRegister.RC_STATE_DNF, this.stateDNF == null ? null : new Timestamp(this.stateDNF));
         docData.put(RaceControlRegister.RC_STATE_FINISHED, this.stateFinished == null ? null : new Timestamp(this.stateFinished));
-        docData.put(RaceControlRegister.RUN_FINAL, runFinal);
 
         return docData;
     }
@@ -66,14 +63,13 @@ public abstract class RaceControlRegister implements Serializable {
     protected RaceControlRegister(DocumentSnapshot object){
         this.ID = object.getId();
         this.carNumber = object.getLong(RaceControlRegister.CAR_NUMBER);
-        this.carType = object.getString(RaceControlRegister.CAR_TYPE);
+        this.round = object.getString(RaceControlRegister.ROUND);
         this.flagURL = object.getString(RaceControlRegister.FLAG_URL);
         this.currentStateDate = object.getDate(RaceControlRegister.CURRENT_STATE_DATE);
         this.order = object.getLong(RaceControlRegister.ORDER);
         this.stateNA = object.getDate(RaceControlRegister.RC_STATE_NOT_AVAILABLE);
         this.stateDNF = object.getDate(RaceControlRegister.RC_STATE_DNF);
         this.stateFinished = object.getDate(RaceControlRegister.RC_STATE_FINISHED);
-        this.runFinal = object.getBoolean(RaceControlRegister.RUN_FINAL);
 
     }
 
@@ -85,12 +81,12 @@ public abstract class RaceControlRegister implements Serializable {
         this.ID = ID;
     }
 
-    public String getCarType() {
-        return carType;
+    public String getRound() {
+        return round;
     }
 
-    public void setCarType(String carType) {
-        this.carType = carType;
+    public void setRound(String round) {
+        this.round = round;
     }
 
     public Long getCarNumber() {
@@ -139,15 +135,6 @@ public abstract class RaceControlRegister implements Serializable {
 
     public void setStateFinished(Date stateFinished) {
         this.stateFinished = stateFinished;
-    }
-
-
-    public Boolean getRunFinal() {
-        return runFinal;
-    }
-
-    public void setRunFinal(Boolean runFinal) {
-        this.runFinal = runFinal;
     }
 
     public Date getStateNA() {

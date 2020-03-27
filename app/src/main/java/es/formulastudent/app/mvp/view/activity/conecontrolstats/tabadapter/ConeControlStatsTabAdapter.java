@@ -25,11 +25,11 @@ public class ConeControlStatsTabAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
 
         if(i == 0){
-            return new ConeControlStatsFragment(presenter, RaceControlRegister.RACE_TYPE_ELECTRIC);
+            return new ConeControlStatsFragment(presenter, RaceControlRegister.RACE_ROUND_1);
         }else if(i==1){
-            return new ConeControlStatsFragment(presenter, RaceControlRegister.RACE_TYPE_COMBUSTION);
+            return new ConeControlStatsFragment(presenter, RaceControlRegister.RACE_ROUND_2);
         }else{
-            return new ConeControlStatsFragment(presenter, RaceControlRegister.RACE_TYPE_FINAL);
+            return new ConeControlStatsFragment(presenter, RaceControlRegister.RACE_ROUND_FINAL);
         }
     }
 

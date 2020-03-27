@@ -151,21 +151,21 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
 
         //Round 1
         if(view.getId() == R.id.round_1_container){
-            selectedRound = RaceControlRegister.RACE_TYPE_ELECTRIC;
+            selectedRound = RaceControlRegister.RACE_ROUND_1;
             round1.setSelected(true);
             round2.setSelected(false);
             roundFinal.setSelected(false);
 
         //Round 2
         }else if(view.getId() == R.id.round_2_container){
-            selectedRound = RaceControlRegister.RACE_TYPE_COMBUSTION;
+            selectedRound = RaceControlRegister.RACE_ROUND_2;
             round1.setSelected(false);
             round2.setSelected(true);
             roundFinal.setSelected(false);
 
         //Final round
         }else if(view.getId() == R.id.round_3_container){
-            selectedRound = RaceControlRegister.RACE_TYPE_FINAL;
+            selectedRound = RaceControlRegister.RACE_ROUND_FINAL;
             round1.setSelected(false);
             round2.setSelected(false);
             roundFinal.setSelected(true);
@@ -218,7 +218,7 @@ public class RaceControlWelcomeActivity extends GeneralActivity implements View.
         }else if(view.getId() == R.id.go_button){
             Intent intent = new Intent(this, RaceControlActivity.class);
             intent.putExtra("eventType", rcEvent);
-            intent.putExtra("rc_type", selectedRound);
+            intent.putExtra("rc_round", selectedRound);
             intent.putExtra("rc_area", selectedArea);
             this.startActivity(intent);
         }

@@ -14,7 +14,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.greenrobot.greendao.annotation.NotNull;
 
 import javax.inject.Inject;
 
@@ -72,7 +71,7 @@ public class DynamicEventActivity extends GeneralActivity implements
      * Inject dependencies method
      * @param appComponent
      */
-    protected void setupComponent(AppComponent appComponent, @NotNull EventType eventType) {
+    protected void setupComponent(AppComponent appComponent, EventType eventType) {
 
         DaggerDynamicEventComponent.builder()
                 .appComponent(appComponent)

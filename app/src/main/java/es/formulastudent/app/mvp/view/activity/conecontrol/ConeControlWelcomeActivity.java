@@ -30,6 +30,7 @@ import es.formulastudent.app.di.component.DaggerConeControlWelcomeComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.ConeControlModule;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
+import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.view.activity.conecontrol.recyclerview.SectorAdapter;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
@@ -165,21 +166,21 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements ConeC
             round1.setSelected(true);
             round2.setSelected(false);
             roundFinal.setSelected(false);
-            selectedRound = "Electric";
+            selectedRound = RaceControlRegister.RACE_ROUND_1;
             this.checkEnableButton();
 
         }else if(view.getId()==R.id.button_round2){
             round1.setSelected(false);
             round2.setSelected(true);
             roundFinal.setSelected(false);
-            selectedRound = "Combustion";
+            selectedRound = RaceControlRegister.RACE_ROUND_2;
             this.checkEnableButton();
 
         }else if(view.getId()==R.id.button_roundFinal){
             round1.setSelected(false);
             round2.setSelected(false);
             roundFinal.setSelected(true);
-            selectedRound = "Final";
+            selectedRound = RaceControlRegister.RACE_ROUND_FINAL;
             this.checkEnableButton();
 
         }else if(view.getId()==R.id.go_button){

@@ -62,7 +62,12 @@ public class RolesSpinnerAdapter extends ArrayAdapter<Role> {
         Role role = roles.get(position);
 
         TextView teamName = view.findViewById(R.id.spinner_value);
-        teamName.setText(role.getName());
+
+        if(role != null){
+            teamName.setText(role.getName());
+        }else{
+            teamName.setText("All roles");
+        }
 
         return view;
     }

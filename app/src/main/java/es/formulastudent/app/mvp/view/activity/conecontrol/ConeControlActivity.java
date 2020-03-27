@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.ListenerRegistration;
 
-import org.greenrobot.greendao.annotation.NotNull;
-
 import javax.inject.Inject;
 
 import es.formulastudent.app.FSSApp;
@@ -72,7 +70,7 @@ public class ConeControlActivity extends GeneralActivity implements ConeControlP
      * Inject dependencies method
      * @param appComponent
      */
-    protected void setupComponent(AppComponent appComponent, @NotNull ConeControlEvent ccEvent) {
+    protected void setupComponent(AppComponent appComponent, ConeControlEvent ccEvent) {
 
         DaggerConeControlComponent.builder()
                 .appComponent(appComponent)

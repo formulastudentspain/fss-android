@@ -1,8 +1,6 @@
 package es.formulastudent.app.mvp.view.activity.briefing;
 
 
-import android.content.Context;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -33,7 +31,6 @@ public class BriefingPresenterTest {
 
     private BriefingPresenter.View mMockView;
     private BriefingPresenter presenter;
-    private Context mMockContext;
     private TeamBO mMockTeamBO;
     private TeamMemberBO mMockTeamMemberBO;
     private BriefingBO mMockBriefingBO;
@@ -47,14 +44,13 @@ public class BriefingPresenterTest {
 
         callbackCaptor = ArgumentCaptor.forClass(BusinessCallback.class);
         mMockView = mock(BriefingPresenter.View.class);
-        mMockContext = mock(Context.class);
         mMockTeamBO = mock(TeamBO.class);
         mMockBriefingBO = mock(BriefingBO.class);
         mMockUser = mock(User.class);
 
         when(mMockUser.getMail()).thenReturn(MOCK_MAIL);
 
-        presenter = new BriefingPresenter(mMockView, mMockContext, mMockTeamBO, mMockBriefingBO, mMockTeamMemberBO, mMockUser);
+        presenter = new BriefingPresenter(mMockView, mMockTeamBO, mMockBriefingBO, mMockTeamMemberBO, mMockUser);
     }
 
 

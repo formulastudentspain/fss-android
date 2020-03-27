@@ -22,8 +22,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import es.formulastudent.app.FSSApp;
@@ -32,7 +30,7 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerUserListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.UserListModule;
-import es.formulastudent.app.mvp.data.model.Team;
+import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.view.activity.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.activity.qrreader.QRReaderActivity;
 import es.formulastudent.app.mvp.view.activity.user.dialog.CreateUserDialog;
@@ -69,7 +67,7 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
         initViews();
         setSupportActionBar(toolbar);
         requestPermissions();
-        presenter.retrieveUsers();
+        //presenter.retrieveUsers();
     }
 
     /**
@@ -233,8 +231,8 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
     }
 
     @Override
-    public void showFilteringDialog(List<Team> teams) {
-        FilteringUsersDialog filteringUsersDialog = FilteringUsersDialog.newInstance(presenter,null, null, null);
+    public void showFilteringDialog(Role selectedRole) {
+        FilteringUsersDialog filteringUsersDialog = FilteringUsersDialog.newInstance(this, presenter, selectedRole);
         filteringUsersDialog.show(getSupportFragmentManager(), "filterUserDialog");
 
     }

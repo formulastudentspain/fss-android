@@ -2,45 +2,46 @@ package es.formulastudent.app.mvp.view.activity.user.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import androidx.fragment.app.DialogFragment;
 
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.model.Role;
+import es.formulastudent.app.mvp.data.model.UserRole;
+import es.formulastudent.app.mvp.view.activity.general.spinneradapters.RolesSpinnerAdapter;
 import es.formulastudent.app.mvp.view.activity.user.UserPresenter;
 
-public class FilteringUsersDialog extends DialogFragment implements ChipGroup.OnCheckedChangeListener{
+public class FilteringUsersDialog extends DialogFragment {
 
     private AlertDialog dialog;
-
-    //View elements
-    private ChipGroup rolesGroup;
-    private ChipGroup itemsGroup;
+    private RolesSpinnerAdapter rolesAdapter;
+    private Context context;
 
     //Data
-    private String selectedRole;
-    private Boolean cellPhoneSelected;
-    private Boolean walkieSelected;
-
+    private Role selectedRole;
 
     //Presenter
     private UserPresenter presenter;
 
-    public FilteringUsersDialog() {}
+    public FilteringUsersDialog() {
+    }
 
-    public static FilteringUsersDialog newInstance(UserPresenter presenter, String selectedRole,
-                                                   Boolean cellPhoneSelected, Boolean walkieSelected) {
+    public static FilteringUsersDialog newInstance(Context context, UserPresenter presenter, Role selectedRole) {
         FilteringUsersDialog frag = new FilteringUsersDialog();
         frag.setPresenter(presenter);
         frag.setSelectedRole(selectedRole);
-        frag.setWalkieSelected(walkieSelected);
-        frag.setCellPhoneSelected(cellPhoneSelected);
+        frag.setContext(context);
 
         return frag;
     }
@@ -54,120 +55,92 @@ public class FilteringUsersDialog extends DialogFragment implements ChipGroup.On
 
         View rootView = inflater.inflate(R.layout.dialog_filter_user, null);
         initializeElements(rootView);
-        initializeValues();
 
         builder.setView(rootView)
-                    .setTitle(R.string.dynamic_event_filtering_dialog_title)
-                    .setPositiveButton(R.string.dynamic_event_filtering_dialog_filter_button,null)
-                    .setNegativeButton(R.string.dynamic_event_filtering_dialog_cancel_button, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            FilteringUsersDialog.this.getDialog().cancel();
-                        }
-                    });
+            .setTitle(R.string.dynamic_event_filtering_dialog_title)
+            .setPositiveButton(R.string.dynamic_event_filtering_dialog_filter_button, null)
+            .setNeutralButton("Clear", null)
+            .setNegativeButton(R.string.dynamic_event_filtering_dialog_cancel_button, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    FilteringUsersDialog.this.getDialog().cancel();
+                }
+            });
 
         dialog = builder.create();
         return dialog;
     }
 
-    private void initializeValues() {
 
+    private void initializeElements(View rootView) {
 
-        //Chips role
-        if(selectedRole != null){
-            if(selectedRole.equalsIgnoreCase(getString(R.string.user_role_staff))){ //waiting area
-                ((Chip) rolesGroup.getChildAt(0)).setChecked(true);
-            }else if(selectedRole.equalsIgnoreCase(getString(R.string.user_role_scrutineer))){ //scrutineering
-                ((Chip) rolesGroup.getChildAt(1)).setChecked(true);
-            }else if(selectedRole.equalsIgnoreCase(getString(R.string.user_role_marshall))){ //racing 1
-                ((Chip) rolesGroup.getChildAt(2)).setChecked(true);
-            }else if(selectedRole.equalsIgnoreCase(getString(R.string.user_role_official))){ //racing 2
-                ((Chip) rolesGroup.getChildAt(3)).setChecked(true);
+        Spinner viewRoles = rootView.findViewById(R.id.roles_spinner);
+
+        List<Role> roles = new ArrayList<>(Arrays.asList(UserRole.values()));
+        roles.add(0, null);
+
+        int selectedRoleIndex = 0;
+        int roleIndex = 0;
+
+        for (Role role : roles) {
+            if (selectedRole != null) {
+                if (selectedRole.equals(role)) {
+                    selectedRoleIndex = roleIndex;
+                }
             }
-        }else{ //all
-            ((Chip) rolesGroup.getChildAt(4)).setChecked(true);
+            roleIndex++;
         }
 
+        rolesAdapter = new RolesSpinnerAdapter(context, android.R.layout.simple_spinner_item, roles);
+        viewRoles.setAdapter(rolesAdapter);
+        viewRoles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-        //Chips items
-        if(cellPhoneSelected != null && cellPhoneSelected){
-            ((Chip) itemsGroup.getChildAt(0)).setChecked(true);
-        }else{
-            ((Chip) itemsGroup.getChildAt(0)).setChecked(false);
-        }
-        if(walkieSelected != null && walkieSelected){
-            ((Chip) itemsGroup.getChildAt(1)).setChecked(true);
-        }else{
-            ((Chip) itemsGroup.getChildAt(1)).setChecked(false);
-        }
-    }
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                UserRole role = (UserRole) rolesAdapter.getItem(position);
+                selectedRole = role;
+            }
 
-    private void initializeElements(View rootView){
-
-        //Roles group
-        rolesGroup = rootView.findViewById(R.id.user_roles_chip_group);
-        rolesGroup.setOnCheckedChangeListener(this);
-
-        //Items group
-        itemsGroup = rootView.findViewById(R.id.user_list_with_items);
-        itemsGroup.setOnCheckedChangeListener(this);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapter) {
+            }
+        });
+        viewRoles.setSelection(selectedRoleIndex);
     }
 
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //Set values for filtering
-              //  presenter.setFilteringValues(selectedArea, selectedCarNumber);
-
-                //Do filter
-                //presenter.retrieveRegisterList();
-
-                //Close dialog
+                presenter.setFilteringValues((UserRole) selectedRole);
+                presenter.retrieveUsers();
                 dialog.dismiss();
+            }
+        });
 
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.setFilteringValues(null);
+                presenter.retrieveUsers();
+                dialog.dismiss();
             }
         });
     }
 
-    @Override
-    public void onCheckedChanged(ChipGroup chipGroup, int selectedChipId) {
-
-        if(selectedChipId == R.id.user_list_role_staff){
-            selectedRole = getString(R.string.user_role_staff);
-
-        }else if(selectedChipId == R.id.user_list_role_scrutineer){
-            selectedRole = getString(R.string.user_role_scrutineer);
-
-        }else if(selectedChipId == R.id.user_list_role_marshall){
-            selectedRole = getString(R.string.user_role_marshall);
-
-        }else if(selectedChipId == R.id.user_list_role_official){
-            selectedRole = getString(R.string.user_role_official);
-
-        }else{ //all
-            selectedRole = null;
-        }
-
-    }
 
     public void setPresenter(UserPresenter presenter) {
         this.presenter = presenter;
     }
 
-    public void setSelectedRole(String selectedRole) {
+    public void setSelectedRole(Role selectedRole) {
         this.selectedRole = selectedRole;
     }
 
-    public void setCellPhoneSelected(Boolean cellPhoneSelected) {
-        this.cellPhoneSelected = cellPhoneSelected;
-    }
-
-    public void setWalkieSelected(Boolean walkieSelected) {
-        this.walkieSelected = walkieSelected;
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

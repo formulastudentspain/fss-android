@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.ListenerRegistration;
 
-import org.greenrobot.greendao.annotation.NotNull;
-
 import javax.inject.Inject;
 
 import es.formulastudent.app.FSSApp;
@@ -34,7 +32,7 @@ RaceControlActivity extends GeneralActivity implements
         RaceControlPresenter.View, View.OnClickListener{
 
     RaceControlEvent rcEvent; //Endurance, AutoX, Acceleration, Skidpad
-    String raceType; //Electric, Combustion or Final
+    String raceRound; //Round 1, Round 2 or Final
     String rcArea;
 
     //Real-time register listener
@@ -66,15 +64,14 @@ RaceControlActivity extends GeneralActivity implements
 
         //Only if ENDURANCE
         if(rcEvent.equals(RaceControlEvent.ENDURANCE)){
-            //Get race type (Electric, Combustion, Final)
-            String raceType = getIntent().getStringExtra("rc_type");
-            this.raceType = raceType;
+            String raceRound = getIntent().getStringExtra("rc_round");
+            this.raceRound = raceRound;
 
             String rcArea = getIntent().getStringExtra("rc_area");
             this.rcArea = rcArea;
         }
 
-        setupComponent(FSSApp.getApp().component(), rcEvent, raceType, rcArea);
+        setupComponent(FSSApp.getApp().component(), rcEvent, raceRound, rcArea);
         initViews();
     }
 
@@ -87,7 +84,7 @@ RaceControlActivity extends GeneralActivity implements
      * Inject dependencies method
      * @param appComponent
      */
-    protected void setupComponent(AppComponent appComponent, @NotNull RaceControlEvent rcEvent, String raceType, String rcArea) {
+    protected void setupComponent(AppComponent appComponent, RaceControlEvent rcEvent, String raceType, String rcArea) {
 
         DaggerRaceControlComponent.builder()
                 .appComponent(appComponent)
@@ -127,7 +124,7 @@ RaceControlActivity extends GeneralActivity implements
 
         //Round
         roundTextView = findViewById(R.id.round_number);
-        roundTextView.setText(raceType == null ? "-" : raceType);
+        roundTextView.setText(raceRound == null ? "-" : raceRound);
 
         //Area
         areaTextView = findViewById(R.id.area);

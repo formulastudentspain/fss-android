@@ -11,8 +11,10 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
+import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.activity.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailActivity;
 
@@ -30,6 +32,8 @@ public class UserPresenter implements RecyclerViewClickListener {
     private List<User> allUsersList = new ArrayList<>();
     private List<User> filteredUserList = new ArrayList<>();
 
+    //Filtering values
+    private UserRole selectedRole;
 
 
     public UserPresenter(UserPresenter.View view, Context context, UserBO userBO, TeamBO teamBO) {
@@ -53,16 +57,14 @@ public class UserPresenter implements RecyclerViewClickListener {
 
 
 
-    void retrieveUsers(){
+    public void retrieveUsers(){
 
-        //Set filtering icon
-        //view.filtersActivated(selectedTeamToFilter!=null && !"".equals(selectedTeamToFilter.getID()));
 
         //show loading
         view.showLoading();
 
         //call business to retrieve users
-        userBO.retrieveUsers(new BusinessCallback() {
+        userBO.retrieveUsers(selectedRole, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
@@ -111,7 +113,9 @@ public class UserPresenter implements RecyclerViewClickListener {
                 view.hideLoading();
 
                 List<Team> teams = (List<Team>) responseDTO.getData();
-                view.showFilteringDialog(teams);
+                //TODO los equipos están para cuando use la app los Team Leaders
+
+                view.showFilteringDialog(selectedRole);
             }
 
             @Override
@@ -162,6 +166,11 @@ public class UserPresenter implements RecyclerViewClickListener {
         view.showCreateUserDialog();
     }
 
+    public void setFilteringValues(UserRole selectedRole) {
+        this.selectedRole = selectedRole;
+        view.filtersActivated(selectedRole != null);
+    }
+
 
     public interface View {
 
@@ -203,7 +212,7 @@ public class UserPresenter implements RecyclerViewClickListener {
          */
         void showCreateUserDialog();
 
-        void showFilteringDialog(List<Team> teams);
+        void showFilteringDialog(Role selectedRole);
     }
 
 }
