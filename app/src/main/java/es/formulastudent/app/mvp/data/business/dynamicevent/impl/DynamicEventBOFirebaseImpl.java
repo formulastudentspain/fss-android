@@ -62,7 +62,7 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
         }
 
         //Event type
-        if(type.name() != null){
+        if (type.name() != null) {
             query = query.whereEqualTo(EventRegister.EVENT_TYPE, type.name());
         }
 
@@ -70,38 +70,33 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         query.orderBy(EventRegister.DATE, Query.Direction.DESCENDING)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                .addOnSuccessListener(queryDocumentSnapshots -> {
 
-                        //Response object
-                        ResponseDTO responseDTO = new ResponseDTO();
+                    //Response object
+                    ResponseDTO responseDTO1 = new ResponseDTO();
 
-                        //Add results to list
-                        List<EventRegister> result = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            if(type.equals(EventType.PRE_SCRUTINEERING)){
-                                PreScrutineeringRegister register = new PreScrutineeringRegister(document, type);
-                                result.add(register);
-                            }else{
-                                EventRegister register = new EventRegister(document, type);
-                                result.add(register);
-                            }
-
+                    //Add results to list
+                    List<EventRegister> result = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        if (type.equals(EventType.PRE_SCRUTINEERING)) {
+                            PreScrutineeringRegister register = new PreScrutineeringRegister(document, type);
+                            result.add(register);
+                        } else {
+                            EventRegister register = new EventRegister(document, type);
+                            result.add(register);
                         }
 
-                        responseDTO.setData(result);
-                        responseDTO.setInfo(R.string.dynamic_event_message_info_retrieving_registers);
-                        callback.onSuccess(responseDTO);
-
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                responseDTO.setError(R.string.dynamic_event_message_error_retrieving_registers);
-                callback.onFailure(responseDTO);
-            }
-        });
+
+                    responseDTO1.setData(result);
+                    responseDTO1.setInfo(R.string.dynamic_event_message_info_retrieving_registers);
+                    callback.onSuccess(responseDTO1);
+
+                })
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.dynamic_event_message_error_retrieving_registers);
+                    callback.onFailure(responseDTO);
+                });
     }
 
 
@@ -112,10 +107,10 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
         Date registerDate = Calendar.getInstance().getTime();
 
         final EventRegister register;
-        if(type.equals(EventType.PRE_SCRUTINEERING)){
+        if (type.equals(EventType.PRE_SCRUTINEERING)) {
             register = new PreScrutineeringRegister(teamMember.getTeamID(), teamMember.getTeam(), teamMember.getID(),
                     teamMember.getName(), teamMember.getPhotoUrl(), registerDate, carNumber, briefingDone, type, firebaseAuth.getCurrentUser().getEmail(), 0L);
-        }else{
+        } else {
             register = new EventRegister(teamMember.getTeamID(), teamMember.getTeam(), teamMember.getID(),
                     teamMember.getName(), teamMember.getPhotoUrl(), registerDate, carNumber, briefingDone, type, firebaseAuth.getCurrentUser().getEmail());
         }
@@ -124,22 +119,15 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
         firebaseFirestore.collection(type.getFirebaseTable())
                 .document(register.getID())
                 .set(register.toObjectData())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .addOnSuccessListener(aVoid -> {
+                    responseDTO.setData(register);
+                    responseDTO.setInfo(R.string.dynamic_event_messages_create_registers_info);
+                    callback.onSuccess(responseDTO);
 
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        responseDTO.setData(register);
-                        responseDTO.setInfo(R.string.dynamic_event_messages_create_registers_info);
-                        callback.onSuccess(responseDTO);
-
-                    }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.dynamic_event_messages_create_registers_error);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.dynamic_event_messages_create_registers_error);
+                    callback.onFailure(responseDTO);
                 });
     }
 
@@ -150,34 +138,19 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
         final DocumentReference registerReference = firebaseFirestore.collection(EventType.PRE_SCRUTINEERING.getFirebaseTable()).document(id);
 
         registerReference.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        registerReference.update(PreScrutineeringRegister.TIME, milliseconds)
-
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        responseDTO.setInfo(R.string.dynamic_event_messages_prescrutineering_update_info);
-                                        callback.onSuccess(responseDTO);
-                                    }
+                .addOnSuccessListener(
+                        documentSnapshot -> registerReference.update(PreScrutineeringRegister.TIME, milliseconds)
+                                .addOnSuccessListener(aVoid -> {
+                                    responseDTO.setInfo(R.string.dynamic_event_messages_prescrutineering_update_info);
+                                    callback.onSuccess(responseDTO);
                                 })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        responseDTO.setError(R.string.dynamic_event_messages_prescrutineering_update_error);
-                                        callback.onFailure(responseDTO);
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.dynamic_event_messages_prescrutineering_update_error);
-                        callback.onFailure(responseDTO);
-                    }
+                                .addOnFailureListener(e -> {
+                                    responseDTO.setError(R.string.dynamic_event_messages_prescrutineering_update_error);
+                                    callback.onFailure(responseDTO);
+                                }))
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.dynamic_event_messages_prescrutineering_update_error);
+                    callback.onFailure(responseDTO);
                 });
     }
 
@@ -190,93 +163,68 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                 .document(registerID);
 
         registerReference.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        registerReference.delete()
-
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        responseDTO.setInfo(R.string.dynamic_event_message_info_deleting_registers);
-                                        callback.onSuccess(responseDTO);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        responseDTO.setError(R.string.dynamic_event_message_error_deleting_registers);
-                                        callback.onFailure(responseDTO);
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.dynamic_event_message_error_deleting_registers);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnSuccessListener(documentSnapshot -> registerReference.delete()
+                        .addOnSuccessListener(aVoid -> {
+                            responseDTO.setInfo(R.string.dynamic_event_message_info_deleting_registers);
+                            callback.onSuccess(responseDTO);
+                        })
+                        .addOnFailureListener(e -> {
+                            responseDTO.setError(R.string.dynamic_event_message_error_deleting_registers);
+                            callback.onFailure(responseDTO);
+                        }))
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.dynamic_event_message_error_deleting_registers);
+                    callback.onFailure(responseDTO);
                 });
     }
 
     @Override
-    public void getDifferentEventRegistersByDriver(String userId, final BusinessCallback callback){
+    public void getDifferentEventRegistersByDriver(String userId, final BusinessCallback callback) {
 
         //Response object
         final ResponseDTO responseDTO = new ResponseDTO();
 
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS);
 
-        if(userId != null){
+        if (userId != null) {
             query = query.whereEqualTo(BriefingRegister.USER_ID, userId);
         }
 
-        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        query.get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
 
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    //Add results to list Map<EventType, register>
+                    Map<String, List<EventRegister>> result = new HashMap<>();
+                    List<EventRegister> eventRegisterList;
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        EventRegister register = new EventRegister(document);
 
+                        //Get all dynamic event from user, with 2 as maximum, except PracticeTrack, PreScrutineering and Briefing
+                        if (register.getType() != EventType.PRACTICE_TRACK &&
+                                register.getType() != EventType.PRE_SCRUTINEERING &&
+                                register.getType() != EventType.BRIEFING) {
 
-                //Add results to list Map<EventType, register>
-                Map<String, List<EventRegister>> result = new HashMap<>();
-                List<EventRegister> eventRegisterList;
-                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    EventRegister register = new EventRegister(document);
+                            if (result.containsKey(register.getType().name())) {
+                                eventRegisterList = result.get(register.getType().name());
+                                eventRegisterList.add(register);
+                                result.put(register.getType().name(), eventRegisterList);
 
-                    //Get all dynamic event from user, with 2 as maximum, except PracticeTrack, PreScrutineering and Briefing
-                    if(register.getType() != EventType.PRACTICE_TRACK &&
-                            register.getType() != EventType.PRE_SCRUTINEERING &&
-                            register.getType() != EventType.BRIEFING) {
+                            } else if (!result.containsKey(register.getType().name()) && result.size() < 2) {
+                                eventRegisterList = new ArrayList<>();
+                                eventRegisterList.add(register);
+                                result.put(register.getType().name(), eventRegisterList);
 
-                        if (result.containsKey(register.getType().name())) {
-                            eventRegisterList = result.get(register.getType().name());
-                            eventRegisterList.add(register);
-                            result.put(register.getType().name(), eventRegisterList);
-
-                        } else if (!result.containsKey(register.getType().name()) && result.size() < 2) {
-                            eventRegisterList = new ArrayList<>();
-                            eventRegisterList.add(register);
-                            result.put(register.getType().name(), eventRegisterList);
-
-                        } else {
-                            responseDTO.setError(R.string.dynamic_event_message_error_runs);
+                            } else {
+                                responseDTO.setError(R.string.dynamic_event_message_error_runs);
+                            }
                         }
                     }
-                }
-
-                responseDTO.setData(result);
-                callback.onSuccess(responseDTO);
-            }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                responseDTO.setError(R.string.dynamic_event_message_error_runs);
-                callback.onFailure(responseDTO);
-            }
-        });
+                    responseDTO.setData(result);
+                    callback.onSuccess(responseDTO);
+                })
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.dynamic_event_message_error_runs);
+                    callback.onFailure(responseDTO);
+                });
     }
-
 }

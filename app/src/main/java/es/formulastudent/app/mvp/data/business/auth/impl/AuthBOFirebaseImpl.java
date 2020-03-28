@@ -32,21 +32,15 @@ public class AuthBOFirebaseImpl implements AuthBO {
         final ResponseDTO responseDTO = new ResponseDTO();
 
         firebaseAuth.signInWithEmailAndPassword(mail, password)
-                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                      @Override
-                      public void onSuccess(AuthResult authResult) {
-                          FirebaseUser user = firebaseAuth.getCurrentUser();
-                          responseDTO.setData(user);
-                          responseDTO.setInfo(R.string.login_business_info_login);
-                          callback.onSuccess(responseDTO);
-                      }
-
-                  }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.login_business_error_login_with_mail);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnSuccessListener(authResult -> {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    responseDTO.setData(user);
+                    responseDTO.setInfo(R.string.login_business_info_login);
+                    callback.onSuccess(responseDTO);
+                })
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.login_business_error_login_with_mail);
+                    callback.onFailure(responseDTO);
                 });
     }
 
@@ -56,20 +50,15 @@ public class AuthBOFirebaseImpl implements AuthBO {
         final ResponseDTO responseDTO = new ResponseDTO();
 
         firebaseAuth.setLanguageCode("en");
-        firebaseAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                responseDTO.setInfo(R.string.login_business_info_reset);
-                callback.onSuccess(responseDTO);
-            }
-
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                responseDTO.setError(R.string.login_business_error_reset_password);
-                callback.onFailure(responseDTO);
-            }
-        });
+        firebaseAuth.sendPasswordResetEmail(mail)
+                .addOnSuccessListener(aVoid -> {
+                    responseDTO.setInfo(R.string.login_business_info_reset);
+                    callback.onSuccess(responseDTO);
+                })
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.login_business_error_reset_password);
+                    callback.onFailure(responseDTO);
+                });
     }
 
     @Override
@@ -77,41 +66,35 @@ public class AuthBOFirebaseImpl implements AuthBO {
 
         final ResponseDTO responseDTO = new ResponseDTO();
 
-       firebaseAuth.createUserWithEmailAndPassword(mail, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-           @Override
-           public void onSuccess(AuthResult authResult) {
+        firebaseAuth.createUserWithEmailAndPassword(mail, password)
+                .addOnSuccessListener(authResult -> {
+                    User user = new User();
+                    user.setPhotoUrl("https://lh3.googleusercontent.com/-cXXaVVq8nMM/AAAAAAAAAAI/AAAAAAAAAKI/_Y1WfBiSnRI/photo.jpg?sz=150");
+                    user.setName(name);
+                    user.setMail(mail);
 
-               User user = new User();
-               user.setPhotoUrl("https://lh3.googleusercontent.com/-cXXaVVq8nMM/AAAAAAAAAAI/AAAAAAAAAKI/_Y1WfBiSnRI/photo.jpg?sz=150");
-               user.setName(name);
-               user.setMail(mail);
+                    userBO.createUser(user, new BusinessCallback() {
+                        @Override
+                        public void onSuccess(ResponseDTO responseDTO1) {
+                            firebaseAuth.signOut();
+                            responseDTO1.setInfo(R.string.login_business_create_user_success);
+                            callback.onSuccess(responseDTO1);
+                        }
 
-               userBO.createUser(user, new BusinessCallback() {
-                   @Override
-                   public void onSuccess(ResponseDTO responseDTO) {
-                       firebaseAuth.signOut();
-                       responseDTO.setInfo(R.string.login_business_create_user_success);
-                       callback.onSuccess(responseDTO);
-                   }
-
-                   @Override
-                   public void onFailure(ResponseDTO responseDTO) {
-                       responseDTO.setInfo(R.string.login_business_create_user_failure);
-                       callback.onFailure(responseDTO);
-                   }
-               });
-
-           }
-       }).addOnFailureListener(new OnFailureListener() {
-           @Override
-           public void onFailure(@NonNull Exception e) {
-              if("The email address is already in use by another account.".equals(e.getMessage())){
-                   responseDTO.setError(R.string.login_business_create_user_email_existing);
-               }else{
-                   responseDTO.setError(R.string.login_business_create_user_failure);
-               }
-               callback.onFailure(responseDTO);
-           }
-       });
+                        @Override
+                        public void onFailure(ResponseDTO responseDTO1) {
+                            responseDTO1.setInfo(R.string.login_business_create_user_failure);
+                            callback.onFailure(responseDTO1);
+                        }
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    if ("The email address is already in use by another account.".equals(e.getMessage())) {
+                        responseDTO.setError(R.string.login_business_create_user_email_existing);
+                    } else {
+                        responseDTO.setError(R.string.login_business_create_user_failure);
+                    }
+                    callback.onFailure(responseDTO);
+                });
     }
 }

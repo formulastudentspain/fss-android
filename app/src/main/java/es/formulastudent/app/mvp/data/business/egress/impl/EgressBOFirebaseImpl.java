@@ -31,29 +31,22 @@ public class EgressBOFirebaseImpl implements EgressBO {
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_EVENT_CONTROL_EGRESS)
                 .whereEqualTo(EgressRegister.PRESCRUTINEERING_ID, preScrutineeringID)
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                if(!queryDocumentSnapshots.isEmpty()){
-                    EgressRegister egressRegister = new EgressRegister(queryDocumentSnapshots.getDocuments().get(0));
-                    responseDTO.setData(egressRegister);
-                    responseDTO.setInfo(R.string.event_egress_message_info_retrieving);
-                    callback.onSuccess(responseDTO);
-                }else{
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        EgressRegister egressRegister = new EgressRegister(queryDocumentSnapshots.getDocuments().get(0));
+                        responseDTO.setData(egressRegister);
+                        responseDTO.setInfo(R.string.event_egress_message_info_retrieving);
+                        callback.onSuccess(responseDTO);
+                    } else {
+                        responseDTO.setError(R.string.event_egress_message_error_retrieving);
+                        callback.onFailure(responseDTO);
+                    }
+                })
+                .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.event_egress_message_error_retrieving);
                     callback.onFailure(responseDTO);
-                }
-            }
-
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                responseDTO.setError(R.string.event_egress_message_error_retrieving);
-                callback.onFailure(responseDTO);
-            }
-        });
-
+                });
     }
 
     @Override
@@ -66,24 +59,15 @@ public class EgressBOFirebaseImpl implements EgressBO {
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_EVENT_CONTROL_EGRESS)
                 .document(register.getId())
                 .set(register.toObjectData())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        responseDTO.setInfo(R.string.dynamic_event_message_info_create_egress);
-                        callback.onSuccess(responseDTO);
-
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    responseDTO.setInfo(R.string.dynamic_event_message_info_create_egress);
+                    callback.onSuccess(responseDTO);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.dynamic_event_message_error_create_egress);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.dynamic_event_message_error_create_egress);
+                    callback.onFailure(responseDTO);
                 });
     }
-
 
 
     @Override
@@ -93,46 +77,32 @@ public class EgressBOFirebaseImpl implements EgressBO {
         final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_EVENT_CONTROL_EGRESS).document(ID);
 
         registerReference.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .addOnSuccessListener(documentSnapshot -> {
 
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    EgressRegister recordToUpdate = new EgressRegister(documentSnapshot);
 
-                        EgressRegister recordToUpdate = new EgressRegister(documentSnapshot);
-
-                        String varToUpdate;
-                        if(recordToUpdate.getFirstAttempt() == null || recordToUpdate.getFirstAttempt() == 0L){
-                            varToUpdate = EgressRegister.FIRST_ATTEMPT;
-                        }else if(recordToUpdate.getSecondAttempt() == null || recordToUpdate.getSecondAttempt() == 0L){
-                            varToUpdate = EgressRegister.SECOND_ATTEMPT;
-                        }else{
-                            varToUpdate = EgressRegister.THIRD_ATTEMPT;
-                        }
-
-                        registerReference.update(varToUpdate, time)
-
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        responseDTO.setInfo(R.string.dynamic_event_message_info_save_egress_time);
-                                        callback.onSuccess(responseDTO);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        responseDTO.setError(R.string.dynamic_event_message_error_save_egress_time);
-                                        callback.onSuccess(responseDTO);
-                                    }
-                                });
+                    String varToUpdate;
+                    if (recordToUpdate.getFirstAttempt() == null || recordToUpdate.getFirstAttempt() == 0L) {
+                        varToUpdate = EgressRegister.FIRST_ATTEMPT;
+                    } else if (recordToUpdate.getSecondAttempt() == null || recordToUpdate.getSecondAttempt() == 0L) {
+                        varToUpdate = EgressRegister.SECOND_ATTEMPT;
+                    } else {
+                        varToUpdate = EgressRegister.THIRD_ATTEMPT;
                     }
+
+                    registerReference.update(varToUpdate, time)
+                            .addOnSuccessListener(aVoid -> {
+                                responseDTO.setInfo(R.string.dynamic_event_message_info_save_egress_time);
+                                callback.onSuccess(responseDTO);
+                            })
+                            .addOnFailureListener(e -> {
+                                responseDTO.setError(R.string.dynamic_event_message_error_save_egress_time);
+                                callback.onSuccess(responseDTO);
+                            });
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.dynamic_event_message_error_save_egress_time);
-                        callback.onSuccess(responseDTO);
-                    }
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.dynamic_event_message_error_save_egress_time);
+                    callback.onSuccess(responseDTO);
                 });
 
     }

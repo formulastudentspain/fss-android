@@ -37,38 +37,30 @@ public class UserBOFirebaseImpl implements UserBO {
 
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER);
 
-        if(selectedRole != null){
+        if (selectedRole != null) {
             query = query.whereEqualTo(User.ROLE, selectedRole.getName());
         }
 
         query.orderBy(User.NAME, Query.Direction.ASCENDING)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    //success
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        List<User> result = new ArrayList<>();
 
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        //success
-                        if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                            List<User> result = new ArrayList<>();
-
-                            //Add results to list
-                            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                                User user = new User(document);
-                                result.add(user);
-                            }
-
-                            responseDTO.setData(result);
-                            responseDTO.setInfo(R.string.user_get_all_info);
-                            callback.onSuccess(responseDTO);
+                        //Add results to list
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                            User user = new User(document);
+                            result.add(user);
                         }
+                        responseDTO.setData(result);
+                        responseDTO.setInfo(R.string.user_get_all_info);
+                        callback.onSuccess(responseDTO);
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.user_get_all_error);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.user_get_all_error);
+                    callback.onFailure(responseDTO);
                 });
     }
 
@@ -80,19 +72,13 @@ public class UserBOFirebaseImpl implements UserBO {
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER)
                 .document(user.getID())
                 .set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        responseDTO.setInfo(R.string.user_create_info);
-                        callback.onSuccess(responseDTO);
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    responseDTO.setInfo(R.string.user_create_info);
+                    callback.onSuccess(responseDTO);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.user_create_error);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.user_create_error);
+                    callback.onFailure(responseDTO);
                 });
     }
 
@@ -103,25 +89,18 @@ public class UserBOFirebaseImpl implements UserBO {
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER)
                 .whereEqualTo(User.MAIL, mail)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        //success
-                        if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                            User user = new User(queryDocumentSnapshots.getDocuments().get(0));
-                            responseDTO.setData(user);
-                        }
-                        responseDTO.setInfo(R.string.user_get_by_mail_info);
-                        callback.onSuccess(responseDTO);
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    //success
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        User user = new User(queryDocumentSnapshots.getDocuments().get(0));
+                        responseDTO.setData(user);
                     }
+                    responseDTO.setInfo(R.string.user_get_by_mail_info);
+                    callback.onSuccess(responseDTO);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.user_get_by_mail_error);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.user_get_by_mail_error);
+                    callback.onFailure(responseDTO);
                 });
     }
 
@@ -131,34 +110,19 @@ public class UserBOFirebaseImpl implements UserBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER).document(user.getID());
 
-        registerReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        registerReference.update(user.toDocumentData())
-
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        responseDTO.setInfo(R.string.user_update_info);
-                                        callback.onSuccess(responseDTO);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        responseDTO.setError(R.string.user_update_error);
-                                        callback.onFailure(responseDTO);
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.user_update_error);
-                        callback.onFailure(responseDTO);
-                    }
+        registerReference.get()
+                .addOnSuccessListener(documentSnapshot -> registerReference.update(user.toDocumentData())
+                        .addOnSuccessListener(aVoid -> {
+                            responseDTO.setInfo(R.string.user_update_info);
+                            callback.onSuccess(responseDTO);
+                        })
+                        .addOnFailureListener(e -> {
+                            responseDTO.setError(R.string.user_update_error);
+                            callback.onFailure(responseDTO);
+                        }))
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.user_update_error);
+                    callback.onFailure(responseDTO);
                 });
     }
 

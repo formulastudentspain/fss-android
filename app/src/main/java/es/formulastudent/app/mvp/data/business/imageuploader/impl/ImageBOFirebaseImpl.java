@@ -40,36 +40,27 @@ public class ImageBOFirebaseImpl implements ImageBO {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        UploadTask uploadTask = storageReference.putBytes(data);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //success
-                taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if(task.isSuccessful()){
-                            Uri path = task.getResult();
+        storageReference.putBytes(data)
+                .addOnSuccessListener(taskSnapshot -> {
+                    taskSnapshot.getMetadata().getReference().getDownloadUrl()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Uri path = task.getResult();
 
-                            responseDTO.setData(path);
-                            responseDTO.setInfo(R.string.upload_picture_success);
-                            callback.onSuccess(responseDTO);
+                                    responseDTO.setData(path);
+                                    responseDTO.setInfo(R.string.upload_picture_success);
+                                    callback.onSuccess(responseDTO);
 
-                        } else {
-                            //on failure
-                            responseDTO.setError(R.string.upload_picture_error);
-                            callback.onFailure(responseDTO);
-                        }
-                    }
+                                } else {
+                                    //on failure
+                                    responseDTO.setError(R.string.upload_picture_error);
+                                    callback.onFailure(responseDTO);
+                                }
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.upload_picture_error);
+                    callback.onFailure(responseDTO);
                 });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                //on failure
-                responseDTO.setError(R.string.upload_picture_error);
-                callback.onFailure(responseDTO);
-            }
-        });
     }
 }

@@ -70,10 +70,6 @@ public class StatisticsBOImpl implements StatisticsBO {
                     Sheet sheet = wb.getSheetAt(0);
                     wb.setSheetName(0, eventType.getActivityTitle());
 
-
-                    //HEADERS
-
-
                     //TEAM NAME
                     Row row = sheet.createRow(4);
                     Cell cell = row.createCell(0);
@@ -325,7 +321,6 @@ public class StatisticsBOImpl implements StatisticsBO {
                     responseDTOExport.setError(R.string.statistics_error_exporting_users);
                     businessCallback.onFailure(responseDTOExport);
                 }
-
             }
 
             @Override
@@ -335,5 +330,4 @@ public class StatisticsBOImpl implements StatisticsBO {
             }
         });
     }
-
 }

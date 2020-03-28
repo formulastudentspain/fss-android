@@ -72,7 +72,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         }
 
 
-        ListenerRegistration registration = query.addSnapshotListener((value, e) -> {
+        return query.addSnapshotListener((value, e) -> {
 
             //Response object
             ResponseDTO responseDTO = new ResponseDTO();
@@ -92,21 +92,18 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                 if (RaceControlEvent.ENDURANCE.equals(event)) {
                     register = new RaceControlRegisterEndurance(doc);
                 } else if (RaceControlEvent.AUTOCROSS.equals(event)
-                    || RaceControlEvent.SKIDPAD.equals(event)) {
+                        || RaceControlEvent.SKIDPAD.equals(event)) {
                     register = new RaceControlRegisterAutocross(doc);
                 }
 
                 if (states != null && states.contains(register.getCurrentState().getAcronym())) {
                     result.add(register);
                 }
-
             }
 
             responseDTO.setData(result);
             callback.onSuccess(responseDTO);
         });
-
-        return registration;
     }
 
 
@@ -183,8 +180,8 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
             currentMaxIndex++;
 
             DocumentReference ref = firebaseFirestore
-                .collection(eventType.getFirebaseTable())
-                .document(item.getCarNumber().toString());
+                    .collection(eventType.getFirebaseTable())
+                    .document(item.getCarNumber().toString());
 
             RaceControlRegister register = null;
             if (RaceControlEvent.ENDURANCE.equals(eventType)) {
@@ -192,7 +189,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                 register.setCurrentState(RaceControlEnduranceState.NOT_AVAILABLE);
 
             } else if (RaceControlEvent.AUTOCROSS.equals(eventType)
-                || RaceControlEvent.SKIDPAD.equals(eventType)) {
+                    || RaceControlEvent.SKIDPAD.equals(eventType)) {
                 register = new RaceControlRegisterAutocross();
                 register.setCurrentState(RaceControlAutocrossState.NOT_AVAILABLE);
             }
@@ -209,44 +206,44 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                 batch.set(ref, ((RaceControlRegisterEndurance) register).toObjectData());
 
             } else if (RaceControlEvent.AUTOCROSS.equals(eventType)
-                || RaceControlEvent.SKIDPAD.equals(eventType)) {
+                    || RaceControlEvent.SKIDPAD.equals(eventType)) {
                 batch.set(ref, ((RaceControlRegisterAutocross) register).toObjectData());
             }
         }
 
-
         // Commit the batch
-        batch.commit().addOnSuccessListener(aVoid -> {
+        batch.commit()
+                .addOnSuccessListener(aVoid -> {
 
-            //Now create cones
+                    //Now create cones
+                    for (RaceControlTeamDTO item : raceControlTeamDTOList) {
+                        coneControlBO.createConeControlForAllSectors(
+                                eventType.getConeControlEvent(),
+                                item.getCarNumber(),
+                                item.getFlagURL(),
+                                raceRound,
+                                7,
+                                new BusinessCallback() {
+                                    @Override
+                                    public void onSuccess(ResponseDTO responseDTO) {
+                                        //DO NOTHING
+                                    }
 
-            for (RaceControlTeamDTO item : raceControlTeamDTOList) {
-                coneControlBO.createConeControlForAllSectors(
-                    eventType.getConeControlEvent(),
-                    item.getCarNumber(),
-                    item.getFlagURL(),
-                    raceRound,
-                    7,
-                    new BusinessCallback() {
-                        @Override
-                        public void onSuccess(ResponseDTO responseDTO) {
-                            //DO NOTHING
-                        }
+                                    @Override
+                                    public void onFailure(ResponseDTO responseDTO) {
+                                        //DO NOTHING
+                                    }
+                                });
+                    }
 
-                        @Override
-                        public void onFailure(ResponseDTO responseDTO) {
-                            //DO NOTHING
-                        }
-                    });
-            }
+                    responseDTO.setInfo(R.string.rc_create_info_message);
+                    callback.onSuccess(responseDTO);
 
-            responseDTO.setInfo(R.string.rc_create_info_message);
-            callback.onSuccess(responseDTO);
-
-        }).addOnFailureListener(e -> {
-            responseDTO.setError(R.string.rc_create_error_message);
-            callback.onFailure(responseDTO);
-        });
+                })
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.rc_create_error_message);
+                    callback.onFailure(responseDTO);
+                });
     }
 
 
@@ -260,25 +257,26 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         RaceControlEvent event = (RaceControlEvent) filters.get("eventType");
 
         firebaseFirestore.collection(event.getFirebaseTable())
-            .orderBy(RaceControlRegisterEndurance.ORDER, Query.Direction.ASCENDING)
-            .get()
-            .addOnSuccessListener(queryDocumentSnapshots -> {
+                .orderBy(RaceControlRegisterEndurance.ORDER, Query.Direction.ASCENDING)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
 
-                //Add results to list
-                List<RaceControlRegisterEndurance> result = new ArrayList<>();
-                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    RaceControlRegisterEndurance register = new RaceControlRegisterEndurance(document);
-                    result.add(register);
-                }
+                    //Add results to list
+                    List<RaceControlRegisterEndurance> result = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        RaceControlRegisterEndurance register = new RaceControlRegisterEndurance(document);
+                        result.add(register);
+                    }
 
-                responseDTO.setData(result);
-                responseDTO.setInfo(R.string.rc_info_retrieving_message);
-                callback.onSuccess(responseDTO);
+                    responseDTO.setData(result);
+                    responseDTO.setInfo(R.string.rc_info_retrieving_message);
+                    callback.onSuccess(responseDTO);
 
-            }).addOnFailureListener(e -> {
-            responseDTO.setError(R.string.rc_error_retrieving_message);
-            callback.onFailure(responseDTO);
-        });
+                })
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.rc_error_retrieving_message);
+                    callback.onFailure(responseDTO);
+                });
 
     }
 
@@ -303,30 +301,30 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
         //Call Firebase to update
         firebaseFirestore.collection(event.getFirebaseTable()).document(register.getID())
-            .update(data)
-            .addOnSuccessListener(aVoid -> {
-                responseDTO.setInfo(R.string.rc_info_update_message);
+                .update(data)
+                .addOnSuccessListener(aVoid -> {
+                    responseDTO.setInfo(R.string.rc_info_update_message);
 
-                //Enable/disable cones for the selected car
-                coneControlBO.enableOrDisableConeControlRegistersByTeam(event.getConeControlEvent(), register.getCarNumber(), newState, new BusinessCallback() {
-                    @Override
-                    public void onSuccess(ResponseDTO responseDTO) {
-                        //TODO add things
-                    }
+                    //Enable/disable cones for the selected car
+                    coneControlBO.enableOrDisableConeControlRegistersByTeam(event.getConeControlEvent(), register.getCarNumber(), newState, new BusinessCallback() {
+                        @Override
+                        public void onSuccess(ResponseDTO responseDTO) {
+                            //TODO add things
+                        }
 
-                    @Override
-                    public void onFailure(ResponseDTO responseDTO) {
-                        //TODO add things
-                    }
+                        @Override
+                        public void onFailure(ResponseDTO responseDTO) {
+                            //TODO add things
+                        }
+                    });
+
+                    callback.onSuccess(responseDTO);
+
+                })
+                .addOnFailureListener(e -> {
+                    responseDTO.setInfo(R.string.rc_error_update_message);
+                    callback.onFailure(responseDTO);
+
                 });
-
-                callback.onSuccess(responseDTO);
-
-            })
-            .addOnFailureListener(e -> {
-                responseDTO.setInfo(R.string.rc_error_update_message);
-                callback.onFailure(responseDTO);
-
-            });
     }
 }

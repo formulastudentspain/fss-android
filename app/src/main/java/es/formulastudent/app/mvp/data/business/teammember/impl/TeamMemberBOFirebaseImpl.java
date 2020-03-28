@@ -38,29 +38,20 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .whereEqualTo(TeamMember.TAG_NFC, tag)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        //success
-                        if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                            TeamMember teamMember = new TeamMember(queryDocumentSnapshots.getDocuments().get(0));
-                            responseDTO.setData(teamMember);
-                            responseDTO.setInfo(R.string.team_member_get_by_nfc_info);
-                        }
-                        callback.onSuccess(responseDTO);
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    //success
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        TeamMember teamMember = new TeamMember(queryDocumentSnapshots.getDocuments().get(0));
+                        responseDTO.setData(teamMember);
+                        responseDTO.setInfo(R.string.team_member_get_by_nfc_info);
                     }
+                    callback.onSuccess(responseDTO);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.team_member_get_by_nfc_error);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.team_member_get_by_nfc_error);
+                    callback.onFailure(responseDTO);
                 });
-
     }
-
 
 
     @Override
@@ -71,36 +62,29 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS);
 
         //Filter by team
-        if(filterTeam != null && !"".equals(filterTeam.getID())){
+        if (filterTeam != null && !"".equals(filterTeam.getID())) {
             query = query.whereEqualTo(TeamMember.TEAM_ID, filterTeam.getID());
         }
 
-        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        query.get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    //success
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        List<TeamMember> result = new ArrayList<>();
 
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        //success
-                        if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                            List<TeamMember> result = new ArrayList<>();
-
-                            //Add results to list
-                            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                                TeamMember teamMember = new TeamMember(document);
-                                result.add(teamMember);
-                            }
-
-                            responseDTO.setData(result);
-                            responseDTO.setInfo(R.string.team_member_get_all_info);
-                            callback.onSuccess(responseDTO);
+                        //Add results to list
+                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                            TeamMember teamMember = new TeamMember(document);
+                            result.add(teamMember);
                         }
+                        responseDTO.setData(result);
+                        responseDTO.setInfo(R.string.team_member_get_all_info);
+                        callback.onSuccess(responseDTO);
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.team_member_get_all_error);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.team_member_get_all_error);
+                    callback.onFailure(responseDTO);
                 });
     }
 
@@ -113,19 +97,13 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .document(teamMember.getID())
                 .set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        responseDTO.setInfo(R.string.team_member_create_info);
-                        callback.onSuccess(responseDTO);
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    responseDTO.setInfo(R.string.team_member_create_info);
+                    callback.onSuccess(responseDTO);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.team_member_create_error);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.team_member_create_error);
+                    callback.onFailure(responseDTO);
                 });
     }
 
@@ -136,59 +114,44 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .addOnSuccessListener(queryDocumentSnapshots -> {
 
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                        for(DocumentSnapshot doc: queryDocumentSnapshots.getDocuments()){
-                            doc.getReference().delete();
-                        }
-                        responseDTO.setInfo(R.string.team_member_delete_all_info);
-                        callback.onSuccess(responseDTO);
+                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                        doc.getReference().delete();
                     }
+                    responseDTO.setInfo(R.string.team_member_delete_all_info);
+                    callback.onSuccess(responseDTO);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.team_member_delete_all_error);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.team_member_delete_all_error);
+                    callback.onFailure(responseDTO);
                 });
     }
 
     @Override
-    public void getRegisteredTeamMemberByTeamId(String teamID, final BusinessCallback callback){
+    public void getRegisteredTeamMemberByTeamId(String teamID, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .whereEqualTo(TeamMember.TEAM_ID, teamID)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<TeamMember> teamMemberList = new ArrayList<>();
 
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<TeamMember> teamMemberList = new ArrayList<>();
+                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                        TeamMember teamMember = new TeamMember(doc);
 
-                        for(DocumentSnapshot doc: queryDocumentSnapshots.getDocuments()){
-                            TeamMember teamMember = new TeamMember(doc);
-
-                            if(teamMember.getNFCTag()!=null){
-                                teamMemberList.add(teamMember);
-                            }
+                        if (teamMember.getNFCTag() != null) {
+                            teamMemberList.add(teamMember);
                         }
-
-                        responseDTO.setData(teamMemberList);
-                        responseDTO.setInfo(R.string.team_member_get_registered_by_team_info);
-                        callback.onSuccess(responseDTO);
                     }
+                    responseDTO.setData(teamMemberList);
+                    responseDTO.setInfo(R.string.team_member_get_registered_by_team_info);
+                    callback.onSuccess(responseDTO);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.team_member_get_registered_by_team_error);
-                        callback.onFailure(responseDTO);
-                    }
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.team_member_get_registered_by_team_error);
+                    callback.onFailure(responseDTO);
                 });
     }
 
@@ -197,34 +160,19 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS).document(teamMember.getID());
 
-        registerReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                registerReference.update(teamMember.toDocumentData())
-
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                responseDTO.setInfo(R.string.team_member_update_info);
-                                callback.onSuccess(responseDTO);
-                            }
+        registerReference.get()
+                .addOnSuccessListener(documentSnapshot -> registerReference.update(teamMember.toDocumentData())
+                        .addOnSuccessListener(aVoid -> {
+                            responseDTO.setInfo(R.string.team_member_update_info);
+                            callback.onSuccess(responseDTO);
                         })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                responseDTO.setError(R.string.team_member_update_error);
-                                callback.onFailure(responseDTO);
-                            }
-                        });
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        responseDTO.setError(R.string.team_member_update_error);
-                        callback.onFailure(responseDTO);
-                    }
+                        .addOnFailureListener(e -> {
+                            responseDTO.setError(R.string.team_member_update_error);
+                            callback.onFailure(responseDTO);
+                        }))
+                .addOnFailureListener(e -> {
+                    responseDTO.setError(R.string.team_member_update_error);
+                    callback.onFailure(responseDTO);
                 });
     }
 }
