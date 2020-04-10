@@ -10,7 +10,7 @@ import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.activity.racecontrol.RaceControlPresenter;
+import es.formulastudent.app.mvp.view.screen.racecontrol.RaceControlPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class, SharedPreferencesModule.class})
 public class RaceControlModule {

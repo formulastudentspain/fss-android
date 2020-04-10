@@ -10,7 +10,7 @@ import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
-import es.formulastudent.app.mvp.view.activity.login.LoginPresenter;
+import es.formulastudent.app.mvp.view.screen.login.LoginPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class, SharedPreferencesModule.class})
 public class LoginModule {

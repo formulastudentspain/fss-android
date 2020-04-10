@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".mvp.view.activity.dynamicevent.DynamicEventActivity">
+    tools:context=".mvp.view.screen.dynamicevent.DynamicEventActivity">
 
     <LinearLayout
         android:id="@+id/user_row_container"

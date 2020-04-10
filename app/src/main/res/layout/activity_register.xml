@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".mvp.view.activity.login.LoginActivity"
+    tools:context=".mvp.view.screen.login.LoginActivity"
     android:background="@mipmap/login_wallpaper">
 
     <ImageView

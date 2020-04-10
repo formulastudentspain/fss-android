@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".mvp.view.activity.teammember.TeamMemberActivity">
+    tools:context=".mvp.view.screen.teammember.TeamMemberActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/main_element"

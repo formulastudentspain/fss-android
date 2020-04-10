@@ -9,7 +9,7 @@ import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.activity.userdetail.UserDetailPresenter;
+import es.formulastudent.app.mvp.view.screen.userdetail.UserDetailPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class UserDetailModule {

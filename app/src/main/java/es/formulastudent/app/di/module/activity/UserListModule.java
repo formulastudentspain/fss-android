@@ -8,7 +8,7 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
-import es.formulastudent.app.mvp.view.activity.user.UserPresenter;
+import es.formulastudent.app.mvp.view.screen.user.UserPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class UserListModule {

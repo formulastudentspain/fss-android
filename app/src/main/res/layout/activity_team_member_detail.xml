@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/md_grey_100"
-    tools:context=".mvp.view.activity.teammemberdetail.TeamMemberDetailActivity">
+    tools:context=".mvp.view.screen.teammemberdetail.TeamMemberDetailActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"

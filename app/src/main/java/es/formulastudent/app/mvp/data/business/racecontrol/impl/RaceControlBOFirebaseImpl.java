@@ -27,7 +27,7 @@ import es.formulastudent.app.mvp.data.model.RaceControlRegisterAutocross;
 import es.formulastudent.app.mvp.data.model.RaceControlRegisterEndurance;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.RaceControlTeamDTO;
+import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.RaceControlTeamDTO;
 
 public class RaceControlBOFirebaseImpl implements RaceControlBO {
 

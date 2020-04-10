@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -24,17 +23,25 @@ import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 public class BriefingBOFirebaseImpl implements BriefingBO {
 
     private FirebaseFirestore firebaseFirestore;
+    private LoadingDialog loadingDialog;
+    private Messages messages;
 
-    public BriefingBOFirebaseImpl(FirebaseFirestore firebaseFirestore) {
+    public BriefingBOFirebaseImpl(FirebaseFirestore firebaseFirestore,
+                                  LoadingDialog loadingDialog, Messages messages) {
         this.firebaseFirestore = firebaseFirestore;
+        this.loadingDialog = loadingDialog;
+        this.messages = messages;
     }
 
     @Override
     public void retrieveBriefingRegisters(Date from, Date to, String teamID, final BusinessCallback callback) {
+        loadingDialog.show();
 
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS);
 
@@ -71,8 +78,9 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
                         }
 
                         responseDTO.setData(result);
-                        responseDTO.setInfo(R.string.briefing_messages_retrieve_registers_info);
+                        messages.showInfo(R.string.briefing_messages_retrieve_registers_info);
                         callback.onSuccess(responseDTO);
+                        loadingDialog.dismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -82,7 +90,7 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
 
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        responseDTO.setInfo(R.string.briefing_messages_retrieve_registers_error);
+                        messages.showError(R.string.briefing_messages_retrieve_registers_error);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -120,8 +128,6 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
                 .orderBy(BriefingRegister.DATE, Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-
-                    List<BriefingRegister> result = new ArrayList<>();
 
                     if (queryDocumentSnapshots.isEmpty()) {
                         responseDTO.setData(Boolean.FALSE);

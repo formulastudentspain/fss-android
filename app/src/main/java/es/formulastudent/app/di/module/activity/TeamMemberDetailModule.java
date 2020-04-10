@@ -7,7 +7,7 @@ import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
-import es.formulastudent.app.mvp.view.activity.teammemberdetail.TeamMemberDetailPresenter;
+import es.formulastudent.app.mvp.view.screen.teammemberdetail.TeamMemberDetailPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class TeamMemberDetailModule {

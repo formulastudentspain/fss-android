@@ -10,7 +10,7 @@ import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
-import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.RaceControlTeamDTO;
+import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.RaceControlTeamDTO;
 
 public interface RaceControlBO {
 

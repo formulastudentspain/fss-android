@@ -16,12 +16,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/Hola"
         tools:ignore="GoogleAppIndexingWarning">
 
 
         <activity
-            android:name=".mvp.view.activity.login.LoginActivity"
+            android:name=".mvp.view.screen.welcome.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,92 +30,83 @@
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.NFCReaderActivity"
+            android:name=".mvp.view.screen.NFCReaderActivity"
             android:label="Formula Student Spain"
             android:launchMode="singleTop">
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.teammember.TeamMemberActivity"
+            android:name=".mvp.view.screen.teammember.TeamMemberActivity"
             android:label="Formula Student Spain"
             android:launchMode="singleTop">
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.briefing.BriefingActivity"
-            android:launchMode="singleTop">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.teammemberdetail.TeamMemberDetailActivity"
+            android:name=".mvp.view.screen.teammemberdetail.TeamMemberDetailActivity"
             android:label="User detail"
             android:launchMode="singleTop">
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.dynamicevent.DynamicEventActivity">
+            android:name=".mvp.view.screen.dynamicevent.DynamicEventActivity">
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.egresschrono.EgressChronoActivity"
+            android:name=".mvp.view.screen.egresschrono.EgressChronoActivity"
             android:label="Egress chrono"
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mvp.view.activity.dynamicevent.DynamicEventActivity"/>
+                android:value=".mvp.view.screen.dynamicevent.DynamicEventActivity"/>
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.welcome.WelcomeActivity">
+            android:name=".mvp.view.screen.statistics.StatisticsActivity">
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.statistics.StatisticsActivity">
+            android:name=".mvp.view.screen.adminoperations.AdminOpsActivity">
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.adminoperations.AdminOpsActivity">
+            android:name=".mvp.view.screen.racecontrol.RaceControlActivity">
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.racecontrol.RaceControlActivity">
+            android:name=".mvp.view.screen.racecontrol.RaceControlWelcomeActivity">
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.racecontrol.RaceControlWelcomeActivity">
+            android:name=".mvp.view.screen.user.UserActivity">
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.user.UserActivity">
+            android:name=".mvp.view.screen.qrreader.QRReaderActivity">
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.qrreader.QRReaderActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.userdetail.UserDetailActivity">
+            android:name=".mvp.view.screen.userdetail.UserDetailActivity">
         </activity>
         <activity
-            android:name=".mvp.view.activity.teams.TeamsActivity">
+            android:name=".mvp.view.screen.teams.TeamsActivity">
         </activity>
         <activity
-            android:name=".mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringActivity">
+            android:name=".mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringActivity">
         </activity>
         <activity
-            android:name=".mvp.view.activity.teamsdetailfee.TeamsDetailFeeActivity">
+            android:name=".mvp.view.screen.teamsdetailfee.TeamsDetailFeeActivity">
         </activity>
         <activity
-            android:name=".mvp.view.activity.conecontrol.ConeControlWelcomeActivity">
+            android:name=".mvp.view.screen.conecontrol.ConeControlWelcomeActivity">
         </activity>
         <activity
-            android:name=".mvp.view.activity.conecontrol.ConeControlActivity">
+            android:name=".mvp.view.screen.conecontrol.ConeControlActivity">
         </activity>
         <activity
-            android:name=".mvp.view.activity.conecontrolstats.ConeControlStatsActivity">
+            android:name=".mvp.view.screen.conecontrolstats.ConeControlStatsActivity">
         </activity>
         <activity
-            android:name=".mvp.view.activity.loginregister.RegisterActivity">
+            android:name=".mvp.view.screen.loginregister.RegisterActivity">
         </activity>
     </application>
 </manifest>

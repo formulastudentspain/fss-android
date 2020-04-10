@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_margin="4dp"
-    tools:context=".mvp.view.activity.teammember.TeamMemberActivity">
+    tools:context=".mvp.view.screen.teammember.TeamMemberActivity">
 
 
     <LinearLayout

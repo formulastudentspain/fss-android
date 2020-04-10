@@ -1,15 +1,11 @@
 package es.formulastudent.app.mvp.data.business.team.impl;
 
-import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,36 +18,44 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Team;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_AI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_BT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_EI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_MI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_NT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_PS;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_RT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_TTT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_AI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_BT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_EI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_MI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_NT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_PS;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_RT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_TTT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.ENERGY_METER_STEP;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.TRANSPONDER_STEP;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_AI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_BT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_EI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_MI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_NT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_PS;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_RT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_TTT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_AI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_BT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_EI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_MI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_NT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_PS;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_RT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_TTT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.ENERGY_METER_STEP;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.TRANSPONDER_STEP;
 
 public class TeamBOFirebaseImpl implements TeamBO {
 
     private FirebaseFirestore firebaseFirestore;
+    private LoadingDialog loadingDialog;
+    private Messages messages;
 
-    public TeamBOFirebaseImpl(FirebaseFirestore firebaseFirestore) {
+    public TeamBOFirebaseImpl(FirebaseFirestore firebaseFirestore,
+                              LoadingDialog loadingDialog, Messages messages) {
         this.firebaseFirestore = firebaseFirestore;
+        this.loadingDialog = loadingDialog;
+        this.messages = messages;
     }
 
     @Override
     public void retrieveTeams(String carType, Map<String, String> filters, final BusinessCallback callback) {
+        loadingDialog.show();
 
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM);
 
@@ -62,7 +66,6 @@ public class TeamBOFirebaseImpl implements TeamBO {
                 || Car.CAR_TYPE_AUTONOMOUS_COMBUSTION.equals(carType)) {
 
             query = query.whereEqualTo(Team.CAR_TYPE, carType);
-
         }
 
 
@@ -182,13 +185,14 @@ public class TeamBOFirebaseImpl implements TeamBO {
                         }
 
                         responseDTO.setData(result);
-                        responseDTO.setInfo(R.string.teams_info_retrieving_all_message);
+                        messages.showInfo(R.string.teams_info_retrieving_all_message);
                         callback.onSuccess(responseDTO);
 
                     } else {
-                        responseDTO.setInfo(R.string.teams_error_retrieving_all_message);
+                        messages.showError(R.string.teams_error_retrieving_all_message);
                         callback.onFailure(responseDTO);
                     }
+                    loadingDialog.hide();
                 });
     }
 

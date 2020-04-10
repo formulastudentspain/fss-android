@@ -6,8 +6,8 @@ import dagger.Component;
 import es.formulastudent.app.di.module.activity.TeamMemberDetailModule;
 import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.activity.teammemberdetail.TeamMemberDetailActivity;
-import es.formulastudent.app.mvp.view.activity.teammemberdetail.TeamMemberDetailPresenter;
+import es.formulastudent.app.mvp.view.screen.teammemberdetail.TeamMemberDetailActivity;
+import es.formulastudent.app.mvp.view.screen.teammemberdetail.TeamMemberDetailPresenter;
 
 
 @Singleton

@@ -8,7 +8,7 @@ import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.activity.briefing.BriefingPresenter;
+import es.formulastudent.app.mvp.view.screen.briefing.BriefingPresenter;
 
 @Module(includes = {BusinessModule.class, SharedPreferencesModule.class})
 public class BriefingModule {

@@ -2,6 +2,8 @@ package es.formulastudent.app.di.module.business;
 
 import android.content.Context;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -34,9 +36,11 @@ import es.formulastudent.app.mvp.data.business.teammember.impl.TeamMemberBOFireb
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.business.user.impl.UserBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-@Module(includes = {FirebaseModule.class, ContextModule.class, SharedPreferencesModule.class})
+@Module(includes = {FirebaseModule.class, ContextModule.class, SharedPreferencesModule.class, UtilsModule.class})
 public class BusinessModule {
 
     /**
@@ -45,8 +49,9 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public TeamBO provideTeamBO(FirebaseFirestore firebaseFirestore) {
-        return new TeamBOFirebaseImpl(firebaseFirestore);
+    public TeamBO provideTeamBO(FirebaseFirestore firebaseFirestore,
+                                LoadingDialog loadingDialog, Messages messages) {
+        return new TeamBOFirebaseImpl(firebaseFirestore, loadingDialog, messages);
     }
 
 
@@ -56,8 +61,9 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public BriefingBO provideBriefingBO(FirebaseFirestore firebaseFirestore) {
-        return new BriefingBOFirebaseImpl(firebaseFirestore);
+    public BriefingBO provideBriefingBO(FirebaseFirestore firebaseFirestore,
+                                        LoadingDialog loadingDialog, Messages messages) {
+        return new BriefingBOFirebaseImpl(firebaseFirestore, loadingDialog, messages);
     }
 
 

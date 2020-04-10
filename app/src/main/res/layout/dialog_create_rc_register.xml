@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".mvp.view.activity.racecontrol.RaceControlActivity">
+    tools:context=".mvp.view.screen.racecontrol.RaceControlActivity">
 
     <TextView
         android:layout_width="wrap_content"

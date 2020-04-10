@@ -10,7 +10,7 @@ import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.EventType;
-import es.formulastudent.app.mvp.view.activity.dynamicevent.DynamicEventPresenter;
+import es.formulastudent.app.mvp.view.screen.dynamicevent.DynamicEventPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class DynamicEventModule {
