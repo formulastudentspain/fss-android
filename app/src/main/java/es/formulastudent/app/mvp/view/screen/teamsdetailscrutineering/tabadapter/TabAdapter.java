@@ -7,8 +7,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringPresenter;
-import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.fragment.prescrutineering.TeamsDetailPreScrutineeringFragment;
-import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.fragment.scrutineering.TeamsDetailScrutineeringFragment;
+import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.prescrutineering.TeamsDetailPreScrutineeringFragment;
+import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.scrutineering.TeamsDetailScrutineeringFragment;
 
 public class TabAdapter extends FragmentStatePagerAdapter {
 

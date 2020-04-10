@@ -22,4 +22,12 @@
         android:textSize="32sp"
         android:text="@string/drawer_menu_staff_briefing" />
 
+    <TextView
+        android:id="@+id/drawerItemTeams"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:textSize="32sp"
+        android:text="@string/drawer_menu_teams" />
+
 </LinearLayout>

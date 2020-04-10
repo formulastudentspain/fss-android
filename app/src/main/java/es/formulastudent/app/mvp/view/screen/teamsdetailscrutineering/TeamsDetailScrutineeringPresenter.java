@@ -20,7 +20,7 @@ import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.fragment.TeamsDetailFragment;
+import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.TeamsDetailFragment;
 
 
 public class TeamsDetailScrutineeringPresenter {

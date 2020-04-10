@@ -61,9 +61,7 @@ public class BriefingPresenter implements RecyclerViewClickListener {
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
-            }
+            public void onFailure(ResponseDTO responseDTO) {}
         });
     }
 
@@ -83,9 +81,7 @@ public class BriefingPresenter implements RecyclerViewClickListener {
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
-            }
+            public void onFailure(ResponseDTO responseDTO) {}
         });
     }
 
@@ -101,14 +97,11 @@ public class BriefingPresenter implements RecyclerViewClickListener {
         briefingBO.deleteBriefingRegister(id, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getInfo());
                 retrieveBriefingRegisterList();
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
-            }
+            public void onFailure(ResponseDTO responseDTO) {}
         });
     }
 
@@ -125,9 +118,7 @@ public class BriefingPresenter implements RecyclerViewClickListener {
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
-            }
+            public void onFailure(ResponseDTO responseDTO) {}
         });
     }
 
@@ -148,9 +139,7 @@ public class BriefingPresenter implements RecyclerViewClickListener {
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
-            }
+            public void onFailure(ResponseDTO responseDTO) {}
         });
     }
 
@@ -195,13 +184,6 @@ public class BriefingPresenter implements RecyclerViewClickListener {
          * @return current activity
          */
         FragmentActivity getActivity();
-
-        /**
-         * Show message to user
-         * @param message to be displayed
-         * @param args for the message
-         */
-        void createMessage(Integer message, Object... args);
 
         /**
          * Refresh items in list

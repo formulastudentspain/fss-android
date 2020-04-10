@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.fragment.prescrutineering;
+package es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.prescrutineering;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,8 +28,8 @@ import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerVie
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringPresenter;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.dialog.AddCommentDialog;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.dialog.ConfirmPassTestDialog;
-import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.fragment.TeamsDetailFragment;
-import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.fragment.prescrutineering.recyclerview.EgressRegistersAdapter;
+import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.TeamsDetailFragment;
+import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.prescrutineering.recyclerview.EgressRegistersAdapter;
 import info.androidhive.fontawesome.FontTextView;
 
 

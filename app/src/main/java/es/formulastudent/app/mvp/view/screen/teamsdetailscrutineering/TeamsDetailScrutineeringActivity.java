@@ -24,7 +24,7 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.TeamsDetailScrutineeringModule;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.general.GeneralActivity;
-import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.fragment.prescrutineering.TeamsDetailPreScrutineeringFragment;
+import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.prescrutineering.TeamsDetailPreScrutineeringFragment;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabadapter.TabAdapter;
 
 

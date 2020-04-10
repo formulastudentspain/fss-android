@@ -1,8 +1,8 @@
 package es.formulastudent.app.mvp.view.screen.teams;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+
+import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,8 +16,6 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog;
-import es.formulastudent.app.mvp.view.screen.teamsdetailfee.TeamsDetailFeeActivity;
-import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringActivity;
 
 
 public class TeamsPresenter implements RecyclerViewClickListener {
@@ -43,35 +41,30 @@ public class TeamsPresenter implements RecyclerViewClickListener {
     /**
      * Retrieve Briefing registers
      */
-     public void retrieveTeamsList() {
+    public void retrieveTeamsList() {
 
-         view.filtersActivated(!filters.keySet().isEmpty());
-
-        //Show loading
-        view.showLoading();
+        view.filtersActivated(!filters.keySet().isEmpty());
 
         //Call Briefing business
         teamBO.retrieveTeams(null, filters, new BusinessCallback() {
 
-             @Override
-             public void onSuccess(ResponseDTO responseDTO) {
-                     List<Team> results = (List<Team>) responseDTO.getData();
-                     if(results == null){
-                         results = new ArrayList<>();
-                     }
-                     updateTeams(results);
-             }
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                List<Team> results = (List<Team>) responseDTO.getData();
+                if (results == null) {
+                    results = new ArrayList<>();
+                }
+                updateTeams(results);
+            }
 
-             @Override
-             public void onFailure(ResponseDTO responseDTO) {
-                 //Show error message
-                 view.createMessage(responseDTO.getError());
-             }
-         });
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+            }
+        });
     }
 
 
-    public void updateTeams(List<Team> items){
+    public void updateTeams(List<Team> items) {
         //Update all-register-list
         this.allTeamsList.clear();
         this.allTeamsList.addAll(items);
@@ -85,33 +78,22 @@ public class TeamsPresenter implements RecyclerViewClickListener {
 
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
-
         Team selectedTeam = filteredTeamsList.get(position);
-        Intent intent = null;
-        //Open Scrutineering
-         if(v.getId() == R.id.scrutineering_button){
-             intent = new Intent(context, TeamsDetailScrutineeringActivity.class);
-             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-         }
 
-        //Open Fee
-        if(v.getId() == R.id.fee_button){
-            intent = new Intent(context, TeamsDetailFeeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (v.getId() == R.id.scrutineering_button) {
+            view.openScrutineeringFragment(selectedTeam);
+
+        } else if (v.getId() == R.id.fee_button) {
+            view.openFeeFragment(selectedTeam);
         }
-
-        intent.putExtra("selectedTeam", selectedTeam);
-        context.startActivity(intent);
-
     }
 
     /**
      * Open the filtering dialog
      */
-    void filterIconClicked(){
-
+    void filterIconClicked() {
         FilterTeamsDialog filterTeamsDialog = FilterTeamsDialog.newInstance(this, filters);
-        filterTeamsDialog.show(((TeamsActivity)view.getActivity()).getSupportFragmentManager(), "addCommentDialog");
+        filterTeamsDialog.show(view.getActivity().getSupportFragmentManager(), "addCommentDialog");
     }
 
 
@@ -125,28 +107,7 @@ public class TeamsPresenter implements RecyclerViewClickListener {
 
     public interface View {
 
-        Activity getActivity();
-
-        /**
-         * Show message to user
-         * @param message
-         */
-        void createMessage(Integer message, Object... args);
-
-        /**
-         * Finish current activity
-         */
-        void finishView();
-
-        /**
-         * Show loading icon
-         */
-        void showLoading();
-
-        /**
-         * Hide loading icon
-         */
-        void hideLoading();
+        FragmentActivity getActivity();
 
         /**
          * Refresh items in list
@@ -155,10 +116,23 @@ public class TeamsPresenter implements RecyclerViewClickListener {
 
         /**
          * Method to know if the filters are activated
+         *
          * @param activated
          */
         void filtersActivated(Boolean activated);
 
-    }
+        /**
+         * Open scrutineering fragment
+         *
+         * @param team: selected team
+         */
+        void openScrutineeringFragment(Team team);
 
+        /**
+         * Open fee fragment
+         *
+         * @param team: selected team
+         */
+        void openFeeFragment(Team team);
+    }
 }

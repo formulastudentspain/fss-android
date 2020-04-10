@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.fragment.scrutineering;
+package es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.scrutineering;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,7 +23,7 @@ import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringPresenter;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.dialog.AddCommentDialog;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.dialog.ConfirmPassTestDialog;
-import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.fragment.TeamsDetailFragment;
+import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.TeamsDetailFragment;
 import info.androidhive.fontawesome.FontTextView;
 
 

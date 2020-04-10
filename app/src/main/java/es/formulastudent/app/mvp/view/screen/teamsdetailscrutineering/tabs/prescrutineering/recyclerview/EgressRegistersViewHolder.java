@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.fragment.prescrutineering.recyclerview;
+package es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.prescrutineering.recyclerview;
 
 import android.view.View;
 import android.widget.ImageView;

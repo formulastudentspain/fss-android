@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -41,11 +40,6 @@ import es.formulastudent.app.mvp.view.screen.briefing.recyclerview.BriefingRegis
 import es.formulastudent.app.mvp.view.screen.general.spinneradapters.TeamsSpinnerAdapter;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BriefingFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedChangeListener,
         BriefingPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
@@ -54,32 +48,11 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
     @Inject
     BriefingPresenter presenter;
 
-    //View components
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private BriefingRegistersAdapter registersAdapter;
     private TeamsSpinnerAdapter teamsAdapter;
     private FloatingActionButton buttonAddRegister;
     private Spinner teamsSpinner;
 
-    public BriefingFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BriefingFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BriefingFragment newInstance(String param1, String param2) {
-        BriefingFragment fragment = new BriefingFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,15 +62,12 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_briefing, container, false);
         initViews(view);
         return view;
     }
 
-
     protected void setupComponent(AppComponent appComponent) {
-
         DaggerBriefingComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(getContext(), getActivity()))
@@ -106,11 +76,8 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
                 .inject(this);
     }
 
-
     private void initViews(View view){
-
-        //Recycler view
-        mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
+        SwipeRefreshLayout mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         registersAdapter = new BriefingRegistersAdapter(presenter.getBriefingRegisterList(), getContext(), presenter);
@@ -162,11 +129,6 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
             @Override
             public void onNothingSelected(AdapterView<?> adapter) {  }
         });
-    }
-
-    @Override
-    public void createMessage(Integer message, Object... args) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -245,15 +207,13 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
                 presenter.setSelectedDateTo(calTo.getTime());
 
             }catch (ParseException pe){
-                createMessage(R.string.briefing_messages_parsing_dates_error);
+                //TODO
             }
         }
 
         //Update list
         presenter.retrieveBriefingRegisterList();
-
     }
-
 
     @Override
     public void onRefresh() {

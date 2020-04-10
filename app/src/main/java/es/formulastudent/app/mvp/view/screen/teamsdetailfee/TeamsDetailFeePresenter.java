@@ -16,6 +16,7 @@ import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.FeeItem;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.dialog.ConfirmNextStepDialog;
+import es.formulastudent.app.mvp.view.screen.teamsdetailfee.tabs.TeamsDetailFeeFragment;
 
 
 public class TeamsDetailFeePresenter {

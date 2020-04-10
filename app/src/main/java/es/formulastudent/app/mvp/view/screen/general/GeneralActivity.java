@@ -47,7 +47,6 @@ import es.formulastudent.app.mvp.view.screen.login.LoginActivity;
 import es.formulastudent.app.mvp.view.screen.racecontrol.RaceControlWelcomeActivity;
 import es.formulastudent.app.mvp.view.screen.statistics.StatisticsActivity;
 import es.formulastudent.app.mvp.view.screen.teammember.TeamMemberActivity;
-import es.formulastudent.app.mvp.view.screen.teams.TeamsActivity;
 import es.formulastudent.app.mvp.view.screen.user.UserActivity;
 import es.formulastudent.app.mvp.view.screen.welcome.MainActivity;
 import info.androidhive.fontawesome.FontDrawable;
@@ -582,8 +581,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         if(drawerItem.getIdentifier() == 10020){ //TeamMember management
             intent = new Intent(this, TeamMemberActivity.class);
 
-        }else if(drawerItem.getIdentifier() == 10001){ //Briefing
-
         }else if(drawerItem.getIdentifier() == 10013){ //Acceleration
             intent = new Intent(this, DynamicEventActivity.class);
             intent.putExtra("eventType", EventType.ACCELERATION);
@@ -641,8 +638,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }else if(drawerItem.getIdentifier() == 10026){ //Users
             intent = new Intent(this, UserActivity.class);
 
-        }else if(drawerItem.getIdentifier() == 70001){ //Teams
-            intent = new Intent(this, TeamsActivity.class);
         }
 
         this.startActivity(intent);

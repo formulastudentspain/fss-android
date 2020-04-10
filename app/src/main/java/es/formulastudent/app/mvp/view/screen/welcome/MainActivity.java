@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         navController = Navigation.findNavController(this, R.id.myNavHostFragment);
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
-
         NavigationUI.setupWithNavController(binding.navigationView, navController);
     }
 
@@ -40,13 +39,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()){
             case R.id.drawerItemBriefing:
                 navController.navigate(R.id.action_welcomeFragment_to_briefingFragment);
                 break;
+            case R.id.drawerItemTeams:
+                navController.navigate(R.id.action_welcomeFragment_to_teamsFragment);
+                break;
         }
-
         drawerLayout.closeDrawer(GravityCompat.START);
     }
 }

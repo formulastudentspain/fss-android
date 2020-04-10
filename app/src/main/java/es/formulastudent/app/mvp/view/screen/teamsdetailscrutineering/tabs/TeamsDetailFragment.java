@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.fragment;
+package es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs;
 
 import es.formulastudent.app.mvp.data.model.Team;
 

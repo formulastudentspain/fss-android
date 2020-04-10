@@ -1,20 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     android:label="@string/app_name"
     app:startDestination="@id/welcomeFragment">
 
     <fragment
         android:id="@+id/welcomeFragment"
+        tools:layout="@layout/fragment_welcome"
         android:name="es.formulastudent.app.mvp.view.screen.welcome.WelcomeFragment"
         android:label="Formula Student Spain">
         <action
             android:id="@+id/action_welcomeFragment_to_briefingFragment"
             app:destination="@id/briefingFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_teamsFragment"
+            app:destination="@id/teamsFragment" />
     </fragment>
     <fragment
         android:id="@+id/briefingFragment"
+        tools:layout="@layout/fragment_briefing"
         android:name="es.formulastudent.app.mvp.view.screen.briefing.BriefingFragment"
         android:label="@string/drawer_menu_staff_briefing" />
+    <fragment
+        android:id="@+id/teamsFragment"
+        tools:layout="@layout/fragment_teams"
+        android:name="es.formulastudent.app.mvp.view.screen.teams.TeamsFragment"
+        android:label="TeamsFragment" >
+        <action
+            android:id="@+id/action_teamsFragment_to_teamsDetailScrutineeringFragment"
+            app:destination="@id/teamsDetailScrutineeringFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/teamsDetailScrutineeringFragment"
+        android:name="es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringFragment"
+        android:label="TeamsDetailScrutineeringFragment" />
 </navigation>

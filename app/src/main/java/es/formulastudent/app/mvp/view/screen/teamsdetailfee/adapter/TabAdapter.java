@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.screen.teamsdetailfee.TeamsDetailFeeFragment;
+import es.formulastudent.app.mvp.view.screen.teamsdetailfee.tabs.TeamsDetailFeeFragment;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.TeamsDetailFeePresenter;
 
 public class TabAdapter extends FragmentStatePagerAdapter {
