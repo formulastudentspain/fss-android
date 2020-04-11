@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -33,6 +36,7 @@ public class TeamsFragment extends Fragment implements TeamsPresenter.View, Swip
 
     private TeamsAdapter adapter;
     private MenuItem filterItem;
+    private NavController navController;
 
 
     @Override
@@ -43,6 +47,9 @@ public class TeamsFragment extends Fragment implements TeamsPresenter.View, Swip
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FragmentActivity activity = getActivity();
+        assert activity != null;
+        navController = Navigation.findNavController(activity, R.id.myNavHostFragment);
         View view = inflater.inflate(R.layout.fragment_teams, container, false);
         initViews(view);
         setHasOptionsMenu(true);
@@ -92,7 +99,7 @@ public class TeamsFragment extends Fragment implements TeamsPresenter.View, Swip
 
     @Override
     public void openScrutineeringFragment(Team team) {
-        //TODO navegar a scrutineering
+        navController.navigate(TeamsFragmentDirections.actionTeamsFragmentToTeamsDetailScrutineeringFragment(team));
     }
 
     @Override

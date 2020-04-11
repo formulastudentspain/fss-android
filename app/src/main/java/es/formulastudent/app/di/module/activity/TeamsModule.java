@@ -1,7 +1,5 @@
 package es.formulastudent.app.di.module.activity;
 
-import android.content.Context;
-
 import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
@@ -24,7 +22,7 @@ public class TeamsModule {
     }
 
     @Provides
-    public TeamsPresenter providePresenter(TeamsPresenter.View categoryView, Context context, TeamBO teamBO) {
-        return new TeamsPresenter(categoryView, context, teamBO);
+    public TeamsPresenter providePresenter(TeamsPresenter.View categoryView, TeamBO teamBO) {
+        return new TeamsPresenter(categoryView, teamBO);
     }
 }

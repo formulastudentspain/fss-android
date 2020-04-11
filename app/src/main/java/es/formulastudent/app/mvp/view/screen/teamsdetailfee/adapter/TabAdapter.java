@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.screen.teamsdetailfee.tabs.TeamsDetailFeeFragment;
+import es.formulastudent.app.mvp.view.screen.teamsdetailfee.tabs.TeamsDetailFeeTabFragment;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.TeamsDetailFeePresenter;
 
 public class TabAdapter extends FragmentStatePagerAdapter {
@@ -15,7 +15,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     private TeamsDetailFeePresenter presenter;
 
     //Fragments
-    private TeamsDetailFeeFragment teamsDetailFeeFragment;
+    private TeamsDetailFeeTabFragment teamsDetailFeeTabFragment;
 
 
     public TabAdapter(FragmentManager fm, Team team, TeamsDetailFeePresenter presenter) {
@@ -28,12 +28,12 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
 
         if(i == 0){
-            teamsDetailFeeFragment = new TeamsDetailFeeFragment(team, presenter, 0);
-            return teamsDetailFeeFragment;
+            teamsDetailFeeTabFragment = new TeamsDetailFeeTabFragment(team, presenter, 0);
+            return teamsDetailFeeTabFragment;
 
         }else{
-            teamsDetailFeeFragment = new TeamsDetailFeeFragment(team, presenter, 1);
-            return teamsDetailFeeFragment;
+            teamsDetailFeeTabFragment = new TeamsDetailFeeTabFragment(team, presenter, 1);
+            return teamsDetailFeeTabFragment;
 
         }
     }

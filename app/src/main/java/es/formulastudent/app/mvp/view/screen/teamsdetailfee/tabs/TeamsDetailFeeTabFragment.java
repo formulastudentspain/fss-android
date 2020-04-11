@@ -21,7 +21,7 @@ import es.formulastudent.app.mvp.view.screen.teamsdetailfee.TeamsDetailFeePresen
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.adapter.StepperAdapter;
 
 
-public class TeamsDetailFeeFragment extends Fragment {
+public class TeamsDetailFeeTabFragment extends Fragment {
 
     private Team team;
     private int type; //0 = Transponder, 1 = Energy Meter
@@ -38,7 +38,7 @@ public class TeamsDetailFeeFragment extends Fragment {
     private StepperAdapter energyMeterAdapter;
 
 
-    public TeamsDetailFeeFragment(Team team, TeamsDetailFeePresenter presenter, int type) {
+    public TeamsDetailFeeTabFragment(Team team, TeamsDetailFeePresenter presenter, int type) {
         this.team = team;
         this.presenter = presenter;
         this.type = type;

@@ -31,9 +31,26 @@
         <action
             android:id="@+id/action_teamsFragment_to_teamsDetailScrutineeringFragment"
             app:destination="@id/teamsDetailScrutineeringFragment" />
+        <action
+            android:id="@+id/action_teamsFragment_to_teamsDetailFeeFragment"
+            app:destination="@id/teamsDetailFeeFragment" />
     </fragment>
     <fragment
         android:id="@+id/teamsDetailScrutineeringFragment"
+        tools:layout="@layout/fragment_teams_detail_scrutineering"
         android:name="es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringFragment"
-        android:label="TeamsDetailScrutineeringFragment" />
+        android:label="TeamsDetailScrutineeringFragment" >
+        <argument
+            android:name="selectedTeam"
+            app:argType="es.formulastudent.app.mvp.data.model.Team" />
+    </fragment>
+    <fragment
+        android:id="@+id/teamsDetailFeeFragment"
+        tools:layout="@layout/fragment_teams_detail_fee"
+        android:name="es.formulastudent.app.mvp.view.screen.teamsdetailfee.TeamsDetailFeeFragment"
+        android:label="TeamsDetailFeeFragment" >
+        <argument
+            android:name="selectedTeam"
+            app:argType="es.formulastudent.app.mvp.data.model.Team" />
+    </fragment>
 </navigation>

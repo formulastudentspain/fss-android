@@ -1,7 +1,5 @@
 package es.formulastudent.app.mvp.view.screen.teams;
 
-import android.content.Context;
-
 import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
@@ -22,18 +20,15 @@ public class TeamsPresenter implements RecyclerViewClickListener {
 
     //Dependencies
     private View view;
-    private Context context;
     private TeamBO teamBO;
 
     //Data
-    List<Team> allTeamsList = new ArrayList<>();
-    List<Team> filteredTeamsList = new ArrayList<>();
-    Map<String, String> filters = new HashMap<>();
+    private List<Team> filteredTeamsList = new ArrayList<>();
+    private Map<String, String> filters = new HashMap<>();
 
 
-    public TeamsPresenter(TeamsPresenter.View view, Context context, TeamBO teamBO) {
+    public TeamsPresenter(TeamsPresenter.View view, TeamBO teamBO) {
         this.view = view;
-        this.context = context;
         this.teamBO = teamBO;
     }
 
@@ -64,12 +59,7 @@ public class TeamsPresenter implements RecyclerViewClickListener {
     }
 
 
-    public void updateTeams(List<Team> items) {
-        //Update all-register-list
-        this.allTeamsList.clear();
-        this.allTeamsList.addAll(items);
-
-        //Update and refresh filtered-register-list
+    private void updateTeams(List<Team> items) {
         this.filteredTeamsList.clear();
         this.filteredTeamsList.addAll(items);
         this.view.refreshBriefingRegisterItems();
@@ -97,7 +87,7 @@ public class TeamsPresenter implements RecyclerViewClickListener {
     }
 
 
-    public List<Team> getTeamsList() {
+    List<Team> getTeamsList() {
         return filteredTeamsList;
     }
 

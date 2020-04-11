@@ -41,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.drawerItemBriefing:
-                navController.navigate(R.id.action_welcomeFragment_to_briefingFragment);
+                navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToBriefingFragment());
                 break;
             case R.id.drawerItemTeams:
-                navController.navigate(R.id.action_welcomeFragment_to_teamsFragment);
+                navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToTeamsFragment());
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

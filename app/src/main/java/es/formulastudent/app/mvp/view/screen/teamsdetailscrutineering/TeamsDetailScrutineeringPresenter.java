@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
@@ -47,9 +46,6 @@ public class TeamsDetailScrutineeringPresenter {
 
     public void updateTeam(final Team mofidiedTeam, final Team originalTeam) {
 
-        //Show loading
-        view.showLoading();
-
         //Update
         teamBO.updateTeam(mofidiedTeam, new BusinessCallback() {
             @Override
@@ -62,12 +58,6 @@ public class TeamsDetailScrutineeringPresenter {
                         ((TeamsDetailFragment)fragment).updateView(mofidiedTeam);
                     }
                 }
-
-                //Show info message
-                view.createMessage(responseDTO.getInfo());
-
-                //Hide loading
-                view.hideLoading();
             }
 
             @Override
@@ -80,20 +70,11 @@ public class TeamsDetailScrutineeringPresenter {
                         ((TeamsDetailFragment) fragment).updateView(originalTeam);
                     }
                 }
-
-                //Show error message
-                view.createMessage(responseDTO.getError());
-
-                //Hide loading
-                view.hideLoading();
             }
         });
     }
 
     public void retrieveEgressRegisterList() {
-
-        //Show loading
-        view.showLoading();
 
         //Call Event business
         dynamicEventBO.retrieveRegisters(null, null, view.getCurrentTeam().getID(), null, EventType.PRE_SCRUTINEERING, new BusinessCallback() {
@@ -103,14 +84,10 @@ public class TeamsDetailScrutineeringPresenter {
                 //Refresh the records
                 List<EventRegister> results = (List<EventRegister>) responseDTO.getData();
                 updateEventRegisters(results==null ? new ArrayList<EventRegister>() : results);
-                view.hideLoading();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //Show error message
-                view.createMessage(responseDTO.getError());
-                view.hideLoading();
             }
         });
     }
@@ -134,9 +111,6 @@ public class TeamsDetailScrutineeringPresenter {
      */
     public void onNFCTagDetected(String tag){
 
-        //Show loading
-        view.showLoading();
-
         //Retrieve user by the NFC tag
         teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
             @Override
@@ -154,23 +128,12 @@ public class TeamsDetailScrutineeringPresenter {
                     }
                     @Override
                     public void onFailure(ResponseDTO responseDTO) {
-
-                        //Hide loading
-                        view.hideLoading();
-
-                        //Show error message
-                        view.createMessage(R.string.dynamic_event_message_error_create);
                     }
                 });
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //Hide loading
-                view.hideLoading();
-
-                //Show error message
-                view.createMessage(R.string.team_member_get_by_nfc_error);
             }
         });
     }
@@ -191,8 +154,6 @@ public class TeamsDetailScrutineeringPresenter {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //Show error message
-                view.createMessage(R.string.dynamic_event_message_error_create_egress);
             }
         });
     }
@@ -206,17 +167,11 @@ public class TeamsDetailScrutineeringPresenter {
      */
     public void onChronoTimeRegistered(Long milliseconds, String registerID) {
 
-        //Show loading
-        view.showLoading();
-
         //We have the time, we need to update the time
         dynamicEventBO.updatePreScrutineeringRegister(registerID, milliseconds, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-
-                //Show info message
-                view.createMessage(responseDTO.getInfo());
 
                 //Update results
                 retrieveEgressRegisterList();
@@ -224,8 +179,6 @@ public class TeamsDetailScrutineeringPresenter {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //Show error
-                view.createMessage(responseDTO.getError());
             }
         });
     }
@@ -235,27 +188,6 @@ public class TeamsDetailScrutineeringPresenter {
     public interface View {
 
         Activity getActivity();
-
-        /**
-         * Show message to user
-         * @param message
-         */
-        void createMessage(Integer message, Object... args);
-
-        /**
-         * Finish current activity
-         */
-        void finishView();
-
-        /**
-         * Show loading icon
-         */
-        void showLoading();
-
-        /**
-         * Hide loading icon
-         */
-        void hideLoading();
 
         /**
          * Get fragment manager

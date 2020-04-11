@@ -88,12 +88,6 @@
             android:name=".mvp.view.screen.userdetail.UserDetailActivity">
         </activity>
         <activity
-            android:name=".mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringActivity">
-        </activity>
-        <activity
-            android:name=".mvp.view.screen.teamsdetailfee.TeamsDetailFeeActivity">
-        </activity>
-        <activity
             android:name=".mvp.view.screen.conecontrol.ConeControlWelcomeActivity">
         </activity>
         <activity

@@ -7,17 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/md_white_1000"
-    tools:context=".mvp.view.screen.teams.TeamsActivity">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="0dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-    </androidx.appcompat.widget.Toolbar>
-
+    tools:context=".mvp.view.screen.welcome.MainActivity">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
@@ -33,9 +23,6 @@
             app:tabTextAppearance="@style/TextAppearance.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-
     </androidx.viewpager.widget.ViewPager>
-
 </LinearLayout>
 
