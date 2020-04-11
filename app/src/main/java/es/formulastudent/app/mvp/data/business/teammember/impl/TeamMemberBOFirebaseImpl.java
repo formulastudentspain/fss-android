@@ -16,27 +16,19 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
-import es.formulastudent.app.mvp.view.utils.Messages;
 
 public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
 
     private FirebaseFirestore firebaseFirestore;
-    private LoadingDialog loadingDialog;
-    private Messages messages;
 
-    public TeamMemberBOFirebaseImpl(FirebaseFirestore firebaseFirestore, 
-                                    LoadingDialog loadingDialog, Messages messages) {
+    public TeamMemberBOFirebaseImpl(FirebaseFirestore firebaseFirestore) {
         this.firebaseFirestore = firebaseFirestore;
-        this.loadingDialog = loadingDialog;
-        this.messages = messages;
     }
 
     @Override
     public void retrieveTeamMemberByNFCTag(String tag, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        loadingDialog.show();
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .whereEqualTo(TeamMember.TAG_NFC, tag)
                 .get()
@@ -45,15 +37,14 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
                     if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                         TeamMember teamMember = new TeamMember(queryDocumentSnapshots.getDocuments().get(0));
                         responseDTO.setData(teamMember);
-                        messages.showInfo(R.string.team_member_get_by_nfc_info);
+                        responseDTO.setInfo(R.string.team_member_get_by_nfc_info);
                     }
                     callback.onSuccess(responseDTO);
-                    loadingDialog.hide();
+                    
                 })
                 .addOnFailureListener(e -> {
-                    messages.showError(R.string.team_member_get_by_nfc_error);
+                    responseDTO.setError(R.string.team_member_get_by_nfc_error);
                     callback.onFailure(responseDTO);
-                    loadingDialog.hide();
                 });
     }
 
@@ -62,7 +53,6 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
     public void retrieveTeamMembers(Team filterTeam, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        loadingDialog.show();
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS);
 
         //Filter by team
@@ -82,15 +72,13 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
                             result.add(teamMember);
                         }
                         responseDTO.setData(result);
-                        messages.showInfo(R.string.team_member_get_all_info);
+                        responseDTO.setInfo(R.string.team_member_get_all_info);
                         callback.onSuccess(responseDTO);
-                        loadingDialog.hide();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    messages.showError(R.string.team_member_get_all_error);
+                    responseDTO.setError(R.string.team_member_get_all_error);
                     callback.onFailure(responseDTO);
-                    loadingDialog.hide();
                 });
     }
 
@@ -99,19 +87,16 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         Map<String, Object> docData = teamMember.toDocumentData();
 
-        loadingDialog.show();
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .document(teamMember.getID())
                 .set(docData)
                 .addOnSuccessListener(aVoid -> {
-                    messages.showInfo(R.string.team_member_create_info);
+                    responseDTO.setInfo(R.string.team_member_create_info);
                     callback.onSuccess(responseDTO);
-                    loadingDialog.hide();
                 })
                 .addOnFailureListener(e -> {
-                    messages.showError(R.string.team_member_create_error);
+                    responseDTO.setError(R.string.team_member_create_error);
                     callback.onFailure(responseDTO);
-                    loadingDialog.hide();
                 });
     }
 
@@ -120,7 +105,6 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
     public void deleteAllTeamMembers(final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        loadingDialog.show();
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -128,14 +112,13 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
                     for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
                         doc.getReference().delete();
                     }
-                    messages.showInfo(R.string.team_member_delete_all_info);
+                    responseDTO.setInfo(R.string.team_member_delete_all_info);
                     callback.onSuccess(responseDTO);
-                    loadingDialog.hide();
+                    
                 })
                 .addOnFailureListener(e -> {
-                    messages.showError(R.string.team_member_delete_all_error);
+                    responseDTO.setError(R.string.team_member_delete_all_error);
                     callback.onFailure(responseDTO);
-                    loadingDialog.hide();
                 });
     }
 
@@ -143,7 +126,6 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
     public void getRegisteredTeamMemberByTeamId(String teamID, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
-        loadingDialog.show();
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .whereEqualTo(TeamMember.TEAM_ID, teamID)
                 .get()
@@ -158,14 +140,13 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
                         }
                     }
                     responseDTO.setData(teamMemberList);
-                    messages.showInfo(R.string.team_member_get_registered_by_team_info);
+                    responseDTO.setInfo(R.string.team_member_get_registered_by_team_info);
                     callback.onSuccess(responseDTO);
-                    loadingDialog.hide();
+                    
                 })
                 .addOnFailureListener(e -> {
-                    messages.showError(R.string.team_member_get_registered_by_team_error);
+                    responseDTO.setError(R.string.team_member_get_registered_by_team_error);
                     callback.onFailure(responseDTO);
-                    loadingDialog.hide();
                 });
     }
 
@@ -174,23 +155,20 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS).document(teamMember.getID());
 
-        loadingDialog.show();
         registerReference.get()
                 .addOnSuccessListener(documentSnapshot -> registerReference.update(teamMember.toDocumentData())
                         .addOnSuccessListener(aVoid -> {
-                            messages.showInfo(R.string.team_member_update_info);
+                            responseDTO.setInfo(R.string.team_member_update_info);
                             callback.onSuccess(responseDTO);
-                            loadingDialog.hide();
                         })
                         .addOnFailureListener(e -> {
-                            messages.showError(R.string.team_member_update_error);
+                            responseDTO.setError(R.string.team_member_update_error);
                             callback.onFailure(responseDTO);
-                            loadingDialog.hide();
                         }))
                 .addOnFailureListener(e -> {
-                    messages.showError(R.string.team_member_update_error);
+                    responseDTO.setError(R.string.team_member_update_error);
                     callback.onFailure(responseDTO);
-                    loadingDialog.hide();
+                    
                 });
     }
 }

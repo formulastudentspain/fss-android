@@ -20,6 +20,8 @@ import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.TeamsDetailFragment;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 
 public class TeamsDetailScrutineeringPresenter {
@@ -30,27 +32,31 @@ public class TeamsDetailScrutineeringPresenter {
     private DynamicEventBO dynamicEventBO;
     private TeamMemberBO teamMemberBO;
     private EgressBO egressBO;
+    private LoadingDialog loadingDialog;
+    private Messages messages;
 
     //Data
     List<EventRegister> eventRegisterList = new ArrayList<>();
 
 
     public TeamsDetailScrutineeringPresenter(TeamsDetailScrutineeringPresenter.View view, TeamBO teamBO,
-                                             DynamicEventBO dynamicEventBO, EgressBO egressBO, TeamMemberBO teamMemberBO) {
+                                             DynamicEventBO dynamicEventBO, EgressBO egressBO,
+                                             TeamMemberBO teamMemberBO, LoadingDialog loadingDialog, Messages messages) {
         this.view = view;
         this.teamBO = teamBO;
         this.dynamicEventBO = dynamicEventBO;
         this.teamMemberBO = teamMemberBO;
         this.egressBO = egressBO;
+        this.loadingDialog = loadingDialog;
+        this.messages = messages;
     }
 
     public void updateTeam(final Team mofidiedTeam, final Team originalTeam) {
-
-        //Update
+        loadingDialog.show();
         teamBO.updateTeam(mofidiedTeam, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-
+                loadingDialog.hide();
                 //Get fragments and update fields with the new values
                 List<Fragment> fragmentList = view.getViewFragmentManager().getFragments();
                 for(Fragment fragment: fragmentList){
@@ -62,6 +68,7 @@ public class TeamsDetailScrutineeringPresenter {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
 
                 //Get fragments and update fields with the old values
                 List<Fragment> fragmentList = view.getViewFragmentManager().getFragments();
@@ -75,26 +82,26 @@ public class TeamsDetailScrutineeringPresenter {
     }
 
     public void retrieveEgressRegisterList() {
-
-        //Call Event business
+        loadingDialog.show();
         dynamicEventBO.retrieveRegisters(null, null, view.getCurrentTeam().getID(), null, EventType.PRE_SCRUTINEERING, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                //Refresh the records
+                loadingDialog.hide();
                 List<EventRegister> results = (List<EventRegister>) responseDTO.getData();
                 updateEventRegisters(results==null ? new ArrayList<EventRegister>() : results);
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
             }
         });
     }
 
 
     public void updateEventRegisters(List<EventRegister> items){
-        //Update register-list
         this.eventRegisterList.clear();
         this.eventRegisterList.addAll(items);
         this.view.refreshRegisterItems();
@@ -109,9 +116,8 @@ public class TeamsDetailScrutineeringPresenter {
      * Retrieve user by NFC tag after read
      * @param tag
      */
-    public void onNFCTagDetected(String tag){
-
-        //Retrieve user by the NFC tag
+    void onNFCTagDetected(String tag){
+        loadingDialog.show();
         teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
@@ -121,19 +127,21 @@ public class TeamsDetailScrutineeringPresenter {
                 dynamicEventBO.createRegister(teamMember, teamMember.getCarNumber(), null, EventType.PRE_SCRUTINEERING, new BusinessCallback() {
                     @Override
                     public void onSuccess(ResponseDTO responseDTO) {
-
                         PreScrutineeringRegister register = (PreScrutineeringRegister) responseDTO.getData();
                         createEgressRegister(register);
-
                     }
                     @Override
                     public void onFailure(ResponseDTO responseDTO) {
+                        loadingDialog.hide();
+                        messages.showError(responseDTO.getError());
                     }
                 });
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
             }
         });
     }
@@ -148,16 +156,17 @@ public class TeamsDetailScrutineeringPresenter {
         egressBO.createRegister(register.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                //Refresh the list
+                loadingDialog.show();
                 retrieveEgressRegisterList();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
             }
         });
     }
-
 
 
     /**
@@ -165,20 +174,20 @@ public class TeamsDetailScrutineeringPresenter {
      * @param milliseconds
      * @param registerID
      */
-    public void onChronoTimeRegistered(Long milliseconds, String registerID) {
-
-        //We have the time, we need to update the time
+    void onChronoTimeRegistered(Long milliseconds, String registerID) {
+        loadingDialog.show();
         dynamicEventBO.updatePreScrutineeringRegister(registerID, milliseconds, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-
-                //Update results
+                loadingDialog.hide();
                 retrieveEgressRegisterList();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
             }
         });
     }

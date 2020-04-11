@@ -36,7 +36,8 @@ public class CreateRegisterDialog extends DialogFragment implements CheckboxChec
     //Presenter
     private RaceControlPresenter presenter;
 
-    public CreateRegisterDialog() {}
+    public CreateRegisterDialog() {
+    }
 
     public static CreateRegisterDialog newInstance(RaceControlPresenter presenter, List<RaceControlTeamDTO> raceControlTeamDTOList, Context context) {
         CreateRegisterDialog frag = new CreateRegisterDialog();
@@ -58,21 +59,20 @@ public class CreateRegisterDialog extends DialogFragment implements CheckboxChec
         initializeElements(rootView);
 
         builder.setView(rootView)
-                    .setTitle(R.string.rc_dialog_add_team_title)
-                    .setPositiveButton(R.string.rc_dialog_add_team_button,null)
-                    .setNegativeButton(R.string.dynamic_event_filtering_dialog_cancel_button, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            CreateRegisterDialog.this.getDialog().cancel();
-                        }
-                    });
+                .setTitle(R.string.rc_dialog_add_team_title)
+                .setPositiveButton(R.string.rc_dialog_add_team_button, null)
+                .setNegativeButton(R.string.dynamic_event_filtering_dialog_cancel_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        CreateRegisterDialog.this.getDialog().cancel();
+                    }
+                });
 
         dialog = builder.create();
         return dialog;
     }
 
 
-
-    private void initializeElements(View rootView){
+    private void initializeElements(View rootView) {
 
         recyclerView = rootView.findViewById(R.id.recyclerView);
         adapter = new CreateRegisterDialogAdapter(raceControlTeamDTOList, context, this);
@@ -84,7 +84,7 @@ public class CreateRegisterDialog extends DialogFragment implements CheckboxChec
 
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
@@ -92,10 +92,8 @@ public class CreateRegisterDialog extends DialogFragment implements CheckboxChec
             //Set values for filtering
             presenter.createRaceControlRegisters(raceControlTeamDTOSelected, getMaxIndex());
 
-
             //Close dialog
             dialog.dismiss();
-
         });
     }
 
@@ -105,19 +103,19 @@ public class CreateRegisterDialog extends DialogFragment implements CheckboxChec
         RaceControlTeamDTO rcTeam = this.raceControlTeamDTOList.get(position);
         rcTeam.setSelected(checked);
 
-        if(checked && !rcTeam.getAlreadyAdded()){
+        if (checked && !rcTeam.getAlreadyAdded()) {
             raceControlTeamDTOSelected.add(rcTeam);
-        }else{
+        } else {
             raceControlTeamDTOSelected.remove(rcTeam);
         }
 
     }
 
-    private Long getMaxIndex(){
+    private Long getMaxIndex() {
 
         long count = 0;
-        for(RaceControlTeamDTO rcTeam: raceControlTeamDTOList){
-            if(rcTeam.getAlreadyAdded()){
+        for (RaceControlTeamDTO rcTeam : raceControlTeamDTOList) {
+            if (rcTeam.getAlreadyAdded()) {
                 count++;
             }
         }

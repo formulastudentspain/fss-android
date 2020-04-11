@@ -25,6 +25,8 @@ import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerVie
 import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.ConfirmEventRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.DeleteEventRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.FilteringRegistersDialog;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 
 public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAccessGeneralPresenter {
@@ -36,6 +38,8 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
     private TeamMemberBO teamMemberBO;
     private BriefingBO briefingBO;
     private EgressBO egressBO;
+    private LoadingDialog loadingDialog;
+    private Messages messages;
 
     //Data
     private EventType eventType;
@@ -54,7 +58,8 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
 
     public RaceAccessPresenter(RaceAccessPresenter.View view, TeamBO teamBO,
                                DynamicEventBO dynamicEventBO, TeamMemberBO teamMemberBO,
-                               BriefingBO briefingBO, EventType eventType, EgressBO egressBO) {
+                               BriefingBO briefingBO, EventType eventType, EgressBO egressBO,
+                               LoadingDialog loadingDialog, Messages messages) {
         this.view = view;
         this.teamBO = teamBO;
         this.dynamicEventBO = dynamicEventBO;
@@ -62,56 +67,64 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
         this.briefingBO = briefingBO;
         this.egressBO = egressBO;
         this.eventType = eventType;
+        this.loadingDialog = loadingDialog;
+        this.messages = messages;
     }
 
 
     /**
      * Create register
+     *
      * @param teamMember
      * @param carNumber
      * @param briefingDone
      */
     @Override
-     public void createRegistry(final TeamMember teamMember, final Long carNumber, final Boolean briefingDone){
-
-        //Check that the driver is able to run, that means he/she has not run already in two different events
+    public void createRegistry(final TeamMember teamMember, final Long carNumber, final Boolean briefingDone) {
+        loadingDialog.show();
         dynamicEventBO.getDifferentEventRegistersByDriver(teamMember.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-
-                if(responseDTO.getError() == null){
+                loadingDialog.hide();
+                if (responseDTO.getError() == null) {
 
                     Map<String, EventRegister> eventRegisterMap = (Map<String, EventRegister>) responseDTO.getData();
 
                     //The driver can't run
-                    if(eventRegisterMap.size() >= 2
+                    if (eventRegisterMap.size() >= 2
                             && !eventRegisterMap.containsKey(eventType.name())
                             && !eventType.equals(EventType.PRE_SCRUTINEERING)
                             && !eventType.equals(EventType.BRIEFING)
-                            && !eventType.equals(EventType.PRACTICE_TRACK)){
+                            && !eventType.equals(EventType.PRACTICE_TRACK)) {
 
-                        //TODO Show error message
-                        //view.createMessage(R.string.dynamic_event_message_error_runs);
+                        messages.showError(R.string.dynamic_event_message_error_runs);
 
                     } else {
+                        loadingDialog.show();
                         dynamicEventBO.createRegister(teamMember, carNumber, briefingDone, eventType, new BusinessCallback() {
                             @Override
                             public void onSuccess(ResponseDTO responseDTO) {
+                                loadingDialog.hide();
                                 retrieveRegisterList();
                             }
-                            @Override
-                            public void onFailure(ResponseDTO responseDTO) { }
-                        });
-                   }
-                } else {
 
-                    //TODO: Show error message
-                    //view.createMessage(R.string.dynamic_event_message_error_runs);
+                            @Override
+                            public void onFailure(ResponseDTO responseDTO) {
+                                loadingDialog.hide();
+                                messages.showError(responseDTO.getError());
+                            }
+                        });
+                    }
+                } else {
+                    messages.showError(R.string.dynamic_event_message_error_runs);
                 }
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) { }
+            public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
+            }
         });
     }
 
@@ -119,23 +132,28 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
     /**
      * Retrieve Event registers
      */
-     public void retrieveRegisterList() {
+    public void retrieveRegisterList() {
+        loadingDialog.show();
         dynamicEventBO.retrieveRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, selectedCarNumber, eventType, new BusinessCallback() {
 
-             @Override
-             public void onSuccess(ResponseDTO responseDTO) {
-                 List<EventRegister> results = (List<EventRegister>) responseDTO.getData();
-                 updateEventRegisters(results==null ? new ArrayList<EventRegister>() : results);
-             }
+            @Override
+            public void onSuccess(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                List<EventRegister> results = (List<EventRegister>) responseDTO.getData();
+                updateEventRegisters(results == null ? new ArrayList<EventRegister>() : results);
+            }
 
-             @Override
-             public void onFailure(ResponseDTO responseDTO) { }
-         });
+            @Override
+            public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
+            }
+        });
     }
 
 
-    private void updateEventRegisters(List<EventRegister> items){
-         this.eventRegisterList.clear();
+    private void updateEventRegisters(List<EventRegister> items) {
+        this.eventRegisterList.clear();
         this.eventRegisterList.addAll(items);
         this.view.refreshEventRegisterItems();
     }
@@ -143,48 +161,63 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
 
     /**
      * Retrieve user by NFC tag after read
+     *
      * @param tag
      */
-    void onNFCTagDetected(String tag){
+    void onNFCTagDetected(String tag) {
+        loadingDialog.show();
         teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                TeamMember teamMember = (TeamMember)responseDTO.getData();
+                loadingDialog.hide();
+                TeamMember teamMember = (TeamMember) responseDTO.getData();
                 getUserBriefingRegister(teamMember);
             }
+
             @Override
-            public void onFailure(ResponseDTO responseDTO) {}
+            public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
+            }
         });
     }
 
     /**
      * Method to delete a dynamic event register
+     *
      * @param registerID
      */
     public void deleteDynamicEventRegister(String registerID) {
+        loadingDialog.show();
         dynamicEventBO.deleteRegister(eventType, registerID, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
+                loadingDialog.hide();
                 retrieveRegisterList();
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {}
+            public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
+            }
         });
     }
 
-    private void getUserBriefingRegister(final TeamMember teamMember){
+    private void getUserBriefingRegister(final TeamMember teamMember) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.HOUR_OF_DAY, 5);
         cal.set(Calendar.SECOND, 0);
 
-        if(teamMember != null && teamMember.getID() != null) {
+        if (teamMember != null && teamMember.getID() != null) {
+            loadingDialog.show();
             briefingBO.checkBriefingByUser(teamMember.getID(), new BusinessCallback() {
 
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
+                    loadingDialog.hide();
                     Boolean briefingAvailable = (Boolean) responseDTO.getData();
 
                     //With all the information, we create the dialog
@@ -195,26 +228,29 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
                 }
 
                 @Override
-                public void onFailure(ResponseDTO responseDTO) { }
+                public void onFailure(ResponseDTO responseDTO) {
+                    loadingDialog.hide();
+                    messages.showError(responseDTO.getError());
+                }
             });
 
         } else {
-            //Show error message
-            //view.createMessage(R.string.team_member_get_by_nfc_not_existing);
+            messages.showError(R.string.team_member_get_by_nfc_not_existing);
         }
     }
-
 
 
     /**
      * Retrieve teams from database
      */
-    private void retrieveTeams(){
+    private void retrieveTeams() {
+        loadingDialog.show();
         teamBO.retrieveTeams(null, null, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                List<Team> teams = (List<Team>)responseDTO.getData();
+                loadingDialog.hide();
+                List<Team> teams = (List<Team>) responseDTO.getData();
 
                 //Add "All" option
                 Team teamAll = new Team("-1", "All");
@@ -225,16 +261,20 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {}
+            public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
+            }
         });
     }
 
 
     /**
      * Open the dialog to repeat the run
+     *
      * @param selectedRegister
      */
-    void openRepeatRunDialog(EventRegister selectedRegister) {
+    private void openRepeatRunDialog(EventRegister selectedRegister) {
 
         //With all the information, we open the dialog
         FragmentManager fm = view.getActivity().getSupportFragmentManager();
@@ -248,12 +288,12 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
     public void recyclerViewListClicked(android.view.View v, int position) {
 
         //Delete run
-        if(v.getId() == R.id.delete_run_button){
+        if (v.getId() == R.id.delete_run_button) {
             EventRegister selectedRegister = eventRegisterList.get(position);
             openConfirmDeleteRegister(selectedRegister);
 
-        //Repeat run
-        }else if(v.getId() == R.id.repeat_run_button){
+            //Repeat run
+        } else if (v.getId() == R.id.repeat_run_button) {
             EventRegister selectedRegister = eventRegisterList.get(position);
             openRepeatRunDialog(selectedRegister);
         }
@@ -262,9 +302,10 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
 
     /**
      * Open the dialog to filter results
+     *
      * @param teams
      */
-    private void openFilteringDialog(List<Team> teams){
+    private void openFilteringDialog(List<Team> teams) {
         this.teams = teams;
 
         FragmentManager fm = view.getActivity().getSupportFragmentManager();
@@ -276,9 +317,10 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
 
     /**
      * Open the dialog to confirm the register to be deleted
+     *
      * @param register
      */
-    private void openConfirmDeleteRegister(EventRegister register){
+    private void openConfirmDeleteRegister(EventRegister register) {
         FragmentManager fm = view.getActivity().getSupportFragmentManager();
         DeleteEventRegisterDialog deleteEventRegisterDialog = DeleteEventRegisterDialog.newInstance(this, register);
         deleteEventRegisterDialog.show(fm, "delete_event_confirm");
@@ -288,10 +330,10 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
     /**
      * Open the filtering dialog if we already have the teams, retrieve them if not.
      */
-    void filterIconClicked(){
-        if(teams == null){
+    void filterIconClicked() {
+        if (teams == null) {
             retrieveTeams();
-        }else{
+        } else {
             openFilteringDialog(teams);
         }
     }
@@ -299,13 +341,14 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
 
     /**
      * Activate/deactivate filtering indicator (red circle in filtering icon)
+     *
      * @param selectedDateFrom
      * @param selectedDateTo
      * @param selectedDay
      * @param selectedTeamID
      * @param selectedCarNumber
      */
-    public void setFilteringValues(Date selectedDateFrom, Date selectedDateTo, String selectedDay, String selectedTeamID, Long selectedCarNumber){
+    public void setFilteringValues(Date selectedDateFrom, Date selectedDateTo, String selectedDay, String selectedTeamID, Long selectedCarNumber) {
         this.selectedDateFrom = selectedDateFrom;
         this.selectedDateTo = selectedDateTo;
         this.selectedTeamID = selectedTeamID;
@@ -313,7 +356,7 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
         this.selectedCarNumber = selectedCarNumber;
 
         view.filtersActivated(
-                selectedDay!=null
+                selectedDay != null
                         || selectedCarNumber != null
                         || (selectedTeamID != null && !selectedTeamID.equals("-1"))
         );
@@ -334,6 +377,7 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
 
         /**
          * Method to know if the filters are activated
+         *
          * @param activated
          */
         void filtersActivated(Boolean activated);

@@ -11,6 +11,8 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.view.screen.raceaccess.RaceAccessPresenter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class DynamicEventModule {
@@ -36,9 +38,12 @@ public class DynamicEventModule {
 
     @Provides
     public RaceAccessPresenter providePresenter(RaceAccessPresenter.View categoryView,
-                                                TeamBO teamBO, DynamicEventBO dynamicEventBO, TeamMemberBO teamMemberBO,
-                                                BriefingBO briefingBO, EventType eventType, EgressBO egressBO) {
-        return new RaceAccessPresenter(categoryView, teamBO, dynamicEventBO, teamMemberBO, briefingBO, eventType, egressBO);
+                                                TeamBO teamBO, DynamicEventBO dynamicEventBO,
+                                                TeamMemberBO teamMemberBO, BriefingBO briefingBO,
+                                                EventType eventType, EgressBO egressBO,
+                                                LoadingDialog loadingDialog, Messages messages) {
+        return new RaceAccessPresenter(categoryView, teamBO, dynamicEventBO, teamMemberBO, briefingBO,
+                eventType, egressBO, loadingDialog, messages);
     }
 
 

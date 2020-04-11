@@ -34,8 +34,6 @@ import es.formulastudent.app.mvp.data.business.teammember.impl.TeamMemberBOFireb
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.business.user.impl.UserBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
-import es.formulastudent.app.mvp.view.utils.Messages;
 
 
 @Module(includes = {FirebaseModule.class, ContextModule.class, SharedPreferencesModule.class, UtilsModule.class})
@@ -47,9 +45,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public TeamBO provideTeamBO(FirebaseFirestore firebaseFirestore,
-                                LoadingDialog loadingDialog, Messages messages) {
-        return new TeamBOFirebaseImpl(firebaseFirestore, loadingDialog, messages);
+    public TeamBO provideTeamBO(FirebaseFirestore firebaseFirestore) {
+        return new TeamBOFirebaseImpl(firebaseFirestore);
     }
 
 
@@ -59,9 +56,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public BriefingBO provideBriefingBO(FirebaseFirestore firebaseFirestore,
-                                        LoadingDialog loadingDialog, Messages messages) {
-        return new BriefingBOFirebaseImpl(firebaseFirestore, loadingDialog, messages);
+    public BriefingBO provideBriefingBO(FirebaseFirestore firebaseFirestore) {
+        return new BriefingBOFirebaseImpl(firebaseFirestore);
     }
 
 
@@ -71,9 +67,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public TeamMemberBO provideTeamMemberBO(FirebaseFirestore firebaseFirestore,
-                                            LoadingDialog loadingDialog, Messages messages) {
-        return new TeamMemberBOFirebaseImpl(firebaseFirestore, loadingDialog, messages);
+    public TeamMemberBO provideTeamMemberBO(FirebaseFirestore firebaseFirestore) {
+        return new TeamMemberBOFirebaseImpl(firebaseFirestore);
     }
 
 
@@ -94,9 +89,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public DynamicEventBO provideDynamicEventBO(FirebaseFirestore firebaseFirestore, FirebaseAuth firebaseAuth,
-                                                LoadingDialog loadingDialog, Messages messages) {
-        return new DynamicEventBOFirebaseImpl(firebaseFirestore, firebaseAuth, loadingDialog, messages);
+    public DynamicEventBO provideDynamicEventBO(FirebaseFirestore firebaseFirestore, FirebaseAuth firebaseAuth) {
+        return new DynamicEventBOFirebaseImpl(firebaseFirestore, firebaseAuth);
     }
 
     /**
@@ -124,9 +118,8 @@ public class BusinessModule {
      */
     @Provides
     public RaceControlBO provideRaceControlBO(FirebaseFirestore firebaseFirestore, TeamBO teamBO,
-                                              ConeControlBO coneControlBO, LoadingDialog loadingDialog,
-                                              Messages messages) {
-        return new RaceControlBOFirebaseImpl(firebaseFirestore, teamBO, coneControlBO, loadingDialog, messages);
+                                              ConeControlBO coneControlBO) {
+        return new RaceControlBOFirebaseImpl(firebaseFirestore, teamBO, coneControlBO);
     }
 
     /**

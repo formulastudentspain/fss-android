@@ -14,6 +14,8 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 
 public class TeamsPresenter implements RecyclerViewClickListener {
@@ -21,15 +23,20 @@ public class TeamsPresenter implements RecyclerViewClickListener {
     //Dependencies
     private View view;
     private TeamBO teamBO;
+    private LoadingDialog loadingDialog;
+    private Messages messages;
 
     //Data
-    private List<Team> filteredTeamsList = new ArrayList<>();
+    private List<Team> teamsList = new ArrayList<>();
     private Map<String, String> filters = new HashMap<>();
 
 
-    public TeamsPresenter(TeamsPresenter.View view, TeamBO teamBO) {
+    public TeamsPresenter(TeamsPresenter.View view, TeamBO teamBO, LoadingDialog loadingDialog,
+                          Messages messages) {
         this.view = view;
         this.teamBO = teamBO;
+        this.loadingDialog = loadingDialog;
+        this.messages = messages;
     }
 
 
@@ -37,7 +44,7 @@ public class TeamsPresenter implements RecyclerViewClickListener {
      * Retrieve Briefing registers
      */
     public void retrieveTeamsList() {
-
+        loadingDialog.show();
         view.filtersActivated(!filters.keySet().isEmpty());
 
         //Call Briefing business
@@ -45,6 +52,7 @@ public class TeamsPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
+                loadingDialog.hide();
                 List<Team> results = (List<Team>) responseDTO.getData();
                 if (results == null) {
                     results = new ArrayList<>();
@@ -54,21 +62,23 @@ public class TeamsPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
             }
         });
     }
 
 
     private void updateTeams(List<Team> items) {
-        this.filteredTeamsList.clear();
-        this.filteredTeamsList.addAll(items);
+        this.teamsList.clear();
+        this.teamsList.addAll(items);
         this.view.refreshBriefingRegisterItems();
     }
 
 
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
-        Team selectedTeam = filteredTeamsList.get(position);
+        Team selectedTeam = teamsList.get(position);
 
         if (v.getId() == R.id.scrutineering_button) {
             view.openScrutineeringFragment(selectedTeam);
@@ -88,7 +98,7 @@ public class TeamsPresenter implements RecyclerViewClickListener {
 
 
     List<Team> getTeamsList() {
-        return filteredTeamsList;
+        return teamsList;
     }
 
     public void setFilters(Map<String, String> filters) {

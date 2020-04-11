@@ -23,22 +23,15 @@ import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
-import es.formulastudent.app.mvp.view.utils.Messages;
 
 public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
-    private LoadingDialog loadingDialog;
-    private Messages messages;
 
-    public DynamicEventBOFirebaseImpl(FirebaseFirestore firebaseFirestore, FirebaseAuth firebaseAuth,
-                                      LoadingDialog loadingDialog, Messages messages) {
+    public DynamicEventBOFirebaseImpl(FirebaseFirestore firebaseFirestore, FirebaseAuth firebaseAuth) {
         this.firebaseFirestore = firebaseFirestore;
         this.firebaseAuth = firebaseAuth;
-        this.loadingDialog = loadingDialog;
-        this.messages = messages;
     }
 
     @Override
@@ -68,7 +61,6 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
             query = query.whereEqualTo(EventRegister.EVENT_TYPE, type.name());
         }
         
-        loadingDialog.show();
         query.orderBy(EventRegister.DATE, Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -86,15 +78,13 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                     }
 
                     responseDTO.setData(result);
-                    messages.showInfo(R.string.dynamic_event_message_info_retrieving_registers);
+                    responseDTO.setInfo(R.string.dynamic_event_message_info_retrieving_registers);
                     callback.onSuccess(responseDTO);
-                    loadingDialog.hide();
 
                 })
                 .addOnFailureListener(e -> {
-                    messages.showError(R.string.dynamic_event_message_error_retrieving_registers);
+                    responseDTO.setError(R.string.dynamic_event_message_error_retrieving_registers);
                     callback.onFailure(responseDTO);
-                    loadingDialog.hide();
                 });
     }
 
@@ -120,15 +110,13 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                 .set(register.toObjectData())
                 .addOnSuccessListener(aVoid -> {
                     responseDTO.setData(register);
-                    messages.showInfo(R.string.dynamic_event_messages_create_registers_info);
+                    responseDTO.setInfo(R.string.dynamic_event_messages_create_registers_info);
                     callback.onSuccess(responseDTO);
-                    loadingDialog.hide();
 
                 })
                 .addOnFailureListener(e -> {
-                    messages.showError(R.string.dynamic_event_messages_create_registers_error);
+                    responseDTO.setError(R.string.dynamic_event_messages_create_registers_error);
                     callback.onFailure(responseDTO);
-                    loadingDialog.hide();
                 });
     }
 
@@ -142,19 +130,16 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                 .addOnSuccessListener(
                         documentSnapshot -> registerReference.update(PreScrutineeringRegister.TIME, milliseconds)
                                 .addOnSuccessListener(aVoid -> {
-                                    messages.showInfo(R.string.dynamic_event_messages_prescrutineering_update_info);
+                                    responseDTO.setInfo(R.string.dynamic_event_messages_prescrutineering_update_info);
                                     callback.onSuccess(responseDTO);
-                                    loadingDialog.hide();
                                 })
                                 .addOnFailureListener(e -> {
-                                    messages.showError(R.string.dynamic_event_messages_prescrutineering_update_error);
+                                    responseDTO.setError(R.string.dynamic_event_messages_prescrutineering_update_error);
                                     callback.onFailure(responseDTO);
-                                    loadingDialog.hide();
                                 }))
                 .addOnFailureListener(e -> {
-                    messages.showError(R.string.dynamic_event_messages_prescrutineering_update_error);
+                    responseDTO.setError(R.string.dynamic_event_messages_prescrutineering_update_error);
                     callback.onFailure(responseDTO);
-                    loadingDialog.hide();
                 });
     }
 
@@ -168,19 +153,16 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
         registerReference.get()
                 .addOnSuccessListener(documentSnapshot -> registerReference.delete()
                         .addOnSuccessListener(aVoid -> {
-                            messages.showInfo(R.string.dynamic_event_message_info_deleting_registers);
+                            responseDTO.setInfo(R.string.dynamic_event_message_info_deleting_registers);
                             callback.onSuccess(responseDTO);
-                            loadingDialog.hide();
                         })
                         .addOnFailureListener(e -> {
-                            messages.showError(R.string.dynamic_event_message_error_deleting_registers);
+                            responseDTO.setError(R.string.dynamic_event_message_error_deleting_registers);
                             callback.onFailure(responseDTO);
-                            loadingDialog.hide();
                         }))
                 .addOnFailureListener(e -> {
-                    messages.showError(R.string.dynamic_event_message_error_deleting_registers);
+                    responseDTO.setError(R.string.dynamic_event_message_error_deleting_registers);
                     callback.onFailure(responseDTO);
-                    loadingDialog.hide();
                 });
     }
 
@@ -218,18 +200,16 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                                 result.put(register.getType().name(), eventRegisterList);
 
                             } else {
-                                messages.showError(R.string.dynamic_event_message_error_runs);
+                                responseDTO.setError(R.string.dynamic_event_message_error_runs);
                             }
                         }
                     }
                     responseDTO.setData(result);
                     callback.onSuccess(responseDTO);
-                    loadingDialog.hide();
                 })
                 .addOnFailureListener(e -> {
-                    messages.showError(R.string.dynamic_event_message_error_runs);
+                    responseDTO.setError(R.string.dynamic_event_message_error_runs);
                     callback.onFailure(responseDTO);
-                    loadingDialog.hide();
                 });
     }
 }

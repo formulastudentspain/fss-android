@@ -6,6 +6,8 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.TeamsDetailFeePresenter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class TeamsDetailFeeModule {
@@ -22,7 +24,8 @@ public class TeamsDetailFeeModule {
     }
 
     @Provides
-    public TeamsDetailFeePresenter providePresenter(TeamsDetailFeePresenter.View categoryView, TeamBO teamBO) {
-        return new TeamsDetailFeePresenter(categoryView, teamBO);
+    public TeamsDetailFeePresenter providePresenter(TeamsDetailFeePresenter.View categoryView,
+                                                    TeamBO teamBO, LoadingDialog loadingDialog, Messages messages) {
+        return new TeamsDetailFeePresenter(categoryView, teamBO, loadingDialog, messages);
     }
 }

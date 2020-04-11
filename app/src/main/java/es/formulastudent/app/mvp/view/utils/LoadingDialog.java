@@ -14,11 +14,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import es.formulastudent.app.R;
 
-public class LoadingDialog  extends DialogFragment {
+public class LoadingDialog extends DialogFragment {
 
+    private static final String KEY = "loading_dialog";
     private FragmentActivity activity;
+    private boolean displaying;
 
-    private LoadingDialog() {}
+    private LoadingDialog() {
+    }
 
     public static LoadingDialog newInstance(FragmentActivity activity) {
         LoadingDialog frag = new LoadingDialog();
@@ -40,14 +43,14 @@ public class LoadingDialog  extends DialogFragment {
         return builder.create();
     }
 
-    public void show(){
+    public void show() {
         FragmentManager fm = activity.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(this, "loading_dialog");
+        ft.add(this, KEY);
         ft.commitAllowingStateLoss();
     }
 
-    public void hide(){
+    public void hide() {
         this.dismiss();
     }
 

@@ -78,7 +78,8 @@
         android:label="RaceControlWelcomeFragment" >
         <action
             android:id="@+id/action_raceControlWelcomeFragment_to_raceControlFragment"
-            app:destination="@id/raceControlFragment" />
+            app:destination="@id/raceControlFragment"
+            app:popUpTo="@id/welcomeFragment" />
         <argument
             android:name="raceControlEvent"
             app:argType="es.formulastudent.app.mvp.data.model.RaceControlEvent" />

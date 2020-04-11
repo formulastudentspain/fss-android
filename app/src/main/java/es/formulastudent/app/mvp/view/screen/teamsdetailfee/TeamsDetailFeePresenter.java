@@ -13,6 +13,8 @@ import es.formulastudent.app.mvp.data.model.FeeItem;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.dialog.ConfirmNextStepDialog;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.tabs.TeamsDetailFeeTabFragment;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 
 public class TeamsDetailFeePresenter {
@@ -20,10 +22,15 @@ public class TeamsDetailFeePresenter {
     //Dependencies
     private View view;
     private TeamBO teamBO;
+    private LoadingDialog loadingDialog;
+    private Messages messages;
 
-    public TeamsDetailFeePresenter(TeamsDetailFeePresenter.View view, TeamBO teamBO) {
+    public TeamsDetailFeePresenter(TeamsDetailFeePresenter.View view, TeamBO teamBO,
+                                   LoadingDialog loadingDialog, Messages messages) {
         this.view = view;
         this.teamBO = teamBO;
+        this.messages = messages;
+        this.loadingDialog = loadingDialog;
     }
 
 
@@ -65,9 +72,11 @@ public class TeamsDetailFeePresenter {
         }
 
         //Update
+        loadingDialog.show();
         teamBO.updateTeam(team, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
+                loadingDialog.hide();
 
                 //Get fragments and update fields with the new values
                 List<Fragment> fragmentList = view.getViewFragmentManager().getFragments();
@@ -79,7 +88,10 @@ public class TeamsDetailFeePresenter {
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) { }
+            public void onFailure(ResponseDTO responseDTO) {
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
+            }
         });
     }
 
