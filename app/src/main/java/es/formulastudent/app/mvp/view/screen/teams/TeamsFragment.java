@@ -104,7 +104,7 @@ public class TeamsFragment extends Fragment implements TeamsPresenter.View, Swip
 
     @Override
     public void openFeeFragment(Team team) {
-        //TODO navegar a fee
+        navController.navigate(TeamsFragmentDirections.actionTeamsFragmentToTeamsDetailFeeFragment(team));
     }
 
     @Override

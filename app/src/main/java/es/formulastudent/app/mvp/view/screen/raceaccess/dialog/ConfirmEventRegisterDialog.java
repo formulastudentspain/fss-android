@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.screen.dynamicevent.dialog;
+package es.formulastudent.app.mvp.view.screen.raceaccess.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,8 +16,8 @@ import com.squareup.picasso.Picasso;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.view.screen.dynamicevent.DynamicEventGeneralPresenter;
-import es.formulastudent.app.mvp.view.screen.dynamicevent.DynamicEventPresenter;
+import es.formulastudent.app.mvp.view.screen.raceaccess.RaceAccessGeneralPresenter;
+import es.formulastudent.app.mvp.view.screen.raceaccess.RaceAccessPresenter;
 
 public class ConfirmEventRegisterDialog extends DialogFragment{
 
@@ -29,7 +29,7 @@ public class ConfirmEventRegisterDialog extends DialogFragment{
     private ImageView briefingDoneIcon;
 
     //Presenter
-    private DynamicEventGeneralPresenter presenter;
+    private RaceAccessGeneralPresenter presenter;
 
     //Detected teamMember
     private TeamMember teamMember;
@@ -37,7 +37,7 @@ public class ConfirmEventRegisterDialog extends DialogFragment{
 
     public ConfirmEventRegisterDialog() {}
 
-    public static ConfirmEventRegisterDialog newInstance(DynamicEventGeneralPresenter presenter, TeamMember teamMember, boolean briefingDone) {
+    public static ConfirmEventRegisterDialog newInstance(RaceAccessGeneralPresenter presenter, TeamMember teamMember, boolean briefingDone) {
         ConfirmEventRegisterDialog frag = new ConfirmEventRegisterDialog();
         frag.setPresenter(presenter);
         frag.setTeamMember(teamMember);
@@ -46,7 +46,7 @@ public class ConfirmEventRegisterDialog extends DialogFragment{
     }
 
 
-    public static ConfirmEventRegisterDialog newInstance(DynamicEventPresenter presenter, EventRegister register) {
+    public static ConfirmEventRegisterDialog newInstance(RaceAccessPresenter presenter, EventRegister register) {
         ConfirmEventRegisterDialog frag = new ConfirmEventRegisterDialog();
         frag.setPresenter(presenter);
 
@@ -118,7 +118,7 @@ public class ConfirmEventRegisterDialog extends DialogFragment{
         });
     }
 
-    public void setPresenter(DynamicEventGeneralPresenter presenter) {
+    public void setPresenter(RaceAccessGeneralPresenter presenter) {
         this.presenter = presenter;
     }
 

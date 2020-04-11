@@ -48,16 +48,12 @@
         </activity>
 
         <activity
-            android:name=".mvp.view.screen.dynamicevent.DynamicEventActivity">
-        </activity>
-
-        <activity
             android:name=".mvp.view.screen.egresschrono.EgressChronoActivity"
             android:label="Egress chrono"
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mvp.view.screen.dynamicevent.DynamicEventActivity"/>
+                android:value=".mvp.view.screen.raceaccess.RaceAccessActivity"/>
         </activity>
 
         <activity

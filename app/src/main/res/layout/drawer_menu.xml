@@ -29,5 +29,50 @@
         android:onClick="onClick"
         android:textSize="32sp"
         android:text="@string/drawer_menu_teams" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Race Access" />
+
+    <TextView
+        android:id="@+id/drawerItemRAPracticeTrack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:textSize="32sp"
+        android:text="@string/drawer_menu_staff_practice_track" />
+
+    <TextView
+        android:id="@+id/drawerItemRASkidpad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:textSize="32sp"
+        android:text="@string/drawer_menu_staff_practice_track" />
+
+    <TextView
+        android:id="@+id/drawerItemRAAcceleration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:textSize="32sp"
+        android:text="@string/drawer_menu_staff_practice_track" />
+
+    <TextView
+        android:id="@+id/drawerItemRAAutoCross"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:textSize="32sp"
+        android:text="@string/drawer_menu_staff_practice_track" />
+
+    <TextView
+        android:id="@+id/drawerItemRAEndurance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:textSize="32sp"
+        android:text="@string/drawer_menu_staff_practice_track" />
 
 </LinearLayout>

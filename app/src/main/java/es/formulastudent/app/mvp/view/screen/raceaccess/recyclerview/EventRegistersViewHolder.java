@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.screen.dynamicevent.recyclerview;
+package es.formulastudent.app.mvp.view.screen.raceaccess.recyclerview;
 
 import android.view.View;
 import android.widget.ImageView;

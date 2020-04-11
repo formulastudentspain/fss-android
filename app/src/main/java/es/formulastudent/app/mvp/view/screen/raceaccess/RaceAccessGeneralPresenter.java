@@ -1,8 +1,8 @@
-package es.formulastudent.app.mvp.view.screen.dynamicevent;
+package es.formulastudent.app.mvp.view.screen.raceaccess;
 
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
-    public interface DynamicEventGeneralPresenter {
+    public interface RaceAccessGeneralPresenter {
 
 
     /**

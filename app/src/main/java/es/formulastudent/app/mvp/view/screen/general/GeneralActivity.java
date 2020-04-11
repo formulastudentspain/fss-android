@@ -34,20 +34,17 @@ import javax.inject.Inject;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
-import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.adminoperations.AdminOpsActivity;
 import es.formulastudent.app.mvp.view.screen.conecontrol.ConeControlWelcomeActivity;
-import es.formulastudent.app.mvp.view.screen.dynamicevent.DynamicEventActivity;
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityExitDialog;
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.screen.login.LoginActivity;
 import es.formulastudent.app.mvp.view.screen.racecontrol.RaceControlWelcomeActivity;
 import es.formulastudent.app.mvp.view.screen.statistics.StatisticsActivity;
 import es.formulastudent.app.mvp.view.screen.teammember.TeamMemberActivity;
-import es.formulastudent.app.mvp.view.screen.user.UserActivity;
 import es.formulastudent.app.mvp.view.screen.welcome.MainActivity;
 import info.androidhive.fontawesome.FontDrawable;
 
@@ -581,26 +578,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         if(drawerItem.getIdentifier() == 10020){ //TeamMember management
             intent = new Intent(this, TeamMemberActivity.class);
 
-        }else if(drawerItem.getIdentifier() == 10013){ //Acceleration
-            intent = new Intent(this, DynamicEventActivity.class);
-            intent.putExtra("eventType", EventType.ACCELERATION);
-
-        }else if(drawerItem.getIdentifier() == 10015){ //Endurance
-            intent = new Intent(this, DynamicEventActivity.class);
-            intent.putExtra("eventType", EventType.ENDURANCE_EFFICIENCY);
-
-        }else if(drawerItem.getIdentifier() == 10014){ //Autocross
-            intent = new Intent(this, DynamicEventActivity.class);
-            intent.putExtra("eventType", EventType.AUTOCROSS);
-
-        }else if(drawerItem.getIdentifier() == 10012){ //SkidPad
-            intent = new Intent(this, DynamicEventActivity.class);
-            intent.putExtra("eventType", EventType.SKIDPAD);
-
-        }else if(drawerItem.getIdentifier() == 10011){ //Practice Track
-            intent = new Intent(this, DynamicEventActivity.class);
-            intent.putExtra("eventType", EventType.PRACTICE_TRACK);
-
         }else if(drawerItem.getIdentifier() == 30006){ //Logout
             FirebaseAuth.getInstance().signOut();
             intent = new Intent(this, LoginActivity.class);
@@ -634,9 +611,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         } else if(drawerItem.getIdentifier() == 80023){ //Cone Control Skidpad
             intent = new Intent(this, ConeControlWelcomeActivity.class);
             intent.putExtra("eventType", ConeControlEvent.SKIDPAD);
-
-        }else if(drawerItem.getIdentifier() == 10026){ //Users
-            intent = new Intent(this, UserActivity.class);
 
         }
 

@@ -1,7 +1,6 @@
-package es.formulastudent.app.mvp.view.screen.dynamicevent;
+package es.formulastudent.app.mvp.view.screen.raceaccess;
 
-import android.app.Activity;
-
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
@@ -22,16 +21,13 @@ import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.view.screen.dynamicevent.dialog.ConfirmEventRegisterDialog;
-import es.formulastudent.app.mvp.view.screen.dynamicevent.dialog.DeleteEventRegisterDialog;
-import es.formulastudent.app.mvp.view.screen.dynamicevent.dialog.FilteringRegistersDialog;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.ConfirmEventRegisterDialog;
+import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.DeleteEventRegisterDialog;
+import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.FilteringRegistersDialog;
 
 
-public class DynamicEventPresenter implements RecyclerViewClickListener, DynamicEventGeneralPresenter {
-
-    //DYNAMIC EVENT TYPE
-    EventType eventType;
+public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAccessGeneralPresenter {
 
     //Dependencies
     private View view;
@@ -42,22 +38,23 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
     private EgressBO egressBO;
 
     //Data
-    List<EventRegister> allEventRegisterList = new ArrayList<>();
-    List<EventRegister> filteredEventRegisterList = new ArrayList<>();
+    private EventType eventType;
+    private List<EventRegister> eventRegisterList = new ArrayList<>();
 
     //Filtering values
-    List<Team> teams;
-    String selectedTeamID;
-    String selectedDay;
-    Long selectedCarNumber;
+    private List<Team> teams;
+    private String selectedTeamID;
+    private String selectedDay;
+    private Long selectedCarNumber;
 
     //Selected chip to filter
     private Date selectedDateFrom;
     private Date selectedDateTo;
 
 
-    public DynamicEventPresenter(DynamicEventPresenter.View view, TeamBO teamBO,
-                                 DynamicEventBO dynamicEventBO, TeamMemberBO teamMemberBO, BriefingBO briefingBO, EventType eventType, EgressBO egressBO) {
+    public RaceAccessPresenter(RaceAccessPresenter.View view, TeamBO teamBO,
+                               DynamicEventBO dynamicEventBO, TeamMemberBO teamMemberBO,
+                               BriefingBO briefingBO, EventType eventType, EgressBO egressBO) {
         this.view = view;
         this.teamBO = teamBO;
         this.dynamicEventBO = dynamicEventBO;
@@ -68,7 +65,6 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
     }
 
 
-
     /**
      * Create register
      * @param teamMember
@@ -77,9 +73,6 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
      */
     @Override
      public void createRegistry(final TeamMember teamMember, final Long carNumber, final Boolean briefingDone){
-
-        //Show loading
-        view.showLoading();
 
         //Check that the driver is able to run, that means he/she has not run already in two different events
         dynamicEventBO.getDifferentEventRegistersByDriver(teamMember.getID(), new BusinessCallback() {
@@ -97,54 +90,29 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
                             && !eventType.equals(EventType.BRIEFING)
                             && !eventType.equals(EventType.PRACTICE_TRACK)){
 
-                        //Hide loading
-                        view.hideLoading();
-
-                        //Show error message
-                        view.createMessage(R.string.dynamic_event_message_error_runs);
+                        //TODO Show error message
+                        //view.createMessage(R.string.dynamic_event_message_error_runs);
 
                     } else {
-
-                        //The driver can run, create the register
                         dynamicEventBO.createRegister(teamMember, carNumber, briefingDone, eventType, new BusinessCallback() {
                             @Override
                             public void onSuccess(ResponseDTO responseDTO) {
-
-                                //Refresh the records
                                 retrieveRegisterList();
-
-                                //Hide loading
-                                view.hideLoading();
                             }
                             @Override
-                            public void onFailure(ResponseDTO responseDTO) {
-
-                                //Hide loading
-                                view.hideLoading();
-
-                                //Show error message
-                                view.createMessage(R.string.dynamic_event_message_error_create);
-                            }
+                            public void onFailure(ResponseDTO responseDTO) { }
                         });
                    }
-
                 } else {
 
-                    //Hide loading
-                    view.hideLoading();
-
-                    //Show error message
-                    view.createMessage(R.string.dynamic_event_message_error_runs);
+                    //TODO: Show error message
+                    //view.createMessage(R.string.dynamic_event_message_error_runs);
                 }
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                //Show error message
-                view.createMessage(R.string.dynamic_event_message_error_retrieving_by_driver);
-            }
+            public void onFailure(ResponseDTO responseDTO) { }
         });
-
     }
 
 
@@ -152,37 +120,23 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
      * Retrieve Event registers
      */
      public void retrieveRegisterList() {
-
-        //Show loading
-        view.showLoading();
-
-        //Call Event business
         dynamicEventBO.retrieveRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, selectedCarNumber, eventType, new BusinessCallback() {
 
              @Override
              public void onSuccess(ResponseDTO responseDTO) {
-                 //Refresh the records
                  List<EventRegister> results = (List<EventRegister>) responseDTO.getData();
                  updateEventRegisters(results==null ? new ArrayList<EventRegister>() : results);
              }
 
              @Override
-             public void onFailure(ResponseDTO responseDTO) {
-                 //Show error message
-                 view.createMessage(R.string.dynamic_event_message_error_retrieving_registers);
-             }
+             public void onFailure(ResponseDTO responseDTO) { }
          });
     }
 
 
-    public void updateEventRegisters(List<EventRegister> items){
-        //Update all-register-list
-        this.allEventRegisterList.clear();
-        this.allEventRegisterList.addAll(items);
-
-        //Update and refresh filtered-register-list
-        this.filteredEventRegisterList.clear();
-        this.filteredEventRegisterList.addAll(items);
+    private void updateEventRegisters(List<EventRegister> items){
+         this.eventRegisterList.clear();
+        this.eventRegisterList.addAll(items);
         this.view.refreshEventRegisterItems();
     }
 
@@ -192,112 +146,61 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
      * @param tag
      */
     void onNFCTagDetected(String tag){
-
-        //Show loading
-        view.showLoading();
-
-        //Retrieve user by the NFC tag
         teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 TeamMember teamMember = (TeamMember)responseDTO.getData();
-
-                //Now check if the teamMember did the briefing today
                 getUserBriefingRegister(teamMember);
             }
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                //Hide loading
-                view.hideLoading();
-
-                //Show error message
-                view.createMessage(R.string.team_member_get_by_nfc_error);
-            }
+            public void onFailure(ResponseDTO responseDTO) {}
         });
     }
-
-
-
 
     /**
      * Method to delete a dynamic event register
      * @param registerID
      */
     public void deleteDynamicEventRegister(String registerID) {
-
-        //Show loading
-        view.showLoading();
-
-        //Call business to delete the dynamic event register
         dynamicEventBO.deleteRegister(eventType, registerID, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-
-                //Show info message
-                view.createMessage(responseDTO.getInfo());
-
-                //Retrieve and refresh the list
                 retrieveRegisterList();
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                //Show error
-                view.createMessage(responseDTO.getError());
-            }
+            public void onFailure(ResponseDTO responseDTO) {}
         });
-
     }
 
-
-    void getUserBriefingRegister(final TeamMember teamMember){
-
+    private void getUserBriefingRegister(final TeamMember teamMember){
         Calendar cal = Calendar.getInstance();
-        Date to = cal.getTime();
-
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.HOUR_OF_DAY, 5);
         cal.set(Calendar.SECOND, 0);
 
-
         if(teamMember != null && teamMember.getID() != null) {
-
-            //If the teamMember exists, retrieve its briefing registers
             briefingBO.checkBriefingByUser(teamMember.getID(), new BusinessCallback() {
 
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
-
                     Boolean briefingAvailable = (Boolean) responseDTO.getData();
 
-                    //Hide loading
-                    view.hideLoading();
-
                     //With all the information, we create the dialog
-                    FragmentManager fm = ((DynamicEventActivity)view.getActivity()).getSupportFragmentManager();
+                    FragmentManager fm = view.getActivity().getSupportFragmentManager();
                     ConfirmEventRegisterDialog createUserDialog = ConfirmEventRegisterDialog
-                            .newInstance(DynamicEventPresenter.this, teamMember, briefingAvailable);
-
-                    //Show the dialog
+                            .newInstance(RaceAccessPresenter.this, teamMember, briefingAvailable);
                     createUserDialog.show(fm, "fragment_event_confirm");
-
                 }
 
                 @Override
-                public void onFailure(ResponseDTO responseDTO) {
-                    //Show error message
-                    view.createMessage(R.string.briefing_messages_retrieve_registers_error);
-                }
+                public void onFailure(ResponseDTO responseDTO) { }
             });
 
         } else {
-
-            //Hide loading
-            view.hideLoading();
-
             //Show error message
-            view.createMessage(R.string.team_member_get_by_nfc_not_existing);
+            //view.createMessage(R.string.team_member_get_by_nfc_not_existing);
         }
     }
 
@@ -306,12 +209,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
     /**
      * Retrieve teams from database
      */
-    void retrieveTeams(){
-
-        //Show loading
-        view.showLoading();
-
-        //Call business to retrieve teams
+    private void retrieveTeams(){
         teamBO.retrieveTeams(null, null, new BusinessCallback() {
 
             @Override
@@ -327,10 +225,7 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(R.string.dynamic_event_message_error_retrieving_teams);
-            }
-
+            public void onFailure(ResponseDTO responseDTO) {}
         });
     }
 
@@ -342,9 +237,9 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
     void openRepeatRunDialog(EventRegister selectedRegister) {
 
         //With all the information, we open the dialog
-        FragmentManager fm = ((DynamicEventActivity)view.getActivity()).getSupportFragmentManager();
+        FragmentManager fm = view.getActivity().getSupportFragmentManager();
         ConfirmEventRegisterDialog createUserDialog = ConfirmEventRegisterDialog
-                .newInstance(DynamicEventPresenter.this, selectedRegister);
+                .newInstance(RaceAccessPresenter.this, selectedRegister);
         createUserDialog.show(fm, "fragment_event_confirm");
     }
 
@@ -354,15 +249,14 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
 
         //Delete run
         if(v.getId() == R.id.delete_run_button){
-            EventRegister selectedRegister = filteredEventRegisterList.get(position);
+            EventRegister selectedRegister = eventRegisterList.get(position);
             openConfirmDeleteRegister(selectedRegister);
 
         //Repeat run
         }else if(v.getId() == R.id.repeat_run_button){
-            EventRegister selectedRegister = filteredEventRegisterList.get(position);
+            EventRegister selectedRegister = eventRegisterList.get(position);
             openRepeatRunDialog(selectedRegister);
         }
-
     }
 
 
@@ -370,19 +264,13 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
      * Open the dialog to filter results
      * @param teams
      */
-    void openFilteringDialog(List<Team> teams){
+    private void openFilteringDialog(List<Team> teams){
         this.teams = teams;
 
-        //With all the information, we create the dialog
-        FragmentManager fm = ((DynamicEventActivity)view.getActivity()).getSupportFragmentManager();
+        FragmentManager fm = view.getActivity().getSupportFragmentManager();
         FilteringRegistersDialog createUserDialog = FilteringRegistersDialog
                 .newInstance(this, teams, selectedTeamID, selectedCarNumber, selectedDay);
-
-        //Show the dialog
         createUserDialog.show(fm, "fragment_event_confirm");
-
-        //Hide loading right after showing the filtering dialog
-        view.hideLoading();
     }
 
 
@@ -390,9 +278,8 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
      * Open the dialog to confirm the register to be deleted
      * @param register
      */
-    void openConfirmDeleteRegister(EventRegister register){
-        //With all the information, we open the dialog
-        FragmentManager fm = ((DynamicEventActivity)view.getActivity()).getSupportFragmentManager();
+    private void openConfirmDeleteRegister(EventRegister register){
+        FragmentManager fm = view.getActivity().getSupportFragmentManager();
         DeleteEventRegisterDialog deleteEventRegisterDialog = DeleteEventRegisterDialog.newInstance(this, register);
         deleteEventRegisterDialog.show(fm, "delete_event_confirm");
     }
@@ -402,8 +289,6 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
      * Open the filtering dialog if we already have the teams, retrieve them if not.
      */
     void filterIconClicked(){
-
-        //Go retrieve teams if we have not yet
         if(teams == null){
             retrieveTeams();
         }else{
@@ -434,41 +319,13 @@ public class DynamicEventPresenter implements RecyclerViewClickListener, Dynamic
         );
     }
 
-    /**
-     * Create message
-     * @param message
-     */
-    public void createMessage(Integer message){
-        view.createMessage(message);
+    List<EventRegister> getEventRegisterList() {
+        return eventRegisterList;
     }
-
-
-    public List<EventRegister> getEventRegisterList() {
-        return filteredEventRegisterList;
-    }
-
-
-
 
     public interface View {
 
-        Activity getActivity();
-
-        /**
-         * Show message to user
-         * @param message
-         */
-        void createMessage(Integer message, Object...args);
-
-        /**
-         * Show loading icon
-         */
-        void showLoading();
-
-        /**
-         * Hide loading icon
-         */
-        void hideLoading();
+        FragmentActivity getActivity();
 
         /**
          * Refresh items in list

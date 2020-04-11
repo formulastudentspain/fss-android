@@ -55,8 +55,7 @@ public class TeamBOFirebaseImpl implements TeamBO {
 
     @Override
     public void retrieveTeams(String carType, Map<String, String> filters, final BusinessCallback callback) {
-        loadingDialog.show();
-
+        ResponseDTO responseDTO = new ResponseDTO();
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM);
 
         //Filter by car type
@@ -67,7 +66,6 @@ public class TeamBOFirebaseImpl implements TeamBO {
 
             query = query.whereEqualTo(Team.CAR_TYPE, carType);
         }
-
 
         //Filter by Scrutineering and Fees
         if (filters != null) {
@@ -168,13 +166,10 @@ public class TeamBOFirebaseImpl implements TeamBO {
             }
         }
 
-
+        loadingDialog.show();
         query.orderBy(Team.CAR_NUMBER, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
-
-                    //Response object
-                    ResponseDTO responseDTO = new ResponseDTO();
 
                     if (task.isSuccessful()) {
 
@@ -199,21 +194,22 @@ public class TeamBOFirebaseImpl implements TeamBO {
 
     @Override
     public void retrieveTeamById(String id, final BusinessCallback callback) {
-
-        //Response object
         final ResponseDTO responseDTO = new ResponseDTO();
 
+        loadingDialog.show();
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
                 .document(id)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     Team team = new Team(documentSnapshot);
                     responseDTO.setData(team);
-                    responseDTO.setInfo(R.string.teams_info_retrieving_by_id_message);
+                    loadingDialog.hide();
+                    messages.showInfo(R.string.teams_info_retrieving_by_id_message);
                     callback.onSuccess(responseDTO);
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.teams_error_retrieving_by_id_message);
+                    messages.showError(R.string.teams_error_retrieving_by_id_message);
+                    loadingDialog.hide();
                     callback.onFailure(responseDTO);
                 });
     }
@@ -221,21 +217,23 @@ public class TeamBOFirebaseImpl implements TeamBO {
 
     @Override
     public void deleteAllTeams(final BusinessCallback callback) {
-
         final ResponseDTO responseDTO = new ResponseDTO();
 
+        loadingDialog.show();
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
                         doc.getReference().delete();
                     }
-                    responseDTO.setInfo(R.string.teams_info_delete_all_message);
+                    messages.showInfo(R.string.teams_info_delete_all_message);
                     callback.onSuccess(responseDTO);
+                    loadingDialog.hide();
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.teams_error_delete_all_message);
+                    messages.showError(R.string.teams_error_delete_all_message);
                     callback.onFailure(responseDTO);
+                    loadingDialog.hide();
                 });
     }
 
@@ -244,39 +242,45 @@ public class TeamBOFirebaseImpl implements TeamBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         Map<String, Object> docData = team.toDocumentData();
 
+        loadingDialog.show();
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
                 .document(team.getID())
                 .set(docData)
                 .addOnSuccessListener(aVoid -> {
-                    responseDTO.setInfo(R.string.teams_info_create_message);
+                    messages.showInfo(R.string.teams_info_create_message);
                     callback.onSuccess(responseDTO);
+                    loadingDialog.hide();
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.teams_error_create_message);
+                    messages.showError(R.string.teams_error_create_message);
                     callback.onFailure(responseDTO);
+                    loadingDialog.hide();
                 });
     }
 
 
     @Override
     public void updateTeam(final Team team, final BusinessCallback callback) {
-
         final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM).document(team.getID());
 
+        loadingDialog.show();
         registerReference.get()
                 .addOnSuccessListener(documentSnapshot -> registerReference.update(team.toDocumentData())
                         .addOnSuccessListener(aVoid -> {
-                            responseDTO.setInfo(R.string.teams_info_update_message);
+                            messages.showInfo(R.string.teams_info_update_message);
                             callback.onSuccess(responseDTO);
+                            loadingDialog.hide();
                         })
                         .addOnFailureListener(e -> {
-                            responseDTO.setError(R.string.teams_error_update_message);
+                            messages.showError(R.string.teams_error_update_message);
                             callback.onFailure(responseDTO);
+                            loadingDialog.hide();
                         }))
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.teams_error_update_message);
+                    messages.showError(R.string.teams_error_update_message);
                     callback.onFailure(responseDTO);
+                    loadingDialog.hide();
                 });
     }
 }

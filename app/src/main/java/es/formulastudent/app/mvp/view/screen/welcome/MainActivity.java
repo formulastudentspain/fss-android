@@ -3,7 +3,6 @@ package es.formulastudent.app.mvp.view.screen.welcome;
 import android.os.Bundle;
 import android.view.View;
 
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -14,6 +13,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.databinding.ActivityMainBinding;
+import es.formulastudent.app.mvp.data.model.EventType;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -45,6 +45,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.drawerItemTeams:
                 navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToTeamsFragment());
+                break;
+            case R.id.drawerItemRAPracticeTrack:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToRaceAccessFragment(
+                                EventType.PRACTICE_TRACK,
+                                EventType.PRACTICE_TRACK.getName()));
+                break;
+            case R.id.drawerItemRASkidpad:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToRaceAccessFragment(
+                                EventType.SKIDPAD,
+                                EventType.SKIDPAD.getName()));
+                break;
+            case R.id.drawerItemRAAcceleration:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToRaceAccessFragment(
+                                EventType.ACCELERATION,
+                                EventType.ACCELERATION.getName()));
+                break;
+            case R.id.drawerItemRAAutoCross:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToRaceAccessFragment(
+                                EventType.AUTOCROSS,
+                                EventType.AUTOCROSS.getName()));
+                break;
+            case R.id.drawerItemRAEndurance:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToRaceAccessFragment(
+                                EventType.ENDURANCE_EFFICIENCY,
+                                EventType.ENDURANCE_EFFICIENCY.getName()));
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

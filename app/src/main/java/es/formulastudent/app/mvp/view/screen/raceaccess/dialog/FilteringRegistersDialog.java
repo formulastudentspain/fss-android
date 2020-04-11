@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.screen.dynamicevent.dialog;
+package es.formulastudent.app.mvp.view.screen.raceaccess.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -25,7 +25,7 @@ import java.util.Locale;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.screen.dynamicevent.DynamicEventPresenter;
+import es.formulastudent.app.mvp.view.screen.raceaccess.RaceAccessPresenter;
 import es.formulastudent.app.mvp.view.screen.general.spinneradapters.TeamsSpinnerAdapter;
 
 public class FilteringRegistersDialog extends DialogFragment implements ChipGroup.OnCheckedChangeListener {
@@ -48,12 +48,12 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
     private Date selectedDateTo;
 
     //Presenter
-    private DynamicEventPresenter presenter;
+    private RaceAccessPresenter presenter;
 
     public FilteringRegistersDialog() {
     }
 
-    public static FilteringRegistersDialog newInstance(DynamicEventPresenter presenter, List<Team> teams,
+    public static FilteringRegistersDialog newInstance(RaceAccessPresenter presenter, List<Team> teams,
                                                        String selectedTeamID, Long selectedCarNumber, String selectedDay) {
         FilteringRegistersDialog frag = new FilteringRegistersDialog();
         frag.setTeams(teams);
@@ -255,14 +255,13 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
                 selectedDateTo = calTo.getTime();
 
             } catch (ParseException pe) {
-                //Show error message
-                presenter.createMessage(R.string.briefing_messages_parsing_dates_error);
+                //TODO
             }
         }
 
     }
 
-    public void setPresenter(DynamicEventPresenter presenter) {
+    public void setPresenter(RaceAccessPresenter presenter) {
         this.presenter = presenter;
     }
 
@@ -270,15 +269,15 @@ public class FilteringRegistersDialog extends DialogFragment implements ChipGrou
         this.teams = teams;
     }
 
-    public void setSelectedTeamID(String selectedTeamID) {
+    private void setSelectedTeamID(String selectedTeamID) {
         this.selectedTeamID = selectedTeamID;
     }
 
-    public void setSelectedDay(String selectedDay) {
+    private void setSelectedDay(String selectedDay) {
         this.selectedDay = selectedDay;
     }
 
-    public void setSelectedCarNumber(Long selectedCarNumber) {
+    private void setSelectedCarNumber(Long selectedCarNumber) {
         this.selectedCarNumber = selectedCarNumber;
     }
 

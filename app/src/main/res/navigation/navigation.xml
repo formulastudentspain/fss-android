@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_welcomeFragment_to_teamsFragment"
             app:destination="@id/teamsFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_raceAccessFragment"
+            app:destination="@id/raceAccessFragment" />
     </fragment>
     <fragment
         android:id="@+id/briefingFragment"
@@ -52,5 +55,17 @@
         <argument
             android:name="selectedTeam"
             app:argType="es.formulastudent.app.mvp.data.model.Team" />
+    </fragment>
+    <fragment
+        android:id="@+id/raceAccessFragment"
+        android:name="es.formulastudent.app.mvp.view.screen.raceaccess.RaceAccessFragment"
+        android:label="Race Access: {eventTypeName}"
+        tools:layout="@layout/fragment_race_access">
+        <argument
+            android:name="eventType"
+            app:argType="es.formulastudent.app.mvp.data.model.EventType" />
+        <argument
+            android:name="eventTypeName"
+            app:argType="string" />
     </fragment>
 </navigation>

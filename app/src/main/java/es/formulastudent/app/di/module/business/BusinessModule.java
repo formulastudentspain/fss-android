@@ -2,8 +2,6 @@ package es.formulastudent.app.di.module.business;
 
 import android.content.Context;
 
-import androidx.fragment.app.FragmentActivity;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -73,8 +71,9 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public TeamMemberBO provideTeamMemberBO(FirebaseFirestore firebaseFirestore) {
-        return new TeamMemberBOFirebaseImpl(firebaseFirestore);
+    public TeamMemberBO provideTeamMemberBO(FirebaseFirestore firebaseFirestore,
+                                            LoadingDialog loadingDialog, Messages messages) {
+        return new TeamMemberBOFirebaseImpl(firebaseFirestore, loadingDialog, messages);
     }
 
 
@@ -95,8 +94,9 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public DynamicEventBO provideDynamicEventBO(FirebaseFirestore firebaseFirestore, FirebaseAuth firebaseAuth) {
-        return new DynamicEventBOFirebaseImpl(firebaseFirestore, firebaseAuth);
+    public DynamicEventBO provideDynamicEventBO(FirebaseFirestore firebaseFirestore, FirebaseAuth firebaseAuth,
+                                                LoadingDialog loadingDialog, Messages messages) {
+        return new DynamicEventBOFirebaseImpl(firebaseFirestore, firebaseAuth, loadingDialog, messages);
     }
 
     /**

@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.screen.dynamicevent.dialog;
+package es.formulastudent.app.mvp.view.screen.raceaccess.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,16 +9,16 @@ import androidx.fragment.app.DialogFragment;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.EventRegister;
-import es.formulastudent.app.mvp.view.screen.dynamicevent.DynamicEventPresenter;
+import es.formulastudent.app.mvp.view.screen.raceaccess.RaceAccessPresenter;
 
 public class DeleteEventRegisterDialog extends DialogFragment {
 
-    DynamicEventPresenter presenter;
+    RaceAccessPresenter presenter;
     EventRegister register;
 
     public DeleteEventRegisterDialog() {}
 
-    public static DeleteEventRegisterDialog newInstance(DynamicEventPresenter presenter, EventRegister register) {
+    public static DeleteEventRegisterDialog newInstance(RaceAccessPresenter presenter, EventRegister register) {
         DeleteEventRegisterDialog frag = new DeleteEventRegisterDialog();
         frag.setPresenter(presenter);
         frag.setRegister(register);
@@ -49,7 +49,7 @@ public class DeleteEventRegisterDialog extends DialogFragment {
         return builder.create();
     }
 
-    public void setPresenter(DynamicEventPresenter presenter) {
+    public void setPresenter(RaceAccessPresenter presenter) {
         this.presenter = presenter;
     }
 
