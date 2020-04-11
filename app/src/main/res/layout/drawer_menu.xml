@@ -105,4 +105,34 @@
         android:onClick="onClick"
         android:text="@string/drawer_menu_staff_endurance_efficiency"
         android:textSize="32sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cone Control"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/drawerItemCCSkidpad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="@string/drawer_menu_staff_skidpad"
+        android:textSize="32sp" />
+
+    <TextView
+        android:id="@+id/drawerItemCCAutocross"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="@string/drawer_menu_staff_autocross"
+        android:textSize="32sp" />
+
+    <TextView
+        android:id="@+id/drawerItemCCEndurance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="@string/drawer_menu_staff_endurance_efficiency"
+        android:textSize="32sp" />
 </LinearLayout>

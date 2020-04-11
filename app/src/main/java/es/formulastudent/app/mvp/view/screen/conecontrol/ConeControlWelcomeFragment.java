@@ -1,19 +1,24 @@
 package es.formulastudent.app.mvp.view.screen.conecontrol;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,23 +30,24 @@ import javax.inject.Inject;
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
+import es.formulastudent.app.di.component.DaggerConeControlWelcomeComponent;
+import es.formulastudent.app.di.module.ContextModule;
+import es.formulastudent.app.di.module.activity.ConeControlModule;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.view.screen.conecontrol.recyclerview.SectorAdapter;
-import es.formulastudent.app.mvp.view.screen.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 
 
-public class ConeControlWelcomeActivity extends GeneralActivity implements View.OnClickListener, RecyclerViewClickListener {
+public class ConeControlWelcomeFragment extends Fragment implements ConeControlPresenter.View, View.OnClickListener, RecyclerViewClickListener {
 
     @Inject
     ConeControlPresenter presenter;
 
     private static final int NUM_SECTORS = 7;
 
-    private MenuItem filterItem;
     private ConeControlEvent ccEvent;
-    private Integer selectedSector;
+    private Long selectedSector = -1L;
     private String selectedRound;
 
     //View elements
@@ -50,161 +56,134 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
     private LinearLayout round2;
     private LinearLayout roundFinal;
     private SectorAdapter sectorAdapter;
-    private RecyclerView sectorRecyclerView;
-    private LinearLayout roundContainer;
-    private LinearLayout sectorContainer;
-    private TextView eventTypeText;
 
-    Map<Integer, Boolean> sectors = new HashMap<>();
-
+    private Map<Integer, Boolean> sectors = new HashMap<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_cone_control_welcome);
-        super.onCreate(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
+        super.onCreate(savedInstanceState);
+    }
 
-        //Get the event type (Endurance, AutoX, Skidpad, Acceleration)
-        ConeControlEvent ccEvent = (ConeControlEvent) getIntent().getSerializableExtra("eventType");
-        this.ccEvent = ccEvent;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_cone_control_welcome, container, false);
 
-        initViews();
-        setSupportActionBar(toolbar);
+        //Get the event type (Endurance, AutoX, Skidpad)
+        assert getArguments() != null;
+        ConeControlWelcomeFragmentArgs args = ConeControlWelcomeFragmentArgs.fromBundle(getArguments());
+        this.ccEvent = args.getConeControlEvent();
 
+        initViews(view);
         checkWritePermissions();
+        return view;
     }
 
     /**
      * Inject dependencies method
+     *
      * @param appComponent
      */
     protected void setupComponent(AppComponent appComponent) {
-
-      /*  DaggerConeControlWelcomeComponent.builder()
+        DaggerConeControlWelcomeComponent.builder()
                 .appComponent(appComponent)
-                .contextModule(new ContextModule(this))
-                .coneControlModule(new ConeControlModule(null, ccEvent))
+                .contextModule(new ContextModule(getContext(), getActivity()))
+                .coneControlModule(new ConeControlModule(this, ccEvent))
                 .build()
-                .inject(this);*/
+                .inject(this);
     }
 
-
-    private void initViews(){
-
-        //Add drawer
-        addDrawer();
-        mDrawerIdentifier = ccEvent.getDrawerItemID();
+    private void initViews(View view) {
 
         //Hide/show rounds and sectors depending on the event type
-        roundContainer = findViewById(R.id.roundContainer);
-        sectorContainer = findViewById(R.id.sectorContainer);
-        if(ConeControlEvent.AUTOCROSS.equals(ccEvent)){
+        LinearLayout roundContainer = view.findViewById(R.id.roundContainer);
+        LinearLayout sectorContainer = view.findViewById(R.id.sectorContainer);
+        if (ConeControlEvent.AUTOCROSS.equals(ccEvent)) {
             roundContainer.setVisibility(View.GONE);
 
-        }else if(ConeControlEvent.ENDURANCE.equals(ccEvent)){
+        } else if (ConeControlEvent.ENDURANCE.equals(ccEvent)) {
             roundContainer.setVisibility(View.VISIBLE);
 
-        }else if(ConeControlEvent.SKIDPAD.equals(ccEvent)){
+        } else if (ConeControlEvent.SKIDPAD.equals(ccEvent)) {
             sectorContainer.setVisibility(View.GONE);
             roundContainer.setVisibility(View.GONE);
         }
 
-        eventTypeText = findViewById(R.id.eventType);
+        TextView eventTypeText = view.findViewById(R.id.eventType);
         eventTypeText.setText(ccEvent.getName());
 
-        goButton = findViewById(R.id.go_button);
+        goButton = view.findViewById(R.id.go_button);
         goButton.setOnClickListener(this);
 
-        round1 = findViewById(R.id.button_round1);
+        round1 = view.findViewById(R.id.button_round1);
         round1.setOnClickListener(this);
 
-        round2 = findViewById(R.id.button_round2);
+        round2 = view.findViewById(R.id.button_round2);
         round2.setOnClickListener(this);
 
-        roundFinal = findViewById(R.id.button_roundFinal);
+        roundFinal = view.findViewById(R.id.button_roundFinal);
         roundFinal.setOnClickListener(this);
 
 
-        for(int i=1; i<=NUM_SECTORS; i++){
-            sectors.put(i,false);
+        for (int i = 1; i <= NUM_SECTORS; i++) {
+            sectors.put(i, false);
         }
 
-        sectorRecyclerView = findViewById(R.id.sectorRecyclerView);
-        sectorAdapter = new SectorAdapter(sectors, this, this);
+        RecyclerView sectorRecyclerView = view.findViewById(R.id.sectorRecyclerView);
+        sectorAdapter = new SectorAdapter(sectors, getContext(), this);
         sectorRecyclerView.setAdapter(sectorAdapter);
-        sectorRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+        sectorRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         checkEnableButton();
-
-        //Add toolbar title
-        setToolbarTitle(getString(ccEvent.getActivityTitle()));
-    }
-
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        drawer.setSelection(mDrawerIdentifier, false);
-    }
-
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-
     }
 
     @Override
     public void onClick(View view) {
-
-
-        if(view.getId()==R.id.button_round1){
+        if (view.getId() == R.id.button_round1) {
             round1.setSelected(true);
             round2.setSelected(false);
             roundFinal.setSelected(false);
             selectedRound = RaceControlRegister.RACE_ROUND_1;
             this.checkEnableButton();
 
-        }else if(view.getId()==R.id.button_round2){
+        } else if (view.getId() == R.id.button_round2) {
             round1.setSelected(false);
             round2.setSelected(true);
             roundFinal.setSelected(false);
             selectedRound = RaceControlRegister.RACE_ROUND_2;
             this.checkEnableButton();
 
-        }else if(view.getId()==R.id.button_roundFinal){
+        } else if (view.getId() == R.id.button_roundFinal) {
             round1.setSelected(false);
             round2.setSelected(false);
             roundFinal.setSelected(true);
             selectedRound = RaceControlRegister.RACE_ROUND_FINAL;
             this.checkEnableButton();
 
-        }else if(view.getId()==R.id.go_button){
-            Intent intent = new Intent(this, ConeControlActivity.class);
-            intent.putExtra("selectedSector", selectedSector);
-            intent.putExtra("selectedRound", selectedRound);
-            intent.putExtra("eventType", ccEvent);
-            this.startActivity(intent);
+        } else if (view.getId() == R.id.go_button) {
+            assert getActivity() != null;
+            NavController navController = Navigation.findNavController(getActivity(), R.id.myNavHostFragment);
+            navController.navigate(ConeControlWelcomeFragmentDirections
+                    .actionConeControlWelcomeFragmentToConeControlFragment(ccEvent, selectedRound, selectedSector));
         }
-
         checkEnableButton();
     }
 
     private void checkEnableButton() {
 
-        if(ConeControlEvent.ENDURANCE.equals(ccEvent)){
-            if(selectedSector==null || selectedRound==null){
+        if (ConeControlEvent.ENDURANCE.equals(ccEvent)) {
+            if (selectedSector == null || selectedRound == null) {
                 goButton.setVisibility(View.GONE);
-            }else{
+            } else {
                 goButton.setVisibility(View.VISIBLE);
             }
-        }else if(ConeControlEvent.AUTOCROSS.equals(ccEvent)){
-            if(selectedSector==null){
+        } else if (ConeControlEvent.AUTOCROSS.equals(ccEvent)) {
+            if (selectedSector == null) {
                 goButton.setVisibility(View.GONE);
-            }else{
+            } else {
                 goButton.setVisibility(View.VISIBLE);
             }
-        }else if(ConeControlEvent.SKIDPAD.equals(ccEvent)){
+        } else if (ConeControlEvent.SKIDPAD.equals(ccEvent)) {
             goButton.setVisibility(View.VISIBLE);
         }
 
@@ -213,52 +192,44 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
     @Override
     public void recyclerViewListClicked(View v, int position) {
 
-        for(Integer i: sectors.keySet()){
+        for (Integer i : sectors.keySet()) {
             sectors.put(i, false);
         }
 
-        sectors.put(position+1, !sectors.get(position+1));
+        sectors.put(position + 1, !sectors.get(position + 1));
         sectorAdapter.notifyDataSetChanged();
 
-        this.selectedSector = position+1;
+        this.selectedSector = position + 1L;
         this.checkEnableButton();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_cone_control_stats, menu);
-
-        //Search menu item
-        filterItem = menu.findItem(R.id.cone_control_stats);
-        filterItem.setOnMenuItemClickListener( menuItem -> {
-
+        MenuItem filterItem = menu.findItem(R.id.cone_control_stats);
+        filterItem.setOnMenuItemClickListener(menuItem -> {
             if(checkWritePermissions()){
                 presenter.exportConesToExcel(ccEvent);
             }
-
             return true;
         });
-
-        return true;
     }
-
 
     //TODO
     private boolean checkWritePermissions(){
         // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this,
+        if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
             } else {
                 // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         16);
 
@@ -271,6 +242,13 @@ public class ConeControlWelcomeActivity extends GeneralActivity implements View.
             return true;
         }
     }
+
+    @Override
+    public void refreshEventRegisterItems() { }
+
+    @Override
+    public String getSelectedRound() { return null; }
+
+    @Override
+    public Long getSelectedSector() { return null; }
 }
-
-

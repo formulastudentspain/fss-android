@@ -1,7 +1,6 @@
 package es.formulastudent.app.mvp.view.screen.conecontrol;
 
-import android.app.Activity;
-import android.content.Context;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -21,42 +20,36 @@ import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDT
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.data.model.ConeControlRegisterLog;
-import es.formulastudent.app.mvp.data.model.RaceControlRegister;
-import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 
 public class ConeControlPresenter implements RecyclerViewClickListener {
 
     //Cone Control Event Type
-    ConeControlEvent ccEventType;
+    private ConeControlEvent ccEventType;
 
     //Dependencies
     private View view;
-    private Context context;
     private ConeControlBO coneControlBO;
     private MailSender mailSender;
-
+    private LoadingDialog loadingDialog;
+    private Messages messages;
 
     //Data
-    List<ConeControlRegister> coneControlRegisterList = new ArrayList<>();
-    ListenerRegistration registration;
-    RaceControlEnduranceState newState = null;
-    RaceControlRegister register = null;
+    private List<ConeControlRegister> coneControlRegisterList = new ArrayList<>();
+    private ListenerRegistration registration;
 
-
-    //Filtering values
-    private String selectedArea;
-    private Long selectedCarNumber;
-
-
-    public ConeControlPresenter(ConeControlPresenter.View view, Context context, ConeControlEvent ccEventType, ConeControlBO coneControlBO, MailSender mailSender) {
+    public ConeControlPresenter(ConeControlPresenter.View view, ConeControlEvent ccEventType,
+                                ConeControlBO coneControlBO, MailSender mailSender,
+                                LoadingDialog loadingDialog, Messages messages) {
         this.view = view;
-        this.context = context;
         this.ccEventType = ccEventType;
         this.coneControlBO = coneControlBO;
-        this.selectedArea = context.getString(R.string.rc_area_all);
         this.mailSender = mailSender;
+        this.loadingDialog = loadingDialog;
+        this.messages = messages;
     }
 
     @Override
@@ -100,18 +93,19 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
             register.setOffCourses(register.getOffCourses()+register.getCurrentOffCourseCount());
             register.setCurrentOffCourseCount(0);
 
-
-
+            loadingDialog.show();
             coneControlBO.updateConeControlRegister(ccEventType, register, new BusinessCallback() {
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
+                    loadingDialog.hide();
                     coneControlRegisterList.get(position).setState(0);
                     refreshList();
                 }
 
                 @Override
                 public void onFailure(ResponseDTO responseDTO) {
-
+                    loadingDialog.hide();
+                    messages.showError(responseDTO.getError());
                 }
             });
         }
@@ -123,9 +117,6 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
         if(registration != null){
             registration.remove();
         }
-
-        //Show loading
-        view.showLoading();
 
         Map<String, Object> filters = new HashMap<>();
         filters.put("sector", view.getSelectedSector());
@@ -142,16 +133,13 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                //Show error message
-                view.createMessage(responseDTO.getError());
+                messages.showError(responseDTO.getError());
             }
         });
-
-
         return registration;
     }
 
-    public void updateEventRegisters(List<ConeControlRegister> items){
+    private void updateEventRegisters(List<ConeControlRegister> items){
 
         //Copy states
         for(ConeControlRegister ccRegister: coneControlRegisterList){
@@ -165,69 +153,54 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
             }
         }
 
-
         //Update all-register-list
         this.coneControlRegisterList.clear();
         this.coneControlRegisterList.addAll(items);
         this.view.refreshEventRegisterItems();
     }
 
-    public void refreshList(){
+    private void refreshList(){
         this.view.refreshEventRegisterItems();
     }
 
 
-    public List<ConeControlRegister> getEventRegisterList() {
+    List<ConeControlRegister> getEventRegisterList() {
         return coneControlRegisterList;
     }
 
 
-    public void exportConesToExcel(ConeControlEvent ccEvent) {
+    void exportConesToExcel(ConeControlEvent ccEvent) {
 
         try {
+            loadingDialog.show();
             coneControlBO.exportConesToExcel(ccEvent, new BusinessCallback() {
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
+                    loadingDialog.hide();
                     ExportStatisticsDTO exportStatisticsDTO = (ExportStatisticsDTO) responseDTO.getData();
                     mailSender.sendMail(exportStatisticsDTO);
                 }
 
                 @Override
                 public void onFailure(ResponseDTO responseDTO) {
-                    //TODO
+                    loadingDialog.hide();
+                    messages.showError(responseDTO.getError());
                 }
             });
         }catch (IOException e){
             //TODO
         }
-
     }
 
 
     public interface View {
 
-        Activity getActivity();
-
-        /**
-         * Show message to user
-         * @param message
-         */
-        void createMessage(Integer message, Object... args);
+        FragmentActivity getActivity();
 
         /**
          * Refresh list
          */
         void refreshEventRegisterItems();
-
-        /**
-         * Show loading icon
-         */
-        void showLoading();
-
-        /**
-         * Hide loading icon
-         */
-        void hideLoading();
 
         /**
          * Get current round
@@ -240,8 +213,5 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
          * @return
          */
         Long getSelectedSector();
-
-
     }
-
 }

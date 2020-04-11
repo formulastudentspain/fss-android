@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_welcomeFragment_to_raceControlWelcomeFragment"
             app:destination="@id/raceControlWelcomeFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_coneControlWelcomeFragment"
+            app:destination="@id/coneControlWelcomeFragment" />
     </fragment>
     <fragment
         android:id="@+id/briefingFragment"
@@ -100,5 +103,34 @@
             android:name="raceControlArea"
             app:argType="string"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/coneControlWelcomeFragment"
+        tools:layout="@layout/fragment_cone_control_welcome"
+        android:name="es.formulastudent.app.mvp.view.screen.conecontrol.ConeControlWelcomeFragment"
+        android:label="ConeControlWelcomeFragment" >
+        <action
+            android:id="@+id/action_coneControlWelcomeFragment_to_coneControlFragment"
+            app:destination="@id/coneControlFragment"
+            app:popUpTo="@id/welcomeFragment" />
+        <argument
+            android:name="coneControlEvent"
+            app:argType="es.formulastudent.app.mvp.data.model.ConeControlEvent" />
+    </fragment>
+    <fragment
+        android:id="@+id/coneControlFragment"
+        tools:layout="@layout/fragment_cone_control"
+        android:name="es.formulastudent.app.mvp.view.screen.conecontrol.ConeControlFragment"
+        android:label="ConeControlFragment" >
+        <argument
+            android:name="coneControlEvent"
+            app:argType="es.formulastudent.app.mvp.data.model.ConeControlEvent" />
+        <argument
+            android:name="selectedRound"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="selectedSector"
+            app:argType="long" />
     </fragment>
 </navigation>

@@ -1,10 +1,10 @@
 package es.formulastudent.app.mvp.view.screen.conecontrol;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,9 +15,6 @@ import javax.inject.Inject;
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
-import es.formulastudent.app.di.component.DaggerConeControlComponent;
-import es.formulastudent.app.di.module.ContextModule;
-import es.formulastudent.app.di.module.activity.ConeControlModule;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.view.screen.conecontrol.recyclerview.ConeControlAdapter;
 import es.formulastudent.app.mvp.view.screen.general.GeneralActivity;
@@ -62,7 +59,7 @@ public class ConeControlActivity extends GeneralActivity implements ConeControlP
     }
 
     @Override
-    public Activity getActivity(){
+    public FragmentActivity getActivity(){
         return this;
     }
 
@@ -72,12 +69,12 @@ public class ConeControlActivity extends GeneralActivity implements ConeControlP
      */
     protected void setupComponent(AppComponent appComponent, ConeControlEvent ccEvent) {
 
-        DaggerConeControlComponent.builder()
+       /* DaggerConeControlComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(this))
                 .coneControlModule(new ConeControlModule(this, ccEvent))
                 .build()
-                .inject(this);
+                .inject(this); */
     }
 
     private void initViews(){
@@ -109,19 +106,9 @@ public class ConeControlActivity extends GeneralActivity implements ConeControlP
     @Override
     public void refreshEventRegisterItems() {
         ccAdapter.notifyDataSetChanged();
-        this.hideLoading();
     }
 
 
-    @Override
-    public void showLoading() {
-        super.showLoadingDialog();
-    }
-
-    @Override
-    public void hideLoading() {
-        super.hideLoadingDialog();
-    }
 
     @Override
     public String getSelectedRound() {

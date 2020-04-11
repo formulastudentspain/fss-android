@@ -1,7 +1,5 @@
 package es.formulastudent.app.di.module.activity;
 
-import android.content.Context;
-
 import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
@@ -10,6 +8,8 @@ import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
 import es.formulastudent.app.mvp.data.business.mailsender.MailSender;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.view.screen.conecontrol.ConeControlPresenter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class ConeControlModule {
@@ -33,8 +33,11 @@ public class ConeControlModule {
     }
 
     @Provides
-    public ConeControlPresenter providePresenter(ConeControlPresenter.View categoryView, Context context, ConeControlBO coneControlBO, MailSender mailSender) {
-        return new ConeControlPresenter(categoryView, context, coneControlEvent, coneControlBO, mailSender);
+    public ConeControlPresenter providePresenter(ConeControlPresenter.View categoryView,
+                                                 ConeControlBO coneControlBO, MailSender mailSender,
+                                                 LoadingDialog loadingDialog, Messages messages) {
+        return new ConeControlPresenter(categoryView, coneControlEvent, coneControlBO,
+                mailSender, loadingDialog, messages);
     }
 
 

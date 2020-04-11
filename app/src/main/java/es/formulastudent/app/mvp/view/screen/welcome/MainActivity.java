@@ -13,6 +13,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.databinding.ActivityMainBinding;
+import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 
@@ -88,6 +89,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.drawerItemRCEndurance:
                 navController.navigate(WelcomeFragmentDirections
                         .actionWelcomeFragmentToRaceControlWelcomeFragment(RaceControlEvent.ENDURANCE));
+                break;
+            case R.id.drawerItemCCSkidpad:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToConeControlWelcomeFragment(ConeControlEvent.SKIDPAD));
+                break;
+            case R.id.drawerItemCCAutocross:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToConeControlWelcomeFragment(ConeControlEvent.AUTOCROSS));
+                break;
+            case R.id.drawerItemCCEndurance:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToConeControlWelcomeFragment(ConeControlEvent.ENDURANCE));
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
