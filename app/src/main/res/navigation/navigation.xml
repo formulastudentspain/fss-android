@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_welcomeFragment_to_raceAccessFragment"
             app:destination="@id/raceAccessFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_raceControlWelcomeFragment"
+            app:destination="@id/raceControlWelcomeFragment" />
     </fragment>
     <fragment
         android:id="@+id/briefingFragment"
@@ -67,5 +70,34 @@
         <argument
             android:name="eventTypeName"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/raceControlWelcomeFragment"
+        tools:layout="@layout/fragment_race_control_welcome"
+        android:name="es.formulastudent.app.mvp.view.screen.racecontrol.RaceControlWelcomeFragment"
+        android:label="RaceControlWelcomeFragment" >
+        <action
+            android:id="@+id/action_raceControlWelcomeFragment_to_raceControlFragment"
+            app:destination="@id/raceControlFragment" />
+        <argument
+            android:name="raceControlEvent"
+            app:argType="es.formulastudent.app.mvp.data.model.RaceControlEvent" />
+    </fragment>
+    <fragment
+        android:id="@+id/raceControlFragment"
+        tools:layout="@layout/fragment_race_control"
+        android:name="es.formulastudent.app.mvp.view.screen.racecontrol.RaceControlFragment"
+        android:label="RaceControlFragment" >
+        <argument
+            android:name="raceControlEvent"
+            app:argType="es.formulastudent.app.mvp.data.model.RaceControlEvent" />
+        <argument
+            android:name="raceControlRound"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="raceControlArea"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

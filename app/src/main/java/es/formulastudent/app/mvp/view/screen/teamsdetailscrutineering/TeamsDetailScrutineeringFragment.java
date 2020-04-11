@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
@@ -65,6 +66,9 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements TeamsD
 
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+
+        //Remove elevation from Action bar
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setElevation(0);
 
         return view;
     }

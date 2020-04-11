@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".mvp.view.screen.racecontrol.RaceControlWelcomeActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:text="Race Control"
+        android:textColor="@color/md_grey_600"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/event_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Endurance"
+        android:textColor="@color/md_grey_600"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/endurance_buttons_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="8dp"
+            android:text="Select round"
+            android:textColor="@color/primary"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/round_1_container"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/rc_state_rounded_borders_selector"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/round_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/round_2_container"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/rc_state_rounded_borders_selector"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/round_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/round_3_container"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/rc_state_rounded_borders_selector"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/round_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="F"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="8dp"
+            android:text="Select area"
+            android:textColor="@color/primary"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/area_wa_container"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:background="@drawable/rc_state_rounded_borders_selector"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/area_wa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WA"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/area_scr_container"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/rc_state_rounded_borders_selector"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/area_scr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SCR"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/area_r1_container"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/rc_state_rounded_borders_selector"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/area_r1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="R1"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/area_r2_container"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/rc_state_rounded_borders_selector"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/area_r2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="R2"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/area_all_container"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/rc_state_rounded_borders_selector"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/area_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ALL"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:layout_weight="1"
+        android:gravity="center|bottom">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="START"
+            android:textColor="@color/md_grey_300"
+            app:backgroundTint="@color/md_white_1000"
+            app:rippleColor="@color/md_grey_300"
+            app:strokeColor="@color/md_grey_300" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/go_button"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="START"
+            android:textColor="@color/md_red_500"
+            app:backgroundTint="@color/md_white_1000"
+            app:rippleColor="@color/md_red_500"
+            app:strokeColor="@color/md_red_500" />
+    </RelativeLayout>
+</LinearLayout>
+

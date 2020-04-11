@@ -1,13 +1,17 @@
 package es.formulastudent.app.mvp.view.screen.racecontrol;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,61 +27,52 @@ import es.formulastudent.app.di.component.DaggerRaceControlComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.RaceControlModule;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
-import es.formulastudent.app.mvp.view.screen.general.GeneralActivity;
 import es.formulastudent.app.mvp.view.screen.racecontrol.recyclerview.RaceControlAdapter;
 
 
-public class
-RaceControlActivity extends GeneralActivity implements
+public class RaceControlFragment extends Fragment implements
         RaceControlPresenter.View, View.OnClickListener{
-
-    RaceControlEvent rcEvent; //Endurance, AutoX, Acceleration, Skidpad
-    String raceRound; //Round 1, Round 2 or Final
-    String rcArea;
-
-    //Real-time register listener
-    ListenerRegistration registerListener;
-
 
     @Inject
     RaceControlPresenter presenter;
 
-    //View components
-    private RecyclerView recyclerView;
+    private String raceRound; //Round 1, Round 2 or Final
+    private String rcArea;
+
+    //Real-time register listener
+    private ListenerRegistration registerListener;
+
     private RaceControlAdapter rcAdapter;
     private FloatingActionButton buttonAddVehicle;
     private MenuItem filterItem;
-    private TextView areaTextView;
-    private TextView roundTextView;
-
-
-
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_race_control);
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Get the event type (Endurance, AutoX...)
-        RaceControlEvent rcEvent = (RaceControlEvent) getIntent().getSerializableExtra("eventType");
-        this.rcEvent = rcEvent;
-
-        //Only if ENDURANCE
-        if(rcEvent.equals(RaceControlEvent.ENDURANCE)){
-            String raceRound = getIntent().getStringExtra("rc_round");
-            this.raceRound = raceRound;
-
-            String rcArea = getIntent().getStringExtra("rc_area");
-            this.rcArea = rcArea;
-        }
-
-        setupComponent(FSSApp.getApp().component(), rcEvent, raceRound, rcArea);
-        initViews();
     }
 
     @Override
-    public Activity getActivity(){
-        return this;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_race_control, container, false);
+
+        //Get the event type (Endurance, AutoX...)
+        assert getArguments() != null;
+        RaceControlFragmentArgs args = RaceControlFragmentArgs.fromBundle(getArguments());
+        RaceControlEvent rcEvent = args.getRaceControlEvent();
+
+        if(rcEvent.equals(RaceControlEvent.ENDURANCE)){
+            this.raceRound = args.getRaceControlRound();
+            this.rcArea = args.getRaceControlArea();
+        }
+
+        setupComponent(FSSApp.getApp().component(), rcEvent, raceRound, rcArea);
+        setHasOptionsMenu(true);
+
+        //Remove elevation from Action bar
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setElevation(0);
+
+        initViews(view);
+        return view;
     }
 
     /**
@@ -85,22 +80,20 @@ RaceControlActivity extends GeneralActivity implements
      * @param appComponent
      */
     protected void setupComponent(AppComponent appComponent, RaceControlEvent rcEvent, String raceType, String rcArea) {
-
         DaggerRaceControlComponent.builder()
                 .appComponent(appComponent)
-                .contextModule(new ContextModule(this))
+                .contextModule(new ContextModule(getContext(), getActivity()))
                 .raceControlModule(new RaceControlModule(this, rcEvent, raceType, rcArea))
                 .build()
                 .inject(this);
     }
 
-    private void initViews(){
-
-        //Recycler view
-        recyclerView = findViewById(R.id.recyclerView);
-        rcAdapter = new RaceControlAdapter(presenter.getEventRegisterList(), this, presenter, presenter);
+    private void initViews(View view){
+        //View components
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        rcAdapter = new RaceControlAdapter(presenter.getEventRegisterList(), getContext(), presenter, presenter);
         recyclerView.setAdapter(rcAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -119,47 +112,22 @@ RaceControlActivity extends GeneralActivity implements
         });
 
         //Add vehicle button
-        buttonAddVehicle = findViewById(R.id.button_add_vehicle);
+        buttonAddVehicle = view.findViewById(R.id.button_add_vehicle);
         buttonAddVehicle.setOnClickListener(this);
 
         //Round
-        roundTextView = findViewById(R.id.round_number);
+        TextView roundTextView = view.findViewById(R.id.round_number);
         roundTextView.setText(raceRound == null ? "-" : raceRound);
 
         //Area
-        areaTextView = findViewById(R.id.area);
+        TextView areaTextView = view.findViewById(R.id.area);
         areaTextView.setText(rcArea == null ? "-" : rcArea);
-
-        //Add toolbar
-        setToolbarTitle(getString(rcEvent.getActivityTitle()));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
     }
 
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        rcAdapter.notifyDataSetChanged();
-    }
-
-
-    @Override
-    public void showLoading() {
-        super.showLoadingDialog();
-    }
-
-    @Override
-    public void hideLoading() {
-        super.hideLoadingDialog();
-    }
 
     @Override
     public void refreshEventRegisterItems() {
         rcAdapter.notifyDataSetChanged();
-        this.hideLoading();
     }
 
 
@@ -187,57 +155,18 @@ RaceControlActivity extends GeneralActivity implements
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_dynamic_event, menu);
-
-        //Search menu item
         filterItem = menu.findItem(R.id.filter_results);
-        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                presenter.filterIconClicked();
-                return true;
-            }
+        filterItem.setOnMenuItemClickListener(menuItem -> {
+            presenter.filterIconClicked();
+            return true;
         });
-
-        return true;
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (rcAdapter != null) {
-            rcAdapter.saveStates(outState);
-        }
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (rcAdapter != null) {
-            rcAdapter.restoreStates(savedInstanceState);
-        }
-    }
-
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
-        return true;
     }
 
     @Override
     public void onStop(){
         super.onStop();
-
-        //Remove realTime listener
         registerListener.remove();
     }
 

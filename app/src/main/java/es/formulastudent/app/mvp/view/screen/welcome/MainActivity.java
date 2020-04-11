@@ -14,6 +14,7 @@ import androidx.navigation.ui.NavigationUI;
 import es.formulastudent.app.R;
 import es.formulastudent.app.databinding.ActivityMainBinding;
 import es.formulastudent.app.mvp.data.model.EventType;
+import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -75,6 +76,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .actionWelcomeFragmentToRaceAccessFragment(
                                 EventType.ENDURANCE_EFFICIENCY,
                                 EventType.ENDURANCE_EFFICIENCY.getName()));
+                break;
+            case R.id.drawerItemRCSkidpad:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToRaceControlWelcomeFragment(RaceControlEvent.SKIDPAD));
+                break;
+            case R.id.drawerItemRCAutocross:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToRaceControlWelcomeFragment(RaceControlEvent.AUTOCROSS));
+                break;
+            case R.id.drawerItemRCEndurance:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToRaceControlWelcomeFragment(RaceControlEvent.ENDURANCE));
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

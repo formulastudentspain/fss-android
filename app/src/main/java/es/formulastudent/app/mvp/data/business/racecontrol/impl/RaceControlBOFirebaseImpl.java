@@ -28,17 +28,25 @@ import es.formulastudent.app.mvp.data.model.RaceControlRegisterEndurance;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.RaceControlTeamDTO;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
     private FirebaseFirestore firebaseFirestore;
     private TeamBO teamBO;
     private ConeControlBO coneControlBO;
+    private LoadingDialog loadingDialog;
+    private Messages messages;
 
-    public RaceControlBOFirebaseImpl(FirebaseFirestore firebaseFirestore, TeamBO teamBO, ConeControlBO coneControlBO) {
+    public RaceControlBOFirebaseImpl(FirebaseFirestore firebaseFirestore, TeamBO teamBO, 
+                                     ConeControlBO coneControlBO, LoadingDialog loadingDialog, 
+                                     Messages messages) {
         this.firebaseFirestore = firebaseFirestore;
         this.teamBO = teamBO;
         this.coneControlBO = coneControlBO;
+        this.loadingDialog = loadingDialog;
+        this.messages = messages;
     }
 
     @Override
@@ -78,7 +86,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
             ResponseDTO responseDTO = new ResponseDTO();
 
             if (e != null) {
-                responseDTO.setError(R.string.rc_realtime_error_retrieving_message);
+                messages.showError(R.string.rc_realtime_error_retrieving_message);
                 callback.onFailure(responseDTO);
                 e.printStackTrace();
             }
@@ -109,19 +117,17 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
     @Override
     public void getRaceControlTeams(final Map<String, Object> filters, final BusinessCallback callback) {
-
+        ResponseDTO response = new ResponseDTO();
 
         //First, retrieve all the teams depending on the race type
+        loadingDialog.show();
         teamBO.retrieveTeams(null, null, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-
                 final List<Team> teams = (List<Team>) responseDTO.getData();
 
                 //Second, retrieve the existing Endurance registers
                 getRaceControlRegisters(filters, new BusinessCallback() {
-
-                    ResponseDTO response = new ResponseDTO();
 
                     @Override
                     public void onSuccess(ResponseDTO responseDTO) {
@@ -147,28 +153,33 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
                         response.setData(resultList);
                         callback.onSuccess(response);
+                        loadingDialog.hide();
                     }
 
                     @Override
                     public void onFailure(ResponseDTO responseDTO) {
-                        responseDTO.setError(R.string.rc_teams_error_message);
+                        messages.showError(R.string.rc_teams_error_message);
                         callback.onFailure(responseDTO);
+                        loadingDialog.hide();
                     }
                 });
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                responseDTO.setError(R.string.rc_teams_error_message);
+                messages.showError(R.string.rc_teams_error_message);
                 callback.onFailure(responseDTO);
+                loadingDialog.hide();
             }
         });
     }
 
     @Override
-    public void createRaceControlRegister(List<RaceControlTeamDTO> raceControlTeamDTOList, RaceControlEvent eventType, String raceRound, Long currentMaxIndex, final BusinessCallback callback) {
+    public void createRaceControlRegister(List<RaceControlTeamDTO> raceControlTeamDTOList,
+                                          RaceControlEvent eventType, String raceRound, Long currentMaxIndex,
+                                          final BusinessCallback callback) {
 
-
+        loadingDialog.show();
         final ResponseDTO responseDTO = new ResponseDTO();
         Date now = Calendar.getInstance().getTime();
 
@@ -176,7 +187,6 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         WriteBatch batch = firebaseFirestore.batch();
 
         for (RaceControlTeamDTO item : raceControlTeamDTOList) {
-
             currentMaxIndex++;
 
             DocumentReference ref = firebaseFirestore
@@ -236,26 +246,26 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                                 });
                     }
 
-                    responseDTO.setInfo(R.string.rc_create_info_message);
+                    messages.showInfo(R.string.rc_create_info_message);
                     callback.onSuccess(responseDTO);
-
+                    loadingDialog.hide();
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.rc_create_error_message);
+                    messages.showError(R.string.rc_create_error_message);
                     callback.onFailure(responseDTO);
+                    loadingDialog.hide();
                 });
     }
 
 
     @Override
     public void getRaceControlRegisters(Map<String, Object> filters, final BusinessCallback callback) {
-
-        //Response object
         final ResponseDTO responseDTO = new ResponseDTO();
 
         //Get Event type
         RaceControlEvent event = (RaceControlEvent) filters.get("eventType");
 
+        loadingDialog.show();
         firebaseFirestore.collection(event.getFirebaseTable())
                 .orderBy(RaceControlRegisterEndurance.ORDER, Query.Direction.ASCENDING)
                 .get()
@@ -269,20 +279,22 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                     }
 
                     responseDTO.setData(result);
-                    responseDTO.setInfo(R.string.rc_info_retrieving_message);
+                    messages.showInfo(R.string.rc_info_retrieving_message);
                     callback.onSuccess(responseDTO);
+                    loadingDialog.hide();
 
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.rc_error_retrieving_message);
+                    messages.showError(R.string.rc_error_retrieving_message);
                     callback.onFailure(responseDTO);
+                    loadingDialog.hide();
                 });
 
     }
 
     @Override
-    public void updateRaceControlState(RaceControlRegister register, RaceControlEvent event, RaceControlState newState, final BusinessCallback callback) {
-
+    public void updateRaceControlState(RaceControlRegister register, RaceControlEvent event,
+                                       RaceControlState newState, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
         Date now = Calendar.getInstance().getTime();
 
@@ -300,31 +312,33 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         }
 
         //Call Firebase to update
+        loadingDialog.show();
         firebaseFirestore.collection(event.getFirebaseTable()).document(register.getID())
                 .update(data)
                 .addOnSuccessListener(aVoid -> {
-                    responseDTO.setInfo(R.string.rc_info_update_message);
+                    messages.showInfo(R.string.rc_info_update_message);
 
                     //Enable/disable cones for the selected car
                     coneControlBO.enableOrDisableConeControlRegistersByTeam(event.getConeControlEvent(), register.getCarNumber(), newState, new BusinessCallback() {
                         @Override
                         public void onSuccess(ResponseDTO responseDTO) {
                             //TODO add things
+                            loadingDialog.hide();
                         }
 
                         @Override
                         public void onFailure(ResponseDTO responseDTO) {
                             //TODO add things
+                            loadingDialog.hide();
                         }
                     });
-
                     callback.onSuccess(responseDTO);
 
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setInfo(R.string.rc_error_update_message);
+                    messages.showInfo(R.string.rc_error_update_message);
                     callback.onFailure(responseDTO);
-
+                    loadingDialog.hide();
                 });
     }
 }

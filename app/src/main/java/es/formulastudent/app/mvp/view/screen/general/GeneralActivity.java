@@ -42,7 +42,6 @@ import es.formulastudent.app.mvp.view.screen.conecontrol.ConeControlWelcomeActiv
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityExitDialog;
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.screen.login.LoginActivity;
-import es.formulastudent.app.mvp.view.screen.racecontrol.RaceControlWelcomeActivity;
 import es.formulastudent.app.mvp.view.screen.statistics.StatisticsActivity;
 import es.formulastudent.app.mvp.view.screen.teammember.TeamMemberActivity;
 import es.formulastudent.app.mvp.view.screen.welcome.MainActivity;
@@ -588,21 +587,9 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }else if(drawerItem.getIdentifier() == 10017) { //Admin operations
             intent = new Intent(this, AdminOpsActivity.class);
 
-        }else if(drawerItem.getIdentifier() == 10021){ //Race Control Endurance
-            intent = new Intent(this, RaceControlWelcomeActivity.class);
-            intent.putExtra("eventType", RaceControlEvent.ENDURANCE);
-
         } else if(drawerItem.getIdentifier() == 80021){ //Cone Control Endurance
             intent = new Intent(this, ConeControlWelcomeActivity.class);
             intent.putExtra("eventType", ConeControlEvent.ENDURANCE);
-
-        }else if(drawerItem.getIdentifier() == 10022){ //Race Control Autocross
-            intent = new Intent(this, RaceControlWelcomeActivity.class);
-            intent.putExtra("eventType", RaceControlEvent.AUTOCROSS);
-
-        }else if(drawerItem.getIdentifier() == 10023){ //Race Control Skidpad
-            intent = new Intent(this, RaceControlWelcomeActivity.class);
-            intent.putExtra("eventType", RaceControlEvent.SKIDPAD);
 
         } else if(drawerItem.getIdentifier() == 80022){ //Cone Control Autocross
             intent = new Intent(this, ConeControlWelcomeActivity.class);

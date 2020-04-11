@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
@@ -42,8 +43,11 @@ public class TeamsDetailFeeFragment extends Fragment implements TeamsDetailFeePr
 
         //Get selected team
         assert getArguments() != null;
-        //TeamsDetailScrutineeringFragmentArgs args = TeamsDetailFeeActivityArgs.fromBundle(getArguments());
-        //team = args.getSelectedTeam();
+        TeamsDetailFeeFragmentArgs args = TeamsDetailFeeFragmentArgs.fromBundle(getArguments());
+        team = args.getSelectedTeam();
+
+        //Remove elevation from Action bar
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setElevation(0);
 
         initViews(view);
         return view;

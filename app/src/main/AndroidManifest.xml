@@ -65,14 +65,6 @@
         </activity>
 
         <activity
-            android:name=".mvp.view.screen.racecontrol.RaceControlActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.screen.racecontrol.RaceControlWelcomeActivity">
-        </activity>
-
-        <activity
             android:name=".mvp.view.screen.user.UserActivity">
         </activity>
 

@@ -1,8 +1,8 @@
 package es.formulastudent.app.mvp.view.screen.racecontrol;
 
-import android.app.Activity;
 import android.content.Context;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.firebase.firestore.ListenerRegistration;
@@ -78,12 +78,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
             registration.remove();
         }
 
-        //Show loading
-        view.showLoading();
-
-        //Filters
         Map<String, Object> filters = new HashMap<>();
-
         List<String> states = new ArrayList<>();
         if (RaceControlEvent.ENDURANCE.equals(rcEventType)) {
             states.addAll(this.getEnduranceStates());
@@ -108,7 +103,6 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
         filters.put("carNumber", selectedCarNumber);
         filters.put("showFinishedCars", showFinishedCars);
 
-
         //Retrieve race control registers in real-time
         ListenerRegistration registration = raceControlBO.getRaceControlRegistersRealTime(filters, new BusinessCallback() {
 
@@ -119,14 +113,10 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                //Show error message
-                view.createMessage(responseDTO.getError());
-            }
+            public void onFailure(ResponseDTO responseDTO) { }
         });
 
         this.registration = registration;
-
         return registration;
     }
 
@@ -196,9 +186,6 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
     void openCreateRegisterDialog() {
 
-        //Show loading
-        view.showLoading();
-
         Map<String, Object> filters = new HashMap<>();
         filters.put("raceRound", raceType);
         filters.put("eventType", rcEventType);
@@ -211,20 +198,14 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
                 List<RaceControlTeamDTO> raceControlTeamsDTO = (List<RaceControlTeamDTO>) responseDTO.getData();
 
                 //With all the information, we open the dialog
-                FragmentManager fm = ((RaceControlActivity) view.getActivity()).getSupportFragmentManager();
+                FragmentManager fm = view.getActivity().getSupportFragmentManager();
                 CreateRegisterDialog createUserDialog = CreateRegisterDialog
                         .newInstance(RaceControlPresenter.this, raceControlTeamsDTO, context);
                 createUserDialog.show(fm, "rc_endurance_create_dialog");
-
-                //Hide loading
-                view.hideLoading();
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                //Show error message
-                view.createMessage(responseDTO.getError());
-            }
+            public void onFailure(ResponseDTO responseDTO) { }
         });
     }
 
@@ -257,7 +238,8 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
             if (!loggedUser.getRole().equals(UserRole.ADMINISTRATOR)
                     && !loggedUser.getRole().equals(UserRole.OFFICIAL_MARSHALL)) {
-                view.createMessage(R.string.rc_info_only_officials);
+                //TODO
+                // view.createMessage(R.string.rc_info_only_officials);
                 return;
             }
         }
@@ -273,19 +255,18 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 view.closeUpdatedRow(register.getID());
-                view.createMessage(R.string.rc_update_state_success_message, oldState, newState.getAcronym());
+                //TODO
+                // view.createMessage(R.string.rc_update_state_success_message, oldState, newState.getAcronym());
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
-            }
+            public void onFailure(ResponseDTO responseDTO) { }
         });
     }
 
 
     void filterIconClicked() {
-        FragmentManager fm = ((RaceControlActivity) view.getActivity()).getSupportFragmentManager();
+        FragmentManager fm = view.getActivity().getSupportFragmentManager();
         FilteringRegistersDialog createFilteringDialog = FilteringRegistersDialog
                 .newInstance(RaceControlPresenter.this, selectedCarNumber, showFinishedCars);
         createFilteringDialog.show(fm, "rc_filtering_dialog");
@@ -299,20 +280,14 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
 
     public void createRaceControlRegisters(List<RaceControlTeamDTO> raceControlTeamDTOList, Long currentMaxIndex) {
-
         raceControlBO.createRaceControlRegister(raceControlTeamDTOList, rcEventType, raceType, currentMaxIndex, new BusinessCallback() {
             @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getInfo());
-            }
+            public void onSuccess(ResponseDTO responseDTO) { }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
-            }
+            public void onFailure(ResponseDTO responseDTO) { }
         });
     }
-
 
 
 
@@ -325,7 +300,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
             RaceControlRegister register = filteredRaceControlRegisterList.get(position);
 
             //Opening officials raceControl dialog
-            FragmentManager fm = ((RaceControlActivity) view.getActivity()).getSupportFragmentManager();
+            FragmentManager fm = view.getActivity().getSupportFragmentManager();
             UpdatingRegistersDialog createUpdatingDialog = UpdatingRegistersDialog
                     .newInstance(RaceControlPresenter.this, register, rcEventType);
             createUpdatingDialog.show(fm, "rc_updating_dialog");
@@ -338,24 +313,7 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
     public interface View {
 
-        Activity getActivity();
-
-        /**
-         * Show message to user
-         *
-         * @param message
-         */
-        void createMessage(Integer message, Object... args);
-
-        /**
-         * Show loading icon
-         */
-        void showLoading();
-
-        /**
-         * Hide loading icon
-         */
-        void hideLoading();
+        FragmentActivity getActivity();
 
         /**
          * Refresh items in list

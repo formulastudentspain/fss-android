@@ -123,8 +123,10 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public RaceControlBO provideRaceControlBO(FirebaseFirestore firebaseFirestore, TeamBO teamBO, ConeControlBO coneControlBO) {
-        return new RaceControlBOFirebaseImpl(firebaseFirestore, teamBO, coneControlBO);
+    public RaceControlBO provideRaceControlBO(FirebaseFirestore firebaseFirestore, TeamBO teamBO,
+                                              ConeControlBO coneControlBO, LoadingDialog loadingDialog,
+                                              Messages messages) {
+        return new RaceControlBOFirebaseImpl(firebaseFirestore, teamBO, coneControlBO, loadingDialog, messages);
     }
 
     /**
