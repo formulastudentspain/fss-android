@@ -36,7 +36,7 @@ public class StepperView extends LinearLayout {
         setClipChildren( true );
         setOrientation( VERTICAL );
 
-        LayoutInflater.from( context ).inflate( R.layout.activity_teams_fee_stepper_item, this, true );
+        LayoutInflater.from( context ).inflate( R.layout.fragment_teams_fee_stepper_item, this, true );
     }
 
     @Nullable

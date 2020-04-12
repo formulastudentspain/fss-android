@@ -33,7 +33,6 @@ import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.adminoperations.AdminOpsActivity;
@@ -41,7 +40,6 @@ import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityExitD
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.screen.login.LoginActivity;
 import es.formulastudent.app.mvp.view.screen.statistics.StatisticsActivity;
-import es.formulastudent.app.mvp.view.screen.teammember.TeamMemberActivity;
 import es.formulastudent.app.mvp.view.screen.welcome.MainActivity;
 import info.androidhive.fontawesome.FontDrawable;
 
@@ -572,10 +570,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         }
 
         Intent intent = null;
-        if(drawerItem.getIdentifier() == 10020){ //TeamMember management
-            intent = new Intent(this, TeamMemberActivity.class);
-
-        }else if(drawerItem.getIdentifier() == 30006){ //Logout
+       if(drawerItem.getIdentifier() == 30006){ //Logout
             FirebaseAuth.getInstance().signOut();
             intent = new Intent(this, LoginActivity.class);
 
@@ -584,18 +579,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         }else if(drawerItem.getIdentifier() == 10017) { //Admin operations
             intent = new Intent(this, AdminOpsActivity.class);
-
-        } else if(drawerItem.getIdentifier() == 80021){ //Cone Control Endurance
-            intent = new Intent(this, ConeControlWelcomeActivity.class);
-            intent.putExtra("eventType", ConeControlEvent.ENDURANCE);
-
-        } else if(drawerItem.getIdentifier() == 80022){ //Cone Control Autocross
-            intent = new Intent(this, ConeControlWelcomeActivity.class);
-            intent.putExtra("eventType", ConeControlEvent.AUTOCROSS);
-
-        } else if(drawerItem.getIdentifier() == 80023){ //Cone Control Skidpad
-            intent = new Intent(this, ConeControlWelcomeActivity.class);
-            intent.putExtra("eventType", ConeControlEvent.SKIDPAD);
 
         }
 

@@ -4,17 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/md_grey_100"
-    tools:context=".mvp.view.screen.teammemberdetail.TeamMemberDetailActivity">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    android:orientation="vertical"
+    tools:context=".mvp.view.screen.welcome.MainActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -32,85 +24,82 @@
             android:paddingTop="8dp"
             android:paddingBottom="16dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/user_detail_profile_image"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:src="@color/md_black_1000"
-            app:civ_border_color="@color/md_white_1000"
-            app:civ_border_width="2dp" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/user_detail_profile_image"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:src="@color/md_black_1000"
+                    app:civ_border_color="@color/md_white_1000"
+                    app:civ_border_width="2dp" />
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignBottom="@id/user_detail_profile_image"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="48dp"
-            android:alpha="0.5"
-            android:src="@drawable/ic_camera" />
-    </RelativeLayout>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignBottom="@id/user_detail_profile_image"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="48dp"
+                    android:alpha="0.5"
+                    android:src="@drawable/ic_camera" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/user_detail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="David Pérez"
+                android:textColor="@color/accent"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/user_detail_team"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Euskal Herriko Scuderia" />
 
 
-    <TextView
-        android:id="@+id/user_detail_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:text="David Pérez"
-        android:textColor="@color/accent"
-        android:textSize="24sp" />
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/user_roles_chip_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                app:singleSelection="true">
 
-    <TextView
-        android:id="@+id/user_detail_team"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Euskal Herriko Scuderia" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipDriver"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Driver"
+                    app:chipBackgroundColor="@color/md_red_50" />
 
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipEso"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ESO"
+                    app:chipBackgroundColor="@color/md_green_50" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/user_roles_chip_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipDriver"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Driver"
-            app:chipBackgroundColor="@color/md_red_50" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipEso"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ESO"
-            app:chipBackgroundColor="@color/md_green_50" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipAsr"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ASR"
-            app:chipBackgroundColor="@color/md_blue_50" />
-    </com.google.android.material.chip.ChipGroup>
-
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAsr"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ASR"
+                    app:chipBackgroundColor="@color/md_blue_50" />
+            </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -126,7 +115,6 @@
             android:orientation="vertical"
             android:paddingTop="8dp"
             android:paddingBottom="16dp">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -180,7 +168,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="Driving license" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -230,20 +217,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="Autonomous vehicle certificate" />
-
             </LinearLayout>
         </LinearLayout>
-
-
     </androidx.cardview.widget.CardView>
-
-
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="16dp"
-        android:background="@color/md_grey_200"/> -->
-
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -260,16 +236,14 @@
             android:paddingTop="8dp"
             android:paddingBottom="16dp">
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="8dp"
-                android:textSize="16sp"
                 android:text="Last briefing"
+                android:textSize="16sp"
                 android:textStyle="bold" />
-
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -293,13 +267,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text=">24 hours ago" />
-
             </LinearLayout>
         </LinearLayout>
-
-
     </androidx.cardview.widget.CardView>
-
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -322,6 +292,4 @@
             android:layout_height="wrap_content"
             android:text="Not registered" />
     </LinearLayout>
-
-
 </LinearLayout>

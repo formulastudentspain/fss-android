@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mvp.view.screen.teammember.TeamMemberActivity">
+    tools:context=".mvp.view.screen.welcome.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/activity_toolbar" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/search_user_field"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="16dp"
-                android:paddingBottom="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/activity_user_list_filter_input"
+                android:hint="Search team member"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:paddingStart="16dp"
                 android:paddingTop="8dp"
                 android:paddingEnd="8dp"
-                android:paddingStart="16dp"
-                android:maxLines="1"
-                android:inputType="textPersonName"
-                android:hint="Search team member"
-                android:background="@drawable/activity_user_list_filter_input"/>
+                android:paddingBottom="8dp" />
 
             <ImageView
                 android:id="@+id/teamMemberSearchNFC"
@@ -41,48 +38,45 @@
                 android:layout_height="40dp"
                 android:layout_marginEnd="16dp"
                 android:scaleType="fitXY"
-                android:visibility="gone"
-                android:src="@drawable/ic_user_nfc_not_registered"/>
-
+                android:src="@drawable/ic_user_nfc_not_registered"
+                android:visibility="gone" />
         </LinearLayout>
-
-
 
         <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
-            app:singleSelection="true"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipBackgroundColor="@color/material_chip_background"
-                android:text="All"/>
+                android:text="All"
+                app:chipBackgroundColor="@color/material_chip_background" />
 
             <com.google.android.material.chip.Chip
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipBackgroundColor="@color/material_chip_background"
-                android:text="Staff"/>
+                android:text="Staff"
+                app:chipBackgroundColor="@color/material_chip_background" />
 
             <com.google.android.material.chip.Chip
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipBackgroundColor="@color/material_chip_background"
-                android:text="Drivers"/>
+                android:text="Drivers"
+                app:chipBackgroundColor="@color/material_chip_background" />
 
             <com.google.android.material.chip.Chip
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:chipBackgroundColor="@color/material_chip_background"
-                android:text="Team managers"/>
+                android:text="Team managers"
+                app:chipBackgroundColor="@color/material_chip_background" />
 
         </com.google.android.material.chip.ChipGroup>
 
@@ -95,11 +89,9 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clipToPadding="false"/>
-
+                android:clipToPadding="false"
+                tools:listitem="@layout/fragment_team_member_list_item" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -107,8 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="bottom|center_horizontal"
-        android:src="@drawable/ic_user_list_add"
-        android:layout_margin="16dp"/>
-
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_user_list_add" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

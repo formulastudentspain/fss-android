@@ -68,7 +68,7 @@ public class EgressChronoActivity extends GeneralActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_prescrutineering_detail);
+        setContentView(R.layout.activity_egress_chono);
         super.onCreate(savedInstanceState);
 
         //Get data from previous activity

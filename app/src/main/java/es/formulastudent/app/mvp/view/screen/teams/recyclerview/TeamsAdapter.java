@@ -48,7 +48,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         View view;
 
-        view = mLayoutInflater.inflate(R.layout.activity_teams_item, parent, false);
+        view = mLayoutInflater.inflate(R.layout.fragment_teams_item, parent, false);
         return new TeamsViewHolder(view, clickListener);
 
     }

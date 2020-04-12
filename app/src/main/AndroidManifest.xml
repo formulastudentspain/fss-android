@@ -36,18 +36,6 @@
         </activity>
 
         <activity
-            android:name=".mvp.view.screen.teammember.TeamMemberActivity"
-            android:label="Formula Student Spain"
-            android:launchMode="singleTop">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.screen.teammemberdetail.TeamMemberDetailActivity"
-            android:label="User detail"
-            android:launchMode="singleTop">
-        </activity>
-
-        <activity
             android:name=".mvp.view.screen.egresschrono.EgressChronoActivity"
             android:label="Egress chrono"
             android:launchMode="singleTop">
@@ -68,9 +56,6 @@
             android:name=".mvp.view.screen.qrreader.QRReaderActivity">
         </activity>
 
-        <activity
-            android:name=".mvp.view.screen.userdetail.UserDetailActivity">
-        </activity>
         <activity
             android:name=".mvp.view.screen.conecontrolstats.ConeControlStatsActivity">
         </activity>

@@ -48,7 +48,7 @@ public class EventRegistersAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         viewBinderHelper.setOpenOnlyOne(true);
         View view;
 
-        view = mLayoutInflater.inflate(R.layout.activity_dynamic_event_list_item, parent, false);
+        view = mLayoutInflater.inflate(R.layout.fragment_dynamic_event_list_item, parent, false);
         return new EventRegistersViewHolder(view, clickListener, viewType);
 
     }

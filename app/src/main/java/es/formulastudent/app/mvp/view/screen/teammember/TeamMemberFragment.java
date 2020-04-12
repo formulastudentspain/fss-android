@@ -3,14 +3,20 @@ package es.formulastudent.app.mvp.view.screen.teammember;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -28,38 +34,32 @@ import es.formulastudent.app.di.component.DaggerTeamMemberListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.TeamMemberListModule;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.screen.general.GeneralActivity;
+import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.screen.teammember.dialog.CreateEditTeamMemberDialog;
 import es.formulastudent.app.mvp.view.screen.teammember.dialog.FilterTeamMembersDialog;
 import es.formulastudent.app.mvp.view.screen.teammember.recyclerview.TeamMemberListAdapter;
 
-
-public class TeamMemberActivity extends GeneralActivity implements TeamMemberPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
-
+public class TeamMemberFragment extends Fragment implements  TeamMemberPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     TeamMemberPresenter presenter;
 
-    //View components
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView recyclerView;
     private TeamMemberListAdapter teamMemberListAdapter;
     private FloatingActionButton buttonAddUser;
     private EditText searchUser;
-    private ImageView searchByNFC;
-
     private MenuItem filterItem;
 
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        setupComponent(FSSApp.getApp().component());
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_team_member_list);
-        super.onCreate(savedInstanceState);
-
-        initViews();
-        setSupportActionBar(toolbar);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view =  inflater.inflate(R.layout.fragment_team_member, container, false);
+        initViews(view);
+        return view;
     }
 
     /**
@@ -67,43 +67,31 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
      * @param appComponent
      */
     protected void setupComponent(AppComponent appComponent) {
-
         DaggerTeamMemberListComponent.builder()
                 .appComponent(appComponent)
-                .contextModule(new ContextModule(this))
+                .contextModule(new ContextModule(getContext(), getActivity()))
                 .teamMemberListModule(new TeamMemberListModule(this))
                 .build()
                 .inject(this);
     }
 
     @Override
-    protected void onResume(){
+    public void onResume(){
         super.onResume();
         searchUser.setText("");
         presenter.retrieveTeamMembers();
     }
 
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        drawer.setSelection(mDrawerIdentifier, false);
-    }
-
-
-    private void initViews(){
-
-        //Add drawer
-        addDrawer();
-        mDrawerIdentifier = 10020L;
+    private void initViews(View view){
 
         //Recycler view
-        mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
+        //View components
+        SwipeRefreshLayout mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        recyclerView = findViewById(R.id.recyclerView);
-        teamMemberListAdapter = new TeamMemberListAdapter(presenter.getUserItemList(), this, presenter);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        teamMemberListAdapter = new TeamMemberListAdapter(presenter.getUserItemList(), getContext(), presenter);
         recyclerView.setAdapter(teamMemberListAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -122,17 +110,14 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
         });
 
         //Add user button
-        buttonAddUser = findViewById(R.id.button_add_user);
+        buttonAddUser = view.findViewById(R.id.button_add_user);
         buttonAddUser.setOnClickListener(this);
 
         //Search user edit text
-        searchUser = findViewById(R.id.search_user_field);
+        searchUser = view.findViewById(R.id.search_user_field);
         searchUser.addTextChangedListener(this);
-        searchByNFC = findViewById(R.id.teamMemberSearchNFC);
+        ImageView searchByNFC = view.findViewById(R.id.teamMemberSearchNFC);
         searchByNFC.setOnClickListener(this);
-
-        //Add toolbar title
-        setToolbarTitle(getString(R.string.activity_team_members_title));
     }
 
     @Override
@@ -147,44 +132,18 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_dynamic_event, menu);
-
-        //Search menu item
         filterItem = menu.findItem(R.id.filter_results);
-        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                presenter.filterIconClicked();
-                return false;
-            }
+        filterItem.setOnMenuItemClickListener(menuItem -> {
+            presenter.filterIconClicked();
+            return false;
         });
-
-        return true;
     }
-
 
     @Override
     public void refreshUserItems() {
         teamMemberListAdapter.notifyDataSetChanged();
-        this.hideLoading();
-    }
-
-    @Override
-    public void finishView() {
-        this.finish();
-    }
-
-    @Override
-    public void showLoading() {
-        super.showLoadingDialog();
-    }
-
-    @Override
-    public void hideLoading() {
-        super.hideLoadingDialog();
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -194,19 +153,27 @@ public class TeamMemberActivity extends GeneralActivity implements TeamMemberPre
         }
     }
 
-
     @Override
     public void showCreateTeamMemberDialog(List<Team> teams) {
-        FragmentManager fm = getSupportFragmentManager();
-        CreateEditTeamMemberDialog createEditTeamMemberDialog = CreateEditTeamMemberDialog.newInstance(presenter, this, teams, null);
+        FragmentManager fm = getParentFragmentManager();
+        CreateEditTeamMemberDialog createEditTeamMemberDialog = CreateEditTeamMemberDialog
+                .newInstance(presenter, getContext(), teams, null);
         createEditTeamMemberDialog.show(fm, "fragment_edit_name");
     }
 
     @Override
     public void showFilteringDialog(List<Team> teams) {
-        FilterTeamMembersDialog filterTeamMembersDialog = FilterTeamMembersDialog.newInstance(presenter,this, teams, presenter.getSelectedTeamToFilter());
-        filterTeamMembersDialog.show(getSupportFragmentManager(), "addCommentDialog");
+        FilterTeamMembersDialog filterTeamMembersDialog = FilterTeamMembersDialog
+                .newInstance(presenter,getContext(), teams, presenter.getSelectedTeamToFilter());
+        filterTeamMembersDialog.show(getParentFragmentManager(), "addCommentDialog");
+    }
 
+    @Override
+    public void openTeamMemberDetailFragment(TeamMember selectedTeamMember, Boolean lastBriefing) {
+        assert getActivity() != null;
+        NavController navController = Navigation.findNavController(getActivity(), R.id.myNavHostFragment);
+        navController.navigate(TeamMemberFragmentDirections
+                .actionTeamMemberFragmentToTeamMemberDetailFragment(selectedTeamMember, lastBriefing));
     }
 
     @Override

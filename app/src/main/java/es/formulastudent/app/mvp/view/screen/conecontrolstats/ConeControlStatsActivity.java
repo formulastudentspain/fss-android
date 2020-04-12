@@ -37,7 +37,7 @@ public class ConeControlStatsActivity extends GeneralActivity implements ConeCon
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_teams_tabs);
+        setContentView(R.layout.fragment_teams_tabs);
         super.onCreate(savedInstanceState);
 
         //Get the event type (Endurance, AutoX, Skidpad, Acceleration)

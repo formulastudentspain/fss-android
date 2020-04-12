@@ -34,7 +34,7 @@ public class SectorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mLayoutInflater = LayoutInflater.from(context);
         View view;
 
-        view = mLayoutInflater.inflate(R.layout.activity_cone_control_sectors_item, parent, false);
+        view = mLayoutInflater.inflate(R.layout.fragment_cone_control_sectors_item, parent, false);
         return new SectorViewHolder(view, clickListener);
 
     }

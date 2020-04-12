@@ -41,7 +41,7 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         View view;
 
-        view = mLayoutInflater.inflate(R.layout.activity_user_list_item, parent, false);
+        view = mLayoutInflater.inflate(R.layout.fragment_user_list_item, parent, false);
         return new UserListViewHolder(view, clickListener);
 
     }

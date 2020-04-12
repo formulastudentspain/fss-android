@@ -41,7 +41,7 @@ public class TeamMemberListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         View view;
 
-        view = mLayoutInflater.inflate(R.layout.activity_team_member_list_item, parent, false);
+        view = mLayoutInflater.inflate(R.layout.fragment_team_member_list_item, parent, false);
         return new TeamMemberListViewHolder(view, clickListener);
 
     }

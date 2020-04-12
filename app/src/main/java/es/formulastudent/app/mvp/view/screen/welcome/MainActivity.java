@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.drawerItemBriefing:
                 navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToBriefingFragment());
                 break;
@@ -106,8 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToUserFragment());
                 break;
             case R.id.drawerItemTeamMembers:
-                navController.navigate(WelcomeFragmentDirections
-                        .actionWelcomeFragmentToConeControlWelcomeFragment(ConeControlEvent.ENDURANCE));
+                navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToTeamMemberFragment());
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

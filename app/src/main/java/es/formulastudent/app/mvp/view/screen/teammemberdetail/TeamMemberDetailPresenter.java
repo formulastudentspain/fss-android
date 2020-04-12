@@ -14,6 +14,8 @@ import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.screen.teammember.TeamMemberGeneralPresenter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 
 public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
@@ -23,119 +25,119 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
     private TeamMemberBO teamMemberBO;
     private ImageBO imageBO;
     private TeamBO teamBO;
+    private LoadingDialog loadingDialog;
+    private Messages messages;
 
-    public TeamMemberDetailPresenter(TeamMemberDetailPresenter.View view, TeamMemberBO teamMemberBO, ImageBO imageBO, TeamBO teamBO) {
+    public TeamMemberDetailPresenter(TeamMemberDetailPresenter.View view, TeamMemberBO teamMemberBO,
+                                     ImageBO imageBO, TeamBO teamBO, LoadingDialog loadingDialog,
+                                     Messages messages) {
         this.view = view;
         this.teamMemberBO = teamMemberBO;
         this.imageBO = imageBO;
         this.teamBO = teamBO;
+        this.loadingDialog = loadingDialog;
+        this.messages = messages;
     }
 
-    void onNFCTagDetected(final TeamMember teamMember, final String tagNFC){
-
-        //Show loading
-        view.showLoading();
+    void onNFCTagDetected(final TeamMember teamMember, final String tagNFC) {
 
         //Check if the NFC tag is already assigned
+        loadingDialog.show();
         teamMemberBO.retrieveTeamMemberByNFCTag(tagNFC, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
+                loadingDialog.hide();
 
-                //The NFC tag is not assigned
-                if(responseDTO.getData() == null) {
-
-                    //Update the user
+                if (responseDTO.getData() == null) {
                     teamMember.setNFCTag(tagNFC);
                     teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
                         @Override
                         public void onSuccess(ResponseDTO responseDTO) {
-                            view.createMessage(responseDTO.getInfo());
+                            loadingDialog.hide();
+                            messages.showInfo(responseDTO.getInfo());
                             view.updateNFCInformation(tagNFC);
-                            view.hideLoadingIcon();
                         }
 
                         @Override
                         public void onFailure(ResponseDTO responseDTO) {
-                            view.createMessage(responseDTO.getError());
-                            view.hideLoadingIcon();
+                            loadingDialog.hide();
+                            messages.showError(responseDTO.getError());
                         }
                     });
 
-                //The NFC tag is already assigned
+                    //The NFC tag is already assigned
                 } else {
                     TeamMember teamMember = (TeamMember) responseDTO.getData();
-                    view.createMessage(R.string.team_member_error_tag_already_used, teamMember.getName());
-                    view.hideLoadingIcon();
+                    messages.showError(R.string.team_member_error_tag_already_used, teamMember.getName());
+                    loadingDialog.hide();
                 }
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
-                view.hideLoadingIcon();
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
             }
         });
     }
 
-    public void checkDocuments(TeamMember teamMember){
+    void checkDocuments(TeamMember teamMember) {
 
         teamMember.setCertifiedASR(true);
         teamMember.setCertifiedDriver(true);
         teamMember.setCertifiedESO(true);
 
-        view.showLoading();
+        loadingDialog.show();
         teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
+                loadingDialog.hide();
                 view.updateTeamMemberInfo(teamMember);
-                view.hideLoadingIcon();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.hideLoadingIcon();
+                loadingDialog.hide();
             }
         });
-
     }
 
 
-    public void checkMaxNumDrivers(){
-
+    void checkMaxNumDrivers() {
+        loadingDialog.show();
         teamMemberBO.getRegisteredTeamMemberByTeamId(view.getSelectedUser().getTeamID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
+                loadingDialog.hide();
                 List<TeamMember> teamMembers = (List<TeamMember>) responseDTO.getData();
 
                 boolean updatingUserNFC = false;
-                for(TeamMember teamMember : teamMembers){
-                    if(teamMember.getID().equals(view.getSelectedUser().getID())){
+                for (TeamMember teamMember : teamMembers) {
+                    if (teamMember.getID().equals(view.getSelectedUser().getID())) {
                         updatingUserNFC = true;
                         break;
                     }
                 }
 
-                if(!updatingUserNFC && teamMembers.size() >= 6){
-                    view.createMessage(R.string.team_member_error_max_6_drivers);
-                }else{
+                if (!updatingUserNFC && teamMembers.size() >= 6) {
+                    messages.showError(R.string.team_member_error_max_6_drivers);
+                } else {
                     view.openNFCReader();
                 }
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
             }
         });
     }
 
 
-    void uploadProfilePicture(final Bitmap bitmap, final TeamMember teamMember){
-
-        //Show loading
-        view.showLoading();
-
+    void uploadProfilePicture(final Bitmap bitmap, final TeamMember teamMember) {
         //Upload image and get the URL
+        loadingDialog.show();
         imageBO.uploadImage(bitmap, teamMember.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
@@ -146,91 +148,66 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
                 teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
                     @Override
                     public void onSuccess(ResponseDTO responseDTO) {
-
-                        //Update the image in view
+                        loadingDialog.hide();
                         view.updateProfilePicture(bitmap);
-                        view.hideLoadingIcon();
-                        view.createMessage(responseDTO.getInfo());
+                        messages.showInfo(responseDTO.getInfo());
                     }
 
                     @Override
                     public void onFailure(ResponseDTO responseDTO) {
-                        view.createMessage(responseDTO.getError());
-                        view.hideLoadingIcon();
+                        loadingDialog.hide();
+                        messages.showError(responseDTO.getError());
                     }
                 });
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
-                view.hideLoadingIcon();
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
             }
         });
 
     }
 
-    public void updateOrCreateTeamMember(TeamMember teamMember){
+    public void updateOrCreateTeamMember(TeamMember teamMember) {
+        loadingDialog.show();
         teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
+                loadingDialog.hide();
                 view.updateTeamMemberInfo(teamMember);
-                view.createMessage(responseDTO.getInfo());
+                messages.showInfo(responseDTO.getInfo());
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
             }
         });
     }
 
-    public void openEditTeamMemberDialog(){
-
-        //Show loading
-        view.showLoading();
-
+    void openEditTeamMemberDialog() {
         //Call business to retrieve teams
+        loadingDialog.show();
         teamBO.retrieveTeams(null, null, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-
-                //Hide loading
-                view.hideLoadingIcon();
-
+                loadingDialog.hide();
                 List<Team> teams = (List<Team>) responseDTO.getData();
                 view.showEditTeamMemberDialog(teams);
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(R.string.team_member_get_teams_error);
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
             }
         });
     }
 
     public interface View {
-
-        /**
-         * Show message to teamMember
-         * @param message
-         */
-        void createMessage(Integer message, Object...args);
-
-        /**
-         * Finish current activity
-         */
-        void finishView();
-
-        /**
-         * Show loading icon
-         */
-        void showLoading();
-
-        /**
-         * Hide loading icon
-         */
-        void hideLoadingIcon();
 
         /**
          * Update teamMember NFC infomation
@@ -239,12 +216,14 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
 
         /**
          * Update the teamMember profile imageView
+         *
          * @param imageBitmap
          */
         void updateProfilePicture(Bitmap imageBitmap);
 
         /**
          * Get selected TeamMember
+         *
          * @return
          */
         TeamMember getSelectedUser();
@@ -261,6 +240,7 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
 
         /**
          * Show edit team member dialog
+         *
          * @param teams
          */
         void showEditTeamMemberDialog(List<Team> teams);
