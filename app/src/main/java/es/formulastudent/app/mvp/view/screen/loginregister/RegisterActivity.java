@@ -53,7 +53,7 @@ public class RegisterActivity extends GeneralActivity implements RegisterPresent
 
         DaggerRegisterComponent.builder()
                 .appComponent(appComponent)
-                .contextModule(new ContextModule(this))
+                .contextModule(new ContextModule(this, this))
                 .registerModule(new RegisterModule(this))
                 .build()
                 .inject(this);

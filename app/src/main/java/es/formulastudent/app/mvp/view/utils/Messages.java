@@ -1,17 +1,16 @@
 package es.formulastudent.app.mvp.view.utils;
 
+import android.app.Activity;
 import android.view.View;
-
-import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
 public class Messages {
 
-    private FragmentActivity activity;
+    private Activity activity;
     private View rootView;
 
-    public Messages(FragmentActivity activity) {
+    public Messages(Activity activity) {
         this.activity = activity;
         rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
     }

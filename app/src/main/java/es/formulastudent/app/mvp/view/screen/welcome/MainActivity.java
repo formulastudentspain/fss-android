@@ -1,5 +1,6 @@
 package es.formulastudent.app.mvp.view.screen.welcome;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,11 +12,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import es.formulastudent.app.R;
 import es.formulastudent.app.databinding.ActivityMainBinding;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
+import es.formulastudent.app.mvp.view.screen.login.LoginActivity;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -107,6 +111,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.drawerItemTeamMembers:
                 navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToTeamMemberFragment());
+                break;
+            case R.id.drawerItemLogout:
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(this, LoginActivity.class);
+                this.startActivity(intent);
+                super.finish();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

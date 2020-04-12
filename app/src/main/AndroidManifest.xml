@@ -16,12 +16,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Hola"
+        android:theme="@style/LoginStyle"
         tools:ignore="GoogleAppIndexingWarning">
 
-
         <activity
-            android:name=".mvp.view.screen.welcome.MainActivity"
+            android:name=".mvp.view.screen.login.LoginActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,36 +30,19 @@
 
         <activity
             android:name=".mvp.view.screen.NFCReaderActivity"
-            android:label="Formula Student Spain"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop"/>
 
         <activity
             android:name=".mvp.view.screen.egresschrono.EgressChronoActivity"
-            android:label="Egress chrono"
-            android:launchMode="singleTop">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mvp.view.screen.raceaccess.RaceAccessActivity"/>
-        </activity>
+            android:launchMode="singleTop"/>
 
-        <activity
-            android:name=".mvp.view.screen.statistics.StatisticsActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.screen.adminoperations.AdminOpsActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.screen.qrreader.QRReaderActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.screen.conecontrolstats.ConeControlStatsActivity">
-        </activity>
-        <activity
-            android:name=".mvp.view.screen.loginregister.RegisterActivity">
+        <activity android:name=".mvp.view.screen.statistics.StatisticsActivity"/>
+        <activity android:name=".mvp.view.screen.adminoperations.AdminOpsActivity"/>
+        <activity android:name=".mvp.view.screen.qrreader.QRReaderActivity"/>
+        <activity android:name=".mvp.view.screen.conecontrolstats.ConeControlStatsActivity"/>
+        <activity android:name=".mvp.view.screen.loginregister.RegisterActivity"/>
+        <activity android:name=".mvp.view.screen.welcome.MainActivity"
+            android:theme="@style/MainStyle">
         </activity>
     </application>
 </manifest>

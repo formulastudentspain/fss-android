@@ -8,11 +8,13 @@ import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.di.module.business.SharedPreferencesModule;
+import es.formulastudent.app.di.module.business.UtilsModule;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.view.screen.login.LoginPresenter;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
-@Module(includes = {ContextModule.class, BusinessModule.class, SharedPreferencesModule.class})
+@Module(includes = {UtilsModule.class, ContextModule.class, BusinessModule.class, SharedPreferencesModule.class})
 public class LoginModule {
 
     private LoginPresenter.View view;
@@ -28,8 +30,9 @@ public class LoginModule {
 
     @Provides
     public LoginPresenter providePresenter(LoginPresenter.View categoryView, Context context,
-                                           AuthBO authBO, UserBO userBO, SharedPreferences sharedPreferences) {
-        return new LoginPresenter(categoryView, context, authBO, userBO, sharedPreferences);
+                                           AuthBO authBO, UserBO userBO, Messages messages,
+                                           SharedPreferences sharedPreferences) {
+        return new LoginPresenter(categoryView, context, authBO, userBO, sharedPreferences, messages);
     }
 
 }

@@ -141,7 +141,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onClick"
-        android:text="@string/drawer_menu_staff_users_management"
+        android:text="@string/drawer_menu_staff_users_management_volunteers"
         android:textSize="32sp" />
 
     <TextView
@@ -150,5 +150,13 @@
         android:layout_height="wrap_content"
         android:onClick="onClick"
         android:text="@string/drawer_menu_staff_users_management_team_members"
+        android:textSize="32sp" />
+
+    <TextView
+        android:id="@+id/drawerItemLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="@string/drawer_menu_common_logout"
         android:textSize="32sp" />
 </LinearLayout>

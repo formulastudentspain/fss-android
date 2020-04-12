@@ -37,13 +37,9 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
     //View components
     private EditText mailEditText;
     private EditText passwordEditText;
-    private Button loginButton;
-    private TextView forgotPasswordTextView;
-    private TextView registerTextView;
     private ProgressBar loadingProgressBar;
     private LinearLayout loginLayout;
     FirebaseAuth mAuth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +58,6 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
             //No TeamMember Logged
             initViews();
         }
-
-
     }
 
 
@@ -72,10 +66,9 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
      * @param appComponent
      */
     protected void setupComponent(AppComponent appComponent) {
-
         DaggerLoginComponent.builder()
                 .appComponent(appComponent)
-                .contextModule(new ContextModule(this))
+                .contextModule(new ContextModule(this, this))
                 .loginModule(new LoginModule(this))
                 .build()
                 .inject(this);
@@ -93,18 +86,18 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
         passwordEditText = findViewById(R.id.login_password);
 
         //Login button
-        loginButton = findViewById(R.id.login_button);
+        Button loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(this);
 
         //Forgot password text
-        forgotPasswordTextView = findViewById(R.id.login_forgot_password);
+        TextView forgotPasswordTextView = findViewById(R.id.login_forgot_password);
         forgotPasswordTextView.setOnClickListener(this);
 
         //Loading icon
         loadingProgressBar = findViewById(R.id.loading_status);
 
         //Register link
-        registerTextView = findViewById(R.id.register_link);
+        TextView registerTextView = findViewById(R.id.register_link);
         registerTextView.setOnClickListener(this);
 
         //Login layout
@@ -112,6 +105,11 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
 
         //Show fields
         this.hideLoadingIcon();
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 
     @Override
@@ -132,24 +130,11 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
     }
 
     @Override
-    public Activity getActivity(){
-        return this;
-    }
-
-    @Override
     public void onClick(View view) {
-
         if(view.getId() == R.id.login_button){
-
             showLoading();
             Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                   presenter.doLogin(mailEditText.getText().toString(), passwordEditText.getText().toString());
-                }
-            }, 1000);
-
+            handler.postDelayed(() -> presenter.doLogin(mailEditText.getText().toString(), passwordEditText.getText().toString()), 1000);
 
         }else if(view.getId() == R.id.login_forgot_password){
             presenter.forgotPassword(mailEditText.getText().toString());
@@ -159,14 +144,13 @@ public class LoginActivity extends GeneralActivity implements LoginPresenter.Vie
             startActivityForResult(intent, REGISTER_REQUEST_CODE);
             overridePendingTransition(R.anim.open_activity_slide_out, R.anim.open_activity_slide_in);
         }
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(requestCode == REGISTER_REQUEST_CODE){
-            if(resultCode == Activity.RESULT_OK){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REGISTER_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
                 createMessage(R.string.login_activity_user_not_activated);
             }
         }

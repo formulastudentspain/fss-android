@@ -13,7 +13,6 @@ import es.formulastudent.app.mvp.view.screen.teams.TeamsPresenter;
 @Singleton
 @Component(modules = {TeamsModule.class, SharedPreferencesModule.class}, dependencies = {AppComponent.class})
 public interface TeamsComponent {
-
     void inject(TeamsFragment teamsFragment);
     TeamsPresenter getMainPresenter();
     User getLoggedUser();

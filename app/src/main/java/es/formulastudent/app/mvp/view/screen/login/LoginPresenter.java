@@ -17,6 +17,7 @@ import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.welcome.MainActivity;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 
 public class LoginPresenter {
@@ -27,19 +28,19 @@ public class LoginPresenter {
     private AuthBO authBO;
     private UserBO userBO;
     private SharedPreferences sharedPreferences;
-    private InputMethodManager imm;
+    private Messages messages;
 
     public LoginPresenter(LoginPresenter.View view, Context context, AuthBO authBO, UserBO userBO,
-                          SharedPreferences sharedPreferences) {
+                          SharedPreferences sharedPreferences, Messages messages) {
         this.view = view;
         this.context = context;
         this.authBO = authBO;
         this.userBO = userBO;
         this.sharedPreferences = sharedPreferences;
+        this.messages = messages;
     }
 
-
-    public void loginSuccess(User user){
+    void loginSuccess(User user){
 
         userBO.retrieveUserByMail(user.getMail(), new BusinessCallback() {
             @Override
@@ -51,7 +52,7 @@ public class LoginPresenter {
 
                     //User not activated, cannot do login
                     if(user.getRole() == null){
-                        view.createMessage(R.string.login_activity_user_not_activated);
+                        messages.showError(R.string.login_activity_user_not_activated);
                         view.hideLoadingIcon();
 
                     }else{
@@ -68,17 +69,15 @@ public class LoginPresenter {
 
                 }else{ //The teamMember is created for Login, but not in users table
                     view.hideLoadingIcon();
-                    view.createMessage(R.string.login_activity_user_not_found);
+                    messages.showError(R.string.login_activity_user_not_found);
                 }
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(responseDTO.getError());
+                messages.showError(responseDTO.getError());
             }
         });
-
-
     }
 
 
@@ -86,22 +85,21 @@ public class LoginPresenter {
      * Get an email with the steps to reset your password
      * @param mail
      */
-    public void forgotPassword(String mail){
-
+    void forgotPassword(String mail){
         if(mail != null && !mail.isEmpty()) {
             authBO.resetPassword(mail, new BusinessCallback() {
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
-                    view.createMessage(responseDTO.getInfo());
+                    messages.showInfo(responseDTO.getInfo());
                 }
 
                 @Override
                 public void onFailure(ResponseDTO responseDTO) {
-                    view.createMessage(responseDTO.getError());
+                    messages.showError(responseDTO.getError());
                 }
             });
         } else {
-            view.createMessage(R.string.login_business_email_mandatory);
+            messages.showInfo(R.string.login_business_email_mandatory);
         }
     }
 
@@ -111,7 +109,7 @@ public class LoginPresenter {
      * @param password
      * @return
      */
-    void doLogin(String mail, String password){
+    void doLogin(String mail, String password) {
 
         //Hide keyboard
         this.hideKeyboard();
@@ -132,11 +130,8 @@ public class LoginPresenter {
         });
     }
 
-
-
-
-    public void hideKeyboard(){
-        imm = (InputMethodManager) view.getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+    private void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager) view.getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
         android.view.View focus = view.getActivity().getCurrentFocus();
         if(focus == null){
             focus = new android.view.View(view.getActivity());
@@ -146,12 +141,7 @@ public class LoginPresenter {
 
 
     public interface View {
-
-        /**
-         * Create Snackbar Message
-         * @param message
-         */
-        void createMessage(Integer message, Object...args);
+        Activity getActivity();
 
         /**
          * Finish current activity
@@ -167,8 +157,5 @@ public class LoginPresenter {
          * Hide loading icon
          */
         void hideLoadingIcon();
-
-        Activity getActivity();
     }
-
 }
