@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_welcomeFragment_to_coneControlWelcomeFragment"
             app:destination="@id/coneControlWelcomeFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_userFragment"
+            app:destination="@id/userFragment" />
     </fragment>
     <fragment
         android:id="@+id/briefingFragment"
@@ -132,5 +135,23 @@
         <argument
             android:name="selectedSector"
             app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/userFragment"
+        tools:layout="@layout/fragment_user"
+        android:name="es.formulastudent.app.mvp.view.screen.user.UserFragment"
+        android:label="UserFragment" >
+        <action
+            android:id="@+id/action_userFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDetailFragment"
+        tools:layout="@layout/fragment_user_detail"
+        android:name="es.formulastudent.app.mvp.view.screen.userdetail.UserDetailFragment"
+        android:label="UserDetailFragment" >
+        <argument
+            android:name="selectedUser"
+            app:argType="es.formulastudent.app.mvp.data.model.User" />
     </fragment>
 </navigation>

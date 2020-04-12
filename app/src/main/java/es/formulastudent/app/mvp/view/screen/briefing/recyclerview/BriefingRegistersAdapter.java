@@ -43,7 +43,7 @@ public class BriefingRegistersAdapter extends RecyclerView.Adapter<RecyclerView.
         LayoutInflater mLayoutInflater = LayoutInflater.from(context);
         viewBinderHelper.setOpenOnlyOne(true);
 
-        View view = mLayoutInflater.inflate(R.layout.activity_briefing_list_item, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.fragment_briefing_list_item, parent, false);
         return new BriefingRegistersViewHolder(view, clickListener);
 
     }

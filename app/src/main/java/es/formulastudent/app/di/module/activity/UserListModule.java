@@ -6,11 +6,14 @@ import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
+import es.formulastudent.app.di.module.business.UtilsModule;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.view.screen.user.UserPresenter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
-@Module(includes = {ContextModule.class, BusinessModule.class})
+@Module(includes = {UtilsModule.class, ContextModule.class, BusinessModule.class})
 public class UserListModule {
 
     private UserPresenter.View view;
@@ -25,7 +28,8 @@ public class UserListModule {
     }
 
     @Provides
-    public UserPresenter providePresenter(UserPresenter.View categoryView, Context context, UserBO userBO, TeamBO teamBO) {
-        return new UserPresenter(categoryView, context, userBO, teamBO);
+    public UserPresenter providePresenter(UserPresenter.View categoryView, Context context, UserBO userBO,
+                                          TeamBO teamBO, LoadingDialog loadingDialog, Messages messages) {
+        return new UserPresenter(categoryView, context, userBO, teamBO, loadingDialog, messages);
     }
 }

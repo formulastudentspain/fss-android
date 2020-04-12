@@ -5,12 +5,17 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.squareup.picasso.Picasso;
 
@@ -19,13 +24,17 @@ import javax.inject.Inject;
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
+import es.formulastudent.app.di.component.DaggerUserDetailComponent;
+import es.formulastudent.app.di.module.ContextModule;
+import es.formulastudent.app.di.module.activity.UserDetailModule;
 import es.formulastudent.app.mvp.data.model.Device;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
-import es.formulastudent.app.mvp.view.screen.general.GeneralActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 
-public class UserDetailActivity extends GeneralActivity implements UserDetailPresenter.View, View.OnClickListener {
+public class UserDetailFragment extends Fragment implements UserDetailPresenter.View, View.OnClickListener{
 
     private static final int REQUEST_IMAGE_CAPTURE = 102;
 
@@ -40,69 +49,63 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
     private ImageView userCellPhone;
     private TextView userCellPhoneNumber;
     private TextView userRole;
-    private MenuItem filterItem;
 
     //Selected user
-    User user;
+    private User user;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_user_detail);
         super.onCreate(savedInstanceState);
-
-        user = (User) getIntent().getSerializableExtra("selectedUser");
-
-        initViews();
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view =  inflater.inflate(R.layout.fragment_user_detail, container, false);
+
+        assert getArguments() != null;
+        UserDetailFragmentArgs args = UserDetailFragmentArgs.fromBundle(getArguments());
+        user = args.getSelectedUser();
+
+        initViews(view);
+        return view;
+    }
 
     /**
      * Inject dependencies method
      * @param appComponent
      */
-    protected void setupComponent(AppComponent appComponent) {
-
-     /*   DaggerUserDetailComponent.builder()
+    private void setupComponent(AppComponent appComponent) {
+        DaggerUserDetailComponent.builder()
                 .appComponent(appComponent)
-                .contextModule(new ContextModule(this))
+                .contextModule(new ContextModule(getContext(), getActivity()))
                 .userDetailModule(new UserDetailModule(this))
                 .build()
-                .inject(this);*/
+                .inject(this);
     }
 
 
-    private void initViews(){
-
-        //Add toolbar title
-        setToolbarTitle(getString(R.string.activity_volunteers_detail_title));
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    private void initViews(View view){
 
         //Instantiate vies components
-        userName = findViewById(R.id.user_detail_name);
-        userRole = findViewById(R.id.user_detail_role);
-        userProfilePhoto = findViewById(R.id.user_detail_profile_image);
+        userName = view.findViewById(R.id.user_detail_name);
+        userRole = view.findViewById(R.id.user_detail_role);
+        userProfilePhoto = view.findViewById(R.id.user_detail_profile_image);
         userProfilePhoto.setOnClickListener(this);
 
         //Walkie
-        userWalkie = findViewById(R.id.user_walkie_talkie);
+        userWalkie = view.findViewById(R.id.user_walkie_talkie);
         userWalkie.setOnClickListener(this);
-        userWalkieNumber = findViewById(R.id.user_walkie_talkie_number);
+        userWalkieNumber = view.findViewById(R.id.user_walkie_talkie_number);
 
         //Cell Phone
-        userCellPhone = findViewById(R.id.user_cell_phone);
+        userCellPhone = view.findViewById(R.id.user_cell_phone);
         userCellPhone.setOnClickListener(this);
-        userCellPhoneNumber = findViewById(R.id.user_cell_phone_number);
+        userCellPhoneNumber = view.findViewById(R.id.user_cell_phone_number);
 
         //Set info
         setUserDetails(user);
-
-      }
-
-
+    }
 
     @Override
     public void onClick(View view) {
@@ -117,35 +120,23 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         }
     }
 
-    /*
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-
-        //Camera image
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             presenter.uploadProfilePicture(imageBitmap, user);
         }
-    }*/
+    }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_user_detail, menu);
-
-        //Search menu item
-        filterItem = menu.findItem(R.id.filter_results);
-        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                presenter.openEditUserDialog();
-                return true;
-            }
+        MenuItem filterItem = menu.findItem(R.id.filter_results);
+        filterItem.setOnMenuItemClickListener(menuItem -> {
+            presenter.openEditUserDialog();
+            return true;
         });
-
-        return true;
     }
 
     @Override
@@ -158,14 +149,9 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         return user;
     }
 
-    @Override
-    public UserDetailActivity getActivity() {
-        return UserDetailActivity.this;
-    }
 
     @Override
     public void setUserDetails(User user) {
-
         userName.setText(user.getName());
         Picasso.get().load(user.getPhotoUrl()).into(userProfilePhoto);
 
@@ -183,7 +169,6 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
             userWalkie.setImageResource(R.drawable.ic_walkie_talkie_off);
             userWalkieNumber.setText("-");
         }
-
 
         if(user.getRole() != null){
             userRole.setText(user.getRole().getName().toUpperCase());
@@ -204,23 +189,11 @@ public class UserDetailActivity extends GeneralActivity implements UserDetailPre
         }
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
-
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        assert getActivity() != null;
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
-        return true;
-    }
-
 }

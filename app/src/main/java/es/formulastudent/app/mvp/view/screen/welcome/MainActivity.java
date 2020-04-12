@@ -102,6 +102,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 navController.navigate(WelcomeFragmentDirections
                         .actionWelcomeFragmentToConeControlWelcomeFragment(ConeControlEvent.ENDURANCE));
                 break;
+            case R.id.drawerItemUser:
+                navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToUserFragment());
+                break;
+            case R.id.drawerItemTeamMembers:
+                navController.navigate(WelcomeFragmentDirections
+                        .actionWelcomeFragmentToConeControlWelcomeFragment(ConeControlEvent.ENDURANCE));
+                break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
     }

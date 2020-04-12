@@ -65,21 +65,11 @@
         </activity>
 
         <activity
-            android:name=".mvp.view.screen.user.UserActivity">
-        </activity>
-
-        <activity
             android:name=".mvp.view.screen.qrreader.QRReaderActivity">
         </activity>
 
         <activity
             android:name=".mvp.view.screen.userdetail.UserDetailActivity">
-        </activity>
-        <activity
-            android:name=".mvp.view.screen.conecontrol.ConeControlWelcomeActivity">
-        </activity>
-        <activity
-            android:name=".mvp.view.screen.conecontrol.ConeControlActivity">
         </activity>
         <activity
             android:name=".mvp.view.screen.conecontrolstats.ConeControlStatsActivity">

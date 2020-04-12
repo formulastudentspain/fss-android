@@ -34,11 +34,9 @@ import javax.inject.Inject;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
-import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.adminoperations.AdminOpsActivity;
-import es.formulastudent.app.mvp.view.screen.conecontrol.ConeControlWelcomeActivity;
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityExitDialog;
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.screen.login.LoginActivity;

@@ -8,14 +8,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -31,7 +36,7 @@ import es.formulastudent.app.di.component.DaggerUserListComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.UserListModule;
 import es.formulastudent.app.mvp.data.model.Role;
-import es.formulastudent.app.mvp.view.screen.general.GeneralActivity;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.qrreader.QRReaderActivity;
 import es.formulastudent.app.mvp.view.screen.user.dialog.CreateUserDialog;
 import es.formulastudent.app.mvp.view.screen.user.dialog.FilteringUsersDialog;
@@ -39,35 +44,33 @@ import es.formulastudent.app.mvp.view.screen.user.recyclerview.UserListAdapter;
 import info.androidhive.fontawesome.FontTextView;
 
 
-public class UserActivity extends GeneralActivity implements UserPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
+public class UserFragment extends Fragment implements UserPresenter.View, View.OnClickListener,
+        TextWatcher, SwipeRefreshLayout.OnRefreshListener{
 
     private final static int QR_REQUEST_CODE_SEARCH = 2;
 
     @Inject
     UserPresenter presenter;
+    @Inject
+    User loggedUser;
 
-    //View components
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView recyclerView;
     private UserListAdapter userListAdapter;
-    private FloatingActionButton buttonAddUser;
-    private EditText searchUser;
-    private FontTextView qrCodeReaderButton;
-
     private MenuItem filterItem;
 
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        setupComponent(FSSApp.getApp().component());
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_user_list);
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_user, container, false);
 
-        initViews();
-        setSupportActionBar(toolbar);
+        initViews(view);
+        setHasOptionsMenu(true);
         requestPermissions();
-        //presenter.retrieveUsers();
+        return view;
     }
 
     /**
@@ -75,79 +78,59 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
      * @param appComponent
      */
     protected void setupComponent(AppComponent appComponent) {
-
         DaggerUserListComponent.builder()
                 .appComponent(appComponent)
-                .contextModule(new ContextModule(this))
+                .contextModule(new ContextModule(getContext(), getActivity()))
                 .userListModule(new UserListModule(this))
                 .build()
                 .inject(this);
     }
 
     @Override
-    protected void onResume(){
+    public void onResume(){
         super.onResume();
         presenter.retrieveUsers();
-
     }
 
+    private void initViews(View view){
 
-    @Override
-    protected void onStart(){
-        super.onStart();
-        drawer.setSelection(mDrawerIdentifier, false);
-    }
-
-
-    private void initViews(){
-
-        //Add drawer
-        addDrawer();
-        mDrawerIdentifier = 10026L;
-
-        //Recycler view
-        mSwipeRefreshLayout = findViewById(R.id.swipeLayout);
+        //View components
+        SwipeRefreshLayout mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        recyclerView = findViewById(R.id.recyclerView);
-        userListAdapter = new UserListAdapter(presenter.getUserItemList(), this, presenter);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        userListAdapter = new UserListAdapter(presenter.getUserItemList(), getContext(), presenter);
         recyclerView.setAdapter(userListAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
         //Add user button
-        buttonAddUser = findViewById(R.id.button_add_user);
+        FloatingActionButton buttonAddUser = view.findViewById(R.id.button_add_user);
         buttonAddUser.setOnClickListener(this);
 
         //Search user edit text
-        searchUser = findViewById(R.id.search_user_field);
+        EditText searchUser = view.findViewById(R.id.search_user_field);
         searchUser.addTextChangedListener(this);
 
         //QR Code reader
-        qrCodeReaderButton = findViewById(R.id.qr_code_reader);
+        FontTextView qrCodeReaderButton = view.findViewById(R.id.qr_code_reader);
         qrCodeReaderButton.setOnClickListener(this);
+    }
 
-        //Add toolbar title
-        setToolbarTitle(getString(R.string.activity_volunteers_title));
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == QR_REQUEST_CODE_SEARCH){
+            if(resultCode == Activity.RESULT_OK){
+                String result = data.getStringExtra("result");
+                //TODO hacer algo con el QR code encontrado
+            }
+        }
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-       if(requestCode == QR_REQUEST_CODE_SEARCH){
-            if(resultCode == Activity.RESULT_OK){
-                String result = data.getStringExtra("result");
-
-                Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-            }
-       }
-    }//onActivityResult
-
-
-
     private void requestPermissions(){
+        assert getActivity() != null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[] {Manifest.permission.CAMERA}, 1);
             }
         }
@@ -164,52 +147,25 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
         }
     }
 
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_dynamic_event, menu);
-
-        //Search menu item
         filterItem = menu.findItem(R.id.filter_results);
-        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                presenter.filterIconClicked();
-                return false;
-            }
+        filterItem.setOnMenuItemClickListener(menuItem -> {
+            presenter.filterIconClicked();
+            return false;
         });
-
-        return true;
     }
-
 
     @Override
     public void refreshUserItems() {
         userListAdapter.notifyDataSetChanged();
-        this.hideLoading();
-    }
-
-    @Override
-    public void finishView() {
-        this.finish();
-    }
-
-    @Override
-    public void showLoading() {
-        super.showLoadingDialog();
-    }
-
-    @Override
-    public void hideLoading() {
-        super.hideLoadingDialog();
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_add_user){
-            presenter.retrieveCreateUserDialogData();
+            showCreateUserDialog();
 
         }else if(view.getId() == R.id.qr_code_reader){
             this.openQRCodeReader();
@@ -218,23 +174,29 @@ public class UserActivity extends GeneralActivity implements UserPresenter.View,
 
     @Override
     public void openQRCodeReader(){
-        Intent i = new Intent(this, QRReaderActivity.class);
+        Intent i = new Intent(getContext(), QRReaderActivity.class);
         startActivityForResult(i, QR_REQUEST_CODE_SEARCH);
     }
 
 
     @Override
     public void showCreateUserDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        CreateUserDialog createUserDialog = CreateUserDialog.newInstance(presenter, this, loggedUser);
+        FragmentManager fm = getParentFragmentManager();
+        CreateUserDialog createUserDialog = CreateUserDialog.newInstance(presenter, getContext(), loggedUser);
         createUserDialog.show(fm, "fragment_edit_name");
     }
 
     @Override
     public void showFilteringDialog(Role selectedRole) {
-        FilteringUsersDialog filteringUsersDialog = FilteringUsersDialog.newInstance(this, presenter, selectedRole);
-        filteringUsersDialog.show(getSupportFragmentManager(), "filterUserDialog");
+        FilteringUsersDialog filteringUsersDialog = FilteringUsersDialog.newInstance(getContext(), presenter, selectedRole);
+        filteringUsersDialog.show(getParentFragmentManager(), "filterUserDialog");
+    }
 
+    @Override
+    public void openUserDetailFragment(User user) {
+        assert getActivity() != null;
+        NavController navController = Navigation.findNavController(getActivity(), R.id.myNavHostFragment);
+        navController.navigate(UserFragmentDirections.actionUserFragmentToUserDetailFragment(user));
     }
 
     @Override

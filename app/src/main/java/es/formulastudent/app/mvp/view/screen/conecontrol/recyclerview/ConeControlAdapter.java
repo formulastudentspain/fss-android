@@ -41,7 +41,7 @@ public class ConeControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         viewBinderHelper.setOpenOnlyOne(true);
         View view;
 
-        view = mLayoutInflater.inflate(R.layout.activity_cone_control_list_item, parent, false);
+        view = mLayoutInflater.inflate(R.layout.fragment_cone_control_list_item, parent, false);
         return new ConeControlViewHolder(view, clickListener, viewType);
 
     }

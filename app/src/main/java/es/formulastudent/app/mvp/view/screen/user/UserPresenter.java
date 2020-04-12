@@ -1,7 +1,6 @@
 package es.formulastudent.app.mvp.view.screen.user;
 
 import android.content.Context;
-import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,17 +15,19 @@ import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.screen.userdetail.UserDetailActivity;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 
 public class UserPresenter implements RecyclerViewClickListener {
-
 
     //Dependencies
     private View view;
     private Context context;
     private UserBO userBO;
     private TeamBO teamBO;
+    private LoadingDialog loadingDialog;
+    private Messages messages;
 
     //Data
     private List<User> allUsersList = new ArrayList<>();
@@ -36,15 +37,18 @@ public class UserPresenter implements RecyclerViewClickListener {
     private UserRole selectedRole;
 
 
-    public UserPresenter(UserPresenter.View view, Context context, UserBO userBO, TeamBO teamBO) {
+    public UserPresenter(UserPresenter.View view, Context context, UserBO userBO, TeamBO teamBO,
+                         LoadingDialog loadingDialog, Messages messages) {
         this.view = view;
         this.context = context;
         this.userBO = userBO;
         this.teamBO = teamBO;
+        this.loadingDialog = loadingDialog;
+        this.messages = messages;
     }
 
 
-    private void updateUserListItems(List<User> newItems){
+    private void updateUserListItems(List<User> newItems) {
         //Update all-user-list
         this.allUsersList.clear();
         this.allUsersList.addAll(newItems);
@@ -56,61 +60,40 @@ public class UserPresenter implements RecyclerViewClickListener {
     }
 
 
-
-    public void retrieveUsers(){
-
-
-        //show loading
-        view.showLoading();
-
-        //call business to retrieve users
+    public void retrieveUsers() {
+        loadingDialog.show();
         userBO.retrieveUsers(selectedRole, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-
+                loadingDialog.hide();
                 List<User> users = (List<User>) responseDTO.getData();
-
-                //Update view with new results
                 updateUserListItems(users);
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(R.string.team_member_get_all_error);
+                loadingDialog.hide();
+                messages.showError(R.string.team_member_get_all_error);
             }
         });
     }
 
-
-
-    public void filterUsers(String query){
-
-        //Clear the list
+    void filterUsers(String query) {
         filteredUserList.clear();
-
-        //Add results
-        for(User user : allUsersList){
-            if(user.getName().toLowerCase().contains(query.toLowerCase())){
+        for (User user : allUsersList) {
+            if (user.getName().toLowerCase().contains(query.toLowerCase())) {
                 filteredUserList.add(user);
             }
         }
-
-        //Refresh list
         this.view.refreshUserItems();
     }
 
     public void filterIconClicked() {
-
-        //Show loading
-        view.showLoading();
-
-        //Call business to retrieve teams
+        loadingDialog.show();
         teamBO.retrieveTeams(null, null, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-
-                //Hide loading
-                view.hideLoading();
+                loadingDialog.hide();
 
                 List<Team> teams = (List<Team>) responseDTO.getData();
                 //TODO los equipos están para cuando use la app los Team Leaders
@@ -120,7 +103,8 @@ public class UserPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                view.createMessage(R.string.team_member_get_teams_error);
+                loadingDialog.hide();
+                messages.showError(R.string.team_member_get_teams_error);
             }
         });
     }
@@ -128,47 +112,36 @@ public class UserPresenter implements RecyclerViewClickListener {
 
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
-
         User selectedUser = filteredUserList.get(position);
-
-        Intent intent = new Intent(context, UserDetailActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("selectedUser", selectedUser);
-        context.startActivity(intent);
-
+        view.openUserDetailFragment(selectedUser);
     }
 
 
-    public void createUser(User user){
-
+    public void createUser(User user) {
+        loadingDialog.show();
         userBO.createUser(user, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                //Update list
+                loadingDialog.hide();
                 retrieveUsers();
-                view.createMessage(responseDTO.getInfo());
+                messages.showInfo(responseDTO.getInfo());
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-               view.createMessage(responseDTO.getError());
+                loadingDialog.hide();
+                messages.showError(responseDTO.getError());
             }
         });
-    }
-
-
-    public List<User> getUserItemList() {
-        return filteredUserList;
-    }
-
-    public void retrieveCreateUserDialogData() {
-        //First retrieve roles, then retrieve teams
-        view.showCreateUserDialog();
     }
 
     public void setFilteringValues(UserRole selectedRole) {
         this.selectedRole = selectedRole;
         view.filtersActivated(selectedRole != null);
+    }
+
+    List<User> getUserItemList() {
+        return filteredUserList;
     }
 
 
@@ -182,27 +155,6 @@ public class UserPresenter implements RecyclerViewClickListener {
         void refreshUserItems();
 
         /**
-         * Show message to user
-         * @param message
-         */
-        void createMessage(Integer message, Object... args);
-
-        /**
-         * Finish current activity
-         */
-        void finishView();
-
-        /**
-         * Show loading
-         */
-        void showLoading();
-
-        /**
-         * Hide loading
-         */
-        void hideLoading();
-
-        /**
          * Open QR reader
          */
         void openQRCodeReader();
@@ -212,7 +164,17 @@ public class UserPresenter implements RecyclerViewClickListener {
          */
         void showCreateUserDialog();
 
+        /**
+         * Show dialog to filter
+         *
+         * @param selectedRole
+         */
         void showFilteringDialog(Role selectedRole);
-    }
 
+        /**
+         * Open user detail
+         * @param user
+         */
+        void openUserDetailFragment(User user);
+    }
 }
