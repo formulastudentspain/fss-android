@@ -1,15 +1,11 @@
 package es.formulastudent.app.mvp.data.business.team.impl;
 
-import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,24 +19,24 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Team;
 
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_AI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_BT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_EI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_MI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_NT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_PS;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_RT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_TTT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_AI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_BT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_EI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_MI;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_NT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_PS;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_RT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_TTT;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.ENERGY_METER_STEP;
-import static es.formulastudent.app.mvp.view.activity.teams.dialog.FilterTeamsDialog.TRANSPONDER_STEP;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.ENERGY_METER_STEP;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_AI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_BT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_EI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_MI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_NT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_PS;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_RT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_TTT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_AI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_BT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_EI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_MI;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_NT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_PS;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_RT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_TTT;
+import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.TRANSPONDER_STEP;
 
 public class TeamBOFirebaseImpl implements TeamBO {
 
@@ -52,7 +48,7 @@ public class TeamBOFirebaseImpl implements TeamBO {
 
     @Override
     public void retrieveTeams(String carType, Map<String, String> filters, final BusinessCallback callback) {
-
+        ResponseDTO responseDTO = new ResponseDTO();
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM);
 
         //Filter by car type
@@ -62,9 +58,7 @@ public class TeamBOFirebaseImpl implements TeamBO {
                 || Car.CAR_TYPE_AUTONOMOUS_COMBUSTION.equals(carType)) {
 
             query = query.whereEqualTo(Team.CAR_TYPE, carType);
-
         }
-
 
         //Filter by Scrutineering and Fees
         if (filters != null) {
@@ -165,13 +159,9 @@ public class TeamBOFirebaseImpl implements TeamBO {
             }
         }
 
-
         query.orderBy(Team.CAR_NUMBER, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
-
-                    //Response object
-                    ResponseDTO responseDTO = new ResponseDTO();
 
                     if (task.isSuccessful()) {
 
@@ -186,7 +176,7 @@ public class TeamBOFirebaseImpl implements TeamBO {
                         callback.onSuccess(responseDTO);
 
                     } else {
-                        responseDTO.setInfo(R.string.teams_error_retrieving_all_message);
+                        responseDTO.setError(R.string.teams_error_retrieving_all_message);
                         callback.onFailure(responseDTO);
                     }
                 });
@@ -195,8 +185,6 @@ public class TeamBOFirebaseImpl implements TeamBO {
 
     @Override
     public void retrieveTeamById(String id, final BusinessCallback callback) {
-
-        //Response object
         final ResponseDTO responseDTO = new ResponseDTO();
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
@@ -217,7 +205,6 @@ public class TeamBOFirebaseImpl implements TeamBO {
 
     @Override
     public void deleteAllTeams(final BusinessCallback callback) {
-
         final ResponseDTO responseDTO = new ResponseDTO();
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
@@ -256,7 +243,6 @@ public class TeamBOFirebaseImpl implements TeamBO {
 
     @Override
     public void updateTeam(final Team team, final BusinessCallback callback) {
-
         final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM).document(team.getID());
 

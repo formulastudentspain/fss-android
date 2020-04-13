@@ -27,7 +27,7 @@ import es.formulastudent.app.mvp.data.model.RaceControlRegisterAutocross;
 import es.formulastudent.app.mvp.data.model.RaceControlRegisterEndurance;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.activity.racecontrol.dialog.RaceControlTeamDTO;
+import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.RaceControlTeamDTO;
 
 public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
@@ -35,7 +35,9 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
     private TeamBO teamBO;
     private ConeControlBO coneControlBO;
 
-    public RaceControlBOFirebaseImpl(FirebaseFirestore firebaseFirestore, TeamBO teamBO, ConeControlBO coneControlBO) {
+
+    public RaceControlBOFirebaseImpl(FirebaseFirestore firebaseFirestore, TeamBO teamBO, 
+                                     ConeControlBO coneControlBO) {
         this.firebaseFirestore = firebaseFirestore;
         this.teamBO = teamBO;
         this.coneControlBO = coneControlBO;
@@ -109,19 +111,16 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
     @Override
     public void getRaceControlTeams(final Map<String, Object> filters, final BusinessCallback callback) {
-
+        ResponseDTO response = new ResponseDTO();
 
         //First, retrieve all the teams depending on the race type
         teamBO.retrieveTeams(null, null, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-
                 final List<Team> teams = (List<Team>) responseDTO.getData();
 
                 //Second, retrieve the existing Endurance registers
                 getRaceControlRegisters(filters, new BusinessCallback() {
-
-                    ResponseDTO response = new ResponseDTO();
 
                     @Override
                     public void onSuccess(ResponseDTO responseDTO) {
@@ -166,8 +165,9 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
     }
 
     @Override
-    public void createRaceControlRegister(List<RaceControlTeamDTO> raceControlTeamDTOList, RaceControlEvent eventType, String raceRound, Long currentMaxIndex, final BusinessCallback callback) {
-
+    public void createRaceControlRegister(List<RaceControlTeamDTO> raceControlTeamDTOList,
+                                          RaceControlEvent eventType, String raceRound, Long currentMaxIndex,
+                                          final BusinessCallback callback) {
 
         final ResponseDTO responseDTO = new ResponseDTO();
         Date now = Calendar.getInstance().getTime();
@@ -176,7 +176,6 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         WriteBatch batch = firebaseFirestore.batch();
 
         for (RaceControlTeamDTO item : raceControlTeamDTOList) {
-
             currentMaxIndex++;
 
             DocumentReference ref = firebaseFirestore
@@ -238,7 +237,6 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
                     responseDTO.setInfo(R.string.rc_create_info_message);
                     callback.onSuccess(responseDTO);
-
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.rc_create_error_message);
@@ -249,8 +247,6 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
     @Override
     public void getRaceControlRegisters(Map<String, Object> filters, final BusinessCallback callback) {
-
-        //Response object
         final ResponseDTO responseDTO = new ResponseDTO();
 
         //Get Event type
@@ -281,8 +277,8 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
     }
 
     @Override
-    public void updateRaceControlState(RaceControlRegister register, RaceControlEvent event, RaceControlState newState, final BusinessCallback callback) {
-
+    public void updateRaceControlState(RaceControlRegister register, RaceControlEvent event,
+                                       RaceControlState newState, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
         Date now = Calendar.getInstance().getTime();
 
@@ -317,14 +313,12 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                             //TODO add things
                         }
                     });
-
                     callback.onSuccess(responseDTO);
 
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setInfo(R.string.rc_error_update_message);
                     callback.onFailure(responseDTO);
-
                 });
     }
 }

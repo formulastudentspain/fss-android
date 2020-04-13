@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/md_white_1000"
-    tools:context=".mvp.view.activity.teams.TeamsActivity">
+    tools:context=".mvp.view.screen.teams.TeamsActivity">
 
     <View
         android:layout_width="match_parent"

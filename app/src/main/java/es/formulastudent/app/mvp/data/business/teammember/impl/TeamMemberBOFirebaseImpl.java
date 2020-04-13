@@ -1,14 +1,9 @@
 package es.formulastudent.app.mvp.data.business.teammember.impl;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +27,6 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
 
     @Override
     public void retrieveTeamMemberByNFCTag(String tag, final BusinessCallback callback) {
-
         final ResponseDTO responseDTO = new ResponseDTO();
 
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
@@ -46,6 +40,7 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
                         responseDTO.setInfo(R.string.team_member_get_by_nfc_info);
                     }
                     callback.onSuccess(responseDTO);
+                    
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.team_member_get_by_nfc_error);
@@ -56,7 +51,6 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
 
     @Override
     public void retrieveTeamMembers(Team filterTeam, final BusinessCallback callback) {
-
         final ResponseDTO responseDTO = new ResponseDTO();
 
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS);
@@ -90,7 +84,6 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
 
     @Override
     public void createTeamMember(TeamMember teamMember, final BusinessCallback callback) {
-
         final ResponseDTO responseDTO = new ResponseDTO();
         Map<String, Object> docData = teamMember.toDocumentData();
 
@@ -121,6 +114,7 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
                     }
                     responseDTO.setInfo(R.string.team_member_delete_all_info);
                     callback.onSuccess(responseDTO);
+                    
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.team_member_delete_all_error);
@@ -148,6 +142,7 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
                     responseDTO.setData(teamMemberList);
                     responseDTO.setInfo(R.string.team_member_get_registered_by_team_info);
                     callback.onSuccess(responseDTO);
+                    
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.team_member_get_registered_by_team_error);
@@ -173,6 +168,7 @@ public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.team_member_update_error);
                     callback.onFailure(responseDTO);
+                    
                 });
     }
 }

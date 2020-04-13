@@ -8,8 +8,6 @@ import es.formulastudent.app.mvp.data.model.TeamMember;
 
 public interface DynamicEventBO {
 
-
-
     /**
      * Method to retrieve Dynamic Event registers
      * @param from

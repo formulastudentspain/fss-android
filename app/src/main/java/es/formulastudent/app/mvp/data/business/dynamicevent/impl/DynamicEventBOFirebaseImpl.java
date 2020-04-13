@@ -1,16 +1,10 @@
 package es.formulastudent.app.mvp.data.business.dynamicevent.impl;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,8 +35,9 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
     }
 
     @Override
-    public void retrieveRegisters(Date from, Date to, String teamID, Long carNumber, final EventType type, final BusinessCallback callback) {
-
+    public void retrieveRegisters(Date from, Date to, String teamID, Long carNumber, 
+                                  final EventType type, final BusinessCallback callback) {
+        final ResponseDTO responseDTO = new ResponseDTO();
         Query query = firebaseFirestore.collection(type.getFirebaseTable());
 
         //Competition day filter
@@ -65,15 +60,10 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
         if (type.name() != null) {
             query = query.whereEqualTo(EventRegister.EVENT_TYPE, type.name());
         }
-
-
-        final ResponseDTO responseDTO = new ResponseDTO();
+        
         query.orderBy(EventRegister.DATE, Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-
-                    //Response object
-                    ResponseDTO responseDTO1 = new ResponseDTO();
 
                     //Add results to list
                     List<EventRegister> result = new ArrayList<>();
@@ -85,12 +75,11 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
                             EventRegister register = new EventRegister(document, type);
                             result.add(register);
                         }
-
                     }
 
-                    responseDTO1.setData(result);
-                    responseDTO1.setInfo(R.string.dynamic_event_message_info_retrieving_registers);
-                    callback.onSuccess(responseDTO1);
+                    responseDTO.setData(result);
+                    responseDTO.setInfo(R.string.dynamic_event_message_info_retrieving_registers);
+                    callback.onSuccess(responseDTO);
 
                 })
                 .addOnFailureListener(e -> {
@@ -156,7 +145,6 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
 
     @Override
     public void deleteRegister(EventType type, String registerID, final BusinessCallback callback) {
-
         final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore
                 .collection(type.getFirebaseTable())
@@ -180,10 +168,7 @@ public class DynamicEventBOFirebaseImpl implements DynamicEventBO {
 
     @Override
     public void getDifferentEventRegistersByDriver(String userId, final BusinessCallback callback) {
-
-        //Response object
         final ResponseDTO responseDTO = new ResponseDTO();
-
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS);
 
         if (userId != null) {

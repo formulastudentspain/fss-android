@@ -9,7 +9,7 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
-import es.formulastudent.app.mvp.view.activity.loginregister.RegisterPresenter;
+import es.formulastudent.app.mvp.view.screen.loginregister.RegisterPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class, SharedPreferencesModule.class})
 public class RegisterModule {
