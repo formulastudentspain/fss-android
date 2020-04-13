@@ -87,7 +87,6 @@ public class EgressChronoActivity extends GeneralActivity implements View.OnClic
      * @param appComponent
      */
     protected void setupComponent(AppComponent appComponent) {
-
         DaggerPreScrutineeringComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(this))
@@ -96,17 +95,7 @@ public class EgressChronoActivity extends GeneralActivity implements View.OnClic
                 .inject(this);
     }
 
-
-
-
     private void initViews() {
-
-        //Add toolbar title
-        setToolbarTitle(getString(R.string.prescruti_detail_activity_title));
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //Bind components
         circularProgressBar = findViewById(R.id.progress_circular);
@@ -118,7 +107,6 @@ public class EgressChronoActivity extends GeneralActivity implements View.OnClic
         thirdAttempt = findViewById(R.id.thirdAttemptValue);
 
         initProgressStatusThread();
-
     }
 
 

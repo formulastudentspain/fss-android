@@ -131,7 +131,8 @@ public class BriefingPresenter implements RecyclerViewClickListener {
                 loadingDialog.hide();
                 TeamMember teamMember = (TeamMember) responseDTO.getData();
                 FragmentManager fm = view.getActivity().getSupportFragmentManager();
-                ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog.newInstance(BriefingPresenter.this, teamMember);
+                ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog
+                        .newInstance(BriefingPresenter.this, teamMember);
                 createUserDialog.show(fm, "fragment_briefing_confirm");
             }
 
