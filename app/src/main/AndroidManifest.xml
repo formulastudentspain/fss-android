@@ -40,7 +40,9 @@
         <activity android:name=".mvp.view.screen.adminoperations.AdminOpsActivity"/>
         <activity android:name=".mvp.view.screen.qrreader.QRReaderActivity"/>
         <activity android:name=".mvp.view.screen.conecontrolstats.ConeControlStatsActivity"/>
-        <activity android:name=".mvp.view.screen.loginregister.RegisterActivity"/>
+        <activity android:name=".mvp.view.screen.loginregister.RegisterActivity"
+            android:theme="@style/LoginStyle">
+        </activity>
         <activity android:name=".mvp.view.screen.welcome.MainActivity"
             android:theme="@style/MainStyle">
         </activity>

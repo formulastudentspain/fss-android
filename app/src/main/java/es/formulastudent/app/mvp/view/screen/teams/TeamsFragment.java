@@ -99,12 +99,14 @@ public class TeamsFragment extends Fragment implements TeamsPresenter.View, Swip
 
     @Override
     public void openScrutineeringFragment(Team team) {
-        navController.navigate(TeamsFragmentDirections.actionTeamsFragmentToTeamsDetailScrutineeringFragment(team));
+        navController.navigate(TeamsFragmentDirections
+                .actionTeamsFragmentToTeamsDetailScrutineeringFragment(team, team.getName()));
     }
 
     @Override
     public void openFeeFragment(Team team) {
-        navController.navigate(TeamsFragmentDirections.actionTeamsFragmentToTeamsDetailFeeFragment(team));
+        navController.navigate(TeamsFragmentDirections
+                .actionTeamsFragmentToTeamsDetailFeeFragment(team, team.getName()));
     }
 
     @Override

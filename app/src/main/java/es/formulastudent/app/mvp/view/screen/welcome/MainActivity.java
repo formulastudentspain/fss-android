@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import es.formulastudent.app.R;
 import es.formulastudent.app.databinding.ActivityMainBinding;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
+import es.formulastudent.app.mvp.data.model.DrawerMenu;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.view.screen.login.LoginActivity;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         drawerLayout = binding.drawerLayout;
+        binding.setMenu(new DrawerMenu());
 
         navController = Navigation.findNavController(this, R.id.myNavHostFragment);
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
@@ -84,27 +86,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.drawerItemRCSkidpad:
                 navController.navigate(WelcomeFragmentDirections
-                        .actionWelcomeFragmentToRaceControlWelcomeFragment(RaceControlEvent.SKIDPAD));
+                        .actionWelcomeFragmentToRaceControlWelcomeFragment(
+                                RaceControlEvent.SKIDPAD,
+                                getString(RaceControlEvent.SKIDPAD.getActivityTitle())));
                 break;
             case R.id.drawerItemRCAutocross:
                 navController.navigate(WelcomeFragmentDirections
-                        .actionWelcomeFragmentToRaceControlWelcomeFragment(RaceControlEvent.AUTOCROSS));
+                        .actionWelcomeFragmentToRaceControlWelcomeFragment(
+                                RaceControlEvent.AUTOCROSS,
+                                getString(RaceControlEvent.AUTOCROSS.getActivityTitle())));
                 break;
             case R.id.drawerItemRCEndurance:
                 navController.navigate(WelcomeFragmentDirections
-                        .actionWelcomeFragmentToRaceControlWelcomeFragment(RaceControlEvent.ENDURANCE));
+                        .actionWelcomeFragmentToRaceControlWelcomeFragment(
+                                RaceControlEvent.ENDURANCE,
+                                getString(RaceControlEvent.ENDURANCE.getActivityTitle())));
                 break;
             case R.id.drawerItemCCSkidpad:
                 navController.navigate(WelcomeFragmentDirections
-                        .actionWelcomeFragmentToConeControlWelcomeFragment(ConeControlEvent.SKIDPAD));
+                        .actionWelcomeFragmentToConeControlWelcomeFragment(
+                                ConeControlEvent.SKIDPAD,
+                                getString(ConeControlEvent.SKIDPAD.getActivityTitle())));
                 break;
             case R.id.drawerItemCCAutocross:
                 navController.navigate(WelcomeFragmentDirections
-                        .actionWelcomeFragmentToConeControlWelcomeFragment(ConeControlEvent.AUTOCROSS));
+                        .actionWelcomeFragmentToConeControlWelcomeFragment(
+                                ConeControlEvent.AUTOCROSS,
+                                getString(ConeControlEvent.AUTOCROSS.getActivityTitle())));
                 break;
             case R.id.drawerItemCCEndurance:
                 navController.navigate(WelcomeFragmentDirections
-                        .actionWelcomeFragmentToConeControlWelcomeFragment(ConeControlEvent.ENDURANCE));
+                        .actionWelcomeFragmentToConeControlWelcomeFragment(
+                                ConeControlEvent.ENDURANCE,
+                                getString(ConeControlEvent.ENDURANCE.getActivityTitle())));
                 break;
             case R.id.drawerItemUser:
                 navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToUserFragment());

@@ -173,7 +173,7 @@ public class TeamMemberFragment extends Fragment implements  TeamMemberPresenter
         assert getActivity() != null;
         NavController navController = Navigation.findNavController(getActivity(), R.id.myNavHostFragment);
         navController.navigate(TeamMemberFragmentDirections
-                .actionTeamMemberFragmentToTeamMemberDetailFragment(selectedTeamMember, lastBriefing));
+                .actionTeamMemberFragmentToTeamMemberDetailFragment(selectedTeamMember, lastBriefing, selectedTeamMember.getName()));
     }
 
     @Override

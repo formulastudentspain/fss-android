@@ -203,7 +203,11 @@ public class RaceControlWelcomeFragment extends Fragment implements View.OnClick
             assert getActivity() != null;
             NavController navController = Navigation.findNavController(getActivity(), R.id.myNavHostFragment);
             navController.navigate(RaceControlWelcomeFragmentDirections
-                    .actionRaceControlWelcomeFragmentToRaceControlFragment(rcEvent, selectedRound, selectedArea));
+                    .actionRaceControlWelcomeFragmentToRaceControlFragment(
+                            rcEvent,
+                            selectedRound,
+                            selectedArea,
+                            getString(rcEvent.getActivityTitle())));
         }
 
         if((RaceControlEvent.ENDURANCE.equals(rcEvent) && selectedRound != null && selectedArea!=null)

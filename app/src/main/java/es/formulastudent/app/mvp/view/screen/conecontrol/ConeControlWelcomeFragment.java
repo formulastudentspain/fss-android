@@ -164,7 +164,11 @@ public class ConeControlWelcomeFragment extends Fragment implements ConeControlP
             assert getActivity() != null;
             NavController navController = Navigation.findNavController(getActivity(), R.id.myNavHostFragment);
             navController.navigate(ConeControlWelcomeFragmentDirections
-                    .actionConeControlWelcomeFragmentToConeControlFragment(ccEvent, selectedRound, selectedSector));
+                    .actionConeControlWelcomeFragmentToConeControlFragment(
+                            ccEvent,
+                            selectedRound,
+                            selectedSector,
+                            getString(ccEvent.getActivityTitle())));
         }
         checkEnableButton();
     }

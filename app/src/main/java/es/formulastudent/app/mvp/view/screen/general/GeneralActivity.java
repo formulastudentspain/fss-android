@@ -74,7 +74,6 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
 
         //loading dialog
         loadingDialog = GeneralActivityLoadingDialog.newInstance();
-
     }
 
     @Override

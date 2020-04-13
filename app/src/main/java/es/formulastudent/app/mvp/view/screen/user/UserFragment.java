@@ -196,7 +196,8 @@ public class UserFragment extends Fragment implements UserPresenter.View, View.O
     public void openUserDetailFragment(User user) {
         assert getActivity() != null;
         NavController navController = Navigation.findNavController(getActivity(), R.id.myNavHostFragment);
-        navController.navigate(UserFragmentDirections.actionUserFragmentToUserDetailFragment(user));
+        navController.navigate(UserFragmentDirections
+                .actionUserFragmentToUserDetailFragment(user, user.getName()));
     }
 
     @Override
