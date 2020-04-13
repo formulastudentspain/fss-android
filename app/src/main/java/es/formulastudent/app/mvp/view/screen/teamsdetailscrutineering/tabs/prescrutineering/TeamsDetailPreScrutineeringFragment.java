@@ -1,5 +1,6 @@
 package es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.prescrutineering;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
@@ -124,7 +127,7 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
 
         }else if(view.getId() == R.id.button_add_egress_register){
             Intent i = new Intent(getActivity(), NFCReaderActivity.class);
-            getActivity().startActivityForResult(i, NFC_REQUEST_CODE);
+            startActivityForResult(i, NFC_REQUEST_CODE);
 
         }else if(view.getId() == R.id.pre_scrutineering_comments){
 
@@ -134,6 +137,26 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //NFC reader
+        if (requestCode == NFC_REQUEST_CODE) {
+            if(resultCode == Activity.RESULT_OK){
+                String result = data.getStringExtra("result");
+                presenter.onNFCTagDetected(result);
+            }
+
+            //Chronometer result for Egress
+        }else if(requestCode == CHRONO_CODE){
+            if(resultCode == Activity.RESULT_OK) {
+                ArrayList<String> result = data.getStringArrayListExtra("result");
+                Long milliSeconds = Long.parseLong(result.get(0));
+                String registerID = result.get(1);
+                presenter.onChronoTimeRegistered(milliSeconds, registerID);
+            }
+        }
+    }
 
     @Override
     public void updateView(Team team) {
@@ -161,7 +184,7 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
         PreScrutineeringRegister selectedRegister = (PreScrutineeringRegister) presenter.getEventRegisterList().get(position);
         Intent intent = new Intent(getContext(), EgressChronoActivity.class);
         intent.putExtra("prescrutineering_register", selectedRegister);
-        getActivity().startActivityForResult(intent, CHRONO_CODE);
+        startActivityForResult(intent, CHRONO_CODE);
     }
 
     @Override
@@ -174,7 +197,6 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
             Team modifiedTeam = team.clone();
             modifiedTeam.setScrutineeringPS(false);
             presenter.updateTeam(modifiedTeam, team);
-
         }
 
         return false;

@@ -1,7 +1,5 @@
 package es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -108,26 +105,5 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements TeamsD
                 .teamsDetailScrutineeringModule(new TeamsDetailScrutineeringModule(this))
                 .build()
                 .inject(this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        //NFC reader
-        if (requestCode == NFC_REQUEST_CODE) {
-            if(resultCode == Activity.RESULT_OK){
-                String result = data.getStringExtra("result");
-                presenter.onNFCTagDetected(result);
-            }
-
-            //Chronometer result for Egress
-        }else if(requestCode == CHRONO_CODE){
-            if(resultCode == Activity.RESULT_OK) {
-                ArrayList<String> result = data.getStringArrayListExtra("result");
-                Long milliSeconds = Long.parseLong(result.get(0));
-                String registerID = result.get(1);
-                presenter.onChronoTimeRegistered(milliSeconds, registerID);
-            }
-        }
     }
 }

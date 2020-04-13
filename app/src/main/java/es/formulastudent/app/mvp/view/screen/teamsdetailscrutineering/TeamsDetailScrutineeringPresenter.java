@@ -36,7 +36,7 @@ public class TeamsDetailScrutineeringPresenter {
     private Messages messages;
 
     //Data
-    List<EventRegister> eventRegisterList = new ArrayList<>();
+    private List<EventRegister> eventRegisterList = new ArrayList<>();
 
 
     public TeamsDetailScrutineeringPresenter(TeamsDetailScrutineeringPresenter.View view, TeamBO teamBO,
@@ -89,7 +89,7 @@ public class TeamsDetailScrutineeringPresenter {
             public void onSuccess(ResponseDTO responseDTO) {
                 loadingDialog.hide();
                 List<EventRegister> results = (List<EventRegister>) responseDTO.getData();
-                updateEventRegisters(results==null ? new ArrayList<EventRegister>() : results);
+                updateEventRegisters(results==null ? new ArrayList<>() : results);
             }
 
             @Override
@@ -101,7 +101,7 @@ public class TeamsDetailScrutineeringPresenter {
     }
 
 
-    public void updateEventRegisters(List<EventRegister> items){
+    private void updateEventRegisters(List<EventRegister> items){
         this.eventRegisterList.clear();
         this.eventRegisterList.addAll(items);
         this.view.refreshRegisterItems();
@@ -116,7 +116,7 @@ public class TeamsDetailScrutineeringPresenter {
      * Retrieve user by NFC tag after read
      * @param tag
      */
-    void onNFCTagDetected(String tag){
+    public void onNFCTagDetected(String tag){
         loadingDialog.show();
         teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
             @Override
@@ -127,6 +127,7 @@ public class TeamsDetailScrutineeringPresenter {
                 dynamicEventBO.createRegister(teamMember, teamMember.getCarNumber(), null, EventType.PRE_SCRUTINEERING, new BusinessCallback() {
                     @Override
                     public void onSuccess(ResponseDTO responseDTO) {
+                        loadingDialog.hide();
                         PreScrutineeringRegister register = (PreScrutineeringRegister) responseDTO.getData();
                         createEgressRegister(register);
                     }
@@ -152,11 +153,11 @@ public class TeamsDetailScrutineeringPresenter {
      * @param register
      */
     private void createEgressRegister(PreScrutineeringRegister register){
-
+        loadingDialog.show();
         egressBO.createRegister(register.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.show();
+                loadingDialog.hide();
                 retrieveEgressRegisterList();
             }
 
@@ -174,7 +175,7 @@ public class TeamsDetailScrutineeringPresenter {
      * @param milliseconds
      * @param registerID
      */
-    void onChronoTimeRegistered(Long milliseconds, String registerID) {
+    public void onChronoTimeRegistered(Long milliseconds, String registerID) {
         loadingDialog.show();
         dynamicEventBO.updatePreScrutineeringRegister(registerID, milliseconds, new BusinessCallback() {
 
