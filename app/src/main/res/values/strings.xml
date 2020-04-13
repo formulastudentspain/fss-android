@@ -30,7 +30,6 @@
     <string name="drawer_menu_cone_control">CONE CONTROL</string>
 
 
-
     <!-- Login -->
     <string name="login_activity_forgot_password"><u>Forgot password?</u></string>
     <string name="login_activity_mail">Mail</string>
@@ -54,14 +53,6 @@
     <string name="login_Activity_mandatory_field">This field is mandatory</string>
     <string name="login_Activity_password_not_match">The password is different</string>
     <string name="login_Activity_min_password_six">Min. 6 characters</string>
-
-
-
-
-
-
-
-
 
 
     <!-- Team Member -->
@@ -103,12 +94,9 @@
     <string name="team_member_dialog_filter_title">Filter team members</string>
 
 
-
     <!-- Volunteers -->
     <string name="activity_volunteers_detail_title">Volunteer</string>
     <string name="activity_volunteers_title">Volunteers</string>
-
-
 
 
     <!-- Create user dialog -->
@@ -135,7 +123,6 @@
     <string name="dialog_assign_device_assign">Assign</string>
 
 
-
     <!-- Briefing -->
     <string name="briefing_activity_title">Briefing control</string>
     <string name="briefing_activity_teams_label">Teams</string>
@@ -149,7 +136,6 @@
     <string name="briefing_messages_delete_register_error">Error deleting briefing register</string>
     <string name="briefing_messages_delete_register_info">Register deleted properly</string>
     <string name="briefing_messages_parsing_dates_error">Error parsing dates</string>
-
 
 
     <!-- General activity -->
@@ -219,7 +205,6 @@
     <string name="dynamic_event_message_info_controlled_from_race_control">This control is done from Race Control</string>
 
 
-
     <!-- Pre-Scrutineering -->
     <string name="prescruti_detail_activity_title">Egress time</string>
     <string name="prescruti_detail_activity_button_start">Start</string>
@@ -239,8 +224,6 @@
     <string name="statistics_info_exporting_dynamic_event">Dynamic Event registers exported successfully</string>
     <string name="statistics_error_exporting_users">Error exporting users</string>
     <string name="statistics_info_exporting_users">Users exported successfully</string>
-
-
 
 
     <!-- Admin operations -->
@@ -294,9 +277,7 @@
     <string name="rc_info_only_officials">Only officials can perform this action</string>
 
 
-
     <string name="rc_skidpad_title">Race Control: Skidpad</string>
-
 
 
     <!-- Race Control Welcome-->
@@ -377,5 +358,8 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

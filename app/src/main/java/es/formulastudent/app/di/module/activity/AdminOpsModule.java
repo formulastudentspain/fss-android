@@ -8,7 +8,7 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
-import es.formulastudent.app.mvp.view.activity.adminoperations.AdminOpsPresenter;
+import es.formulastudent.app.mvp.view.screen.adminoperations.AdminOpsPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class AdminOpsModule {

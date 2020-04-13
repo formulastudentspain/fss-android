@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".mvp.view.activity.teammember.TeamMemberActivity">
+    tools:context=".mvp.view.screen.teammember.TeamMemberActivity">
 
     <TextView
         android:layout_width="wrap_content"

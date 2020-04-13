@@ -36,7 +36,7 @@ import es.formulastudent.app.mvp.data.business.user.impl.UserBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.model.User;
 
 
-@Module(includes = {FirebaseModule.class, ContextModule.class, SharedPreferencesModule.class})
+@Module(includes = {FirebaseModule.class, ContextModule.class, SharedPreferencesModule.class, UtilsModule.class})
 public class BusinessModule {
 
     /**
@@ -117,7 +117,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public RaceControlBO provideRaceControlBO(FirebaseFirestore firebaseFirestore, TeamBO teamBO, ConeControlBO coneControlBO) {
+    public RaceControlBO provideRaceControlBO(FirebaseFirestore firebaseFirestore, TeamBO teamBO,
+                                              ConeControlBO coneControlBO) {
         return new RaceControlBOFirebaseImpl(firebaseFirestore, teamBO, coneControlBO);
     }
 

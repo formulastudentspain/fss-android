@@ -16,12 +16,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/LoginStyle"
         tools:ignore="GoogleAppIndexingWarning">
 
-
         <activity
-            android:name=".mvp.view.activity.login.LoginActivity"
+            android:name=".mvp.view.screen.login.LoginActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,92 +29,22 @@
         </activity>
 
         <activity
-            android:name=".mvp.view.activity.NFCReaderActivity"
-            android:label="Formula Student Spain"
-            android:launchMode="singleTop">
-        </activity>
+            android:name=".mvp.view.screen.NFCReaderActivity"
+            android:launchMode="singleTop"/>
 
         <activity
-            android:name=".mvp.view.activity.teammember.TeamMemberActivity"
-            android:label="Formula Student Spain"
-            android:launchMode="singleTop">
-        </activity>
+            android:name=".mvp.view.screen.egresschrono.EgressChronoActivity"
+            android:launchMode="singleTop"/>
 
-        <activity
-            android:name=".mvp.view.activity.briefing.BriefingActivity"
-            android:launchMode="singleTop">
+        <activity android:name=".mvp.view.screen.statistics.StatisticsActivity"/>
+        <activity android:name=".mvp.view.screen.adminoperations.AdminOpsActivity"/>
+        <activity android:name=".mvp.view.screen.qrreader.QRReaderActivity"/>
+        <activity android:name=".mvp.view.screen.conecontrolstats.ConeControlStatsActivity"/>
+        <activity android:name=".mvp.view.screen.loginregister.RegisterActivity"
+            android:theme="@style/LoginStyle">
         </activity>
-
-        <activity
-            android:name=".mvp.view.activity.teammemberdetail.TeamMemberDetailActivity"
-            android:label="User detail"
-            android:launchMode="singleTop">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.dynamicevent.DynamicEventActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.egresschrono.EgressChronoActivity"
-            android:label="Egress chrono"
-            android:launchMode="singleTop">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mvp.view.activity.dynamicevent.DynamicEventActivity"/>
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.welcome.WelcomeActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.statistics.StatisticsActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.adminoperations.AdminOpsActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.racecontrol.RaceControlActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.racecontrol.RaceControlWelcomeActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.user.UserActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.qrreader.QRReaderActivity">
-        </activity>
-
-        <activity
-            android:name=".mvp.view.activity.userdetail.UserDetailActivity">
-        </activity>
-        <activity
-            android:name=".mvp.view.activity.teams.TeamsActivity">
-        </activity>
-        <activity
-            android:name=".mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringActivity">
-        </activity>
-        <activity
-            android:name=".mvp.view.activity.teamsdetailfee.TeamsDetailFeeActivity">
-        </activity>
-        <activity
-            android:name=".mvp.view.activity.conecontrol.ConeControlWelcomeActivity">
-        </activity>
-        <activity
-            android:name=".mvp.view.activity.conecontrol.ConeControlActivity">
-        </activity>
-        <activity
-            android:name=".mvp.view.activity.conecontrolstats.ConeControlStatsActivity">
-        </activity>
-        <activity
-            android:name=".mvp.view.activity.loginregister.RegisterActivity">
+        <activity android:name=".mvp.view.screen.welcome.MainActivity"
+            android:theme="@style/MainStyle">
         </activity>
     </application>
 </manifest>

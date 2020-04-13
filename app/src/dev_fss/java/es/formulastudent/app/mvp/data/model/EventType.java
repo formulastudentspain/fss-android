@@ -7,25 +7,25 @@ public enum EventType implements Serializable {
         BRIEFING ("Briefing control", 10001L,"DEV_DYNAMIC_EVENT_CONTROL"),
         PRE_SCRUTINEERING ("Pre-Scrutineering", 10002L, "DEV_DYNAMIC_EVENT_CONTROL"),
 
-        PRACTICE_TRACK ("Practice Track control", 10011L, "DEV_DYNAMIC_EVENT_CONTROL"),
-        SKIDPAD ("Skidpad control", 10012L, "DEV_DYNAMIC_EVENT_CONTROL"),
-        ACCELERATION ("Acceleration control", 10013L, "DEV_DYNAMIC_EVENT_CONTROL"),
-        AUTOCROSS ("Autocross control", 10014L, "DEV_DYNAMIC_EVENT_CONTROL"),
-        ENDURANCE_EFFICIENCY ("Endurance control", 10015L, "DEV_DYNAMIC_EVENT_CONTROL");
+        PRACTICE_TRACK ("Practice Track", 10011L, "DEV_DYNAMIC_EVENT_CONTROL"),
+        SKIDPAD ("Skidpad", 10012L, "DEV_DYNAMIC_EVENT_CONTROL"),
+        ACCELERATION ("Acceleration", 10013L, "DEV_DYNAMIC_EVENT_CONTROL"),
+        AUTOCROSS ("Autocross", 10014L, "DEV_DYNAMIC_EVENT_CONTROL"),
+        ENDURANCE_EFFICIENCY ("Endurance", 10015L, "DEV_DYNAMIC_EVENT_CONTROL");
 
 
-        private final String activityTitle;
+        private final String name;
         private final Long drawerItemID;
         private final String firebaseTable;
 
-        EventType(String value, Long drawerItemID, String firebaseTable) {
-                this.activityTitle = value;
+        EventType(String name, Long drawerItemID, String firebaseTable) {
+                this.name = name;
                 this.drawerItemID = drawerItemID;
                 this.firebaseTable = firebaseTable;
         }
 
-        public String getActivityTitle() {
-                return activityTitle;
+        public String getName() {
+                return name;
         }
 
         public Long getDrawerItemID() {

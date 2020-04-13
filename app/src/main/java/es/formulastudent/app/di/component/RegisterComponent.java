@@ -6,8 +6,8 @@ import dagger.Component;
 import es.formulastudent.app.di.module.activity.RegisterModule;
 import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.activity.loginregister.RegisterActivity;
-import es.formulastudent.app.mvp.view.activity.loginregister.RegisterPresenter;
+import es.formulastudent.app.mvp.view.screen.loginregister.RegisterActivity;
+import es.formulastudent.app.mvp.view.screen.loginregister.RegisterPresenter;
 
 
 @Singleton

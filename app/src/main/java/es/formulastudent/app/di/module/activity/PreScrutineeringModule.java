@@ -7,7 +7,7 @@ import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
-import es.formulastudent.app.mvp.view.activity.egresschrono.EgressChronoPresenter;
+import es.formulastudent.app.mvp.view.screen.egresschrono.EgressChronoPresenter;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class PreScrutineeringModule {

@@ -8,7 +8,9 @@ import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
-import es.formulastudent.app.mvp.view.activity.teamsdetailscrutineering.TeamsDetailScrutineeringPresenter;
+import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringPresenter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.Messages;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class TeamsDetailScrutineeringModule {
@@ -26,7 +28,10 @@ public class TeamsDetailScrutineeringModule {
 
     @Provides
     public TeamsDetailScrutineeringPresenter providePresenter(TeamsDetailScrutineeringPresenter.View categoryView,
-                                                              TeamBO teamBO, DynamicEventBO dynamicEventBO, EgressBO egressBO, TeamMemberBO teamMemberBO) {
-        return new TeamsDetailScrutineeringPresenter(categoryView, teamBO, dynamicEventBO, egressBO, teamMemberBO);
+                                                              TeamBO teamBO, DynamicEventBO dynamicEventBO,
+                                                              EgressBO egressBO, TeamMemberBO teamMemberBO,
+                                                              LoadingDialog loadingDialog, Messages messages) {
+        return new TeamsDetailScrutineeringPresenter(categoryView, teamBO, dynamicEventBO, egressBO,
+                teamMemberBO, loadingDialog, messages);
     }
 }

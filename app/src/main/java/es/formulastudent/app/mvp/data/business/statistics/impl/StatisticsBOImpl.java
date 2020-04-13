@@ -68,7 +68,7 @@ public class StatisticsBOImpl implements StatisticsBO {
                 try {
                     Workbook wb = new HSSFWorkbook(is);
                     Sheet sheet = wb.getSheetAt(0);
-                    wb.setSheetName(0, eventType.getActivityTitle());
+                    wb.setSheetName(0, eventType.getName());
 
                     //TEAM NAME
                     Row row = sheet.createRow(4);
@@ -170,11 +170,11 @@ public class StatisticsBOImpl implements StatisticsBO {
 
                     //Create Directory
                     String rootDirectoryName = Environment.getExternalStorageDirectory() + "";
-                    File subDirectory = new File(rootDirectoryName, "FSS/" + eventType.getActivityTitle());
+                    File subDirectory = new File(rootDirectoryName, "FSS/" + eventType.getName());
                     subDirectory.mkdirs();
 
                     //Create File
-                    OutputStream stream = new FileOutputStream(rootDirectoryName + "/" + "FSS/" + eventType.getActivityTitle() + "/" + nameFile + ".xls");
+                    OutputStream stream = new FileOutputStream(rootDirectoryName + "/" + "FSS/" + eventType.getName() + "/" + nameFile + ".xls");
 
                     wb.write(stream);
                     stream.close();
@@ -184,7 +184,7 @@ public class StatisticsBOImpl implements StatisticsBO {
                     ExportStatisticsDTO exportStatisticsDTO = new ExportStatisticsDTO();
                     exportStatisticsDTO.setEventType(eventType);
                     exportStatisticsDTO.setExportDate(Calendar.getInstance().getTime());
-                    exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/FSS/" + eventType.getActivityTitle() + "/" + nameFile + ".xls");
+                    exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/FSS/" + eventType.getName() + "/" + nameFile + ".xls");
 
                     responseDTOExport.setData(exportStatisticsDTO);
 
