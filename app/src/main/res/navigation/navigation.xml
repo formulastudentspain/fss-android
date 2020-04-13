@@ -13,25 +13,53 @@
         tools:layout="@layout/fragment_welcome">
         <action
             android:id="@+id/action_welcomeFragment_to_briefingFragment"
-            app:destination="@id/briefingFragment" />
+            app:destination="@id/briefingFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_welcomeFragment_to_teamsFragment"
-            app:destination="@id/teamsFragment" />
+            app:destination="@id/teamsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_welcomeFragment_to_raceAccessFragment"
-            app:destination="@id/raceAccessFragment" />
+            app:destination="@id/raceAccessFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_welcomeFragment_to_raceControlWelcomeFragment"
-            app:destination="@id/raceControlWelcomeFragment" />
+            app:destination="@id/raceControlWelcomeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_welcomeFragment_to_coneControlWelcomeFragment"
-            app:destination="@id/coneControlWelcomeFragment" />
+            app:destination="@id/coneControlWelcomeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_welcomeFragment_to_userFragment"
-            app:destination="@id/userFragment" />
+            app:destination="@id/userFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_welcomeFragment_to_teamMemberFragment"
-            app:destination="@id/teamMemberFragment" />
+            app:destination="@id/teamMemberFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/briefingFragment"
@@ -45,10 +73,18 @@
         tools:layout="@layout/fragment_teams">
         <action
             android:id="@+id/action_teamsFragment_to_teamsDetailScrutineeringFragment"
-            app:destination="@id/teamsDetailScrutineeringFragment" />
+            app:destination="@id/teamsDetailScrutineeringFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_teamsFragment_to_teamsDetailFeeFragment"
-            app:destination="@id/teamsDetailFeeFragment" />
+            app:destination="@id/teamsDetailFeeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/teamsDetailScrutineeringFragment"
@@ -94,7 +130,11 @@
         <action
             android:id="@+id/action_raceControlWelcomeFragment_to_raceControlFragment"
             app:destination="@id/raceControlFragment"
-            app:popUpTo="@id/welcomeFragment" />
+            app:popUpTo="@id/welcomeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <argument
             android:name="raceControlEvent"
             app:argType="es.formulastudent.app.mvp.data.model.RaceControlEvent" />
@@ -130,7 +170,11 @@
         <action
             android:id="@+id/action_coneControlWelcomeFragment_to_coneControlFragment"
             app:destination="@id/coneControlFragment"
-            app:popUpTo="@id/welcomeFragment" />
+            app:popUpTo="@id/welcomeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <argument
             android:name="coneControlEvent"
             app:argType="es.formulastudent.app.mvp.data.model.ConeControlEvent" />
@@ -164,7 +208,11 @@
         tools:layout="@layout/fragment_user">
         <action
             android:id="@+id/action_userFragment_to_userDetailFragment"
-            app:destination="@id/userDetailFragment" />
+            app:destination="@id/userDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/userDetailFragment"
@@ -185,7 +233,11 @@
         tools:layout="@layout/fragment_team_member">
         <action
             android:id="@+id/action_teamMemberFragment_to_teamMemberDetailFragment"
-            app:destination="@id/teamMemberDetailFragment" />
+            app:destination="@id/teamMemberDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/teamMemberDetailFragment"

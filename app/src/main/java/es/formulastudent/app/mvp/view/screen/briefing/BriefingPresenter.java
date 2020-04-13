@@ -62,8 +62,8 @@ public class BriefingPresenter implements RecyclerViewClickListener {
         briefingBO.createBriefingRegistry(teamMember, loggedUser.getMail(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                retrieveBriefingRegisterList();
                 loadingDialog.hide();
+                retrieveBriefingRegisterList();
             }
 
             @Override
