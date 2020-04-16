@@ -2,7 +2,6 @@ package es.formulastudent.app.mvp.view.screen.briefing;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,13 +19,14 @@ import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.view.screen.GeneralPresenter;
 import es.formulastudent.app.mvp.view.screen.briefing.dialog.ConfirmBriefingRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.briefing.dialog.DeleteEventRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class BriefingPresenter implements RecyclerViewClickListener, DataConsumer {
+public class BriefingPresenter extends GeneralPresenter implements RecyclerViewClickListener, DataConsumer {
 
     //Dependencies
     private View view;
@@ -43,9 +43,6 @@ public class BriefingPresenter implements RecyclerViewClickListener, DataConsume
     private Date selectedDateFrom;
     private Date selectedDateTo;
     private String selectedTeamID;
-
-    //Live data to show the loading dialog
-    private MutableLiveData<Boolean> loadingData = new MutableLiveData<>();
 
     public BriefingPresenter(BriefingPresenter.View view, TeamBO teamBO,
                              BriefingBO briefingBO, TeamMemberBO teamMemberBO,
@@ -191,15 +188,6 @@ public class BriefingPresenter implements RecyclerViewClickListener, DataConsume
 
     void setSelectedTeamID(String selectedTeamID) {
         this.selectedTeamID = selectedTeamID;
-    }
-
-    public MutableLiveData<Boolean> getLoadingData() {
-        return loadingData;
-    }
-
-    @Override
-    public void loadingData(boolean loading) {
-        loadingData.setValue(loading);
     }
 
     public interface View {

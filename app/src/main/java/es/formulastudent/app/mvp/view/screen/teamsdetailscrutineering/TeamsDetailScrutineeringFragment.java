@@ -26,6 +26,7 @@ import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabadapter.TabAdapter;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.prescrutineering.TeamsDetailPreScrutineeringFragment;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 
 public class TeamsDetailScrutineeringFragment extends Fragment implements TeamsDetailScrutineeringPresenter.View{
 
@@ -38,6 +39,9 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements TeamsD
     @Inject
     User loggedUser;
 
+    @Inject
+    LoadingDialog loadingDialog;
+
     private Team team;
 
 
@@ -45,6 +49,14 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements TeamsD
     public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
+
+        presenter.getLoadingData().observe(this, loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
     }
 
 

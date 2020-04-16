@@ -63,12 +63,6 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
     public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
-    }
-
-    @SuppressLint("FragmentLiveDataObserve")
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_briefing, container, false);
 
         presenter.getLoadingData().observe(this, loadingData -> {
             if(loadingData){
@@ -77,6 +71,12 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
                 loadingDialog.hide();
             }
         });
+    }
+
+    @SuppressLint("FragmentLiveDataObserve")
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_briefing, container, false);
 
         initViews(view);
         return view;

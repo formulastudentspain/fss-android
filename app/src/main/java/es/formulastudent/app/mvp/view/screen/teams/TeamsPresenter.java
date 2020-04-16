@@ -9,21 +9,21 @@ import java.util.Map;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Team;
+import es.formulastudent.app.mvp.view.screen.GeneralPresenter;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class TeamsPresenter implements RecyclerViewClickListener {
+public class TeamsPresenter extends GeneralPresenter implements RecyclerViewClickListener, DataConsumer {
 
     //Dependencies
     private View view;
     private TeamBO teamBO;
-    private LoadingDialog loadingDialog;
     private Messages messages;
 
     //Data
@@ -31,11 +31,10 @@ public class TeamsPresenter implements RecyclerViewClickListener {
     private Map<String, String> filters = new HashMap<>();
 
 
-    public TeamsPresenter(TeamsPresenter.View view, TeamBO teamBO, LoadingDialog loadingDialog,
-                          Messages messages) {
+    public TeamsPresenter(TeamsPresenter.View view, TeamBO teamBO, Messages messages) {
         this.view = view;
         this.teamBO = teamBO;
-        this.loadingDialog = loadingDialog;
+        this.teamBO.setDataConsumer(this);
         this.messages = messages;
     }
 
@@ -44,7 +43,6 @@ public class TeamsPresenter implements RecyclerViewClickListener {
      * Retrieve Briefing registers
      */
     public void retrieveTeamsList() {
-        loadingDialog.show();
         view.filtersActivated(!filters.keySet().isEmpty());
 
         //Call Briefing business
@@ -52,7 +50,6 @@ public class TeamsPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 List<Team> results = (List<Team>) responseDTO.getData();
                 if (results == null) {
                     results = new ArrayList<>();
@@ -62,7 +59,6 @@ public class TeamsPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -104,6 +100,8 @@ public class TeamsPresenter implements RecyclerViewClickListener {
     public void setFilters(Map<String, String> filters) {
         this.filters = filters;
     }
+
+
 
     public interface View {
 

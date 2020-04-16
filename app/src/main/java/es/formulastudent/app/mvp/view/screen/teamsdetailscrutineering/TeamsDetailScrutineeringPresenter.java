@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
@@ -19,12 +20,12 @@ import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.view.screen.GeneralPresenter;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.TeamsDetailFragment;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class TeamsDetailScrutineeringPresenter {
+public class TeamsDetailScrutineeringPresenter extends GeneralPresenter implements DataConsumer {
 
     //Dependencies
     private View view;
@@ -32,7 +33,6 @@ public class TeamsDetailScrutineeringPresenter {
     private DynamicEventBO dynamicEventBO;
     private TeamMemberBO teamMemberBO;
     private EgressBO egressBO;
-    private LoadingDialog loadingDialog;
     private Messages messages;
 
     //Data
@@ -41,34 +41,34 @@ public class TeamsDetailScrutineeringPresenter {
 
     public TeamsDetailScrutineeringPresenter(TeamsDetailScrutineeringPresenter.View view, TeamBO teamBO,
                                              DynamicEventBO dynamicEventBO, EgressBO egressBO,
-                                             TeamMemberBO teamMemberBO, LoadingDialog loadingDialog, Messages messages) {
+                                             TeamMemberBO teamMemberBO,Messages messages) {
         this.view = view;
         this.teamBO = teamBO;
+        this.teamBO.setDataConsumer(this);
         this.dynamicEventBO = dynamicEventBO;
+        this.dynamicEventBO.setDataConsumer(this);
         this.teamMemberBO = teamMemberBO;
+        this.teamMemberBO.setDataConsumer(this);
         this.egressBO = egressBO;
-        this.loadingDialog = loadingDialog;
+        this.egressBO.setDataConsumer(this);
         this.messages = messages;
     }
 
-    public void updateTeam(final Team mofidiedTeam, final Team originalTeam) {
-        loadingDialog.show();
-        teamBO.updateTeam(mofidiedTeam, new BusinessCallback() {
+    public void updateTeam(final Team mofifiedTeam, final Team originalTeam) {
+        teamBO.updateTeam(mofifiedTeam, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 //Get fragments and update fields with the new values
                 List<Fragment> fragmentList = view.getViewFragmentManager().getFragments();
                 for(Fragment fragment: fragmentList){
                     if(fragment instanceof TeamsDetailFragment){
-                        ((TeamsDetailFragment)fragment).updateView(mofidiedTeam);
+                        ((TeamsDetailFragment)fragment).updateView(mofifiedTeam);
                     }
                 }
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
 
                 //Get fragments and update fields with the old values
                 List<Fragment> fragmentList = view.getViewFragmentManager().getFragments();
@@ -82,19 +82,16 @@ public class TeamsDetailScrutineeringPresenter {
     }
 
     public void retrieveEgressRegisterList() {
-        loadingDialog.show();
         dynamicEventBO.retrieveRegisters(null, null, view.getCurrentTeam().getID(), null, EventType.PRE_SCRUTINEERING, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 List<EventRegister> results = (List<EventRegister>) responseDTO.getData();
                 updateEventRegisters(results==null ? new ArrayList<>() : results);
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -117,7 +114,6 @@ public class TeamsDetailScrutineeringPresenter {
      * @param tag
      */
     public void onNFCTagDetected(String tag){
-        loadingDialog.show();
         teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
@@ -127,13 +123,11 @@ public class TeamsDetailScrutineeringPresenter {
                 dynamicEventBO.createRegister(teamMember, teamMember.getCarNumber(), null, EventType.PRE_SCRUTINEERING, new BusinessCallback() {
                     @Override
                     public void onSuccess(ResponseDTO responseDTO) {
-                        loadingDialog.hide();
                         PreScrutineeringRegister register = (PreScrutineeringRegister) responseDTO.getData();
                         createEgressRegister(register);
                     }
                     @Override
                     public void onFailure(ResponseDTO responseDTO) {
-                        loadingDialog.hide();
                         messages.showError(responseDTO.getError());
                     }
                 });
@@ -141,7 +135,6 @@ public class TeamsDetailScrutineeringPresenter {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -153,17 +146,14 @@ public class TeamsDetailScrutineeringPresenter {
      * @param register
      */
     private void createEgressRegister(PreScrutineeringRegister register){
-        loadingDialog.show();
         egressBO.createRegister(register.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 retrieveEgressRegisterList();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -176,18 +166,15 @@ public class TeamsDetailScrutineeringPresenter {
      * @param registerID
      */
     public void onChronoTimeRegistered(Long milliseconds, String registerID) {
-        loadingDialog.show();
         dynamicEventBO.updatePreScrutineeringRegister(registerID, milliseconds, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 retrieveEgressRegisterList();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });

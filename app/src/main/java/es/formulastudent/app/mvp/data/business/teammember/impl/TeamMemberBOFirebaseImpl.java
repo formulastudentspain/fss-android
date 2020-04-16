@@ -30,6 +30,7 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
     public void retrieveTeamMemberByNFCTag(String tag, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .whereEqualTo(TeamMember.TAG_NFC, tag)
                 .get()
@@ -41,11 +42,13 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
                         responseDTO.setInfo(R.string.team_member_get_by_nfc_info);
                     }
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                     
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.team_member_get_by_nfc_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -61,6 +64,7 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
             query = query.whereEqualTo(TeamMember.TEAM_ID, filterTeam.getID());
         }
 
+        loadingData(true);
         query.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     //success
@@ -75,11 +79,13 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
                         responseDTO.setData(result);
                         responseDTO.setInfo(R.string.team_member_get_all_info);
                         callback.onSuccess(responseDTO);
+                        loadingData(false);
                     }
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.team_member_get_all_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -88,16 +94,19 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
         final ResponseDTO responseDTO = new ResponseDTO();
         Map<String, Object> docData = teamMember.toDocumentData();
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .document(teamMember.getID())
                 .set(docData)
                 .addOnSuccessListener(aVoid -> {
                     responseDTO.setInfo(R.string.team_member_create_info);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.team_member_create_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -106,6 +115,7 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
     public void deleteAllTeamMembers(final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -115,11 +125,13 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
                     }
                     responseDTO.setInfo(R.string.team_member_delete_all_info);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                     
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.team_member_delete_all_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -127,6 +139,7 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
     public void getRegisteredTeamMemberByTeamId(String teamID, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .whereEqualTo(TeamMember.TEAM_ID, teamID)
                 .get()
@@ -143,11 +156,13 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
                     responseDTO.setData(teamMemberList);
                     responseDTO.setInfo(R.string.team_member_get_registered_by_team_info);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                     
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.team_member_get_registered_by_team_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -156,20 +171,23 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
         final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS).document(teamMember.getID());
 
+        loadingData(true);
         registerReference.get()
                 .addOnSuccessListener(documentSnapshot -> registerReference.update(teamMember.toDocumentData())
                         .addOnSuccessListener(aVoid -> {
                             responseDTO.setInfo(R.string.team_member_update_info);
                             callback.onSuccess(responseDTO);
+                            loadingData(false);
                         })
                         .addOnFailureListener(e -> {
                             responseDTO.setError(R.string.team_member_update_error);
                             callback.onFailure(responseDTO);
+                            loadingData(false);
                         }))
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.team_member_update_error);
                     callback.onFailure(responseDTO);
-                    
+                    loadingData(false);
                 });
     }
 }

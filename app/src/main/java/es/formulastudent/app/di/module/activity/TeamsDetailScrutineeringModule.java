@@ -32,6 +32,6 @@ public class TeamsDetailScrutineeringModule {
                                                               EgressBO egressBO, TeamMemberBO teamMemberBO,
                                                               LoadingDialog loadingDialog, Messages messages) {
         return new TeamsDetailScrutineeringPresenter(categoryView, teamBO, dynamicEventBO, egressBO,
-                teamMemberBO, loadingDialog, messages);
+                teamMemberBO, messages);
     }
 }

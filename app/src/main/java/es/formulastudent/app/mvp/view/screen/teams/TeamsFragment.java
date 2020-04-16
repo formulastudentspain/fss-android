@@ -27,12 +27,16 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.TeamsModule;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.teams.recyclerview.TeamsAdapter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 
 
 public class TeamsFragment extends Fragment implements TeamsPresenter.View, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     TeamsPresenter presenter;
+
+    @Inject
+    LoadingDialog loadingDialog;
 
     private TeamsAdapter adapter;
     private MenuItem filterItem;
@@ -43,6 +47,14 @@ public class TeamsFragment extends Fragment implements TeamsPresenter.View, Swip
     public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
+
+        presenter.getLoadingData().observe(this, loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
     }
 
     @Override
