@@ -5,9 +5,11 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.model.Team;
 
-public interface TeamBO {
+public interface TeamBO extends DataLoader.Consumer{
 
 
     /**
@@ -45,4 +47,10 @@ public interface TeamBO {
      * @param callback
      */
     void updateTeam(Team team, BusinessCallback callback);
+
+    /**
+     * Set data consumer
+     * @param dataConsumer
+     */
+    void setDataConsumer(DataConsumer dataConsumer);
 }

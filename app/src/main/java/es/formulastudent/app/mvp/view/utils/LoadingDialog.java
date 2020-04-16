@@ -44,14 +44,20 @@ public class LoadingDialog extends DialogFragment {
     }
 
     public void show() {
+        if (displaying) return;
+
         FragmentManager fm = activity.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(this, KEY);
         ft.commitAllowingStateLoss();
+        displaying = true;
     }
 
     public void hide() {
+        if (!displaying) return;
+
         this.dismiss();
+        displaying = false;
     }
 
     public void setActivity(FragmentActivity activity) {

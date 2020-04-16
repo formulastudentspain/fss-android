@@ -14,6 +14,7 @@ import java.util.Map;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Car;
@@ -38,7 +39,7 @@ import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDial
 import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_PASSED_TTT;
 import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.TRANSPONDER_STEP;
 
-public class TeamBOFirebaseImpl implements TeamBO {
+public class TeamBOFirebaseImpl extends DataLoader implements TeamBO {
 
     private FirebaseFirestore firebaseFirestore;
 
@@ -159,6 +160,7 @@ public class TeamBOFirebaseImpl implements TeamBO {
             }
         }
 
+        loadingData(true);
         query.orderBy(Team.CAR_NUMBER, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -174,10 +176,12 @@ public class TeamBOFirebaseImpl implements TeamBO {
                         responseDTO.setData(result);
                         responseDTO.setInfo(R.string.teams_info_retrieving_all_message);
                         callback.onSuccess(responseDTO);
+                        loadingData(false);
 
                     } else {
                         responseDTO.setError(R.string.teams_error_retrieving_all_message);
                         callback.onFailure(responseDTO);
+                        loadingData(false);
                     }
                 });
     }
@@ -187,6 +191,7 @@ public class TeamBOFirebaseImpl implements TeamBO {
     public void retrieveTeamById(String id, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
                 .document(id)
                 .get()
@@ -195,10 +200,12 @@ public class TeamBOFirebaseImpl implements TeamBO {
                     responseDTO.setData(team);
                     responseDTO.setInfo(R.string.teams_info_retrieving_by_id_message);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.teams_error_retrieving_by_id_message);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -207,6 +214,7 @@ public class TeamBOFirebaseImpl implements TeamBO {
     public void deleteAllTeams(final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -215,10 +223,12 @@ public class TeamBOFirebaseImpl implements TeamBO {
                     }
                     responseDTO.setInfo(R.string.teams_info_delete_all_message);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.teams_error_delete_all_message);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -227,16 +237,19 @@ public class TeamBOFirebaseImpl implements TeamBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         Map<String, Object> docData = team.toDocumentData();
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM)
                 .document(team.getID())
                 .set(docData)
                 .addOnSuccessListener(aVoid -> {
                     responseDTO.setInfo(R.string.teams_info_create_message);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.teams_error_create_message);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -246,19 +259,23 @@ public class TeamBOFirebaseImpl implements TeamBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM).document(team.getID());
 
+        loadingData(true);
         registerReference.get()
                 .addOnSuccessListener(documentSnapshot -> registerReference.update(team.toDocumentData())
                         .addOnSuccessListener(aVoid -> {
                             responseDTO.setInfo(R.string.teams_info_update_message);
                             callback.onSuccess(responseDTO);
+                            loadingData(false);
                         })
                         .addOnFailureListener(e -> {
                             responseDTO.setError(R.string.teams_error_update_message);
                             callback.onFailure(responseDTO);
+                            loadingData(false);
                         }))
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.teams_error_update_message);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 }

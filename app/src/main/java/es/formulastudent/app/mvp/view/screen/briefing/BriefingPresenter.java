@@ -2,6 +2,7 @@ package es.formulastudent.app.mvp.view.screen.briefing;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
@@ -21,11 +23,10 @@ import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.briefing.dialog.ConfirmBriefingRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.briefing.dialog.DeleteEventRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class BriefingPresenter implements RecyclerViewClickListener {
+public class BriefingPresenter implements RecyclerViewClickListener, DataConsumer {
 
     //Dependencies
     private View view;
@@ -33,55 +34,54 @@ public class BriefingPresenter implements RecyclerViewClickListener {
     private BriefingBO briefingBO;
     private TeamMemberBO teamMemberBO;
     private User loggedUser;
-    private LoadingDialog loadingDialog;
     private Messages messages;
 
     //Data
-    private List<BriefingRegister> filteredBriefingRegisterList = new ArrayList<>();
+    private List<BriefingRegister> briefingRegisterList = new ArrayList<>();
 
     //Selected chip to filter
     private Date selectedDateFrom;
     private Date selectedDateTo;
     private String selectedTeamID;
 
+    //Live data to show the loading dialog
+    private MutableLiveData<Boolean> loadingData = new MutableLiveData<>();
+
     public BriefingPresenter(BriefingPresenter.View view, TeamBO teamBO,
                              BriefingBO briefingBO, TeamMemberBO teamMemberBO,
-                             User loggedUser, LoadingDialog loadingDialog, Messages messages) {
+                             User loggedUser, Messages messages) {
         this.view = view;
         this.teamBO = teamBO;
+        this.teamBO.setDataConsumer(this);
         this.briefingBO = briefingBO;
+        this.briefingBO.setDataConsumer(this);
         this.teamMemberBO = teamMemberBO;
+        this.teamMemberBO.setDataConsumer(this);
         this.loggedUser = loggedUser;
-        this.loadingDialog = loadingDialog;
         this.messages = messages;
     }
 
 
     public void createRegistry(TeamMember teamMember) {
-        loadingDialog.show();
         briefingBO.createBriefingRegistry(teamMember, loggedUser.getMail(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 retrieveBriefingRegisterList();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
                 messages.showError(responseDTO.getError());
-                loadingDialog.hide();
             }
         });
     }
 
 
     void retrieveBriefingRegisterList() {
-        loadingDialog.show();
         briefingBO.retrieveBriefingRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 List<BriefingRegister> results = (List<BriefingRegister>) responseDTO.getData();
                 if (results == null) {
                     results = new ArrayList<>();
@@ -91,7 +91,6 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -99,24 +98,21 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
 
     private void updateBriefingRegisters(List<BriefingRegister> items) {
-        this.filteredBriefingRegisterList.clear();
-        this.filteredBriefingRegisterList.addAll(items);
+        this.briefingRegisterList.clear();
+        this.briefingRegisterList.addAll(items);
         this.view.refreshBriefingRegisterItems();
     }
 
 
     public void deleteBriefingRegister(String id) {
-        loadingDialog.show();
         briefingBO.deleteBriefingRegister(id, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 retrieveBriefingRegisterList();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -124,11 +120,9 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
 
     void onNFCTagDetected(String tag) {
-        loadingDialog.show();
         teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 TeamMember teamMember = (TeamMember) responseDTO.getData();
                 FragmentManager fm = view.getActivity().getSupportFragmentManager();
                 ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog
@@ -138,7 +132,6 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -147,12 +140,10 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
     @SuppressWarnings("unchecked")
     void retrieveTeams() {
-        loadingDialog.show();
         teamBO.retrieveTeams(null, null, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 List<Team> teams = (List<Team>) responseDTO.getData();
 
                 //Add "All" option
@@ -163,7 +154,6 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -173,7 +163,7 @@ public class BriefingPresenter implements RecyclerViewClickListener {
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
         if (v.getId() == R.id.delete_run_button) {
-            BriefingRegister selectedRegister = filteredBriefingRegisterList.get(position);
+            BriefingRegister selectedRegister = briefingRegisterList.get(position);
             openConfirmDeleteRegister(selectedRegister);
         }
     }
@@ -188,7 +178,7 @@ public class BriefingPresenter implements RecyclerViewClickListener {
 
 
     List<BriefingRegister> getBriefingRegisterList() {
-        return filteredBriefingRegisterList;
+        return briefingRegisterList;
     }
 
     void setSelectedDateFrom(Date selectedDateFrom) {
@@ -203,6 +193,14 @@ public class BriefingPresenter implements RecyclerViewClickListener {
         this.selectedTeamID = selectedTeamID;
     }
 
+    public MutableLiveData<Boolean> getLoadingData() {
+        return loadingData;
+    }
+
+    @Override
+    public void loadingData(boolean loading) {
+        loadingData.setValue(loading);
+    }
 
     public interface View {
 

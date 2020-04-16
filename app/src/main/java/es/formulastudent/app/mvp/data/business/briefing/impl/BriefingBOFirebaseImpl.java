@@ -13,13 +13,14 @@ import java.util.List;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
-public class BriefingBOFirebaseImpl implements BriefingBO {
+public class BriefingBOFirebaseImpl extends DataLoader implements BriefingBO {
 
     private FirebaseFirestore firebaseFirestore;
 
@@ -30,6 +31,7 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
     @Override
     public void retrieveBriefingRegisters(Date from, Date to, String teamID, final BusinessCallback callback) {
         ResponseDTO responseDTO = new ResponseDTO();
+        loadingData(true);
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS);
 
         //Competition day filter
@@ -58,10 +60,12 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
                     responseDTO.setData(result);
                     responseDTO.setInfo(R.string.briefing_messages_retrieve_registers_info);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.briefing_messages_retrieve_registers_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -72,16 +76,19 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
         Date registerDate = Calendar.getInstance().getTime();
         BriefingRegister briefingRegister = new BriefingRegister(teamMember, registerDate, registerUserMail);
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS)
                 .document(briefingRegister.getID())
                 .set(briefingRegister.toObjectData())
                 .addOnSuccessListener(aVoid -> {
                     responseDTO.setInfo(R.string.briefing_messages_create_registers_info);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.briefing_messages_create_registers_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -89,13 +96,13 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
     public void checkBriefingByUser(String userID, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS)
                 .whereEqualTo(BriefingRegister.USER_ID, userID)
                 .whereEqualTo(BriefingRegister.EVENT_TYPE, EventType.BRIEFING)
                 .orderBy(BriefingRegister.DATE, Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-
                     if (queryDocumentSnapshots.isEmpty()) {
                         responseDTO.setData(Boolean.FALSE);
 
@@ -115,10 +122,13 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
 
                     callback.onSuccess(responseDTO);
                     responseDTO.setInfo(R.string.briefing_messages_retrieve_registers_info);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
+                    loadingData(false);
                     responseDTO.setError(R.string.briefing_messages_retrieve_registers_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
 
     }
@@ -130,19 +140,23 @@ public class BriefingBOFirebaseImpl implements BriefingBO {
                 .collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS)
                 .document(registerID);
 
+        loadingData(true);
         registerReference.get()
                 .addOnSuccessListener(documentSnapshot -> registerReference.delete()
                         .addOnSuccessListener(aVoid -> {
                             responseDTO.setInfo(R.string.briefing_messages_delete_register_info);
                             callback.onSuccess(responseDTO);
+                            loadingData(false);
                         })
                         .addOnFailureListener(e -> {
                             responseDTO.setError(R.string.briefing_messages_delete_register_error);
                             callback.onSuccess(responseDTO);
+                            loadingData(false);
                         }))
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.briefing_messages_delete_register_error);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 });
     }
 }

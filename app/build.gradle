@@ -118,11 +118,13 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.2.1'
     implementation 'androidx.navigation:navigation-ui:2.2.1'
 
+    //Navigation
     implementation "androidx.core:core:1.2.0"
     implementation "androidx.navigation:navigation-fragment:2.2.1"
     implementation "androidx.navigation:navigation-ui:2.2.1"
 
-
+    //LiveData
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

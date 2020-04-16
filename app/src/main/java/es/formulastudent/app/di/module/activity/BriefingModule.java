@@ -10,7 +10,6 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.briefing.BriefingPresenter;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 @Module(includes = {BusinessModule.class, SharedPreferencesModule.class, UtilsModule.class})
@@ -30,8 +29,8 @@ public class BriefingModule {
     @Provides
     public BriefingPresenter providePresenter(BriefingPresenter.View categoryView, TeamBO teamBO,
                                               BriefingBO briefingBO, TeamMemberBO teamMemberBO,
-                                              User loggedUser, LoadingDialog loadingDialog, Messages messages) {
+                                              User loggedUser, Messages messages) {
         return new BriefingPresenter(categoryView, teamBO, briefingBO, teamMemberBO, loggedUser,
-                loadingDialog, messages);
+                messages);
     }
 }

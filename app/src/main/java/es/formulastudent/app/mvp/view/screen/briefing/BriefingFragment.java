@@ -1,5 +1,6 @@
 package es.formulastudent.app.mvp.view.screen.briefing;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.screen.briefing.recyclerview.BriefingRegistersAdapter;
 import es.formulastudent.app.mvp.view.screen.general.spinneradapters.TeamsSpinnerAdapter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 
 
 public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedChangeListener,
@@ -47,6 +49,9 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
 
     @Inject
     BriefingPresenter presenter;
+
+    @Inject
+    LoadingDialog loadingDialog;
 
     private BriefingRegistersAdapter registersAdapter;
     private TeamsSpinnerAdapter teamsAdapter;
@@ -60,9 +65,19 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("FragmentLiveDataObserve")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_briefing, container, false);
+
+        presenter.getLoadingData().observe(this, loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
+
         initViews(view);
         return view;
     }

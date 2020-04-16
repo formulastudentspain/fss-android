@@ -12,12 +12,13 @@ import java.util.Map;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
-public class TeamMemberBOFirebaseImpl implements TeamMemberBO {
+public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO {
 
     private FirebaseFirestore firebaseFirestore;
 

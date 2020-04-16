@@ -1,10 +1,11 @@
 package es.formulastudent.app.mvp.data.business.teammember;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
-public interface TeamMemberBO {
+public interface TeamMemberBO extends DataLoader.Consumer{
 
 
     /**
