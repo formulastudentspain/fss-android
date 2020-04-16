@@ -33,6 +33,7 @@ This app is used to control the dynamic events in the Formula Student Spain comp
 * Firebase (Authentication, Cloud Firestore, Cloud Storage)
 * NFC reader
 * Navigation component + Safe Args
+* LiveData observers
 
 ## Screenshots
 <img src="/images/screenshot_login.jpg" alt="drawing" width="200"/>    <img src="/images/screenshot_menu.jpg" alt="drawing" width="200"/>
