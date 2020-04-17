@@ -82,7 +82,7 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
         DaggerRaceAccessComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(getContext(), getActivity()))
-                .dynamicEventModule(new RaceAccessModule(this, eventType))
+                .raceAccessModule(new RaceAccessModule(this, eventType))
                 .build()
                 .inject(this);
     }

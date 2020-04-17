@@ -38,11 +38,16 @@ import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.screen.teammember.dialog.CreateEditTeamMemberDialog;
 import es.formulastudent.app.mvp.view.screen.teammember.dialog.FilterTeamMembersDialog;
 import es.formulastudent.app.mvp.view.screen.teammember.recyclerview.TeamMemberListAdapter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 
-public class TeamMemberFragment extends Fragment implements  TeamMemberPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
+public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     TeamMemberPresenter presenter;
+
+    @Inject
+    LoadingDialog loadingDialog;
+
 
     private TeamMemberListAdapter teamMemberListAdapter;
     private FloatingActionButton buttonAddUser;
@@ -53,6 +58,14 @@ public class TeamMemberFragment extends Fragment implements  TeamMemberPresenter
     public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
+
+        presenter.getLoadingData().observe(this, loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
     }
 
     @Override

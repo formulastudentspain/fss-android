@@ -8,6 +8,7 @@ import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.teammember.TeamMemberFragment;
 import es.formulastudent.app.mvp.view.screen.teammember.TeamMemberPresenter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 
 
 @Singleton
@@ -16,4 +17,5 @@ public interface TeamMemberListComponent {
     void inject(TeamMemberFragment teamMemberFragment);
     TeamMemberPresenter getMainPresenter();
     User getLoggedUser();
+    LoadingDialog getLoadingDialog();
 }
