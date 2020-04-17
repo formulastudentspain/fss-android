@@ -1,8 +1,9 @@
 package es.formulastudent.app.mvp.data.business.egress;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 
-public interface EgressBO {
+public interface EgressBO extends DataLoader.Consumer{
 
     /**
      * Method to retrieve the egress register by a Pre-Scrutineering ID given

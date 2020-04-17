@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
@@ -20,12 +19,12 @@ import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.view.screen.GeneralPresenter;
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.TeamsDetailFragment;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class TeamsDetailScrutineeringPresenter extends GeneralPresenter implements DataConsumer {
+public class TeamsDetailScrutineeringPresenter extends DataConsumer {
 
     //Dependencies
     private View view;
@@ -42,15 +41,12 @@ public class TeamsDetailScrutineeringPresenter extends GeneralPresenter implemen
     public TeamsDetailScrutineeringPresenter(TeamsDetailScrutineeringPresenter.View view, TeamBO teamBO,
                                              DynamicEventBO dynamicEventBO, EgressBO egressBO,
                                              TeamMemberBO teamMemberBO,Messages messages) {
+        super(teamBO, dynamicEventBO, teamMemberBO, egressBO);
         this.view = view;
         this.teamBO = teamBO;
-        this.teamBO.setDataConsumer(this);
         this.dynamicEventBO = dynamicEventBO;
-        this.dynamicEventBO.setDataConsumer(this);
         this.teamMemberBO = teamMemberBO;
-        this.teamMemberBO.setDataConsumer(this);
         this.egressBO = egressBO;
-        this.egressBO.setDataConsumer(this);
         this.messages = messages;
     }
 

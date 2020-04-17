@@ -5,9 +5,9 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.model.Team;
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
 
 public interface TeamBO extends DataLoader.Consumer{
 

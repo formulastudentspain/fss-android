@@ -1,22 +1,17 @@
 package es.formulastudent.app.mvp.data.business.egress.impl;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.model.EgressRegister;
 
-public class EgressBOFirebaseImpl implements EgressBO {
+public class EgressBOFirebaseImpl extends DataLoader implements EgressBO {
 
 
     private FirebaseFirestore firebaseFirestore;
@@ -29,6 +24,7 @@ public class EgressBOFirebaseImpl implements EgressBO {
     public void retrieveEgressByPreScrutineeringId(String preScrutineeringID, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_EVENT_CONTROL_EGRESS)
                 .whereEqualTo(EgressRegister.PRESCRUTINEERING_ID, preScrutineeringID)
                 .get()
@@ -38,14 +34,17 @@ public class EgressBOFirebaseImpl implements EgressBO {
                         responseDTO.setData(egressRegister);
                         responseDTO.setInfo(R.string.event_egress_message_info_retrieving);
                         callback.onSuccess(responseDTO);
+                        loadingData(false);
                     } else {
                         responseDTO.setError(R.string.event_egress_message_error_retrieving);
                         callback.onFailure(responseDTO);
+                        loadingData(false);
                     }
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.event_egress_message_error_retrieving);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -56,16 +55,19 @@ public class EgressBOFirebaseImpl implements EgressBO {
 
         EgressRegister register = new EgressRegister(preScrutineeringID);
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_EVENT_CONTROL_EGRESS)
                 .document(register.getId())
                 .set(register.toObjectData())
                 .addOnSuccessListener(aVoid -> {
                     responseDTO.setInfo(R.string.dynamic_event_message_info_create_egress);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.dynamic_event_message_error_create_egress);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -76,6 +78,7 @@ public class EgressBOFirebaseImpl implements EgressBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_EVENT_CONTROL_EGRESS).document(ID);
 
+        loadingData(true);
         registerReference.get()
                 .addOnSuccessListener(documentSnapshot -> {
 
@@ -94,16 +97,18 @@ public class EgressBOFirebaseImpl implements EgressBO {
                             .addOnSuccessListener(aVoid -> {
                                 responseDTO.setInfo(R.string.dynamic_event_message_info_save_egress_time);
                                 callback.onSuccess(responseDTO);
+                                loadingData(false);
                             })
                             .addOnFailureListener(e -> {
                                 responseDTO.setError(R.string.dynamic_event_message_error_save_egress_time);
                                 callback.onSuccess(responseDTO);
+                                loadingData(false);
                             });
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.dynamic_event_message_error_save_egress_time);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 });
-
     }
 }

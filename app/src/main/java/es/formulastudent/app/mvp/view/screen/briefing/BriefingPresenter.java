@@ -9,7 +9,6 @@ import java.util.List;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
@@ -19,14 +18,14 @@ import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.screen.GeneralPresenter;
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.briefing.dialog.ConfirmBriefingRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.briefing.dialog.DeleteEventRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class BriefingPresenter extends GeneralPresenter implements RecyclerViewClickListener, DataConsumer {
+public class BriefingPresenter extends DataConsumer implements RecyclerViewClickListener {
 
     //Dependencies
     private View view;
@@ -47,13 +46,11 @@ public class BriefingPresenter extends GeneralPresenter implements RecyclerViewC
     public BriefingPresenter(BriefingPresenter.View view, TeamBO teamBO,
                              BriefingBO briefingBO, TeamMemberBO teamMemberBO,
                              User loggedUser, Messages messages) {
+        super(teamBO, briefingBO, teamMemberBO);
         this.view = view;
         this.teamBO = teamBO;
-        this.teamBO.setDataConsumer(this);
         this.briefingBO = briefingBO;
-        this.briefingBO.setDataConsumer(this);
         this.teamMemberBO = teamMemberBO;
-        this.teamMemberBO.setDataConsumer(this);
         this.loggedUser = loggedUser;
         this.messages = messages;
     }

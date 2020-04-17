@@ -9,17 +9,16 @@ import java.util.Map;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.screen.GeneralPresenter;
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class TeamsPresenter extends GeneralPresenter implements RecyclerViewClickListener, DataConsumer {
+public class TeamsPresenter extends DataConsumer implements RecyclerViewClickListener {
 
     //Dependencies
     private View view;
@@ -32,9 +31,9 @@ public class TeamsPresenter extends GeneralPresenter implements RecyclerViewClic
 
 
     public TeamsPresenter(TeamsPresenter.View view, TeamBO teamBO, Messages messages) {
+        super(teamBO);
         this.view = view;
         this.teamBO = teamBO;
-        this.teamBO.setDataConsumer(this);
         this.messages = messages;
     }
 
@@ -100,6 +99,7 @@ public class TeamsPresenter extends GeneralPresenter implements RecyclerViewClic
     public void setFilters(Map<String, String> filters) {
         this.filters = filters;
     }
+
 
 
 

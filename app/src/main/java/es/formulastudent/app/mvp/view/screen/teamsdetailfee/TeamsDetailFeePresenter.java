@@ -7,18 +7,17 @@ import androidx.fragment.app.FragmentManager;
 import java.util.List;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.FeeItem;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.screen.GeneralPresenter;
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.dialog.ConfirmNextStepDialog;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.tabs.TeamsDetailFeeTabFragment;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class TeamsDetailFeePresenter extends GeneralPresenter implements DataConsumer {
+public class TeamsDetailFeePresenter extends DataConsumer {
 
     //Dependencies
     private View view;
@@ -26,9 +25,9 @@ public class TeamsDetailFeePresenter extends GeneralPresenter implements DataCon
     private Messages messages;
 
     public TeamsDetailFeePresenter(TeamsDetailFeePresenter.View view, TeamBO teamBO, Messages messages) {
+        super(teamBO);
         this.view = view;
         this.teamBO = teamBO;
-        this.teamBO.setDataConsumer(this);
         this.messages = messages;
     }
 

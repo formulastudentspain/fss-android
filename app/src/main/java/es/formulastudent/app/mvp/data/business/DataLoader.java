@@ -1,5 +1,7 @@
 package es.formulastudent.app.mvp.data.business;
 
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
+
 public class DataLoader {
 
     private DataConsumer dataConsumer;
