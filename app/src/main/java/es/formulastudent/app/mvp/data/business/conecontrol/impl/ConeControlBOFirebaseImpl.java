@@ -33,6 +33,7 @@ import java.util.Map;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
 import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDTO;
@@ -45,7 +46,7 @@ import es.formulastudent.app.mvp.data.model.RaceControlState;
 import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.RACING_1D;
 import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.RACING_2D;
 
-public class ConeControlBOFirebaseImpl implements ConeControlBO {
+public class ConeControlBOFirebaseImpl extends DataLoader implements ConeControlBO {
 
     private FirebaseFirestore firebaseFirestore;
     private Context context;
@@ -116,21 +117,26 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
         }
 
         WriteBatch batch = firebaseFirestore.batch();
-        for (ConeControlRegister register : registerList) {
+
+        registerList.forEach(register -> {
             DocumentReference docRef = firebaseFirestore
                     .collection(event.getFirebaseTable())
                     .document(register.getId());
             batch.set(docRef, register.toObjectData());
-        }
+        });
 
+
+        loadingData(true);
         batch.commit()
                 .addOnSuccessListener(aVoid -> {
                     responseDTO.setInfo(R.string.cone_control_create_success);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.cone_control_create_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
 
     }
@@ -195,14 +201,17 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore.collection(event.getFirebaseTable()).document(register.getId());
 
+        loadingData(true);
         registerReference.update(register.toObjectData())
                 .addOnSuccessListener(aVoid -> {
                     responseDTO.setInfo(R.string.teams_info_update_message);//FIXME
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.teams_error_update_message);//FIXME
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -240,6 +249,7 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
         WriteBatch batch = firebaseFirestore.batch();
 
         boolean finalEnable = enable;
+        loadingData(true);
         firebaseFirestore.collection(ccEvent.getFirebaseTable())
                 .whereEqualTo(ConeControlRegister.CAR_NUMBER, carNumber)
                 .get()
@@ -253,14 +263,17 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
                     // Commit the batch
                     batch.commit().addOnSuccessListener(task -> {
                         callback.onSuccess(responseDTO);
+                        loadingData(false);
 
                     }).addOnFailureListener(task -> {
                         callback.onFailure(responseDTO);
+                        loadingData(false);
                     });
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.dynamic_event_message_error_retrieving_registers);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -289,6 +302,7 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
         // Get a new write batch
         WriteBatch batch = firebaseFirestore.batch();
 
+        loadingData(true);
         String finalRoundToEnable = roundToEnable;
         firebaseFirestore.collection(ccEvent.getFirebaseTable())
                 .whereEqualTo(ConeControlRegister.CAR_NUMBER, carNumber)
@@ -310,15 +324,18 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
                     // Commit the batch
                     batch.commit().addOnSuccessListener(task -> {
                         callback.onSuccess(responseDTO);
+                        loadingData(false);
 
                     }).addOnFailureListener(task -> {
                         callback.onFailure(responseDTO);
+                        loadingData(false);
                     });
 
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.dynamic_event_message_error_retrieving_registers);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -333,6 +350,7 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
             query = query.whereEqualTo(ConeControlRegister.RACE_ROUND, raceRound);
         }
 
+        loadingData(true);
         query.orderBy(ConeControlRegister.CAR_NUMBER, Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -346,10 +364,12 @@ public class ConeControlBOFirebaseImpl implements ConeControlBO {
                     responseDTO.setData(result);
                     //TODO
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
 
                 }).addOnFailureListener(e -> {
             //TODO
             callback.onFailure(responseDTO);
+            loadingData(false);
         });
     }
 

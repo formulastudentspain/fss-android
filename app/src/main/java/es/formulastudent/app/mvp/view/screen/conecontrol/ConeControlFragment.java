@@ -22,12 +22,16 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.ConeControlModule;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.view.screen.conecontrol.recyclerview.ConeControlAdapter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 
 
 public class ConeControlFragment extends Fragment implements ConeControlPresenter.View{
 
     @Inject
     ConeControlPresenter presenter;
+
+    @Inject
+    LoadingDialog loadingDialog;
 
     private Long selectedSector;
     private String selectedRound;
@@ -50,6 +54,14 @@ public class ConeControlFragment extends Fragment implements ConeControlPresente
         setupComponent(FSSApp.getApp().component(), args.getConeControlEvent());
         this.selectedRound = args.getSelectedRound();
         this.selectedSector = args.getSelectedSector();
+
+        presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
 
         initViews(view);
         return view;

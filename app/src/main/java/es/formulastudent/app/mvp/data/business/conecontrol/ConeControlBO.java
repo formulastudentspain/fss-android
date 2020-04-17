@@ -7,11 +7,12 @@ import java.io.IOException;
 import java.util.Map;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 
-public interface ConeControlBO {
+public interface ConeControlBO extends DataLoader.Consumer{
 
     /**
      * Get filtered Race Cones registers in Real-Time

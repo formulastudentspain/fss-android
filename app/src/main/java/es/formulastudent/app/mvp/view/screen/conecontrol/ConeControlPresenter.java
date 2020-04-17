@@ -20,12 +20,12 @@ import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDT
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.data.model.ConeControlRegisterLog;
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class ConeControlPresenter implements RecyclerViewClickListener {
+public class ConeControlPresenter extends DataConsumer implements RecyclerViewClickListener {
 
     //Cone Control Event Type
     private ConeControlEvent ccEventType;
@@ -34,7 +34,6 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
     private View view;
     private ConeControlBO coneControlBO;
     private MailSender mailSender;
-    private LoadingDialog loadingDialog;
     private Messages messages;
 
     //Data
@@ -42,13 +41,12 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
     private ListenerRegistration registration;
 
     public ConeControlPresenter(ConeControlPresenter.View view, ConeControlEvent ccEventType,
-                                ConeControlBO coneControlBO, MailSender mailSender,
-                                LoadingDialog loadingDialog, Messages messages) {
+                                ConeControlBO coneControlBO, MailSender mailSender, Messages messages) {
+        super(coneControlBO);
         this.view = view;
         this.ccEventType = ccEventType;
         this.coneControlBO = coneControlBO;
         this.mailSender = mailSender;
-        this.loadingDialog = loadingDialog;
         this.messages = messages;
     }
 
@@ -93,18 +91,15 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
             register.setOffCourses(register.getOffCourses()+register.getCurrentOffCourseCount());
             register.setCurrentOffCourseCount(0);
 
-            loadingDialog.show();
             coneControlBO.updateConeControlRegister(ccEventType, register, new BusinessCallback() {
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
-                    loadingDialog.hide();
                     coneControlRegisterList.get(position).setState(0);
                     refreshList();
                 }
 
                 @Override
                 public void onFailure(ResponseDTO responseDTO) {
-                    loadingDialog.hide();
                     messages.showError(responseDTO.getError());
                 }
             });
@@ -172,18 +167,15 @@ public class ConeControlPresenter implements RecyclerViewClickListener {
     void exportConesToExcel(ConeControlEvent ccEvent) {
 
         try {
-            loadingDialog.show();
             coneControlBO.exportConesToExcel(ccEvent, new BusinessCallback() {
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
-                    loadingDialog.hide();
                     ExportStatisticsDTO exportStatisticsDTO = (ExportStatisticsDTO) responseDTO.getData();
                     mailSender.sendMail(exportStatisticsDTO);
                 }
 
                 @Override
                 public void onFailure(ResponseDTO responseDTO) {
-                    loadingDialog.hide();
                     messages.showError(responseDTO.getError());
                 }
             });
