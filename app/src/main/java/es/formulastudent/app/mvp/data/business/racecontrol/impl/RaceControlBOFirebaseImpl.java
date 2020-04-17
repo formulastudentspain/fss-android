@@ -15,6 +15,7 @@ import java.util.Map;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
@@ -29,7 +30,7 @@ import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.RaceControlTeamDTO;
 
-public class RaceControlBOFirebaseImpl implements RaceControlBO {
+public class RaceControlBOFirebaseImpl extends DataLoader implements RaceControlBO {
 
     private FirebaseFirestore firebaseFirestore;
     private TeamBO teamBO;
@@ -114,6 +115,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         ResponseDTO response = new ResponseDTO();
 
         //First, retrieve all the teams depending on the race type
+        loadingData(true);
         teamBO.retrieveTeams(null, null, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
@@ -146,12 +148,14 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
                         response.setData(resultList);
                         callback.onSuccess(response);
+                        loadingData(false);
                     }
 
                     @Override
                     public void onFailure(ResponseDTO responseDTO) {
                         responseDTO.setError(R.string.rc_teams_error_message);
                         callback.onFailure(responseDTO);
+                        loadingData(false);
                     }
                 });
             }
@@ -160,6 +164,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
             public void onFailure(ResponseDTO responseDTO) {
                 responseDTO.setError(R.string.rc_teams_error_message);
                 callback.onFailure(responseDTO);
+                loadingData(false);
             }
         });
     }
@@ -211,6 +216,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         }
 
         // Commit the batch
+        loadingData(true);
         batch.commit()
                 .addOnSuccessListener(aVoid -> {
 
@@ -237,10 +243,12 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
 
                     responseDTO.setInfo(R.string.rc_create_info_message);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.rc_create_error_message);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -252,6 +260,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         //Get Event type
         RaceControlEvent event = (RaceControlEvent) filters.get("eventType");
 
+        loadingData(true);
         firebaseFirestore.collection(event.getFirebaseTable())
                 .orderBy(RaceControlRegisterEndurance.ORDER, Query.Direction.ASCENDING)
                 .get()
@@ -267,11 +276,13 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                     responseDTO.setData(result);
                     responseDTO.setInfo(R.string.rc_info_retrieving_message);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
 
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.rc_error_retrieving_message);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
 
     }
@@ -296,6 +307,7 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
         }
 
         //Call Firebase to update
+        loadingData(true);
         firebaseFirestore.collection(event.getFirebaseTable()).document(register.getID())
                 .update(data)
                 .addOnSuccessListener(aVoid -> {
@@ -314,11 +326,13 @@ public class RaceControlBOFirebaseImpl implements RaceControlBO {
                         }
                     });
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
 
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setInfo(R.string.rc_error_update_message);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 }

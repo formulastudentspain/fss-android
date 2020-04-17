@@ -11,7 +11,6 @@ import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.racecontrol.RaceControlPresenter;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 @Module(includes = {ContextModule.class, BusinessModule.class, SharedPreferencesModule.class})
@@ -42,9 +41,9 @@ public class RaceControlModule {
     @Provides
     public RaceControlPresenter providePresenter(RaceControlPresenter.View categoryView, Context context,
                                                  RaceControlBO raceControlBO, User user,
-                                                 LoadingDialog loadingDialog, Messages messages) {
+                                                 Messages messages) {
         return new RaceControlPresenter(categoryView, context, raceControlEvent, raceType, raceArea,
-                raceControlBO, user, loadingDialog, messages);
+                raceControlBO, user, messages);
     }
 
 

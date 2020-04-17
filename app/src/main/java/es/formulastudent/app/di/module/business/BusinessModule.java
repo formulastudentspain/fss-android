@@ -15,8 +15,8 @@ import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.briefing.impl.BriefingBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
 import es.formulastudent.app.mvp.data.business.conecontrol.impl.ConeControlBOFirebaseImpl;
-import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
-import es.formulastudent.app.mvp.data.business.dynamicevent.impl.DynamicEventBOFirebaseImpl;
+import es.formulastudent.app.mvp.data.business.raceaccess.RaceAccessBO;
+import es.formulastudent.app.mvp.data.business.raceaccess.impl.RaceAccessBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.egress.impl.EgressBOFirebaseImpl;
 import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
@@ -89,8 +89,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public DynamicEventBO provideDynamicEventBO(FirebaseFirestore firebaseFirestore, FirebaseAuth firebaseAuth) {
-        return new DynamicEventBOFirebaseImpl(firebaseFirestore, firebaseAuth);
+    public RaceAccessBO provideDynamicEventBO(FirebaseFirestore firebaseFirestore, FirebaseAuth firebaseAuth) {
+        return new RaceAccessBOFirebaseImpl(firebaseFirestore, firebaseAuth);
     }
 
     /**
@@ -108,8 +108,8 @@ public class BusinessModule {
      * @return
      */
     @Provides
-    public StatisticsBO provideStatisticsBO(DynamicEventBO dynamicEventBO, TeamMemberBO teamMemberBO, Context context) {
-        return new StatisticsBOImpl(dynamicEventBO, teamMemberBO, context);
+    public StatisticsBO provideStatisticsBO(RaceAccessBO raceAccessBO, TeamMemberBO teamMemberBO, Context context) {
+        return new StatisticsBOImpl(raceAccessBO, teamMemberBO, context);
     }
 
     /**

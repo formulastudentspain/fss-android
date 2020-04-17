@@ -23,13 +23,13 @@ import javax.inject.Inject;
 import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.component.AppComponent;
-import es.formulastudent.app.di.component.DaggerDynamicEventComponent;
+import es.formulastudent.app.di.component.DaggerRaceAccessComponent;
 import es.formulastudent.app.di.module.ContextModule;
-import es.formulastudent.app.di.module.activity.DynamicEventModule;
+import es.formulastudent.app.di.module.activity.RaceAccessModule;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.view.screen.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.screen.raceaccess.recyclerview.EventRegistersAdapter;
-import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringFragmentArgs;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 
 public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
@@ -37,6 +37,9 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
 
     @Inject
     RaceAccessPresenter presenter;
+
+    @Inject
+    LoadingDialog loadingDialog;
 
     private EventRegistersAdapter registersAdapter;
     private FloatingActionButton buttonAddRegister;
@@ -57,6 +60,14 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
         EventType eventType = args.getEventType();
         setupComponent(FSSApp.getApp().component(), eventType);
 
+        presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
+
         initViews(view);
         setHasOptionsMenu(true);
         presenter.retrieveRegisterList();
@@ -68,10 +79,10 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
      * @param appComponent
      */
     protected void setupComponent(AppComponent appComponent, EventType eventType) {
-        DaggerDynamicEventComponent.builder()
+        DaggerRaceAccessComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(getContext(), getActivity()))
-                .dynamicEventModule(new DynamicEventModule(this, eventType))
+                .dynamicEventModule(new RaceAccessModule(this, eventType))
                 .build()
                 .inject(this);
     }

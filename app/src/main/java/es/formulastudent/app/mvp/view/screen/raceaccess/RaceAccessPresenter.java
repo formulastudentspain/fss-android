@@ -13,7 +13,7 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
-import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
+import es.formulastudent.app.mvp.data.business.raceaccess.RaceAccessBO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
@@ -21,6 +21,7 @@ import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.ConfirmEventRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.DeleteEventRegisterDialog;
@@ -29,15 +30,15 @@ import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAccessGeneralPresenter {
+public class RaceAccessPresenter extends DataConsumer implements RecyclerViewClickListener, RaceAccessGeneralPresenter {
 
     //Dependencies
     private View view;
     private TeamBO teamBO;
-    private DynamicEventBO dynamicEventBO;
+    private RaceAccessBO raceAccessBO;
     private TeamMemberBO teamMemberBO;
     private BriefingBO briefingBO;
-    private EgressBO egressBO;
+    private EgressBO egressBO; //TODO use it to take egress done
     private LoadingDialog loadingDialog;
     private Messages messages;
 
@@ -57,12 +58,13 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
 
 
     public RaceAccessPresenter(RaceAccessPresenter.View view, TeamBO teamBO,
-                               DynamicEventBO dynamicEventBO, TeamMemberBO teamMemberBO,
+                               RaceAccessBO raceAccessBO, TeamMemberBO teamMemberBO,
                                BriefingBO briefingBO, EventType eventType, EgressBO egressBO,
                                LoadingDialog loadingDialog, Messages messages) {
+        super(teamBO, raceAccessBO, teamMemberBO, briefingBO, egressBO);
         this.view = view;
         this.teamBO = teamBO;
-        this.dynamicEventBO = dynamicEventBO;
+        this.raceAccessBO = raceAccessBO;
         this.teamMemberBO = teamMemberBO;
         this.briefingBO = briefingBO;
         this.egressBO = egressBO;
@@ -82,7 +84,7 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
     @Override
     public void createRegistry(final TeamMember teamMember, final Long carNumber, final Boolean briefingDone) {
         loadingDialog.show();
-        dynamicEventBO.getDifferentEventRegistersByDriver(teamMember.getID(), new BusinessCallback() {
+        raceAccessBO.getDifferentEventRegistersByDriver(teamMember.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 loadingDialog.hide();
@@ -101,7 +103,7 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
 
                     } else {
                         loadingDialog.show();
-                        dynamicEventBO.createRegister(teamMember, carNumber, briefingDone, eventType, new BusinessCallback() {
+                        raceAccessBO.createRegister(teamMember, carNumber, briefingDone, eventType, new BusinessCallback() {
                             @Override
                             public void onSuccess(ResponseDTO responseDTO) {
                                 loadingDialog.hide();
@@ -134,7 +136,7 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
      */
     public void retrieveRegisterList() {
         loadingDialog.show();
-        dynamicEventBO.retrieveRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, selectedCarNumber, eventType, new BusinessCallback() {
+        raceAccessBO.retrieveRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, selectedCarNumber, eventType, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
@@ -189,7 +191,7 @@ public class RaceAccessPresenter implements RecyclerViewClickListener, RaceAcces
      */
     public void deleteDynamicEventRegister(String registerID) {
         loadingDialog.show();
-        dynamicEventBO.deleteRegister(eventType, registerID, new BusinessCallback() {
+        raceAccessBO.deleteRegister(eventType, registerID, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {

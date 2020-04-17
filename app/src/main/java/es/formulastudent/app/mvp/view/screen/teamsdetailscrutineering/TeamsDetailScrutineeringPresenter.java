@@ -10,7 +10,7 @@ import java.util.List;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
-import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
+import es.formulastudent.app.mvp.data.business.raceaccess.RaceAccessBO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
@@ -29,7 +29,7 @@ public class TeamsDetailScrutineeringPresenter extends DataConsumer {
     //Dependencies
     private View view;
     private TeamBO teamBO;
-    private DynamicEventBO dynamicEventBO;
+    private RaceAccessBO raceAccessBO;
     private TeamMemberBO teamMemberBO;
     private EgressBO egressBO;
     private Messages messages;
@@ -39,12 +39,12 @@ public class TeamsDetailScrutineeringPresenter extends DataConsumer {
 
 
     public TeamsDetailScrutineeringPresenter(TeamsDetailScrutineeringPresenter.View view, TeamBO teamBO,
-                                             DynamicEventBO dynamicEventBO, EgressBO egressBO,
-                                             TeamMemberBO teamMemberBO,Messages messages) {
-        super(teamBO, dynamicEventBO, teamMemberBO, egressBO);
+                                             RaceAccessBO raceAccessBO, EgressBO egressBO,
+                                             TeamMemberBO teamMemberBO, Messages messages) {
+        super(teamBO, raceAccessBO, teamMemberBO, egressBO);
         this.view = view;
         this.teamBO = teamBO;
-        this.dynamicEventBO = dynamicEventBO;
+        this.raceAccessBO = raceAccessBO;
         this.teamMemberBO = teamMemberBO;
         this.egressBO = egressBO;
         this.messages = messages;
@@ -78,7 +78,7 @@ public class TeamsDetailScrutineeringPresenter extends DataConsumer {
     }
 
     public void retrieveEgressRegisterList() {
-        dynamicEventBO.retrieveRegisters(null, null, view.getCurrentTeam().getID(), null, EventType.PRE_SCRUTINEERING, new BusinessCallback() {
+        raceAccessBO.retrieveRegisters(null, null, view.getCurrentTeam().getID(), null, EventType.PRE_SCRUTINEERING, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
@@ -116,7 +116,7 @@ public class TeamsDetailScrutineeringPresenter extends DataConsumer {
                 TeamMember teamMember = (TeamMember)responseDTO.getData();
 
                 //The driver can run, create the register
-                dynamicEventBO.createRegister(teamMember, teamMember.getCarNumber(), null, EventType.PRE_SCRUTINEERING, new BusinessCallback() {
+                raceAccessBO.createRegister(teamMember, teamMember.getCarNumber(), null, EventType.PRE_SCRUTINEERING, new BusinessCallback() {
                     @Override
                     public void onSuccess(ResponseDTO responseDTO) {
                         PreScrutineeringRegister register = (PreScrutineeringRegister) responseDTO.getData();
@@ -162,7 +162,7 @@ public class TeamsDetailScrutineeringPresenter extends DataConsumer {
      * @param registerID
      */
     public void onChronoTimeRegistered(Long milliseconds, String registerID) {
-        dynamicEventBO.updatePreScrutineeringRegister(registerID, milliseconds, new BusinessCallback() {
+        raceAccessBO.updatePreScrutineeringRegister(registerID, milliseconds, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {

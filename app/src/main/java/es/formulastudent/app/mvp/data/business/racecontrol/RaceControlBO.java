@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.RaceControlTeamDTO;
 
-public interface RaceControlBO {
+public interface RaceControlBO extends DataLoader.Consumer {
 
     /**
      * Get filtered Race Control registers in Real-Time

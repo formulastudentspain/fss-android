@@ -25,17 +25,17 @@ import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewLongClickListener;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.CreateRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.FilteringRegistersDialog;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.RaceControlTeamDTO;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.UpdatingRegistersDialog;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class RaceControlPresenter implements RecyclerViewClickListener, RecyclerViewLongClickListener {
+public class RaceControlPresenter extends DataConsumer implements RecyclerViewClickListener, RecyclerViewLongClickListener {
 
     //Race Control Event Type
     private RaceControlEvent rcEventType;
@@ -46,7 +46,6 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
     private View view;
     private Context context;
     private RaceControlBO raceControlBO;
-    private LoadingDialog loadingDialog;
     private Messages messages;
     private User loggedUser;
 
@@ -62,7 +61,8 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
     public RaceControlPresenter(RaceControlPresenter.View view, Context context, RaceControlEvent rcEventType,
                                 String raceType, String raceArea, RaceControlBO raceControlBO, User loggedUser,
-                                LoadingDialog loadingDialog, Messages messages) {
+                                Messages messages) {
+        super(raceControlBO);
         this.view = view;
         this.context = context;
         this.rcEventType = rcEventType;
@@ -70,7 +70,6 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
         this.raceType = raceType;
         this.raceArea = raceArea;
         this.loggedUser = loggedUser;
-        this.loadingDialog = loadingDialog;
         this.messages = messages;
     }
 
@@ -200,12 +199,10 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
         filters.put("eventType", rcEventType);
 
         //Call business to retrieve teams
-        loadingDialog.show();
         raceControlBO.getRaceControlTeams(filters, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 List<RaceControlTeamDTO> raceControlTeamsDTO = (List<RaceControlTeamDTO>) responseDTO.getData();
 
                 //With all the information, we open the dialog
@@ -217,7 +214,6 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -262,18 +258,15 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
     public void updateRegister(final RaceControlRegister register, final RaceControlEvent event, final RaceControlState newState) {
         final String oldState = register.getCurrentState().getAcronym();
-        loadingDialog.show();
         raceControlBO.updateRaceControlState(register, event, newState, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 view.closeUpdatedRow(register.getID());
                 messages.showInfo(R.string.rc_update_state_success_message, oldState, newState.getAcronym());
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -295,17 +288,14 @@ public class RaceControlPresenter implements RecyclerViewClickListener, Recycler
 
 
     public void createRaceControlRegisters(List<RaceControlTeamDTO> raceControlTeamDTOList, Long currentMaxIndex) {
-        loadingDialog.show();
         raceControlBO.createRaceControlRegister(raceControlTeamDTOList, rcEventType, raceType, currentMaxIndex, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
                 //No need lo refresh list, because it is a real-time
-                loadingDialog.hide();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });

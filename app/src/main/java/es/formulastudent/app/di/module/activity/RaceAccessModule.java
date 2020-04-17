@@ -5,7 +5,7 @@ import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
-import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
+import es.formulastudent.app.mvp.data.business.raceaccess.RaceAccessBO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
@@ -15,13 +15,13 @@ import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
-public class DynamicEventModule {
+public class RaceAccessModule {
 
     private RaceAccessPresenter.View view;
 
     private EventType eventType;
 
-    public DynamicEventModule(RaceAccessPresenter.View view, EventType eventType) {
+    public RaceAccessModule(RaceAccessPresenter.View view, EventType eventType) {
         this.view = view;
         this.eventType = eventType;
     }
@@ -38,11 +38,11 @@ public class DynamicEventModule {
 
     @Provides
     public RaceAccessPresenter providePresenter(RaceAccessPresenter.View categoryView,
-                                                TeamBO teamBO, DynamicEventBO dynamicEventBO,
+                                                TeamBO teamBO, RaceAccessBO raceAccessBO,
                                                 TeamMemberBO teamMemberBO, BriefingBO briefingBO,
                                                 EventType eventType, EgressBO egressBO,
                                                 LoadingDialog loadingDialog, Messages messages) {
-        return new RaceAccessPresenter(categoryView, teamBO, dynamicEventBO, teamMemberBO, briefingBO,
+        return new RaceAccessPresenter(categoryView, teamBO, raceAccessBO, teamMemberBO, briefingBO,
                 eventType, egressBO, loadingDialog, messages);
     }
 

@@ -28,6 +28,7 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.RaceControlModule;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.view.screen.racecontrol.recyclerview.RaceControlAdapter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 
 
 public class RaceControlFragment extends Fragment implements
@@ -35,6 +36,9 @@ public class RaceControlFragment extends Fragment implements
 
     @Inject
     RaceControlPresenter presenter;
+
+    @Inject
+    LoadingDialog loadingDialog;
 
     private String raceRound; //Round 1, Round 2 or Final
     private String rcArea;
@@ -67,6 +71,14 @@ public class RaceControlFragment extends Fragment implements
 
         setupComponent(FSSApp.getApp().component(), rcEvent, raceRound, rcArea);
         setHasOptionsMenu(true);
+
+        presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
 
         //Remove elevation from Action bar
         ((AppCompatActivity)getActivity()).getSupportActionBar().setElevation(0);

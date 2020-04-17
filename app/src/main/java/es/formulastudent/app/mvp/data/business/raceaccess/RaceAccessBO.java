@@ -1,12 +1,13 @@
-package es.formulastudent.app.mvp.data.business.dynamicevent;
+package es.formulastudent.app.mvp.data.business.raceaccess;
 
 import java.util.Date;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
-public interface DynamicEventBO {
+public interface RaceAccessBO extends DataLoader.Consumer{
 
     /**
      * Method to retrieve Dynamic Event registers
