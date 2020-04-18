@@ -5,13 +5,13 @@ import java.util.List;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
@@ -82,7 +82,7 @@ public class UserPresenter extends DataConsumer implements RecyclerViewClickList
         teamBO.retrieveTeams(null, null, teams -> {
             //TODO los equipos están para cuando use la app los Team Leaders
             view.showFilteringDialog(selectedRole);
-        }, null);
+        }, this::setErrorToDisplay);
     }
 
 

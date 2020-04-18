@@ -1,9 +1,15 @@
 package es.formulastudent.app.mvp.data.business.raceaccess;
 
-import java.util.Date;
+import org.jetbrains.annotations.NotNull;
 
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import es.formulastudent.app.mvp.data.business.DataLoader;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
+import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
@@ -16,10 +22,12 @@ public interface RaceAccessBO extends DataLoader.Consumer{
      * @param teamID
      * @param carNumber
      * @param type
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void retrieveRegisters(Date from, Date to, String teamID, Long carNumber, EventType type, BusinessCallback callback);
-
+    void retrieveRegisters(Date from, Date to, String teamID, Long carNumber, EventType type,
+                           @NotNull OnSuccessCallback<List<EventRegister>> onSuccessCallback,
+                           @NotNull OnFailureCallback onFailureCallback);
 
 
     /**
@@ -28,29 +36,44 @@ public interface RaceAccessBO extends DataLoader.Consumer{
      * @param carNumber
      * @param briefingDone
      * @param type
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void createRegister(TeamMember teamMember, Long carNumber, Boolean briefingDone, EventType type, BusinessCallback callback);
-
+    void createRegister(TeamMember teamMember, Long carNumber, Boolean briefingDone, EventType type,
+                        @NotNull OnSuccessCallback<EventRegister> onSuccessCallback,
+                        @NotNull OnFailureCallback onFailureCallback);
 
 
     /**
      * Method to update the Chrono time to the Pre-Scrutineering register
      * @param id
      * @param milliseconds
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void updatePreScrutineeringRegister(String id, long milliseconds, BusinessCallback callback);
-
+    void updatePreScrutineeringRegister(String id, long milliseconds,
+                                        @NotNull OnSuccessCallback<?> onSuccessCallback,
+                                        @NotNull OnFailureCallback onFailureCallback);
 
     /**
      * Method to delete a Dynamic Event register
      * @param type
      * @param registerID
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void deleteRegister(EventType type, String registerID, BusinessCallback callback);
+    void deleteRegister(EventType type, String registerID,
+                        @NotNull OnSuccessCallback<?> onSuccessCallback,
+                        @NotNull OnFailureCallback onFailureCallback);
 
 
-    void getDifferentEventRegistersByDriver(String userId, BusinessCallback callback);
+    /**
+     *
+     * @param userId
+     * @param onSuccessCallback
+     * @param onFailureCallback
+     */
+    void getDifferentEventRegistersByDriver(String userId,
+                                            @NotNull OnSuccessCallback<Map<String, List<EventRegister>>> onSuccessCallback,
+                                            @NotNull OnFailureCallback onFailureCallback);
 }

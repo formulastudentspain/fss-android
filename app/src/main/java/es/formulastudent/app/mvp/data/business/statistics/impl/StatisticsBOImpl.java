@@ -58,153 +58,135 @@ public class StatisticsBOImpl extends DataLoader implements StatisticsBO {
         AssetManager mngr = context.getAssets();
         final InputStream is = mngr.open("template_export_fss.xls");
 
-        raceAccessBO.retrieveRegisters(null, null, null, null, eventType, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
+        raceAccessBO.retrieveRegisters(null, null, null, null, eventType,
+                listToExport -> {
+                    ResponseDTO responseDTOExport = new ResponseDTO();
 
-                ResponseDTO responseDTOExport = new ResponseDTO();
-
-                List<EventRegister> listToExport = (List<EventRegister>) responseDTO.getData();
-
-                try {
-                    Workbook wb = new HSSFWorkbook(is);
-                    Sheet sheet = wb.getSheetAt(0);
-                    wb.setSheetName(0, eventType.getName());
-
-                    //TEAM NAME
-                    Row row = sheet.createRow(4);
-                    Cell cell = row.createCell(0);
-                    cell.setCellValue("TEAM NAME");
-
-                    //DRIVER NAME
-                    cell = row.createCell(1);
-                    cell.setCellValue("DRIVER NAME");
-
-                    //DATE
-                    cell = row.createCell(2);
-                    cell.setCellValue("DATE");
-
-                    //DONE BY USERMAIL
-                    cell = row.createCell(3);
-                    cell.setCellValue("DONE BY");
-
-                    if(!eventType.equals(EventType.BRIEFING)) {
-
-                        //CAR TYPE
-                        cell = row.createCell(4);
-                        cell.setCellValue("CAR TYPE");
-
-                        //CAR NUMBER
-                        cell = row.createCell(5);
-                        cell.setCellValue("CAR NUMBER");
-
-                        //BRIEFING DONE
-                        cell = row.createCell(6);
-                        cell.setCellValue("BRIEFING DONE");
-
-
-                        if (eventType.equals(EventType.PRE_SCRUTINEERING)) {
-                            //EGRESS TIME
-                            cell = row.createCell(7);
-                            cell.setCellValue("EGRESS TIME");
-                        }
-                    }
-
-
-
-                    /*
-                        Test Data Values
-                    */
-                    int rowNum = 4;
-                    int cellNum;
-
-                    for (EventRegister register : listToExport) {
-
-                        //Init values
-                        cellNum = 0;
-                        row = sheet.createRow(++rowNum);
+                    try {
+                        Workbook wb = new HSSFWorkbook(is);
+                        Sheet sheet = wb.getSheetAt(0);
+                        wb.setSheetName(0, eventType.getName());
 
                         //TEAM NAME
-                        cell = row.createCell(cellNum);
-                        cell.setCellValue(register.getTeam()==null ? "" : register.getTeam());
+                        Row row = sheet.createRow(4);
+                        Cell cell = row.createCell(0);
+                        cell.setCellValue("TEAM NAME");
 
                         //DRIVER NAME
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getUser()==null ? "" : register.getUser());
+                        cell = row.createCell(1);
+                        cell.setCellValue("DRIVER NAME");
 
                         //DATE
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getDate()==null ? "" : df.format(register.getDate()));
+                        cell = row.createCell(2);
+                        cell.setCellValue("DATE");
 
-                        //DONE EMAIL BY
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(register.getDoneByUserMail()==null ? "" : register.getDoneByUserMail());
+                        //DONE BY USERMAIL
+                        cell = row.createCell(3);
+                        cell.setCellValue("DONE BY");
 
+                        if (!eventType.equals(EventType.BRIEFING)) {
 
-                        if(!eventType.equals(EventType.BRIEFING)) {
+                            //CAR TYPE
+                            cell = row.createCell(4);
+                            cell.setCellValue("CAR TYPE");
 
                             //CAR NUMBER
-                            cell = row.createCell(++cellNum);
-                            cell.setCellValue(register.getCarNumber() == null ? "" : register.getCarNumber().toString());
+                            cell = row.createCell(5);
+                            cell.setCellValue("CAR NUMBER");
 
                             //BRIEFING DONE
-                            cell = row.createCell(++cellNum);
-                            cell.setCellValue(register.getBriefingDone() == null ? "" : register.getBriefingDone().toString());
+                            cell = row.createCell(6);
+                            cell.setCellValue("BRIEFING DONE");
 
-                            //EGRESS TIME
                             if (eventType.equals(EventType.PRE_SCRUTINEERING)) {
+                                //EGRESS TIME
+                                cell = row.createCell(7);
+                                cell.setCellValue("EGRESS TIME");
+                            }
+                        }
+
+                        /*
+                            Test Data Values
+                        */
+                        int rowNum = 4;
+                        int cellNum;
+
+                        for (EventRegister register : listToExport) {
+
+                            //Init values
+                            cellNum = 0;
+                            row = sheet.createRow(++rowNum);
+
+                            //TEAM NAME
+                            cell = row.createCell(cellNum);
+                            cell.setCellValue(register.getTeam() == null ? "" : register.getTeam());
+
+                            //DRIVER NAME
+                            cell = row.createCell(++cellNum);
+                            cell.setCellValue(register.getUser() == null ? "" : register.getUser());
+
+                            //DATE
+                            cell = row.createCell(++cellNum);
+                            cell.setCellValue(register.getDate() == null ? "" : df.format(register.getDate()));
+
+                            //DONE EMAIL BY
+                            cell = row.createCell(++cellNum);
+                            cell.setCellValue(register.getDoneByUserMail() == null ? "" : register.getDoneByUserMail());
+
+                            if (!eventType.equals(EventType.BRIEFING)) {
+
+                                //CAR NUMBER
                                 cell = row.createCell(++cellNum);
-                                String value = ((PreScrutineeringRegister) register).getTime() == null ? "" : Utils.chronoFormatter(((PreScrutineeringRegister) register).getTime());
-                                cell.setCellValue(value);
+                                cell.setCellValue(register.getCarNumber() == null ? "" : register.getCarNumber().toString());
+
+                                //BRIEFING DONE
+                                cell = row.createCell(++cellNum);
+                                cell.setCellValue(register.getBriefingDone() == null ? "" : register.getBriefingDone().toString());
+
+                                //EGRESS TIME
+                                if (eventType.equals(EventType.PRE_SCRUTINEERING)) {
+                                    cell = row.createCell(++cellNum);
+                                    String value = ((PreScrutineeringRegister) register).getTime() == null ? "" : Utils.chronoFormatter(((PreScrutineeringRegister) register).getTime());
+                                    cell.setCellValue(value);
+                                }
                             }
                         }
 
 
+                        //Get File Name
+                        DateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                        String nameFile = "Export" + "_" + sdf.format(timestamp);
 
+                        //Create Directory
+                        String rootDirectoryName = Environment.getExternalStorageDirectory() + "";
+                        File subDirectory = new File(rootDirectoryName, "FSS/" + eventType.getName());
+                        subDirectory.mkdirs();
+
+                        //Create File
+                        OutputStream stream = new FileOutputStream(rootDirectoryName + "/" + "FSS/" + eventType.getName() + "/" + nameFile + ".xls");
+
+                        wb.write(stream);
+                        stream.close();
+                        wb.close();
+
+                        ExportStatisticsDTO exportStatisticsDTO = new ExportStatisticsDTO();
+                        exportStatisticsDTO.setEventType(eventType);
+                        exportStatisticsDTO.setExportDate(Calendar.getInstance().getTime());
+                        exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/FSS/" + eventType.getName() + "/" + nameFile + ".xls");
+
+                        responseDTOExport.setData(exportStatisticsDTO);
+
+                        responseDTOExport.setInfo(R.string.statistics_info_exporting_dynamic_event);
+                        callback.onSuccess(responseDTOExport);
+
+                    } catch (IOException e) {
+                        responseDTOExport.setError(R.string.statistics_error_exporting_dynamic_event);
+                        callback.onFailure(responseDTOExport);
                     }
-
-
-                    //Get File Name
-                    DateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    String nameFile = "Export" + "_" + sdf.format(timestamp);
-
-                    //Create Directory
-                    String rootDirectoryName = Environment.getExternalStorageDirectory() + "";
-                    File subDirectory = new File(rootDirectoryName, "FSS/" + eventType.getName());
-                    subDirectory.mkdirs();
-
-                    //Create File
-                    OutputStream stream = new FileOutputStream(rootDirectoryName + "/" + "FSS/" + eventType.getName() + "/" + nameFile + ".xls");
-
-                    wb.write(stream);
-                    stream.close();
-                    wb.close();
-
-
-                    ExportStatisticsDTO exportStatisticsDTO = new ExportStatisticsDTO();
-                    exportStatisticsDTO.setEventType(eventType);
-                    exportStatisticsDTO.setExportDate(Calendar.getInstance().getTime());
-                    exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/FSS/" + eventType.getName() + "/" + nameFile + ".xls");
-
-                    responseDTOExport.setData(exportStatisticsDTO);
-
-                    responseDTOExport.setInfo(R.string.statistics_info_exporting_dynamic_event);
-                    callback.onSuccess(responseDTOExport);
-
-                } catch (IOException e) {
-                    responseDTOExport.setError(R.string.statistics_error_exporting_dynamic_event);
-                    callback.onFailure(responseDTOExport);
-                }
-
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                responseDTO.setError(R.string.statistics_error_exporting_dynamic_event);
-                callback.onFailure(responseDTO);
-            }
-        });
+                }, errorMessage -> {
+                    //TODO
+                });
     }
 
     @Override

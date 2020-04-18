@@ -6,7 +6,6 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.view.screen.teams.TeamsPresenter;
-import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class TeamsModule {
@@ -23,8 +22,7 @@ public class TeamsModule {
     }
 
     @Provides
-    public TeamsPresenter providePresenter(TeamsPresenter.View categoryView, TeamBO teamBO,
-                                           Messages messages) {
-        return new TeamsPresenter(categoryView, teamBO, messages);
+    public TeamsPresenter providePresenter(TeamsPresenter.View categoryView, TeamBO teamBO) {
+        return new TeamsPresenter(categoryView, teamBO);
     }
 }

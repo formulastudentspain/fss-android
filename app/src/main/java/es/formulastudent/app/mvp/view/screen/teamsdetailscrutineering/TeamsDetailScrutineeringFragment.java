@@ -27,11 +27,9 @@ import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabadapter.TabAdapter;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.prescrutineering.TeamsDetailPreScrutineeringFragment;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 public class TeamsDetailScrutineeringFragment extends Fragment implements TeamsDetailScrutineeringPresenter.View{
-
-    private static final int NFC_REQUEST_CODE = 101;
-    private static final int CHRONO_CODE = 102;
 
     @Inject
     TeamsDetailScrutineeringPresenter presenter;
@@ -42,14 +40,17 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements TeamsD
     @Inject
     LoadingDialog loadingDialog;
 
-    private Team team;
+    @Inject
+    Messages messages;
 
+    private Team team;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
 
+        //Observer for loading dialog
         presenter.getLoadingData().observe(this, loadingData -> {
             if(loadingData){
                 loadingDialog.show();
@@ -57,6 +58,10 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements TeamsD
                 loadingDialog.hide();
             }
         });
+
+        //Observer to display errors
+        presenter.getErrorToDisplay().observe(this,
+                error -> messages.showError(error.getStringID(), error.getArgs()));
     }
 
 
@@ -109,7 +114,6 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements TeamsD
      * @param appComponent
      */
     protected void setupComponent(AppComponent appComponent) {
-
         DaggerTeamsDetailScrutineeringComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(getContext(), getActivity()))

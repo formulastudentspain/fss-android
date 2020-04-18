@@ -11,7 +11,6 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.view.screen.raceaccess.RaceAccessPresenter;
-import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
 public class RaceAccessModule {
@@ -39,9 +38,8 @@ public class RaceAccessModule {
     public RaceAccessPresenter providePresenter(RaceAccessPresenter.View categoryView,
                                                 TeamBO teamBO, RaceAccessBO raceAccessBO,
                                                 TeamMemberBO teamMemberBO, BriefingBO briefingBO,
-                                                EventType eventType, EgressBO egressBO,
-                                                Messages messages) {
+                                                EventType eventType, EgressBO egressBO) {
         return new RaceAccessPresenter(categoryView, teamBO, raceAccessBO, teamMemberBO, briefingBO,
-                eventType, egressBO, messages);
+                eventType, egressBO);
     }
 }

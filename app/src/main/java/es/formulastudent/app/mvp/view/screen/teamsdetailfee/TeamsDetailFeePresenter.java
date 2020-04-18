@@ -6,15 +6,12 @@ import androidx.fragment.app.FragmentManager;
 
 import java.util.List;
 
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.FeeItem;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.dialog.ConfirmNextStepDialog;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.tabs.TeamsDetailFeeTabFragment;
-import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class TeamsDetailFeePresenter extends DataConsumer {
@@ -22,13 +19,11 @@ public class TeamsDetailFeePresenter extends DataConsumer {
     //Dependencies
     private View view;
     private TeamBO teamBO;
-    private Messages messages;
 
-    public TeamsDetailFeePresenter(TeamsDetailFeePresenter.View view, TeamBO teamBO, Messages messages) {
+    public TeamsDetailFeePresenter(TeamsDetailFeePresenter.View view, TeamBO teamBO) {
         super(teamBO);
         this.view = view;
         this.teamBO = teamBO;
-        this.messages = messages;
     }
 
 
@@ -42,7 +37,7 @@ public class TeamsDetailFeePresenter extends DataConsumer {
 
     public void updateTeam(FeeItem feeItem, final Team team) {
 
-        switch (feeItem){
+        switch (feeItem) {
             case TRANSPONDER_FEE_GIVEN:
                 team.setTransponderFeeGiven(true);
                 break;
@@ -70,24 +65,16 @@ public class TeamsDetailFeePresenter extends DataConsumer {
         }
 
         //Update
-        teamBO.updateTeam(team, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-
-                //Get fragments and update fields with the new values
-                List<Fragment> fragmentList = view.getViewFragmentManager().getFragments();
-                for(Fragment fragment: fragmentList){
-                    if(fragment instanceof TeamsDetailFeeTabFragment){
-                        ((TeamsDetailFeeTabFragment)fragment).updateView(team);
+        teamBO.updateTeam(team,
+                response -> {
+                    List<Fragment> fragmentList = view.getViewFragmentManager().getFragments();
+                    for (Fragment fragment : fragmentList) {
+                        if (fragment instanceof TeamsDetailFeeTabFragment) {
+                            ((TeamsDetailFeeTabFragment) fragment).updateView(team);
+                        }
                     }
-                }
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+                },
+                this::setErrorToDisplay);
     }
 
 

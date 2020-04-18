@@ -59,16 +59,10 @@ public class AdminOpsPresenter {
     }
 
     public void deleteAllTeams() {
-        teamBO.deleteAllTeams(new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-
-            }
+        teamBO.deleteAllTeams(response -> {
+            //TODO
+        }, errorMessage -> {
+            //TODO
         });
     }
 
@@ -160,25 +154,16 @@ public class AdminOpsPresenter {
 
             //Save all teams
             for(String teamKey: teams.keySet()){
-               final Team team = teams.get(teamKey);
-
-                teamBO.createTeam(team, new BusinessCallback() {
-                    @Override
-                    public void onSuccess(ResponseDTO responseDTO) {
-                        persistedTeams.put(team.getName(), team);
-
-                        if(persistedTeams.size() == teams.size()){
-                            createDrivers(persistedTeams);
-                        }
+                final Team team = teams.get(teamKey);
+                teamBO.createTeam(team, response -> {
+                    persistedTeams.put(team.getName(), team);
+                    if(persistedTeams.size() == teams.size()){
+                        createDrivers(persistedTeams);
                     }
-
-                    @Override
-                    public void onFailure(ResponseDTO responseDTO) {
-
-                    }
+                }, errorMessage -> {
+                    //TODO
                 });
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
