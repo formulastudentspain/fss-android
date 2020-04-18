@@ -9,12 +9,11 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.Role;
-import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
-import es.formulastudent.app.mvp.view.screen.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class UserPresenter extends DataConsumer implements RecyclerViewClickListener {
@@ -80,20 +79,10 @@ public class UserPresenter extends DataConsumer implements RecyclerViewClickList
     }
 
     public void filterIconClicked() {
-        teamBO.retrieveTeams(null, null, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<Team> teams = (List<Team>) responseDTO.getData();
-                //TODO los equipos están para cuando use la app los Team Leaders
-
-                view.showFilteringDialog(selectedRole);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(R.string.team_member_get_teams_error);
-            }
-        });
+        teamBO.retrieveTeams(null, null, teams -> {
+            //TODO los equipos están para cuando use la app los Team Leaders
+            view.showFilteringDialog(selectedRole);
+        }, null);
     }
 
 

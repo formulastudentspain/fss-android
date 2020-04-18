@@ -75,7 +75,6 @@ public class UserDetailFragment extends Fragment implements UserDetailPresenter.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_user_detail, container, false);
 
-        assert getArguments() != null;
         UserDetailFragmentArgs args = UserDetailFragmentArgs.fromBundle(getArguments());
         user = args.getSelectedUser();
 

@@ -54,7 +54,6 @@ public class TeamsDetailFeeFragment extends Fragment implements TeamsDetailFeePr
         View view = inflater.inflate(R.layout.fragment_teams_detail_fee, container, false);
 
         //Get selected team
-        assert getArguments() != null;
         TeamsDetailFeeFragmentArgs args = TeamsDetailFeeFragmentArgs.fromBundle(getArguments());
         team = args.getSelectedTeam();
 

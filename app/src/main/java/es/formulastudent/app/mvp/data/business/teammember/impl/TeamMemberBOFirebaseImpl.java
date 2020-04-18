@@ -13,10 +13,13 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.DataLoader;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO {
 
@@ -27,27 +30,24 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
     }
 
     @Override
-    public void retrieveTeamMemberByNFCTag(String tag, final BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void retrieveTeamMemberByNFCTag(String tag,
+                                           OnSuccessCallback<TeamMember> onSuccessCallback,
+                                           OnFailureCallback onFailureCallback) {
 
         loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM_MEMBERS)
                 .whereEqualTo(TeamMember.TAG_NFC, tag)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    //success
                     if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                         TeamMember teamMember = new TeamMember(queryDocumentSnapshots.getDocuments().get(0));
-                        responseDTO.setData(teamMember);
-                        responseDTO.setInfo(R.string.team_member_get_by_nfc_info);
+                        onSuccessCallback.onSuccess(teamMember);
                     }
-                    callback.onSuccess(responseDTO);
                     loadingData(false);
                     
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.team_member_get_by_nfc_error);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.team_member_get_by_nfc_error));
                     loadingData(false);
                 });
     }

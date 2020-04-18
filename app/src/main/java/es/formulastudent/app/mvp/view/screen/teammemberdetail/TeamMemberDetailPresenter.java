@@ -13,9 +13,9 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.view.screen.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.teammember.TeamMemberGeneralPresenter;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class TeamMemberDetailPresenter extends DataConsumer implements TeamMemberGeneralPresenter {
@@ -38,39 +38,32 @@ public class TeamMemberDetailPresenter extends DataConsumer implements TeamMembe
     }
 
     void onNFCTagDetected(final TeamMember teamMember, final String tagNFC) {
-
         //Check if the NFC tag is already assigned
-        teamMemberBO.retrieveTeamMemberByNFCTag(tagNFC, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
+        teamMemberBO.retrieveTeamMemberByNFCTag(tagNFC,
+                retrievedTeamMember -> {
+                    if (retrievedTeamMember == null) {
+                        teamMember.setNFCTag(tagNFC);
+                        teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
+                            @Override
+                            public void onSuccess(ResponseDTO responseDTO) {
+                                messages.showInfo(responseDTO.getInfo());
+                                view.updateNFCInformation(tagNFC);
+                            }
 
-                if (responseDTO.getData() == null) {
-                    teamMember.setNFCTag(tagNFC);
-                    teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
-                        @Override
-                        public void onSuccess(ResponseDTO responseDTO) {
-                            messages.showInfo(responseDTO.getInfo());
-                            view.updateNFCInformation(tagNFC);
-                        }
+                            @Override
+                            public void onFailure(ResponseDTO responseDTO) {
+                                messages.showError(responseDTO.getError());
+                            }
+                        });
 
-                        @Override
-                        public void onFailure(ResponseDTO responseDTO) {
-                            messages.showError(responseDTO.getError());
-                        }
-                    });
-
-                    //The NFC tag is already assigned
-                } else {
-                    TeamMember teamMember = (TeamMember) responseDTO.getData();
-                    messages.showError(R.string.team_member_error_tag_already_used, teamMember.getName());
-                }
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+                        //The NFC tag is already assigned
+                    } else {
+                        messages.showError(R.string.team_member_error_tag_already_used, retrievedTeamMember.getName());
+                    }
+                },
+                error -> {
+                    messages.showError(1); //FIXME
+                });
     }
 
     void checkDocuments(TeamMember teamMember) {
@@ -168,18 +161,9 @@ public class TeamMemberDetailPresenter extends DataConsumer implements TeamMembe
 
     void openEditTeamMemberDialog() {
         //Call business to retrieve teams
-        teamBO.retrieveTeams(null, null, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<Team> teams = (List<Team>) responseDTO.getData();
-                view.showEditTeamMemberDialog(teams);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        teamBO.retrieveTeams(null, null,
+                teams -> view.showEditTeamMemberDialog(teams),
+                error -> messages.showError(1)); //FIXME
     }
 
     public interface View {

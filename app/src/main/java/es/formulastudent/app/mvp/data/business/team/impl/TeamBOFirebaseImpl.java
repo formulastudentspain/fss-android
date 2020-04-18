@@ -1,6 +1,8 @@
 package es.formulastudent.app.mvp.data.business.team.impl;
 
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -15,10 +17,13 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.DataLoader;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Car;
 import es.formulastudent.app.mvp.data.model.Team;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.ENERGY_METER_STEP;
 import static es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog.RADIOBUTTON_NOT_PASSED_AI;
@@ -48,8 +53,10 @@ public class TeamBOFirebaseImpl extends DataLoader implements TeamBO {
     }
 
     @Override
-    public void retrieveTeams(String carType, Map<String, String> filters, final BusinessCallback callback) {
-        ResponseDTO responseDTO = new ResponseDTO();
+    public void retrieveTeams(String carType, Map<String, String> filters,
+                              @NonNull OnSuccessCallback<List<Team>> onSuccessCallback,
+                              @NonNull OnFailureCallback onFailureCallback) {
+
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_TEAM);
 
         //Filter by car type
@@ -164,23 +171,16 @@ public class TeamBOFirebaseImpl extends DataLoader implements TeamBO {
         query.orderBy(Team.CAR_NUMBER, Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
-
                     if (task.isSuccessful()) {
-
                         List<Team> result = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Team team = new Team(document);
                             result.add(team);
                         }
-
-                        responseDTO.setData(result);
-                        responseDTO.setInfo(R.string.teams_info_retrieving_all_message);
-                        callback.onSuccess(responseDTO);
+                        onSuccessCallback.onSuccess(result);
                         loadingData(false);
-
                     } else {
-                        responseDTO.setError(R.string.teams_error_retrieving_all_message);
-                        callback.onFailure(responseDTO);
+                        onFailureCallback.onFailure(new Message(R.string.teams_error_retrieving_all_message));
                         loadingData(false);
                     }
                 });

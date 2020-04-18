@@ -82,9 +82,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "com.github.SUPERCILEX.poi-android:poi:3.17"
-    testImplementation 'org.powermock:powermock-core:1.7.0RC2'
-    testImplementation 'org.powermock:powermock-module-junit4:1.7.0RC2'
-    testImplementation 'org.powermock:powermock-api-mockito2:1.7.0RC2'
+    testImplementation 'android.arch.core:core-testing:1.1.1'
 
     //Material Drawer
     implementation "com.mikepenz:materialdrawer:6.1.2"
@@ -125,6 +123,7 @@ dependencies {
 
     //LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'org.jetbrains:annotations:15.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

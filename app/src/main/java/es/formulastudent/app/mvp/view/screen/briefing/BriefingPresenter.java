@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
@@ -18,11 +16,10 @@ import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.screen.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.briefing.dialog.ConfirmBriefingRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.briefing.dialog.DeleteEventRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.utils.Messages;
 
 
 public class BriefingPresenter extends DataConsumer implements RecyclerViewClickListener {
@@ -33,7 +30,6 @@ public class BriefingPresenter extends DataConsumer implements RecyclerViewClick
     private BriefingBO briefingBO;
     private TeamMemberBO teamMemberBO;
     private User loggedUser;
-    private Messages messages;
 
     //Data
     private List<BriefingRegister> briefingRegisterList = new ArrayList<>();
@@ -45,49 +41,27 @@ public class BriefingPresenter extends DataConsumer implements RecyclerViewClick
 
     public BriefingPresenter(BriefingPresenter.View view, TeamBO teamBO,
                              BriefingBO briefingBO, TeamMemberBO teamMemberBO,
-                             User loggedUser, Messages messages) {
+                             User loggedUser) {
         super(teamBO, briefingBO, teamMemberBO);
         this.view = view;
         this.teamBO = teamBO;
         this.briefingBO = briefingBO;
         this.teamMemberBO = teamMemberBO;
         this.loggedUser = loggedUser;
-        this.messages = messages;
     }
 
 
     public void createRegistry(TeamMember teamMember) {
-        briefingBO.createBriefingRegistry(teamMember, loggedUser.getMail(), new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                retrieveBriefingRegisterList();
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        briefingBO.createBriefingRegistry(teamMember, loggedUser.getMail(),
+                success -> retrieveBriefingRegisterList(),
+                this::setErrorToDisplay);
     }
 
 
     void retrieveBriefingRegisterList() {
-        briefingBO.retrieveBriefingRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, new BusinessCallback() {
-
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<BriefingRegister> results = (List<BriefingRegister>) responseDTO.getData();
-                if (results == null) {
-                    results = new ArrayList<>();
-                }
-                updateBriefingRegisters(results);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        briefingBO.retrieveBriefingRegisters(selectedDateFrom, selectedDateTo, selectedTeamID,
+                this::updateBriefingRegisters,
+                this::setErrorToDisplay);
     }
 
 
@@ -99,58 +73,30 @@ public class BriefingPresenter extends DataConsumer implements RecyclerViewClick
 
 
     public void deleteBriefingRegister(String id) {
-        briefingBO.deleteBriefingRegister(id, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                retrieveBriefingRegisterList();
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        briefingBO.deleteBriefingRegister(id,
+                success -> retrieveBriefingRegisterList(),
+                this::setErrorToDisplay);
     }
 
 
     void onNFCTagDetected(String tag) {
-        teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                TeamMember teamMember = (TeamMember) responseDTO.getData();
-                FragmentManager fm = view.getActivity().getSupportFragmentManager();
-                ConfirmBriefingRegisterDialog createUserDialog = ConfirmBriefingRegisterDialog
-                        .newInstance(BriefingPresenter.this, teamMember);
-                createUserDialog.show(fm, "fragment_briefing_confirm");
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        teamMemberBO.retrieveTeamMemberByNFCTag(tag,
+                teamMember -> {
+                    FragmentManager fm = view.getActivity().getSupportFragmentManager();
+                    ConfirmBriefingRegisterDialog
+                            .newInstance(BriefingPresenter.this, teamMember)
+                            .show(fm, "fragment_briefing_confirm");
+                }, this::setErrorToDisplay);
     }
 
 
-    @SuppressWarnings("unchecked")
     void retrieveTeams() {
-        teamBO.retrieveTeams(null, null, new BusinessCallback() {
-
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<Team> teams = (List<Team>) responseDTO.getData();
-
-                //Add "All" option
-                Team teamAll = new Team("-1", "All");
-                teams.add(0, teamAll);
-                view.initializeTeamsSpinner(teams);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        teamBO.retrieveTeams(null, null,
+                teams -> {
+                    Team teamAll = new Team("-1", "All");
+                    teams.add(0, teamAll);
+                    view.initializeTeamsSpinner(teams);
+                }, this::setErrorToDisplay);
     }
 
 

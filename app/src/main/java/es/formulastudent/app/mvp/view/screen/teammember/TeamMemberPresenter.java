@@ -10,9 +10,9 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.view.screen.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class TeamMemberPresenter extends DataConsumer implements RecyclerViewClickListener, TeamMemberGeneralPresenter {
@@ -96,19 +96,9 @@ public class TeamMemberPresenter extends DataConsumer implements RecyclerViewCli
     public void recyclerViewListClicked(android.view.View v, int position) {
 
         TeamMember selectedTeamMember = filteredTeamMemberList.get(position);
-
-        briefingBO.checkBriefingByUser(selectedTeamMember.getID(), new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                Boolean lastBriefing = (Boolean) responseDTO.getData();
-                view.openTeamMemberDetailFragment(selectedTeamMember, lastBriefing);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        briefingBO.checkBriefingByUser(selectedTeamMember.getID(),
+                briefingDone -> view.openTeamMemberDetailFragment(selectedTeamMember, briefingDone),
+                error -> messages.showError(1)); //FIXME
     }
 
     public void updateOrCreateTeamMember(TeamMember teamMember) {
@@ -132,35 +122,15 @@ public class TeamMemberPresenter extends DataConsumer implements RecyclerViewCli
 
 
     void openCreateTeamMemberDialog() {
-
-        //Call business to retrieve teams
-        teamBO.retrieveTeams(null, null, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<Team> teams = (List<Team>) responseDTO.getData();
-                view.showCreateTeamMemberDialog(teams);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        teamBO.retrieveTeams(null, null,
+                teams -> view.showCreateTeamMemberDialog(teams),
+                error -> messages.showError(1)); //FIXME
     }
 
     public void filterIconClicked() {
-        teamBO.retrieveTeams(null, null, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<Team> teams = (List<Team>) responseDTO.getData();
-                view.showFilteringDialog(teams);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        teamBO.retrieveTeams(null, null,
+                teams -> view.showFilteringDialog(teams),
+                error -> messages.showError(1)); //FIXME
     }
 
     List<TeamMember> getUserItemList() {

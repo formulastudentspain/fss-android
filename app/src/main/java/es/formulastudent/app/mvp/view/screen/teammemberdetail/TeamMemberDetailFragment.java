@@ -39,7 +39,7 @@ import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.screen.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.screen.teammember.dialog.CreateEditTeamMemberDialog;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 import info.androidhive.fontawesome.FontTextView;
 
 import static android.app.Activity.RESULT_OK;
@@ -103,7 +103,6 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_team_member_detail, container, false);
 
-        assert getArguments() != null;
         TeamMemberDetailFragmentArgs args = TeamMemberDetailFragmentArgs.fromBundle(getArguments());
         teamMember = args.getTeamMember();
         lastBriefing = args.getLastBriefing();
@@ -160,7 +159,6 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
     }
 
     private void initData() {
-        assert getContext() != null;
 
         //Set data
         userName.setText(teamMember.getName());

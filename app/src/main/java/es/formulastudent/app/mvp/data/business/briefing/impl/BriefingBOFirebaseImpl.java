@@ -1,5 +1,7 @@
 package es.formulastudent.app.mvp.data.business.briefing.impl;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -11,14 +13,15 @@ import java.util.Date;
 import java.util.List;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.DataLoader;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 public class BriefingBOFirebaseImpl extends DataLoader implements BriefingBO {
 
@@ -29,9 +32,10 @@ public class BriefingBOFirebaseImpl extends DataLoader implements BriefingBO {
     }
 
     @Override
-    public void retrieveBriefingRegisters(Date from, Date to, String teamID, final BusinessCallback callback) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        loadingData(true);
+    public void retrieveBriefingRegisters(Date from, Date to, String teamID,
+                                          @NonNull OnSuccessCallback<List<BriefingRegister>> onSuccessCallback,
+                                          @NonNull OnFailureCallback onFailureCallback) {
+
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS);
 
         //Competition day filter
@@ -46,33 +50,33 @@ public class BriefingBOFirebaseImpl extends DataLoader implements BriefingBO {
         }
 
         //Type Filter
+        loadingData(true);
         query = query.whereEqualTo(BriefingRegister.EVENT_TYPE, EventType.BRIEFING);
         query.orderBy(BriefingRegister.DATE, Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<BriefingRegister> result = new ArrayList<>();
-                    
+
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         BriefingRegister briefingRegister = new BriefingRegister(document);
                         result.add(briefingRegister);
                     }
 
-                    responseDTO.setData(result);
-                    responseDTO.setInfo(R.string.briefing_messages_retrieve_registers_info);
-                    callback.onSuccess(responseDTO);
                     loadingData(false);
+                    onSuccessCallback.onSuccess(result);
+
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.briefing_messages_retrieve_registers_error);
-                    callback.onFailure(responseDTO);
                     loadingData(false);
+                    onFailureCallback.onFailure(new Message(R.string.briefing_messages_retrieve_registers_error));
                 });
     }
 
 
     @Override
-    public void createBriefingRegistry(TeamMember teamMember, String registerUserMail, final BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void createBriefingRegistry(TeamMember teamMember, String registerUserMail,
+                                       @NonNull OnSuccessCallback<?> onSuccessCallback,
+                                       @NonNull OnFailureCallback onFailureCallback) {
         Date registerDate = Calendar.getInstance().getTime();
         BriefingRegister briefingRegister = new BriefingRegister(teamMember, registerDate, registerUserMail);
 
@@ -81,20 +85,19 @@ public class BriefingBOFirebaseImpl extends DataLoader implements BriefingBO {
                 .document(briefingRegister.getID())
                 .set(briefingRegister.toObjectData())
                 .addOnSuccessListener(aVoid -> {
-                    responseDTO.setInfo(R.string.briefing_messages_create_registers_info);
-                    callback.onSuccess(responseDTO);
+                    onSuccessCallback.onSuccess(null);
                     loadingData(false);
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.briefing_messages_create_registers_error);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.briefing_messages_create_registers_error));
                     loadingData(false);
                 });
     }
 
     @Override
-    public void checkBriefingByUser(String userID, final BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void checkBriefingByUser(String userID,
+                                    @NonNull OnSuccessCallback<Boolean> onSuccessCallback,
+                                    @NonNull OnFailureCallback onFailureCallback) {
 
         loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS)
@@ -103,8 +106,10 @@ public class BriefingBOFirebaseImpl extends DataLoader implements BriefingBO {
                 .orderBy(BriefingRegister.DATE, Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    Boolean result;
                     if (queryDocumentSnapshots.isEmpty()) {
-                        responseDTO.setData(Boolean.FALSE);
+                        result = Boolean.FALSE;
 
                     } else {
                         BriefingRegister briefingRegister = new BriefingRegister(queryDocumentSnapshots.getDocuments().get(0));
@@ -114,28 +119,27 @@ public class BriefingBOFirebaseImpl extends DataLoader implements BriefingBO {
                         long hours = secs / 3600;
 
                         if (hours > 24) {
-                            responseDTO.setData(Boolean.FALSE);
+                            result = Boolean.FALSE;
                         } else {
-                            responseDTO.setData(Boolean.TRUE);
+                            result = Boolean.TRUE;
                         }
                     }
 
-                    callback.onSuccess(responseDTO);
-                    responseDTO.setInfo(R.string.briefing_messages_retrieve_registers_info);
+                    onSuccessCallback.onSuccess(result);
                     loadingData(false);
+
                 })
                 .addOnFailureListener(e -> {
-                    loadingData(false);
-                    responseDTO.setError(R.string.briefing_messages_retrieve_registers_error);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.briefing_messages_retrieve_registers_error));
                     loadingData(false);
                 });
 
     }
 
     @Override
-    public void deleteBriefingRegister(String registerID, final BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void deleteBriefingRegister(String registerID,
+                                       @NonNull OnSuccessCallback<?> onSuccessCallback,
+                                       @NonNull OnFailureCallback onFailureCallback) {
         final DocumentReference registerReference = firebaseFirestore
                 .collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS)
                 .document(registerID);
@@ -144,18 +148,15 @@ public class BriefingBOFirebaseImpl extends DataLoader implements BriefingBO {
         registerReference.get()
                 .addOnSuccessListener(documentSnapshot -> registerReference.delete()
                         .addOnSuccessListener(aVoid -> {
-                            responseDTO.setInfo(R.string.briefing_messages_delete_register_info);
-                            callback.onSuccess(responseDTO);
+                            onSuccessCallback.onSuccess(null);
                             loadingData(false);
                         })
                         .addOnFailureListener(e -> {
-                            responseDTO.setError(R.string.briefing_messages_delete_register_error);
-                            callback.onSuccess(responseDTO);
+                            onFailureCallback.onFailure(new Message(R.string.briefing_messages_delete_register_error));
                             loadingData(false);
                         }))
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.briefing_messages_delete_register_error);
-                    callback.onSuccess(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.briefing_messages_delete_register_error));
                     loadingData(false);
                 });
     }

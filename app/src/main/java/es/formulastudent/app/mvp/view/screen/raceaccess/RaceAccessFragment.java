@@ -55,7 +55,6 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
         View view = inflater.inflate(R.layout.fragment_race_access, container, false);
 
         //Get selected team
-        assert getArguments() != null;
         RaceAccessFragmentArgs args = RaceAccessFragmentArgs.fromBundle(getArguments());
         EventType eventType = args.getEventType();
         setupComponent(FSSApp.getApp().component(), eventType);

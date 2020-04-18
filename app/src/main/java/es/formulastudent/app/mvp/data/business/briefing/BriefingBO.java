@@ -1,9 +1,14 @@
 package es.formulastudent.app.mvp.data.business.briefing;
 
-import java.util.Date;
+import org.jetbrains.annotations.NotNull;
 
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import java.util.Date;
+import java.util.List;
+
 import es.formulastudent.app.mvp.data.business.DataLoader;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
+import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
 public interface BriefingBO extends DataLoader.Consumer {
@@ -14,33 +19,46 @@ public interface BriefingBO extends DataLoader.Consumer {
      * @param from:    From date
      * @param to:      To date
      * @param teamID:    Selected teamID
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void retrieveBriefingRegisters(Date from, Date to, String teamID, BusinessCallback callback);
+    void retrieveBriefingRegisters(Date from, Date to, String teamID,
+                                   @NotNull OnSuccessCallback<List<BriefingRegister>> onSuccessCallback,
+                                   @NotNull OnFailureCallback onFailureCallback);
 
 
     /**
      * Method to create a Briefing registry
      * @param teamMember
-     * @param callback
+     * @param registerUserMail
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void createBriefingRegistry(TeamMember teamMember, String registerUserMail, BusinessCallback callback);
+    void createBriefingRegistry(TeamMember teamMember, String registerUserMail,
+                                @NotNull OnSuccessCallback<?> onSuccessCallback,
+                                @NotNull OnFailureCallback onFailureCallback);
 
 
     /**
      * Retrieve briefing registers by user and dates
      * @param userID
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void checkBriefingByUser(String userID, BusinessCallback callback);
+    void checkBriefingByUser(String userID,
+                             @NotNull OnSuccessCallback<Boolean> onSuccessCallback,
+                             @NotNull OnFailureCallback onFailureCallback);
 
 
     /**
      * Delete Briefing register
      * @param userID
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void deleteBriefingRegister(String userID, BusinessCallback callback);
+    void deleteBriefingRegister(String userID,
+                                @NotNull OnSuccessCallback<?> onSuccessCallback,
+                                @NotNull OnFailureCallback onFailureCallback);
 
 }
 

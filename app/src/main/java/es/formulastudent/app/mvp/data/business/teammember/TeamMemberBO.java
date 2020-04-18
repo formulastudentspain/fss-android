@@ -1,19 +1,25 @@
 package es.formulastudent.app.mvp.data.business.teammember;
 
+import org.jetbrains.annotations.NotNull;
+
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.DataLoader;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
 public interface TeamMemberBO extends DataLoader.Consumer{
 
-
     /**
      * Retrieve team member by NFC tag
      * @param tag
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void retrieveTeamMemberByNFCTag(String tag, BusinessCallback callback);
+    void retrieveTeamMemberByNFCTag(String tag,
+                                    @NotNull OnSuccessCallback<TeamMember> onSuccessCallback,
+                                    @NotNull OnFailureCallback onFailureCallback);
 
 
     /**

@@ -183,7 +183,6 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
 
     @Override
     public void openTeamMemberDetailFragment(TeamMember selectedTeamMember, Boolean lastBriefing) {
-        assert getActivity() != null;
         NavController navController = Navigation.findNavController(getActivity(), R.id.myNavHostFragment);
         navController.navigate(TeamMemberFragmentDirections
                 .actionTeamMemberFragmentToTeamMemberDetailFragment(selectedTeamMember, lastBriefing, selectedTeamMember.getName()));

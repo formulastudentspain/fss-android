@@ -13,11 +13,11 @@ import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.Device;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.screen.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.userdetail.dialog.AssignDeviceDialog;
 import es.formulastudent.app.mvp.view.screen.userdetail.dialog.EditUserDialog;
 import es.formulastudent.app.mvp.view.screen.userdetail.dialog.ReturnDeviceDialog;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class UserDetailPresenter extends DataConsumer {
