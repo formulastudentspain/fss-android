@@ -7,11 +7,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
 import es.formulastudent.app.mvp.data.business.raceaccess.RaceAccessBO;
@@ -21,12 +19,11 @@ import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.ConfirmEventRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.DeleteEventRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.FilteringRegistersDialog;
-import es.formulastudent.app.mvp.view.utils.messages.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 
 public class RaceAccessPresenter extends DataConsumer implements RecyclerViewClickListener, RaceAccessGeneralPresenter {
@@ -38,7 +35,6 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
     private TeamMemberBO teamMemberBO;
     private BriefingBO briefingBO;
     private EgressBO egressBO; //TODO use it to take egress done
-    private Messages messages;
 
     //Data
     private EventType eventType;
@@ -57,8 +53,7 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
 
     public RaceAccessPresenter(RaceAccessPresenter.View view, TeamBO teamBO,
                                RaceAccessBO raceAccessBO, TeamMemberBO teamMemberBO,
-                               BriefingBO briefingBO, EventType eventType, EgressBO egressBO,
-                               Messages messages) {
+                               BriefingBO briefingBO, EventType eventType, EgressBO egressBO) {
         super(teamBO, raceAccessBO, teamMemberBO, briefingBO, egressBO);
         this.view = view;
         this.teamBO = teamBO;
@@ -67,25 +62,13 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
         this.briefingBO = briefingBO;
         this.egressBO = egressBO;
         this.eventType = eventType;
-        this.messages = messages;
     }
 
 
-    /**
-     * Create register
-     *
-     * @param teamMember
-     * @param carNumber
-     * @param briefingDone
-     */
     @Override
     public void createRegistry(final TeamMember teamMember, final Long carNumber, final Boolean briefingDone) {
-        raceAccessBO.getDifferentEventRegistersByDriver(teamMember.getID(), new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                if (responseDTO.getError() == null) {
-
-                    Map<String, EventRegister> eventRegisterMap = (Map<String, EventRegister>) responseDTO.getData();
+        raceAccessBO.getDifferentEventRegistersByDriver(teamMember.getID(),
+                eventRegisterMap -> {
 
                     //The driver can't run
                     if (eventRegisterMap.size() >= 2
@@ -94,31 +77,13 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
                             && !eventType.equals(EventType.BRIEFING)
                             && !eventType.equals(EventType.PRACTICE_TRACK)) {
 
-                        messages.showError(R.string.dynamic_event_message_error_runs);
-
+                        setErrorToDisplay(new Message(R.string.dynamic_event_message_error_runs));
                     } else {
-                        raceAccessBO.createRegister(teamMember, carNumber, briefingDone, eventType, new BusinessCallback() {
-                            @Override
-                            public void onSuccess(ResponseDTO responseDTO) {
-                                retrieveRegisterList();
-                            }
-
-                            @Override
-                            public void onFailure(ResponseDTO responseDTO) {
-                                messages.showError(responseDTO.getError());
-                            }
-                        });
+                        raceAccessBO.createRegister(teamMember, carNumber, briefingDone, eventType,
+                                success -> retrieveRegisterList(),
+                                this::setErrorToDisplay);
                     }
-                } else {
-                    messages.showError(R.string.dynamic_event_message_error_runs);
-                }
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+                }, this::setErrorToDisplay);
     }
 
 
@@ -126,19 +91,10 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
      * Retrieve Event registers
      */
     public void retrieveRegisterList() {
-        raceAccessBO.retrieveRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, selectedCarNumber, eventType, new BusinessCallback() {
-
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<EventRegister> results = (List<EventRegister>) responseDTO.getData();
-                updateEventRegisters(results == null ? new ArrayList<EventRegister>() : results);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        raceAccessBO.retrieveRegisters(selectedDateFrom, selectedDateTo, selectedTeamID,
+                selectedCarNumber, eventType,
+                this::updateEventRegisters,
+                this::setErrorToDisplay);
     }
 
 
@@ -157,7 +113,7 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
     void onNFCTagDetected(String tag) {
         teamMemberBO.retrieveTeamMemberByNFCTag(tag,
                 this::getUserBriefingRegister,
-                error -> messages.showError(1)); //FIXME delete when implemented liveData messages here
+                this::setErrorToDisplay);
     }
 
     /**
@@ -166,18 +122,9 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
      * @param registerID
      */
     public void deleteDynamicEventRegister(String registerID) {
-        raceAccessBO.deleteRegister(eventType, registerID, new BusinessCallback() {
-
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                retrieveRegisterList();
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        raceAccessBO.deleteRegister(eventType, registerID,
+                response -> retrieveRegisterList(),
+                this::setErrorToDisplay);
     }
 
     private void getUserBriefingRegister(final TeamMember teamMember) {
@@ -195,10 +142,10 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
                                     .newInstance(RaceAccessPresenter.this, teamMember, briefingAvailable)
                                     .show(fm, "fragment_event_confirm");
                         }
-                    }, error -> messages.showError(1)); //FIXME delete when implemented liveData messages here
-
+                    },
+                    this::setErrorToDisplay);
         } else {
-            messages.showError(R.string.team_member_get_by_nfc_not_existing);
+            setErrorToDisplay(new Message(R.string.team_member_get_by_nfc_not_existing));
         }
     }
 
@@ -207,17 +154,13 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
      * Retrieve teams from database
      */
     private void retrieveTeams() {
-        teamBO.retrieveTeams(null, null, teams -> {
-
-            //Add "All" option
-            Team teamAll = new Team("-1", "All");
-            teams.add(0, teamAll);
-
-            //Show filtering dialog
-            openFilteringDialog(teams);
-        }, error -> {
-            messages.showError(1); //FIXME delete when implemented liveData messages here
-        });
+        teamBO.retrieveTeams(null, null,
+                teams -> {
+                    Team teamAll = new Team("-1", "All");
+                    teams.add(0, teamAll);
+                    openFilteringDialog(teams);
+                },
+                this::setErrorToDisplay);
     }
 
 

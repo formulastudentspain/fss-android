@@ -1,10 +1,14 @@
 package es.formulastudent.app.mvp.data.business.raceaccess.impl;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,17 +18,19 @@ import java.util.List;
 import java.util.Map;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.DataLoader;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.business.raceaccess.RaceAccessBO;
 import es.formulastudent.app.mvp.data.model.BriefingRegister;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
+//@SuppressWarnings("ALL")
 public class RaceAccessBOFirebaseImpl extends DataLoader implements RaceAccessBO {
 
     private FirebaseFirestore firebaseFirestore;
@@ -36,9 +42,9 @@ public class RaceAccessBOFirebaseImpl extends DataLoader implements RaceAccessBO
     }
 
     @Override
-    public void retrieveRegisters(Date from, Date to, String teamID, Long carNumber, 
-                                  final EventType type, final BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void retrieveRegisters(Date from, Date to, String teamID, Long carNumber, final EventType type,
+                                  @NotNull OnSuccessCallback<List<EventRegister> > onSuccessCallback,
+                                  @NonNull OnFailureCallback onFailureCallback) {
         Query query = firebaseFirestore.collection(type.getFirebaseTable());
 
         //Competition day filter
@@ -78,27 +84,23 @@ public class RaceAccessBOFirebaseImpl extends DataLoader implements RaceAccessBO
                             result.add(register);
                         }
                     }
-
-                    responseDTO.setData(result);
-                    responseDTO.setInfo(R.string.dynamic_event_message_info_retrieving_registers);
-                    callback.onSuccess(responseDTO);
+                    onSuccessCallback.onSuccess(result);
                     loadingData(false);
 
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.dynamic_event_message_error_retrieving_registers);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.dynamic_event_message_error_retrieving_registers));
                     loadingData(false);
                 });
     }
 
 
     @Override
-    public void createRegister(TeamMember teamMember, Long carNumber, Boolean briefingDone, EventType type, final BusinessCallback callback) {
+    public void createRegister(TeamMember teamMember, Long carNumber, Boolean briefingDone, EventType type,
+                               @NonNull OnSuccessCallback<EventRegister> onSuccessCallback,
+                               @NonNull OnFailureCallback onFailureCallback) {
 
-        final ResponseDTO responseDTO = new ResponseDTO();
         Date registerDate = Calendar.getInstance().getTime();
-
         final EventRegister register;
         if (type.equals(EventType.PRE_SCRUTINEERING)) {
             register = new PreScrutineeringRegister(teamMember.getTeamID(), teamMember.getTeam(), teamMember.getID(),
@@ -113,23 +115,20 @@ public class RaceAccessBOFirebaseImpl extends DataLoader implements RaceAccessBO
                 .document(register.getID())
                 .set(register.toObjectData())
                 .addOnSuccessListener(aVoid -> {
-                    responseDTO.setData(register);
-                    responseDTO.setInfo(R.string.dynamic_event_messages_create_registers_info);
-                    callback.onSuccess(responseDTO);
+                    onSuccessCallback.onSuccess(register);
                     loadingData(false);
-
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.dynamic_event_messages_create_registers_error);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.dynamic_event_messages_create_registers_error));
                     loadingData(false);
                 });
     }
 
     @Override
-    public void updatePreScrutineeringRegister(String id, final long milliseconds, final BusinessCallback callback) {
+    public void updatePreScrutineeringRegister(String id, final long milliseconds,
+                                               @NonNull OnSuccessCallback<?> onSuccessCallback,
+                                               @NonNull OnFailureCallback onFailureCallback) {
 
-        final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore.collection(EventType.PRE_SCRUTINEERING.getFirebaseTable()).document(id);
 
         loadingData(true);
@@ -137,25 +136,23 @@ public class RaceAccessBOFirebaseImpl extends DataLoader implements RaceAccessBO
                 .addOnSuccessListener(
                         documentSnapshot -> registerReference.update(PreScrutineeringRegister.TIME, milliseconds)
                                 .addOnSuccessListener(aVoid -> {
-                                    responseDTO.setInfo(R.string.dynamic_event_messages_prescrutineering_update_info);
-                                    callback.onSuccess(responseDTO);
+                                    onSuccessCallback.onSuccess(null);
                                     loadingData(false);
                                 })
                                 .addOnFailureListener(e -> {
-                                    responseDTO.setError(R.string.dynamic_event_messages_prescrutineering_update_error);
-                                    callback.onFailure(responseDTO);
+                                    onFailureCallback.onFailure(new Message(R.string.dynamic_event_messages_prescrutineering_update_error));
                                     loadingData(false);
                                 }))
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.dynamic_event_messages_prescrutineering_update_error);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.dynamic_event_messages_prescrutineering_update_error));
                     loadingData(false);
                 });
     }
 
     @Override
-    public void deleteRegister(EventType type, String registerID, final BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void deleteRegister(EventType type, String registerID,
+                               @NonNull OnSuccessCallback<?> onSuccessCallback,
+                               @NonNull OnFailureCallback onFailureCallback) {
         final DocumentReference registerReference = firebaseFirestore
                 .collection(type.getFirebaseTable())
                 .document(registerID);
@@ -164,25 +161,24 @@ public class RaceAccessBOFirebaseImpl extends DataLoader implements RaceAccessBO
         registerReference.get()
                 .addOnSuccessListener(documentSnapshot -> registerReference.delete()
                         .addOnSuccessListener(aVoid -> {
-                            responseDTO.setInfo(R.string.dynamic_event_message_info_deleting_registers);
-                            callback.onSuccess(responseDTO);
+                            onSuccessCallback.onSuccess(null);
                             loadingData(false);
                         })
                         .addOnFailureListener(e -> {
-                            responseDTO.setError(R.string.dynamic_event_message_error_deleting_registers);
-                            callback.onFailure(responseDTO);
+                            onFailureCallback.onFailure(new Message(R.string.dynamic_event_message_error_deleting_registers));
                             loadingData(false);
                         }))
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.dynamic_event_message_error_deleting_registers);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.dynamic_event_message_error_deleting_registers));
                     loadingData(false);
                 });
     }
 
     @Override
-    public void getDifferentEventRegistersByDriver(String userId, final BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void getDifferentEventRegistersByDriver(String userId,
+                                                   @NonNull OnSuccessCallback<Map<String, List<EventRegister>>> onSuccessCallback,
+                                                   @NonNull OnFailureCallback onFailureCallback) {
+
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_DYNAMIC_EVENTS);
 
         if (userId != null) {
@@ -215,17 +211,15 @@ public class RaceAccessBOFirebaseImpl extends DataLoader implements RaceAccessBO
                                 result.put(register.getType().name(), eventRegisterList);
 
                             } else {
-                                responseDTO.setError(R.string.dynamic_event_message_error_runs);
+                                onFailureCallback.onFailure(new Message(R.string.dynamic_event_message_error_runs));
                             }
                         }
                     }
-                    responseDTO.setData(result);
-                    callback.onSuccess(responseDTO);
+                    onSuccessCallback.onSuccess(result);
                     loadingData(false);
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.dynamic_event_message_error_runs);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.dynamic_event_message_error_runs));
                     loadingData(false);
                 });
     }

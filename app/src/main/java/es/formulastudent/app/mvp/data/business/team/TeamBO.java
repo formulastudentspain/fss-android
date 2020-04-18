@@ -7,12 +7,10 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.business.OnFailureCallback;
 import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 
 public interface TeamBO extends DataLoader.Consumer{
 
@@ -32,34 +30,38 @@ public interface TeamBO extends DataLoader.Consumer{
     /**
      * Method to retrieve a team by ID
      * @param id
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void retrieveTeamById(String id, BusinessCallback callback);
+    void retrieveTeamById(String id,  @NotNull OnSuccessCallback<Team> onSuccessCallback,
+                          @NotNull OnFailureCallback onFailureCallback);
 
 
     /**
      * Method to delete all teams
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void deleteAllTeams(BusinessCallback callback);
+    void deleteAllTeams(@NotNull OnSuccessCallback<?> onSuccessCallback,
+                        @NotNull OnFailureCallback onFailureCallback);
+
 
     /**
      * Method to create a team
      * @param team
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void createTeam(Team team, BusinessCallback callback);
+    void createTeam(Team team, @NotNull OnSuccessCallback<?> onSuccessCallback,
+                    @NotNull OnFailureCallback onFailureCallback);
 
     /**
      * Method to update a team
      * @param team
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void updateTeam(Team team, BusinessCallback callback);
+    void updateTeam(Team team, @NotNull OnSuccessCallback<?> onSuccessCallback,
+                    @NotNull OnFailureCallback onFailureCallback);
 
-    /**
-     * Set data consumer
-     * @param dataConsumer
-     */
-    void setDataConsumer(DataConsumer dataConsumer);
 }

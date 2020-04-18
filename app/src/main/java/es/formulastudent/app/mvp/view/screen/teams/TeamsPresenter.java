@@ -8,12 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog;
-import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class TeamsPresenter extends DataConsumer implements RecyclerViewClickListener {
@@ -21,18 +20,16 @@ public class TeamsPresenter extends DataConsumer implements RecyclerViewClickLis
     //Dependencies
     private View view;
     private TeamBO teamBO;
-    private Messages messages;
 
     //Data
     private List<Team> teamsList = new ArrayList<>();
     private Map<String, String> filters = new HashMap<>();
 
 
-    public TeamsPresenter(TeamsPresenter.View view, TeamBO teamBO, Messages messages) {
+    public TeamsPresenter(TeamsPresenter.View view, TeamBO teamBO) {
         super(teamBO);
         this.view = view;
         this.teamBO = teamBO;
-        this.messages = messages;
     }
 
 
@@ -43,8 +40,9 @@ public class TeamsPresenter extends DataConsumer implements RecyclerViewClickLis
         view.filtersActivated(!filters.keySet().isEmpty());
 
         //Call Briefing business
-        teamBO.retrieveTeams(null, filters, this::updateTeams,
-                error -> messages.showError(1)); //FIXME
+        teamBO.retrieveTeams(null, filters,
+                this::updateTeams,
+                this::setErrorToDisplay);
     }
 
 

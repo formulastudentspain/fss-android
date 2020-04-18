@@ -23,6 +23,7 @@ import es.formulastudent.app.di.module.activity.TeamsDetailFeeModule;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.adapter.TabAdapter;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class TeamsDetailFeeFragment extends Fragment implements TeamsDetailFeePresenter.View{
@@ -33,6 +34,9 @@ public class TeamsDetailFeeFragment extends Fragment implements TeamsDetailFeePr
     @Inject
     LoadingDialog loadingDialog;
 
+    @Inject
+    Messages messages;
+
     private Team team;
 
     @Override
@@ -40,6 +44,7 @@ public class TeamsDetailFeeFragment extends Fragment implements TeamsDetailFeePr
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
 
+        //Observer for loading dialog
         presenter.getLoadingData().observe(this, loadingData -> {
             if(loadingData){
                 loadingDialog.show();
@@ -47,6 +52,10 @@ public class TeamsDetailFeeFragment extends Fragment implements TeamsDetailFeePr
                 loadingDialog.hide();
             }
         });
+
+        //Observer to display errors
+        presenter.getErrorToDisplay().observe(this,
+                error -> messages.showError(error.getStringID(), error.getArgs()));
     }
 
     @Override
