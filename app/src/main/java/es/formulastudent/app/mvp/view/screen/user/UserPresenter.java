@@ -1,7 +1,5 @@
 package es.formulastudent.app.mvp.view.screen.user;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,19 +12,17 @@ import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class UserPresenter implements RecyclerViewClickListener {
+public class UserPresenter extends DataConsumer implements RecyclerViewClickListener {
 
     //Dependencies
     private View view;
-    private Context context;
     private UserBO userBO;
     private TeamBO teamBO;
-    private LoadingDialog loadingDialog;
     private Messages messages;
 
     //Data
@@ -37,13 +33,11 @@ public class UserPresenter implements RecyclerViewClickListener {
     private UserRole selectedRole;
 
 
-    public UserPresenter(UserPresenter.View view, Context context, UserBO userBO, TeamBO teamBO,
-                         LoadingDialog loadingDialog, Messages messages) {
+    public UserPresenter(UserPresenter.View view, UserBO userBO, TeamBO teamBO, Messages messages) {
+        super(userBO, teamBO);
         this.view = view;
-        this.context = context;
         this.userBO = userBO;
         this.teamBO = teamBO;
-        this.loadingDialog = loadingDialog;
         this.messages = messages;
     }
 
@@ -61,18 +55,15 @@ public class UserPresenter implements RecyclerViewClickListener {
 
 
     public void retrieveUsers() {
-        loadingDialog.show();
         userBO.retrieveUsers(selectedRole, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 List<User> users = (List<User>) responseDTO.getData();
                 updateUserListItems(users);
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(R.string.team_member_get_all_error);
             }
         });
@@ -89,12 +80,9 @@ public class UserPresenter implements RecyclerViewClickListener {
     }
 
     public void filterIconClicked() {
-        loadingDialog.show();
         teamBO.retrieveTeams(null, null, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
-
                 List<Team> teams = (List<Team>) responseDTO.getData();
                 //TODO los equipos están para cuando use la app los Team Leaders
 
@@ -103,7 +91,6 @@ public class UserPresenter implements RecyclerViewClickListener {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(R.string.team_member_get_teams_error);
             }
         });
@@ -118,18 +105,15 @@ public class UserPresenter implements RecyclerViewClickListener {
 
 
     public void createUser(User user) {
-        loadingDialog.show();
         userBO.createUser(user, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 retrieveUsers();
                 messages.showInfo(responseDTO.getInfo());
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });

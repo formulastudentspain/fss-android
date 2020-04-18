@@ -13,14 +13,14 @@ import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.Device;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.userdetail.dialog.AssignDeviceDialog;
 import es.formulastudent.app.mvp.view.screen.userdetail.dialog.EditUserDialog;
 import es.formulastudent.app.mvp.view.screen.userdetail.dialog.ReturnDeviceDialog;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class UserDetailPresenter {
+public class UserDetailPresenter extends DataConsumer {
 
     //Dependencies
     private View view;
@@ -28,17 +28,16 @@ public class UserDetailPresenter {
     private UserBO userBO;
     private User loggedUser;
     private ImageBO imageBO;
-    private LoadingDialog loadingDialog;
     private Messages messages;
 
     public UserDetailPresenter(UserDetailPresenter.View view, Context context, UserBO userBO, User loggedUser,
-                               ImageBO imageBO, LoadingDialog loadingDialog, Messages messages) {
+                               ImageBO imageBO, Messages messages) {
+        super(userBO, imageBO);
         this.view = view;
         this.context = context;
         this.userBO = userBO;
         this.loggedUser = loggedUser;
         this.imageBO = imageBO;
-        this.loadingDialog = loadingDialog;
         this.messages = messages;
     }
 
@@ -58,18 +57,15 @@ public class UserDetailPresenter {
      * @param user
      */
     public void updateUser(final User user) {
-        loadingDialog.show();
         userBO.editUser(user, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showInfo(responseDTO.getInfo());
                 view.setUserDetails(user);
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.show();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -153,7 +149,6 @@ public class UserDetailPresenter {
      * @param user
      */
     void uploadProfilePicture(final Bitmap bitmap, final User user) {
-        loadingDialog.show();
         imageBO.uploadImage(bitmap, user.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
@@ -163,14 +158,12 @@ public class UserDetailPresenter {
                 userBO.editUser(user, new BusinessCallback() {
                     @Override
                     public void onSuccess(ResponseDTO responseDTO) {
-                        loadingDialog.hide();
                         view.updateProfilePicture(bitmap);
                         messages.showInfo(responseDTO.getInfo());
                     }
 
                     @Override
                     public void onFailure(ResponseDTO responseDTO) {
-                        loadingDialog.hide();
                         messages.showError(responseDTO.getError());
                     }
                 });
@@ -178,7 +171,6 @@ public class UserDetailPresenter {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });

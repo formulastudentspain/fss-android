@@ -30,6 +30,7 @@ import es.formulastudent.app.di.module.activity.UserDetailModule;
 import es.formulastudent.app.mvp.data.model.Device;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -40,6 +41,9 @@ public class UserDetailFragment extends Fragment implements UserDetailPresenter.
 
     @Inject
     UserDetailPresenter presenter;
+
+    @Inject
+    LoadingDialog loadingDialog;
 
     //View components
     private TextView userName;
@@ -57,6 +61,14 @@ public class UserDetailFragment extends Fragment implements UserDetailPresenter.
     public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
+
+        presenter.getLoadingData().observe(this, loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
     }
 
     @Override

@@ -41,6 +41,7 @@ import es.formulastudent.app.mvp.view.screen.qrreader.QRReaderActivity;
 import es.formulastudent.app.mvp.view.screen.user.dialog.CreateUserDialog;
 import es.formulastudent.app.mvp.view.screen.user.dialog.FilteringUsersDialog;
 import es.formulastudent.app.mvp.view.screen.user.recyclerview.UserListAdapter;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import info.androidhive.fontawesome.FontTextView;
 
 
@@ -51,8 +52,12 @@ public class UserFragment extends Fragment implements UserPresenter.View, View.O
 
     @Inject
     UserPresenter presenter;
+
     @Inject
     User loggedUser;
+
+    @Inject
+    LoadingDialog loadingDialog;
 
     private UserListAdapter userListAdapter;
     private MenuItem filterItem;
@@ -61,6 +66,14 @@ public class UserFragment extends Fragment implements UserPresenter.View, View.O
     public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
+
+        presenter.getLoadingData().observe(this, loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
     }
 
     @Override

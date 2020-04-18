@@ -1,14 +1,9 @@
 package es.formulastudent.app.mvp.data.business.user.impl;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +12,13 @@ import java.util.Map;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
 
-public class UserBOFirebaseImpl implements UserBO {
+public class UserBOFirebaseImpl extends DataLoader implements UserBO {
 
     private FirebaseFirestore firebaseFirestore;
 
@@ -41,6 +37,7 @@ public class UserBOFirebaseImpl implements UserBO {
             query = query.whereEqualTo(User.ROLE, selectedRole.getName());
         }
 
+        loadingData(true);
         query.orderBy(User.NAME, Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -56,11 +53,13 @@ public class UserBOFirebaseImpl implements UserBO {
                         responseDTO.setData(result);
                         responseDTO.setInfo(R.string.user_get_all_info);
                         callback.onSuccess(responseDTO);
+                        loadingData(false);
                     }
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.user_get_all_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -69,16 +68,19 @@ public class UserBOFirebaseImpl implements UserBO {
         final Map<String, Object> docData = user.toDocumentData();
 
         ResponseDTO responseDTO = new ResponseDTO();
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER)
                 .document(user.getID())
                 .set(docData)
                 .addOnSuccessListener(aVoid -> {
                     responseDTO.setInfo(R.string.user_create_info);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.user_create_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -86,6 +88,7 @@ public class UserBOFirebaseImpl implements UserBO {
     public void retrieveUserByMail(String mail, final BusinessCallback callback) {
         final ResponseDTO responseDTO = new ResponseDTO();
 
+        loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER)
                 .whereEqualTo(User.MAIL, mail)
                 .get()
@@ -97,10 +100,12 @@ public class UserBOFirebaseImpl implements UserBO {
                     }
                     responseDTO.setInfo(R.string.user_get_by_mail_info);
                     callback.onSuccess(responseDTO);
+                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.user_get_by_mail_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
 
@@ -110,20 +115,23 @@ public class UserBOFirebaseImpl implements UserBO {
         final ResponseDTO responseDTO = new ResponseDTO();
         final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER).document(user.getID());
 
+        loadingData(true);
         registerReference.get()
                 .addOnSuccessListener(documentSnapshot -> registerReference.update(user.toDocumentData())
                         .addOnSuccessListener(aVoid -> {
                             responseDTO.setInfo(R.string.user_update_info);
                             callback.onSuccess(responseDTO);
+                            loadingData(false);
                         })
                         .addOnFailureListener(e -> {
                             responseDTO.setError(R.string.user_update_error);
                             callback.onFailure(responseDTO);
+                            loadingData(false);
                         }))
                 .addOnFailureListener(e -> {
                     responseDTO.setError(R.string.user_update_error);
                     callback.onFailure(responseDTO);
+                    loadingData(false);
                 });
     }
-
 }
