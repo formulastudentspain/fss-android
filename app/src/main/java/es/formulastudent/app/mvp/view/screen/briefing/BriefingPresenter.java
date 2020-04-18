@@ -91,7 +91,7 @@ public class BriefingPresenter extends DataConsumer implements RecyclerViewClick
     }
 
 
-    private void updateBriefingRegisters(List<BriefingRegister> items) {
+    protected void updateBriefingRegisters(List<BriefingRegister> items) {
         this.briefingRegisterList.clear();
         this.briefingRegisterList.addAll(items);
         this.view.refreshBriefingRegisterItems();
