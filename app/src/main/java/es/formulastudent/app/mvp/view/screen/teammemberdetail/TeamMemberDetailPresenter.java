@@ -13,54 +13,48 @@ import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
+import es.formulastudent.app.mvp.view.screen.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.teammember.TeamMemberGeneralPresenter;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 
-public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
+public class TeamMemberDetailPresenter extends DataConsumer implements TeamMemberGeneralPresenter {
 
     //Dependencies
     private View view;
     private TeamMemberBO teamMemberBO;
     private ImageBO imageBO;
     private TeamBO teamBO;
-    private LoadingDialog loadingDialog;
     private Messages messages;
 
     public TeamMemberDetailPresenter(TeamMemberDetailPresenter.View view, TeamMemberBO teamMemberBO,
-                                     ImageBO imageBO, TeamBO teamBO, LoadingDialog loadingDialog,
-                                     Messages messages) {
+                                     ImageBO imageBO, TeamBO teamBO, Messages messages) {
+        super(teamMemberBO, imageBO, teamBO);
         this.view = view;
         this.teamMemberBO = teamMemberBO;
         this.imageBO = imageBO;
         this.teamBO = teamBO;
-        this.loadingDialog = loadingDialog;
         this.messages = messages;
     }
 
     void onNFCTagDetected(final TeamMember teamMember, final String tagNFC) {
 
         //Check if the NFC tag is already assigned
-        loadingDialog.show();
         teamMemberBO.retrieveTeamMemberByNFCTag(tagNFC, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
 
                 if (responseDTO.getData() == null) {
                     teamMember.setNFCTag(tagNFC);
                     teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
                         @Override
                         public void onSuccess(ResponseDTO responseDTO) {
-                            loadingDialog.hide();
                             messages.showInfo(responseDTO.getInfo());
                             view.updateNFCInformation(tagNFC);
                         }
 
                         @Override
                         public void onFailure(ResponseDTO responseDTO) {
-                            loadingDialog.hide();
                             messages.showError(responseDTO.getError());
                         }
                     });
@@ -69,13 +63,11 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
                 } else {
                     TeamMember teamMember = (TeamMember) responseDTO.getData();
                     messages.showError(R.string.team_member_error_tag_already_used, teamMember.getName());
-                    loadingDialog.hide();
                 }
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -87,28 +79,22 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
         teamMember.setCertifiedDriver(true);
         teamMember.setCertifiedESO(true);
 
-        loadingDialog.show();
         teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 view.updateTeamMemberInfo(teamMember);
             }
 
             @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
-            }
+            public void onFailure(ResponseDTO responseDTO) { }
         });
     }
 
 
     void checkMaxNumDrivers() {
-        loadingDialog.show();
         teamMemberBO.getRegisteredTeamMemberByTeamId(view.getSelectedUser().getTeamID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 List<TeamMember> teamMembers = (List<TeamMember>) responseDTO.getData();
 
                 boolean updatingUserNFC = false;
@@ -128,7 +114,6 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -137,7 +122,6 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
 
     void uploadProfilePicture(final Bitmap bitmap, final TeamMember teamMember) {
         //Upload image and get the URL
-        loadingDialog.show();
         imageBO.uploadImage(bitmap, teamMember.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
@@ -148,14 +132,12 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
                 teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
                     @Override
                     public void onSuccess(ResponseDTO responseDTO) {
-                        loadingDialog.hide();
                         view.updateProfilePicture(bitmap);
                         messages.showInfo(responseDTO.getInfo());
                     }
 
                     @Override
                     public void onFailure(ResponseDTO responseDTO) {
-                        loadingDialog.hide();
                         messages.showError(responseDTO.getError());
                     }
                 });
@@ -163,7 +145,6 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -171,18 +152,15 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
     }
 
     public void updateOrCreateTeamMember(TeamMember teamMember) {
-        loadingDialog.show();
         teamMemberBO.updateTeamMember(teamMember, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 view.updateTeamMemberInfo(teamMember);
                 messages.showInfo(responseDTO.getInfo());
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -190,18 +168,15 @@ public class TeamMemberDetailPresenter implements TeamMemberGeneralPresenter {
 
     void openEditTeamMemberDialog() {
         //Call business to retrieve teams
-        loadingDialog.show();
         teamBO.retrieveTeams(null, null, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 List<Team> teams = (List<Team>) responseDTO.getData();
                 view.showEditTeamMemberDialog(teams);
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });

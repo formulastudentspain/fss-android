@@ -38,6 +38,7 @@ import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.screen.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.screen.teammember.dialog.CreateEditTeamMemberDialog;
+import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 import info.androidhive.fontawesome.FontTextView;
 
@@ -53,8 +54,12 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
 
     @Inject
     TeamMemberDetailPresenter presenter;
+
     @Inject
     Messages messages;
+
+    @Inject
+    LoadingDialog loadingDialog;
 
     //View components
     private TextView userName;
@@ -84,6 +89,14 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
     public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
+
+        presenter.getLoadingData().observe(this, loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
     }
 
     @Override
@@ -105,7 +118,6 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
      * @param appComponent
      */
     protected void setupComponent(AppComponent appComponent) {
-
         DaggerTeamMemberDetailComponent.builder()
                 .appComponent(appComponent)
                 .contextModule(new ContextModule(getContext(), getActivity()))

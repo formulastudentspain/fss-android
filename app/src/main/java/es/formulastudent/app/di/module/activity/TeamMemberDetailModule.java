@@ -8,7 +8,6 @@ import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.view.screen.teammemberdetail.TeamMemberDetailPresenter;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.Messages;
 
 @Module(includes = {ContextModule.class, BusinessModule.class})
@@ -28,9 +27,7 @@ public class TeamMemberDetailModule {
     @Provides
     public TeamMemberDetailPresenter providePresenter(TeamMemberDetailPresenter.View categoryView,
                                                       TeamMemberBO teamMemberBO, ImageBO imageBO,
-                                                      TeamBO teamBO, LoadingDialog loadingDialog,
-                                                      Messages messages) {
-        return new TeamMemberDetailPresenter(categoryView, teamMemberBO, imageBO, teamBO,
-                loadingDialog, messages);
+                                                      TeamBO teamBO, Messages messages) {
+        return new TeamMemberDetailPresenter(categoryView, teamMemberBO, imageBO, teamBO, messages);
     }
 }
