@@ -24,8 +24,9 @@ import java.util.Locale;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
-import es.formulastudent.app.mvp.data.business.dynamicevent.DynamicEventBO;
+import es.formulastudent.app.mvp.data.business.raceaccess.RaceAccessBO;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
 import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDTO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
@@ -35,18 +36,18 @@ import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 import es.formulastudent.app.mvp.view.Utils;
 
-public class StatisticsBOImpl implements StatisticsBO {
+public class StatisticsBOImpl extends DataLoader implements StatisticsBO {
 
 
-    private DynamicEventBO dynamicEventBO;
+    private RaceAccessBO raceAccessBO;
     private TeamMemberBO teamMemberBO;
     private Context context;
 
     private DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
 
 
-    public StatisticsBOImpl(DynamicEventBO dynamicEventBO, TeamMemberBO teamMemberBO, Context context) {
-        this.dynamicEventBO = dynamicEventBO;
+    public StatisticsBOImpl(RaceAccessBO raceAccessBO, TeamMemberBO teamMemberBO, Context context) {
+        this.raceAccessBO = raceAccessBO;
         this.teamMemberBO = teamMemberBO;
         this.context = context;
     }
@@ -57,7 +58,7 @@ public class StatisticsBOImpl implements StatisticsBO {
         AssetManager mngr = context.getAssets();
         final InputStream is = mngr.open("template_export_fss.xls");
 
-        dynamicEventBO.retrieveRegisters(null, null, null, null, eventType, new BusinessCallback() {
+        raceAccessBO.retrieveRegisters(null, null, null, null, eventType, new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
 
