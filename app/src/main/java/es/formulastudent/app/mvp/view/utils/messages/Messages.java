@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.view.utils;
+package es.formulastudent.app.mvp.view.utils.messages;
 
 import android.app.Activity;
 import android.view.View;

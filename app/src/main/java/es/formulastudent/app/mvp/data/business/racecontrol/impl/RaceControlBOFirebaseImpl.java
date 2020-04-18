@@ -16,6 +16,8 @@ import java.util.Map;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.DataLoader;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
@@ -29,6 +31,7 @@ import es.formulastudent.app.mvp.data.model.RaceControlRegisterEndurance;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.RaceControlTeamDTO;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 public class RaceControlBOFirebaseImpl extends DataLoader implements RaceControlBO {
 
@@ -111,62 +114,50 @@ public class RaceControlBOFirebaseImpl extends DataLoader implements RaceControl
 
 
     @Override
-    public void getRaceControlTeams(final Map<String, Object> filters, final BusinessCallback callback) {
-        ResponseDTO response = new ResponseDTO();
+    public void getRaceControlTeams(final Map<String, Object> filters,
+                                    OnSuccessCallback<List<RaceControlTeamDTO>> onSuccessCallback,
+                                    OnFailureCallback onFailureCallback) {
 
         //First, retrieve all the teams depending on the race type
         loadingData(true);
-        teamBO.retrieveTeams(null, null, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                final List<Team> teams = (List<Team>) responseDTO.getData();
+        teamBO.retrieveTeams(null, null,
+                teams -> {
+                    //Second, retrieve the existing Endurance registers
+                    getRaceControlRegisters(filters, new BusinessCallback() {
 
-                //Second, retrieve the existing Endurance registers
-                getRaceControlRegisters(filters, new BusinessCallback() {
+                        @Override
+                        public void onSuccess(ResponseDTO responseDTO) {
 
-                    @Override
-                    public void onSuccess(ResponseDTO responseDTO) {
+                            List<RaceControlTeamDTO> resultList = new ArrayList<>();
+                            List<RaceControlRegisterEndurance> list = (List<RaceControlRegisterEndurance>) responseDTO.getData();
 
-                        List<RaceControlTeamDTO> resultList = new ArrayList<>();
-                        List<RaceControlRegisterEndurance> list = (List<RaceControlRegisterEndurance>) responseDTO.getData();
-
-                        //Check if a team has been already added
-                        for (Team team : teams) {
-
-                            boolean isTeamAlreadyAdded = false;
-                            for (RaceControlRegisterEndurance raceControlTeam : list) {
-
-                                if (team.getCar().getNumber().equals(raceControlTeam.getCarNumber())) {
-                                    isTeamAlreadyAdded = true;
-                                    break;
+                            //Check if a team has been already added
+                            for (Team team : teams) {
+                                boolean isTeamAlreadyAdded = false;
+                                for (RaceControlRegisterEndurance raceControlTeam : list) {
+                                    if (team.getCar().getNumber().equals(raceControlTeam.getCarNumber())) {
+                                        isTeamAlreadyAdded = true;
+                                        break;
+                                    }
                                 }
+                                RaceControlTeamDTO result = new RaceControlTeamDTO(team, isTeamAlreadyAdded);
+                                resultList.add(result);
                             }
-
-                            RaceControlTeamDTO result = new RaceControlTeamDTO(team, isTeamAlreadyAdded);
-                            resultList.add(result);
+                            onSuccessCallback.onSuccess(resultList);
+                            loadingData(false);
                         }
 
-                        response.setData(resultList);
-                        callback.onSuccess(response);
-                        loadingData(false);
-                    }
-
-                    @Override
-                    public void onFailure(ResponseDTO responseDTO) {
-                        responseDTO.setError(R.string.rc_teams_error_message);
-                        callback.onFailure(responseDTO);
-                        loadingData(false);
-                    }
+                        @Override
+                        public void onFailure(ResponseDTO responseDTO) {
+                            onFailureCallback.onFailure(new Message(R.string.rc_teams_error_message));
+                            loadingData(false);
+                        }
+                    });
+                },
+                error -> {
+                    onFailureCallback.onFailure(new Message(R.string.rc_teams_error_message));
+                    loadingData(false);
                 });
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                responseDTO.setError(R.string.rc_teams_error_message);
-                callback.onFailure(responseDTO);
-                loadingData(false);
-            }
-        });
     }
 
     @Override

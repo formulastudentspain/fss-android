@@ -13,21 +13,20 @@ import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
-import es.formulastudent.app.mvp.data.business.raceaccess.RaceAccessBO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
+import es.formulastudent.app.mvp.data.business.raceaccess.RaceAccessBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.view.screen.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.ConfirmEventRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.DeleteEventRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.raceaccess.dialog.FilteringRegistersDialog;
-import es.formulastudent.app.mvp.view.utils.LoadingDialog;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class RaceAccessPresenter extends DataConsumer implements RecyclerViewClickListener, RaceAccessGeneralPresenter {
@@ -39,7 +38,6 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
     private TeamMemberBO teamMemberBO;
     private BriefingBO briefingBO;
     private EgressBO egressBO; //TODO use it to take egress done
-    private LoadingDialog loadingDialog;
     private Messages messages;
 
     //Data
@@ -60,7 +58,7 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
     public RaceAccessPresenter(RaceAccessPresenter.View view, TeamBO teamBO,
                                RaceAccessBO raceAccessBO, TeamMemberBO teamMemberBO,
                                BriefingBO briefingBO, EventType eventType, EgressBO egressBO,
-                               LoadingDialog loadingDialog, Messages messages) {
+                               Messages messages) {
         super(teamBO, raceAccessBO, teamMemberBO, briefingBO, egressBO);
         this.view = view;
         this.teamBO = teamBO;
@@ -69,7 +67,6 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
         this.briefingBO = briefingBO;
         this.egressBO = egressBO;
         this.eventType = eventType;
-        this.loadingDialog = loadingDialog;
         this.messages = messages;
     }
 
@@ -83,11 +80,9 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
      */
     @Override
     public void createRegistry(final TeamMember teamMember, final Long carNumber, final Boolean briefingDone) {
-        loadingDialog.show();
         raceAccessBO.getDifferentEventRegistersByDriver(teamMember.getID(), new BusinessCallback() {
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 if (responseDTO.getError() == null) {
 
                     Map<String, EventRegister> eventRegisterMap = (Map<String, EventRegister>) responseDTO.getData();
@@ -102,17 +97,14 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
                         messages.showError(R.string.dynamic_event_message_error_runs);
 
                     } else {
-                        loadingDialog.show();
                         raceAccessBO.createRegister(teamMember, carNumber, briefingDone, eventType, new BusinessCallback() {
                             @Override
                             public void onSuccess(ResponseDTO responseDTO) {
-                                loadingDialog.hide();
                                 retrieveRegisterList();
                             }
 
                             @Override
                             public void onFailure(ResponseDTO responseDTO) {
-                                loadingDialog.hide();
                                 messages.showError(responseDTO.getError());
                             }
                         });
@@ -124,7 +116,6 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -135,19 +126,16 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
      * Retrieve Event registers
      */
     public void retrieveRegisterList() {
-        loadingDialog.show();
         raceAccessBO.retrieveRegisters(selectedDateFrom, selectedDateTo, selectedTeamID, selectedCarNumber, eventType, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 List<EventRegister> results = (List<EventRegister>) responseDTO.getData();
                 updateEventRegisters(results == null ? new ArrayList<EventRegister>() : results);
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -167,21 +155,9 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
      * @param tag
      */
     void onNFCTagDetected(String tag) {
-        loadingDialog.show();
-        teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
-                TeamMember teamMember = (TeamMember) responseDTO.getData();
-                getUserBriefingRegister(teamMember);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
-                messages.showError(responseDTO.getError());
-            }
-        });
+        teamMemberBO.retrieveTeamMemberByNFCTag(tag,
+                this::getUserBriefingRegister,
+                error -> messages.showError(1)); //FIXME delete when implemented liveData messages here
     }
 
     /**
@@ -190,18 +166,15 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
      * @param registerID
      */
     public void deleteDynamicEventRegister(String registerID) {
-        loadingDialog.show();
         raceAccessBO.deleteRegister(eventType, registerID, new BusinessCallback() {
 
             @Override
             public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 retrieveRegisterList();
             }
 
             @Override
             public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
                 messages.showError(responseDTO.getError());
             }
         });
@@ -214,27 +187,15 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
         cal.set(Calendar.SECOND, 0);
 
         if (teamMember != null && teamMember.getID() != null) {
-            loadingDialog.show();
-            briefingBO.checkBriefingByUser(teamMember.getID(), new BusinessCallback() {
-
-                @Override
-                public void onSuccess(ResponseDTO responseDTO) {
-                    loadingDialog.hide();
-                    Boolean briefingAvailable = (Boolean) responseDTO.getData();
-
-                    //With all the information, we create the dialog
-                    FragmentManager fm = view.getActivity().getSupportFragmentManager();
-                    ConfirmEventRegisterDialog createUserDialog = ConfirmEventRegisterDialog
-                            .newInstance(RaceAccessPresenter.this, teamMember, briefingAvailable);
-                    createUserDialog.show(fm, "fragment_event_confirm");
-                }
-
-                @Override
-                public void onFailure(ResponseDTO responseDTO) {
-                    loadingDialog.hide();
-                    messages.showError(responseDTO.getError());
-                }
-            });
+            briefingBO.checkBriefingByUser(teamMember.getID(),
+                    briefingAvailable -> {
+                        if (briefingAvailable != null) {
+                            FragmentManager fm = view.getActivity().getSupportFragmentManager();
+                            ConfirmEventRegisterDialog
+                                    .newInstance(RaceAccessPresenter.this, teamMember, briefingAvailable)
+                                    .show(fm, "fragment_event_confirm");
+                        }
+                    }, error -> messages.showError(1)); //FIXME delete when implemented liveData messages here
 
         } else {
             messages.showError(R.string.team_member_get_by_nfc_not_existing);
@@ -246,27 +207,16 @@ public class RaceAccessPresenter extends DataConsumer implements RecyclerViewCli
      * Retrieve teams from database
      */
     private void retrieveTeams() {
-        loadingDialog.show();
-        teamBO.retrieveTeams(null, null, new BusinessCallback() {
+        teamBO.retrieveTeams(null, null, teams -> {
 
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                loadingDialog.hide();
-                List<Team> teams = (List<Team>) responseDTO.getData();
+            //Add "All" option
+            Team teamAll = new Team("-1", "All");
+            teams.add(0, teamAll);
 
-                //Add "All" option
-                Team teamAll = new Team("-1", "All");
-                teams.add(0, teamAll);
-
-                //Show filtering dialog
-                openFilteringDialog(teams);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                loadingDialog.hide();
-                messages.showError(responseDTO.getError());
-            }
+            //Show filtering dialog
+            openFilteringDialog(teams);
+        }, error -> {
+            messages.showError(1); //FIXME delete when implemented liveData messages here
         });
     }
 

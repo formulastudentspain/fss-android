@@ -10,18 +10,17 @@ import java.util.List;
 
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
-import es.formulastudent.app.mvp.data.business.raceaccess.RaceAccessBO;
 import es.formulastudent.app.mvp.data.business.egress.EgressBO;
+import es.formulastudent.app.mvp.data.business.raceaccess.RaceAccessBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.EventRegister;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.view.screen.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.TeamsDetailFragment;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class TeamsDetailScrutineeringPresenter extends DataConsumer {
@@ -109,31 +108,24 @@ public class TeamsDetailScrutineeringPresenter extends DataConsumer {
      * Retrieve user by NFC tag after read
      * @param tag
      */
-    public void onNFCTagDetected(String tag){
-        teamMemberBO.retrieveTeamMemberByNFCTag(tag, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                TeamMember teamMember = (TeamMember)responseDTO.getData();
+    public void onNFCTagDetected(String tag) {
+        teamMemberBO.retrieveTeamMemberByNFCTag(tag,
+                teamMember -> {
+                    //The driver can run, create the register
+                    raceAccessBO.createRegister(teamMember, teamMember.getCarNumber(), null, EventType.PRE_SCRUTINEERING,
+                            new BusinessCallback() {
+                                @Override
+                                public void onSuccess(ResponseDTO responseDTO) {
+                                    PreScrutineeringRegister register = (PreScrutineeringRegister) responseDTO.getData();
+                                    createEgressRegister(register);
+                                }
 
-                //The driver can run, create the register
-                raceAccessBO.createRegister(teamMember, teamMember.getCarNumber(), null, EventType.PRE_SCRUTINEERING, new BusinessCallback() {
-                    @Override
-                    public void onSuccess(ResponseDTO responseDTO) {
-                        PreScrutineeringRegister register = (PreScrutineeringRegister) responseDTO.getData();
-                        createEgressRegister(register);
-                    }
-                    @Override
-                    public void onFailure(ResponseDTO responseDTO) {
-                        messages.showError(responseDTO.getError());
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+                                @Override
+                                public void onFailure(ResponseDTO responseDTO) {
+                                    messages.showError(responseDTO.getError());
+                                }
+                            });
+                }, error -> messages.showError(1)); //FIXME delete when implemented liveData messages here
     }
 
 

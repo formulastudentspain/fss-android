@@ -10,7 +10,7 @@ import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.briefing.BriefingFragment;
 import es.formulastudent.app.mvp.view.screen.briefing.BriefingPresenter;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 @Singleton

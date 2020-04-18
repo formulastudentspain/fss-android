@@ -11,7 +11,7 @@ import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.userdetail.UserDetailPresenter;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 @Module(includes = {UtilsModule.class, ContextModule.class, BusinessModule.class})
 public class UserDetailModule {

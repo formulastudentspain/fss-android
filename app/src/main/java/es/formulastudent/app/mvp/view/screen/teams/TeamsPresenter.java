@@ -8,14 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.screen.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.teams.dialog.FilterTeamsDialog;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class TeamsPresenter extends DataConsumer implements RecyclerViewClickListener {
@@ -45,22 +43,8 @@ public class TeamsPresenter extends DataConsumer implements RecyclerViewClickLis
         view.filtersActivated(!filters.keySet().isEmpty());
 
         //Call Briefing business
-        teamBO.retrieveTeams(null, filters, new BusinessCallback() {
-
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<Team> results = (List<Team>) responseDTO.getData();
-                if (results == null) {
-                    results = new ArrayList<>();
-                }
-                updateTeams(results);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        teamBO.retrieveTeams(null, filters, this::updateTeams,
+                error -> messages.showError(1)); //FIXME
     }
 
 

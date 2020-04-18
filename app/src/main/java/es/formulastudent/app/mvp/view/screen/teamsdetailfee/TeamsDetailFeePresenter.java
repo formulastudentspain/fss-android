@@ -11,10 +11,10 @@ import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.model.FeeItem;
 import es.formulastudent.app.mvp.data.model.Team;
-import es.formulastudent.app.mvp.view.screen.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.dialog.ConfirmNextStepDialog;
 import es.formulastudent.app.mvp.view.screen.teamsdetailfee.tabs.TeamsDetailFeeTabFragment;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class TeamsDetailFeePresenter extends DataConsumer {

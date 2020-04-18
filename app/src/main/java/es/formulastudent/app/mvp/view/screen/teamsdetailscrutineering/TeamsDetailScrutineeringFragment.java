@@ -65,7 +65,6 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements TeamsD
         View view = inflater.inflate(R.layout.fragment_teams_detail_scrutineering, container, false);
 
         //Get selected team
-        assert getArguments() != null;
         TeamsDetailScrutineeringFragmentArgs args = TeamsDetailScrutineeringFragmentArgs.fromBundle(getArguments());
         team = args.getSelectedTeam();
 

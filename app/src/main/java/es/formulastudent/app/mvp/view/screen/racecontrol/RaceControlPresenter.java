@@ -25,14 +25,14 @@ import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
-import es.formulastudent.app.mvp.view.screen.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewLongClickListener;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.CreateRegisterDialog;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.FilteringRegistersDialog;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.RaceControlTeamDTO;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.UpdatingRegistersDialog;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class RaceControlPresenter extends DataConsumer implements RecyclerViewClickListener, RecyclerViewLongClickListener {
@@ -199,24 +199,14 @@ public class RaceControlPresenter extends DataConsumer implements RecyclerViewCl
         filters.put("eventType", rcEventType);
 
         //Call business to retrieve teams
-        raceControlBO.getRaceControlTeams(filters, new BusinessCallback() {
-
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<RaceControlTeamDTO> raceControlTeamsDTO = (List<RaceControlTeamDTO>) responseDTO.getData();
-
-                //With all the information, we open the dialog
-                FragmentManager fm = view.getActivity().getSupportFragmentManager();
-                CreateRegisterDialog createUserDialog = CreateRegisterDialog
-                        .newInstance(RaceControlPresenter.this, raceControlTeamsDTO, context);
-                createUserDialog.show(fm, "rc_endurance_create_dialog");
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        raceControlBO.getRaceControlTeams(filters,
+                raceControlTeamsDTO -> {
+                    FragmentManager fm = view.getActivity().getSupportFragmentManager();
+                    CreateRegisterDialog
+                            .newInstance(RaceControlPresenter.this, raceControlTeamsDTO, context)
+                            .show(fm, "rc_endurance_create_dialog");
+                },
+                error -> messages.showError(1)); //FIXME
     }
 
 

@@ -20,9 +20,9 @@ import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDT
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.data.model.ConeControlRegisterLog;
-import es.formulastudent.app.mvp.view.screen.DataConsumer;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class ConeControlPresenter extends DataConsumer implements RecyclerViewClickListener {

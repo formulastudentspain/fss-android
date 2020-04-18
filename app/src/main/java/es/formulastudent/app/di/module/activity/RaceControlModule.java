@@ -11,7 +11,7 @@ import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.racecontrol.RaceControlPresenter;
-import es.formulastudent.app.mvp.view.utils.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 @Module(includes = {ContextModule.class, BusinessModule.class, SharedPreferencesModule.class})
 public class RaceControlModule {
