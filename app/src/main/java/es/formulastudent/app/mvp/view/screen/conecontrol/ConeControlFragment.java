@@ -23,6 +23,7 @@ import es.formulastudent.app.di.module.activity.ConeControlModule;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.view.screen.conecontrol.recyclerview.ConeControlAdapter;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class ConeControlFragment extends Fragment implements ConeControlPresenter.View{
@@ -32,6 +33,9 @@ public class ConeControlFragment extends Fragment implements ConeControlPresente
 
     @Inject
     LoadingDialog loadingDialog;
+
+    @Inject
+    Messages messages;
 
     private Long selectedSector;
     private String selectedRound;
@@ -49,12 +53,15 @@ public class ConeControlFragment extends Fragment implements ConeControlPresente
         View view =  inflater.inflate(R.layout.fragment_cone_control, container, false);
 
         //Get the event type (Endurance, AutoX, Skidpad)
-        assert getArguments() != null;
-        ConeControlFragmentArgs args = ConeControlFragmentArgs.fromBundle(getArguments());
-        setupComponent(FSSApp.getApp().component(), args.getConeControlEvent());
-        this.selectedRound = args.getSelectedRound();
-        this.selectedSector = args.getSelectedSector();
+        if(getArguments() != null) {
+            ConeControlFragmentArgs args = ConeControlFragmentArgs.fromBundle(getArguments());
+            setupComponent(FSSApp.getApp().component(), args.getConeControlEvent());
+            this.selectedRound = args.getSelectedRound();
+            this.selectedSector = args.getSelectedSector();
+        }
 
+
+        //Observer to display loading dialog
         presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
             if(loadingData){
                 loadingDialog.show();
@@ -62,6 +69,10 @@ public class ConeControlFragment extends Fragment implements ConeControlPresente
                 loadingDialog.hide();
             }
         });
+
+        //Observer to display errors
+        presenter.getErrorToDisplay().observe(getViewLifecycleOwner(), message ->
+                messages.showError(message.getStringID(), message.getArgs()));
 
         initViews(view);
         return view;

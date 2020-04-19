@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,9 +33,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.DataLoader;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
 import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDTO;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
@@ -42,6 +43,7 @@ import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlAutocrossState;
 import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.RACING_1D;
 import static es.formulastudent.app.mvp.data.model.RaceControlEnduranceState.RACING_2D;
@@ -57,7 +59,10 @@ public class ConeControlBOFirebaseImpl extends DataLoader implements ConeControl
     }
 
     @Override
-    public ListenerRegistration getConeControlRegistersRealTime(ConeControlEvent event, final Map<String, Object> filters, final BusinessCallback callback) {
+    public ListenerRegistration getConeControlRegistersRealTime(ConeControlEvent event,
+                                                                final Map<String, Object> filters,
+                                                                @NotNull OnSuccessCallback<List<ConeControlRegister>> onSuccessCallback,
+                                                                @NotNull OnFailureCallback onFailureCallback) {
 
         //Event type
         Query query = firebaseFirestore.collection(event.getFirebaseTable());
@@ -78,12 +83,8 @@ public class ConeControlBOFirebaseImpl extends DataLoader implements ConeControl
         ListenerRegistration registration = query.orderBy(ConeControlRegister.CAR_NUMBER, Query.Direction.ASCENDING)
                 .addSnapshotListener((value, e) -> {
 
-                    //Response object
-                    ResponseDTO responseDTO = new ResponseDTO();
-
                     if (e != null) {
-                        responseDTO.setError(R.string.cc_realtime_error_retrieving_message);
-                        callback.onFailure(responseDTO);
+                        onFailureCallback.onFailure(new Message(R.string.cc_realtime_error_retrieving_message));
                         return;
                     }
 
@@ -92,17 +93,17 @@ public class ConeControlBOFirebaseImpl extends DataLoader implements ConeControl
                         result.add(new ConeControlRegister(doc));
                     }
 
-                    responseDTO.setData(result);
-                    callback.onSuccess(responseDTO);
+                    onSuccessCallback.onSuccess(result);
                 });
 
         return registration;
     }
 
     @Override
-    public void createConeControlForAllSectors(ConeControlEvent event, Long carNumber, String flagURL, String raceRound, int numberOfSectors, BusinessCallback callback) {
-
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void createConeControlForAllSectors(ConeControlEvent event, Long carNumber, String flagURL,
+                                               String raceRound, int numberOfSectors,
+                                               @NotNull OnSuccessCallback<?> onSuccessCallback,
+                                               @NotNull OnFailureCallback onFailureCallback) {
 
         //Create registers
         List<ConeControlRegister> registerList = new ArrayList<>();
@@ -129,13 +130,11 @@ public class ConeControlBOFirebaseImpl extends DataLoader implements ConeControl
         loadingData(true);
         batch.commit()
                 .addOnSuccessListener(aVoid -> {
-                    responseDTO.setInfo(R.string.cone_control_create_success);
-                    callback.onSuccess(responseDTO);
+                    onSuccessCallback.onSuccess(null);
                     loadingData(false);
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.cone_control_create_error);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.cone_control_create_error));
                     loadingData(false);
                 });
 
@@ -197,48 +196,54 @@ public class ConeControlBOFirebaseImpl extends DataLoader implements ConeControl
     }
 
     @Override
-    public void updateConeControlRegister(ConeControlEvent event, ConeControlRegister register, BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
-        final DocumentReference registerReference = firebaseFirestore.collection(event.getFirebaseTable()).document(register.getId());
+    public void updateConeControlRegister(ConeControlEvent event, ConeControlRegister register,
+                                          @NotNull OnSuccessCallback<?> onSuccessCallback,
+                                          @NotNull OnFailureCallback onFailureCallback) {
+        final DocumentReference registerReference = firebaseFirestore
+                .collection(event.getFirebaseTable()).document(register.getId());
 
         loadingData(true);
         registerReference.update(register.toObjectData())
                 .addOnSuccessListener(aVoid -> {
-                    responseDTO.setInfo(R.string.teams_info_update_message);//FIXME
-                    callback.onSuccess(responseDTO);
+                    onSuccessCallback.onSuccess(null);
                     loadingData(false);
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.teams_error_update_message);//FIXME
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.cone_control_update_error));
                     loadingData(false);
                 });
     }
 
 
     @Override
-    public void enableOrDisableConeControlRegistersByTeam(ConeControlEvent ccEvent, Long carNumber, RaceControlState state, BusinessCallback callback) {
+    public void enableOrDisableConeControlRegistersByTeam(ConeControlEvent ccEvent, Long carNumber,
+                                                          RaceControlState state,
+                                                          @NotNull OnSuccessCallback<?> onSuccessCallback,
+                                                          @NotNull OnFailureCallback onFailureCallback) {
 
         if (ConeControlEvent.AUTOCROSS.equals(ccEvent) || ConeControlEvent.SKIDPAD.equals(ccEvent)) {
-            this.enableOrDisableConeControlRegistersByTeam(ccEvent, carNumber, (RaceControlAutocrossState) state, callback);
+            this.enableOrDisableConeControlRegistersByTeam(ccEvent, carNumber,
+                    (RaceControlAutocrossState) state, onSuccessCallback, onFailureCallback);
 
         } else if (ConeControlEvent.ENDURANCE.equals(ccEvent)) {
-            this.enableOrDisableConeControlRegistersByTeam(ccEvent, carNumber, (RaceControlEnduranceState) state, callback);
+            this.enableOrDisableConeControlRegistersByTeam(ccEvent, carNumber,
+                    (RaceControlEnduranceState) state, onSuccessCallback, onFailureCallback);
         }
     }
 
 
     /**
      * Update cones for Endurance
-     *
      * @param ccEvent
      * @param carNumber
      * @param state
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    private void enableOrDisableConeControlRegistersByTeam(ConeControlEvent ccEvent, Long carNumber, RaceControlEnduranceState state, BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
-
+    private void enableOrDisableConeControlRegistersByTeam(ConeControlEvent ccEvent, Long carNumber,
+                                                           RaceControlEnduranceState state,
+                                                           @NotNull OnSuccessCallback<?> onSuccessCallback,
+                                                           @NotNull OnFailureCallback onFailureCallback) {
         boolean enable = false;
         if (RACING_1D.equals(state)
                 || RACING_2D.equals(state)) {
@@ -261,32 +266,35 @@ public class ConeControlBOFirebaseImpl extends DataLoader implements ConeControl
                     }
 
                     // Commit the batch
-                    batch.commit().addOnSuccessListener(task -> {
-                        callback.onSuccess(responseDTO);
-                        loadingData(false);
-
-                    }).addOnFailureListener(task -> {
-                        callback.onFailure(responseDTO);
-                        loadingData(false);
-                    });
+                    batch.commit()
+                            .addOnSuccessListener(task -> {
+                                onSuccessCallback.onSuccess(null);
+                                loadingData(false);
+                            })
+                            .addOnFailureListener(task -> {
+                                onFailureCallback.onFailure(new Message(R.string.cone_control_enable_disable_error));
+                                loadingData(false);
+                            });
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.dynamic_event_message_error_retrieving_registers);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.dynamic_event_message_error_retrieving_registers));
                     loadingData(false);
                 });
     }
 
+
     /**
      * Update cones for Autocross
-     *
      * @param ccEvent
      * @param carNumber
      * @param state
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    private void enableOrDisableConeControlRegistersByTeam(ConeControlEvent ccEvent, Long carNumber, RaceControlAutocrossState state, BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
+    private void enableOrDisableConeControlRegistersByTeam(ConeControlEvent ccEvent, Long carNumber,
+                                                           RaceControlAutocrossState state,
+                                                           @NotNull OnSuccessCallback<?> onSuccessCallback,
+                                                           @NotNull OnFailureCallback onFailureCallback) {
 
         String roundToEnable = "";
         if (RaceControlAutocrossState.RACING_ROUND_1.equals(state)) {
@@ -322,27 +330,29 @@ public class ConeControlBOFirebaseImpl extends DataLoader implements ConeControl
                     }
 
                     // Commit the batch
-                    batch.commit().addOnSuccessListener(task -> {
-                        callback.onSuccess(responseDTO);
-                        loadingData(false);
+                    batch.commit()
+                            .addOnSuccessListener(task -> {
+                                onSuccessCallback.onSuccess(null);
+                                loadingData(false);
 
-                    }).addOnFailureListener(task -> {
-                        callback.onFailure(responseDTO);
-                        loadingData(false);
-                    });
+                            })
+                            .addOnFailureListener(task -> {
+                                onFailureCallback.onFailure(new Message(R.string.cone_control_enable_disable_error));
+                                loadingData(false);
+                            });
 
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.dynamic_event_message_error_retrieving_registers);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.dynamic_event_message_error_retrieving_registers));
                     loadingData(false);
                 });
     }
 
 
     @Override
-    public void getConeControlRegistersByRaceRound(ConeControlEvent event, String raceRound, BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void getConeControlRegistersByRaceRound(ConeControlEvent event, String raceRound,
+                                                   @NotNull OnSuccessCallback<List<ConeControlRegister>> onSuccessCallback,
+                                                   @NotNull OnFailureCallback onFailureCallback) {
 
         Query query = firebaseFirestore.collection(event.getFirebaseTable());
 
@@ -361,141 +371,131 @@ public class ConeControlBOFirebaseImpl extends DataLoader implements ConeControl
                         ConeControlRegister register = new ConeControlRegister(document);
                         result.add(register);
                     }
-                    responseDTO.setData(result);
-                    //TODO
-                    callback.onSuccess(responseDTO);
+                    onSuccessCallback.onSuccess(result);
                     loadingData(false);
 
-                }).addOnFailureListener(e -> {
-            //TODO
-            callback.onFailure(responseDTO);
-            loadingData(false);
-        });
+                })
+                .addOnFailureListener(e -> {
+                    onFailureCallback.onFailure(new Message(R.string.cone_control_get_by_round_error));
+                    loadingData(false);
+                });
     }
 
 
     @Override
-    public void exportConesToExcel(ConeControlEvent event, BusinessCallback callback) throws IOException {
-        ResponseDTO result = new ResponseDTO();
-        AssetManager mngr = context.getAssets();
-        final InputStream is = mngr.open("template_export_fss.xls");
+    public void exportConesToExcel(ConeControlEvent event,
+                                   @NotNull OnSuccessCallback<ExportStatisticsDTO> onSuccessCallback,
+                                   @NotNull OnFailureCallback onFailureCallback) throws IOException {
 
-        this.getConeControlRegistersByRaceRound(event, null, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<ConeControlRegister> listToExport = (List<ConeControlRegister>) responseDTO.getData();
+        AssetManager assetManager = context.getAssets();
+        final InputStream is = assetManager.open("template_export_fss.xls");
 
-                int columnNum = 0;
+        this.getConeControlRegistersByRaceRound(event, null,
+                listToExport -> {
 
-                try {
+                    int columnNum = 0;
 
-                    Workbook wb = new HSSFWorkbook(is);
-                    Sheet sheet = wb.getSheetAt(0);
-                    wb.setSheetName(0, event.getName() + " cones");
+                    try {
 
-
-                    // ** HEADERS ** //
-
-                    //Car number
-                    Row row = sheet.createRow(4);
-                    Cell cell = row.createCell(columnNum);
-                    cell.setCellValue("Car");
-
-                    //Round
-                    cell = row.createCell(++columnNum);
-                    cell.setCellValue("Round");
+                        Workbook wb = new HSSFWorkbook(is);
+                        Sheet sheet = wb.getSheetAt(0);
+                        wb.setSheetName(0, event.getName() + " cones");
 
 
-                    //Sector
-                    if (ConeControlEvent.ENDURANCE.equals(event)
-                            || ConeControlEvent.AUTOCROSS.equals(event)) {
-                        cell = row.createCell(++columnNum);
-                        cell.setCellValue("Sector");
-                    }
-
-                    //Cones
-                    cell = row.createCell(++columnNum);
-                    cell.setCellValue("Cones");
-
-                    //OffCourses
-                    cell = row.createCell(++columnNum);
-                    cell.setCellValue("Off Courses");
-
-
-                    /*
-                        Test Data Values
-                    */
-                    int rowNum = 5;
-
-                    for (ConeControlRegister register : listToExport) {
-
-                        //Init values
-                        columnNum = 0;
-                        row = sheet.createRow(rowNum);
+                        // ** HEADERS ** //
 
                         //Car number
-                        cell = row.createCell(columnNum);
-                        cell.setCellValue(register.getCarNumber());
+                        Row row = sheet.createRow(4);
+                        Cell cell = row.createCell(columnNum);
+                        cell.setCellValue("Car");
 
                         //Round
                         cell = row.createCell(++columnNum);
-                        cell.setCellValue(register.getRaceRound());
+                        cell.setCellValue("Round");
 
 
                         //Sector
                         if (ConeControlEvent.ENDURANCE.equals(event)
                                 || ConeControlEvent.AUTOCROSS.equals(event)) {
                             cell = row.createCell(++columnNum);
-                            cell.setCellValue(register.getSectorNumber());
+                            cell.setCellValue("Sector");
                         }
 
                         //Cones
                         cell = row.createCell(++columnNum);
-                        cell.setCellValue(register.getTrafficCones());
+                        cell.setCellValue("Cones");
 
                         //OffCourses
                         cell = row.createCell(++columnNum);
-                        cell.setCellValue(register.getOffCourses());
+                        cell.setCellValue("Off Courses");
 
-                        rowNum++;
+
+                        /*
+                            Test Data Values
+                        */
+                        int rowNum = 5;
+
+                        for (ConeControlRegister register : listToExport) {
+
+                            //Init values
+                            columnNum = 0;
+                            row = sheet.createRow(rowNum);
+
+                            //Car number
+                            cell = row.createCell(columnNum);
+                            cell.setCellValue(register.getCarNumber());
+
+                            //Round
+                            cell = row.createCell(++columnNum);
+                            cell.setCellValue(register.getRaceRound());
+
+
+                            //Sector
+                            if (ConeControlEvent.ENDURANCE.equals(event)
+                                    || ConeControlEvent.AUTOCROSS.equals(event)) {
+                                cell = row.createCell(++columnNum);
+                                cell.setCellValue(register.getSectorNumber());
+                            }
+
+                            //Cones
+                            cell = row.createCell(++columnNum);
+                            cell.setCellValue(register.getTrafficCones());
+
+                            //OffCourses
+                            cell = row.createCell(++columnNum);
+                            cell.setCellValue(register.getOffCourses());
+
+                            rowNum++;
+                        }
+
+                        //Get File Name
+                        DateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                        String nameFile = "Cones" + "_" + sdf.format(timestamp);
+
+                        //Create Directory
+                        String rootDirectoryName = Environment.getExternalStorageDirectory() + "";
+                        File subDirectory = new File(rootDirectoryName, "FSS/" + event.getName());
+                        subDirectory.mkdirs();
+
+                        //Create File
+                        OutputStream stream = new FileOutputStream(rootDirectoryName + "/" + "FSS/" + event.getName() + "/" + nameFile + ".xls");
+
+                        wb.write(stream);
+                        stream.close();
+                        wb.close();
+
+                        ExportStatisticsDTO exportStatisticsDTO = new ExportStatisticsDTO();
+                        exportStatisticsDTO.setExportDate(Calendar.getInstance().getTime());
+                        exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/FSS/" + event.getName() + "/" + nameFile + ".xls");
+                        exportStatisticsDTO.setDescription(event.getName() + " Cones");
+
+                        onSuccessCallback.onSuccess(exportStatisticsDTO);
+
+                    } catch (IOException e) {
+                        onFailureCallback.onFailure(new Message(R.string.cone_control_excel_export_error));
                     }
-
-                    //Get File Name
-                    DateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    String nameFile = "Cones" + "_" + sdf.format(timestamp);
-
-                    //Create Directory
-                    String rootDirectoryName = Environment.getExternalStorageDirectory() + "";
-                    File subDirectory = new File(rootDirectoryName, "FSS/" + event.getName());
-                    subDirectory.mkdirs();
-
-                    //Create File
-                    OutputStream stream = new FileOutputStream(rootDirectoryName + "/" + "FSS/" + event.getName() + "/" + nameFile + ".xls");
-
-                    wb.write(stream);
-                    stream.close();
-                    wb.close();
-
-
-                    ExportStatisticsDTO exportStatisticsDTO = new ExportStatisticsDTO();
-                    exportStatisticsDTO.setExportDate(Calendar.getInstance().getTime());
-                    exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/FSS/" + event.getName() + "/" + nameFile + ".xls");
-                    exportStatisticsDTO.setDescription(event.getName() + " Cones");
-
-                    result.setData(exportStatisticsDTO);
-
-                    callback.onSuccess(result);
-
-                } catch (IOException e) {
-                    //TODO
-                }
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                //TODO
-            }
-        });
+                },
+                onFailureCallback);
     }
 }

@@ -345,7 +345,10 @@
     <string name="cone_control_create_success">Cones created successfully</string>
     <string name="cone_control_create_error">Error creating cone registers</string>
     <string name="cc_realtime_error_retrieving_message">Error retrieving real-time Cone Control registers</string>
-
+    <string name="cone_control_update_error">Error updating cone control</string>
+    <string name="cone_control_enable_disable_error">Error enabling/disabling cone control registers</string>
+    <string name="cone_control_get_by_round_error">Error getting cones by race round</string>
+    <string name="cone_control_excel_export_error">Error exporting cones to Excel</string>
     <string name="cc_autocross_title">Cone Control: Autocross</string>
     <string name="cc_skidpad_title">Cone Control: Skidpad</string>
 

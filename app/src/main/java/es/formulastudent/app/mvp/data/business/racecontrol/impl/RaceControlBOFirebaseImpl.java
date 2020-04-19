@@ -219,15 +219,15 @@ public class RaceControlBOFirebaseImpl extends DataLoader implements RaceControl
                                 item.getFlagURL(),
                                 raceRound,
                                 7,
-                                new BusinessCallback() {
+                                new OnSuccessCallback<Object>() {
                                     @Override
-                                    public void onSuccess(ResponseDTO responseDTO) {
-                                        //DO NOTHING
+                                    public void onSuccess(Object response) {
+                                        //TODO
                                     }
-
+                                }, new OnFailureCallback() {
                                     @Override
-                                    public void onFailure(ResponseDTO responseDTO) {
-                                        //DO NOTHING
+                                    public void onFailure(Message errorMessage) {
+                                        //TODO
                                     }
                                 });
                     }
@@ -305,17 +305,18 @@ public class RaceControlBOFirebaseImpl extends DataLoader implements RaceControl
                     responseDTO.setInfo(R.string.rc_info_update_message);
 
                     //Enable/disable cones for the selected car
-                    coneControlBO.enableOrDisableConeControlRegistersByTeam(event.getConeControlEvent(), register.getCarNumber(), newState, new BusinessCallback() {
-                        @Override
-                        public void onSuccess(ResponseDTO responseDTO) {
-                            //TODO add things
-                        }
-
-                        @Override
-                        public void onFailure(ResponseDTO responseDTO) {
-                            //TODO add things
-                        }
-                    });
+                    coneControlBO.enableOrDisableConeControlRegistersByTeam(event.getConeControlEvent(),
+                            register.getCarNumber(), newState, new OnSuccessCallback<Object>() {
+                                @Override
+                                public void onSuccess(Object response) {
+                                    //TODO
+                                }
+                            }, new OnFailureCallback() {
+                                @Override
+                                public void onFailure(Message errorMessage) {
+                                    //TODO
+                                }
+                            });
                     callback.onSuccess(responseDTO);
                     loadingData(false);
 
