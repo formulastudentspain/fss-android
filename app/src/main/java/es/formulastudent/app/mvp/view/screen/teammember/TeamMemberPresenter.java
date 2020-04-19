@@ -3,16 +3,13 @@ package es.formulastudent.app.mvp.view.screen.teammember;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.briefing.BriefingBO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class TeamMemberPresenter extends DataConsumer implements RecyclerViewClickListener, TeamMemberGeneralPresenter {
@@ -22,7 +19,6 @@ public class TeamMemberPresenter extends DataConsumer implements RecyclerViewCli
     private TeamMemberBO teamMemberBO;
     private TeamBO teamBO;
     private BriefingBO briefingBO;
-    private Messages messages;
 
     //Data
     private List<TeamMember> allTeamMemberList = new ArrayList<>();
@@ -31,13 +27,12 @@ public class TeamMemberPresenter extends DataConsumer implements RecyclerViewCli
 
 
     public TeamMemberPresenter(TeamMemberPresenter.View view, TeamMemberBO teamMemberBO,
-                               TeamBO teamBO, BriefingBO briefingBO, Messages messages) {
+                               TeamBO teamBO, BriefingBO briefingBO) {
         super(teamMemberBO, teamBO, briefingBO);
         this.view = view;
         this.teamMemberBO = teamMemberBO;
         this.teamBO = teamBO;
         this.briefingBO = briefingBO;
-        this.messages = messages;
     }
 
 
@@ -59,18 +54,9 @@ public class TeamMemberPresenter extends DataConsumer implements RecyclerViewCli
         view.filtersActivated(selectedTeamToFilter != null && !"".equals(selectedTeamToFilter.getID()));
 
         //call business to retrieve users
-        teamMemberBO.retrieveTeamMembers(selectedTeamToFilter, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<TeamMember> teamMembers = (List<TeamMember>) responseDTO.getData();
-                updateUserListItems(teamMembers);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        teamMemberBO.retrieveTeamMembers(selectedTeamToFilter,
+                this::updateUserListItems,
+                this::setErrorToDisplay);
     }
 
 
@@ -98,7 +84,7 @@ public class TeamMemberPresenter extends DataConsumer implements RecyclerViewCli
         TeamMember selectedTeamMember = filteredTeamMemberList.get(position);
         briefingBO.checkBriefingByUser(selectedTeamMember.getID(),
                 briefingDone -> view.openTeamMemberDetailFragment(selectedTeamMember, briefingDone),
-                error -> messages.showError(1)); //FIXME
+                this::setErrorToDisplay);
     }
 
     public void updateOrCreateTeamMember(TeamMember teamMember) {
@@ -106,31 +92,21 @@ public class TeamMemberPresenter extends DataConsumer implements RecyclerViewCli
     }
 
     private void createUser(TeamMember teamMember) {
-        teamMemberBO.createTeamMember(teamMember, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                retrieveTeamMembers();
-                messages.showInfo(responseDTO.getInfo());
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        teamMemberBO.createTeamMember(teamMember, onSuccess -> retrieveTeamMembers()
+                , this::setErrorToDisplay);
     }
 
 
     void openCreateTeamMemberDialog() {
         teamBO.retrieveTeams(null, null,
                 teams -> view.showCreateTeamMemberDialog(teams),
-                error -> messages.showError(1)); //FIXME
+                this::setErrorToDisplay);
     }
 
     public void filterIconClicked() {
         teamBO.retrieveTeams(null, null,
                 teams -> view.showFilteringDialog(teams),
-                error -> messages.showError(1)); //FIXME
+                this::setErrorToDisplay);
     }
 
     List<TeamMember> getUserItemList() {

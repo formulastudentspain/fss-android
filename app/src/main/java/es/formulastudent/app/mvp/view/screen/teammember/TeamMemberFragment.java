@@ -39,6 +39,7 @@ import es.formulastudent.app.mvp.view.screen.teammember.dialog.CreateEditTeamMem
 import es.formulastudent.app.mvp.view.screen.teammember.dialog.FilterTeamMembersDialog;
 import es.formulastudent.app.mvp.view.screen.teammember.recyclerview.TeamMemberListAdapter;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
 
@@ -48,6 +49,8 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
     @Inject
     LoadingDialog loadingDialog;
 
+    @Inject
+    Messages messages;
 
     private TeamMemberListAdapter teamMemberListAdapter;
     private FloatingActionButton buttonAddUser;
@@ -59,13 +62,18 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
 
-        presenter.getLoadingData().observe(this, loadingData -> {
+        //Observer to display loading dialog
+        presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
             if(loadingData){
                 loadingDialog.show();
             }else{
                 loadingDialog.hide();
             }
         });
+
+        //Observer to display errors
+        presenter.getErrorToDisplay().observe(getViewLifecycleOwner(), message ->
+                messages.showError(message.getStringID(), message.getArgs()));
     }
 
     @Override

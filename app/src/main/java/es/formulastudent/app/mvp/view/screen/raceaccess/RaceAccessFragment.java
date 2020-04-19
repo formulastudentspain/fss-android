@@ -30,6 +30,7 @@ import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.view.screen.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.screen.raceaccess.recyclerview.EventRegistersAdapter;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
@@ -40,6 +41,9 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
 
     @Inject
     LoadingDialog loadingDialog;
+
+    @Inject
+    Messages messages;
 
     private EventRegistersAdapter registersAdapter;
     private FloatingActionButton buttonAddRegister;
@@ -66,6 +70,19 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
                 loadingDialog.hide();
             }
         });
+
+        //Observer to display loading dialog
+        presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
+
+        //Observer to display errors
+        presenter.getErrorToDisplay().observe(getViewLifecycleOwner(), message ->
+                messages.showError(message.getStringID(), message.getArgs()));
 
         initViews(view);
         setHasOptionsMenu(true);
