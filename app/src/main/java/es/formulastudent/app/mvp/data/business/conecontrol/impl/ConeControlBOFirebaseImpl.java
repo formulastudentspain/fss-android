@@ -202,15 +202,15 @@ public class ConeControlBOFirebaseImpl extends DataLoader implements ConeControl
         final DocumentReference registerReference = firebaseFirestore
                 .collection(event.getFirebaseTable()).document(register.getId());
 
-        loadingData(true);
+        //loadingData(true); {No needed}
         registerReference.update(register.toObjectData())
                 .addOnSuccessListener(aVoid -> {
                     onSuccessCallback.onSuccess(null);
-                    loadingData(false);
+                    //loadingData(false); {No needed}
                 })
                 .addOnFailureListener(e -> {
                     onFailureCallback.onFailure(new Message(R.string.cone_control_update_error));
-                    loadingData(false);
+                    //loadingData(false); {No needed}
                 });
     }
 

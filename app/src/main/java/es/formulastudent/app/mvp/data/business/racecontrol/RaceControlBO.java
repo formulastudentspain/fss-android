@@ -3,15 +3,17 @@ package es.formulastudent.app.mvp.data.business.racecontrol;
 
 import com.google.firebase.firestore.ListenerRegistration;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Map;
 
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.business.OnFailureCallback;
 import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
+import es.formulastudent.app.mvp.data.model.RaceControlRegisterEndurance;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.RaceControlTeamDTO;
 
@@ -19,11 +21,14 @@ public interface RaceControlBO extends DataLoader.Consumer {
 
     /**
      * Get filtered Race Control registers in Real-Time
-     *
      * @param filters
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
+     * @return
      */
-    ListenerRegistration getRaceControlRegistersRealTime(Map<String, Object> filters, BusinessCallback callback);
+    ListenerRegistration getRaceControlRegistersRealTime(Map<String, Object> filters,
+                                                         @NotNull OnSuccessCallback<List<RaceControlRegister>> onSuccessCallback,
+                                                         @NotNull OnFailureCallback onFailureCallback);
 
 
     /**
@@ -33,37 +38,47 @@ public interface RaceControlBO extends DataLoader.Consumer {
      * @param onFailureCallback
      */
     void getRaceControlTeams(Map<String, Object> filters,
-                             OnSuccessCallback<List<RaceControlTeamDTO>> onSuccessCallback,
-                             OnFailureCallback onFailureCallback);
+                             @NotNull OnSuccessCallback<List<RaceControlTeamDTO>> onSuccessCallback,
+                             @NotNull OnFailureCallback onFailureCallback);
 
 
     /**
      * Create Race Control registers
-     *
      * @param raceControlTeamDTOList
+     * @param eventType
      * @param vehicleType
      * @param currentMaxIndex
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void createRaceControlRegister(List<RaceControlTeamDTO> raceControlTeamDTOList, RaceControlEvent eventType, String vehicleType, Long currentMaxIndex, BusinessCallback callback);
+    void createRaceControlRegister(List<RaceControlTeamDTO> raceControlTeamDTOList, RaceControlEvent eventType,
+                                   String vehicleType, Long currentMaxIndex,
+                                   @NotNull OnSuccessCallback<?> onSuccessCallback,
+                                   @NotNull OnFailureCallback onFailureCallback);
 
 
     /**
      * Get filtered Race Control registers
-     *
      * @param filters
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void getRaceControlRegisters(Map<String, Object> filters, BusinessCallback callback);
+    void getRaceControlRegisters(Map<String, Object> filters,
+                                 @NotNull OnSuccessCallback<List<RaceControlRegisterEndurance>> onSuccessCallback,
+                                 @NotNull OnFailureCallback onFailureCallback);
 
 
     /**
-     * Update the registry state into a new one
      *
+     * @param register
      * @param event
      * @param newState
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void updateRaceControlState(RaceControlRegister register, RaceControlEvent event, RaceControlState newState, BusinessCallback callback);
+    void updateRaceControlState(RaceControlRegister register, RaceControlEvent event,
+                                RaceControlState newState,
+                                @NotNull OnSuccessCallback<?> onSuccessCallback,
+                                @NotNull OnFailureCallback onFailureCallback);
 
 }

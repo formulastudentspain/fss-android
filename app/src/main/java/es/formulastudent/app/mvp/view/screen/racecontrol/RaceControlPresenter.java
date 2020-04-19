@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.racecontrol.RaceControlBO;
 import es.formulastudent.app.mvp.data.model.RaceControlAutocrossState;
 import es.formulastudent.app.mvp.data.model.RaceControlEnduranceState;
@@ -25,7 +24,6 @@ import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.RaceControlState;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewLongClickListener;
 import es.formulastudent.app.mvp.view.screen.racecontrol.dialog.CreateRegisterDialog;
@@ -110,19 +108,9 @@ public class RaceControlPresenter extends DataConsumer implements RecyclerViewCl
         filters.put("showFinishedCars", showFinishedCars);
 
         //Retrieve race control registers in real-time
-        ListenerRegistration registration = raceControlBO.getRaceControlRegistersRealTime(filters, new BusinessCallback() {
-
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<RaceControlRegister> results = (List<RaceControlRegister>) responseDTO.getData();
-                updateEventRegisters(results == null ? new ArrayList<>() : results);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        ListenerRegistration registration = raceControlBO.getRaceControlRegistersRealTime(filters,
+                this::updateEventRegisters,
+                this::setErrorToDisplay);
 
         this.registration = registration;
         return registration;
@@ -206,7 +194,7 @@ public class RaceControlPresenter extends DataConsumer implements RecyclerViewCl
                             .newInstance(RaceControlPresenter.this, raceControlTeamsDTO, context)
                             .show(fm, "rc_endurance_create_dialog");
                 },
-                error -> messages.showError(1)); //FIXME
+                this::setErrorToDisplay);
     }
 
 
@@ -246,20 +234,11 @@ public class RaceControlPresenter extends DataConsumer implements RecyclerViewCl
     }
 
 
-    public void updateRegister(final RaceControlRegister register, final RaceControlEvent event, final RaceControlState newState) {
-        final String oldState = register.getCurrentState().getAcronym();
-        raceControlBO.updateRaceControlState(register, event, newState, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                view.closeUpdatedRow(register.getID());
-                messages.showInfo(R.string.rc_update_state_success_message, oldState, newState.getAcronym());
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+    public void updateRegister(final RaceControlRegister register, final RaceControlEvent event,
+                               final RaceControlState newState) {
+        raceControlBO.updateRaceControlState(register, event, newState,
+                response -> view.closeUpdatedRow(register.getID()),
+                this::setErrorToDisplay);
     }
 
 
@@ -278,17 +257,9 @@ public class RaceControlPresenter extends DataConsumer implements RecyclerViewCl
 
 
     public void createRaceControlRegisters(List<RaceControlTeamDTO> raceControlTeamDTOList, Long currentMaxIndex) {
-        raceControlBO.createRaceControlRegister(raceControlTeamDTOList, rcEventType, raceType, currentMaxIndex, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                //No need lo refresh list, because it is a real-time
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        raceControlBO.createRaceControlRegister(raceControlTeamDTOList, rcEventType, raceType, currentMaxIndex,
+                response -> { /* Nothing to do, real-time baby */ },
+                this::setErrorToDisplay);
     }
 
 

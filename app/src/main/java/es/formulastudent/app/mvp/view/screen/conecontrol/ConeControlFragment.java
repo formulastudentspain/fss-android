@@ -60,7 +60,6 @@ public class ConeControlFragment extends Fragment implements ConeControlPresente
             this.selectedSector = args.getSelectedSector();
         }
 
-
         //Observer to display loading dialog
         presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
             if(loadingData){
