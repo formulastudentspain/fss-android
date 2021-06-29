@@ -367,7 +367,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         //Staff: Admin Operations
         PrimaryDrawerItem adminOperations = new PrimaryDrawerItem()
                 .withIdentifier(10017)
-                .withName(R.string.drawer_menu_staff_admin_operations)
+                .withName(R.string.drawer_menu_admin_operations)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 

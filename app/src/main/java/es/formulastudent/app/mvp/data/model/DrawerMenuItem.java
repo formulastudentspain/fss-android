@@ -15,13 +15,16 @@ public enum DrawerMenuItem implements Serializable {
     ENDURANCE(R.string.drawer_menu_staff_endurance_efficiency, R.string.fa_flag_checkered_solid),
     TEAM_MEMBER(R.string.drawer_menu_staff_users_management_team_members, R.string.fa_people_carry_solid),
     VOLUNTEERS(R.string.drawer_menu_staff_users_management_volunteers, R.string.fa_smile),
+    ADMIN_OPERATIONS(R.string.drawer_menu_admin_operations, R.string.fa_adjust_solid),
     LOGOUT(R.string.drawer_menu_common_logout, R.string.fa_sign_out_alt_solid),
+
     //Titles
     TITLE_EVENT_CONTROL(R.string.drawer_menu_staff, -1),
     TITLE_RACE_ACCESS(R.string.drawer_menu_race_access, -1),
     TITLE_RACE_CONTROL(R.string.drawer_menu_race_control, -1),
     TITLE_CONE_CONTROL(R.string.drawer_menu_cone_control, -1),
-    TITLE_USER_MANAGEMENT(R.string.drawer_menu_staff_users_management, -1);
+    TITLE_USER_MANAGEMENT(R.string.drawer_menu_staff_users_management, -1),
+    TITLE_ADMIN_OPERATIONS(R.string.drawer_menu_admin_operations_title, -1);;
 
     private final int title;
     private final int icon;

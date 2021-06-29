@@ -121,4 +121,14 @@ public class User implements Serializable {
     public void setCellPhone(Long cellPhone) {
         this.cellPhone = cellPhone;
     }
+
+    public boolean isAdministrator(){
+        return role.equals(UserRole.ADMINISTRATOR);
+    }
+
+    public boolean isOfficial(){
+        return role.equals(UserRole.OFFICIAL_MARSHALL)
+                || role.equals(UserRole.OFFICIAL_SCRUTINEER)
+                || role.equals(UserRole.OFFICIAL_STAFF);
+    }
 }

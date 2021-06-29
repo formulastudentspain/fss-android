@@ -14,16 +14,26 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import javax.inject.Inject;
+
+import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.databinding.ActivityMainBinding;
+import es.formulastudent.app.di.component.AppComponent;
+import es.formulastudent.app.di.component.DaggerWelcomeComponent;
+import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.DrawerMenu;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.login.LoginActivity;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    @Inject
+    User loggedUser;
 
     private DrawerLayout drawerLayout;
     private NavController navController;
@@ -31,9 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupComponent(FSSApp.getApp().component());
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         drawerLayout = binding.drawerLayout;
-        binding.setMenu(new DrawerMenu());
+        binding.setMenu(new DrawerMenu(loggedUser));
 
         navController = Navigation.findNavController(this, R.id.myNavHostFragment);
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
@@ -126,6 +137,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.drawerItemTeamMembers:
                 navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToTeamMemberFragment());
                 break;
+            case R.id.drawerItemAdminOperations:
+                //TODO
+                break;
             case R.id.drawerItemLogout:
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(this, LoginActivity.class);
@@ -134,5 +148,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    /**
+     * Inject dependencies method
+     * @param appComponent
+     */
+    protected void setupComponent(AppComponent appComponent) {
+        DaggerWelcomeComponent.builder()
+                .appComponent(appComponent)
+                .contextModule(new ContextModule(this))
+                .build()
+                .inject(this);
     }
 }
