@@ -12,7 +12,6 @@ import es.formulastudent.app.di.module.business.UtilsModule;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.view.screen.login.LoginPresenter;
-import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 @Module(includes = {UtilsModule.class, ContextModule.class, BusinessModule.class, SharedPreferencesModule.class})
 public class LoginModule {
@@ -30,9 +29,9 @@ public class LoginModule {
 
     @Provides
     public LoginPresenter providePresenter(LoginPresenter.View categoryView, Context context,
-                                           AuthBO authBO, UserBO userBO, Messages messages,
+                                           AuthBO authBO, UserBO userBO,
                                            SharedPreferences sharedPreferences) {
-        return new LoginPresenter(categoryView, context, authBO, userBO, sharedPreferences, messages);
+        return new LoginPresenter(categoryView, context, authBO, userBO, sharedPreferences);
     }
 
 }

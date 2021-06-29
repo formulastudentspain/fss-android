@@ -12,15 +12,16 @@ import com.google.gson.Gson;
 import es.formulastudent.app.R;
 import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.welcome.MainActivity;
-import es.formulastudent.app.mvp.view.utils.messages.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 
-public class LoginPresenter {
+public class LoginPresenter extends DataConsumer {
 
     //Dependencies
     private View view;
@@ -28,56 +29,42 @@ public class LoginPresenter {
     private AuthBO authBO;
     private UserBO userBO;
     private SharedPreferences sharedPreferences;
-    private Messages messages;
 
     public LoginPresenter(LoginPresenter.View view, Context context, AuthBO authBO, UserBO userBO,
-                          SharedPreferences sharedPreferences, Messages messages) {
+                          SharedPreferences sharedPreferences) {
         this.view = view;
         this.context = context;
         this.authBO = authBO;
         this.userBO = userBO;
         this.sharedPreferences = sharedPreferences;
-        this.messages = messages;
     }
 
-    void loginSuccess(User user){
+    void loginSuccess(User user) {
+        userBO.retrieveUserByMail(user.getMail(),
+                retrievedUser -> {
+                    if (retrievedUser != null) {
+                        //User not activated, cannot do login
+                        if (retrievedUser.getRole() == null) {
+                            setErrorToDisplay(new Message(R.string.login_activity_user_not_activated));
+                            view.hideLoadingIcon();
 
-        userBO.retrieveUserByMail(user.getMail(), new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                if(responseDTO.getData()!=null){
+                        } else {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(SharedPreferencesModule.PREFS_CURRENT_USER, new Gson().toJson(retrievedUser));
+                            editor.commit();
 
-                    //If user exists in database, we store it in local storage
-                    User user = (User) responseDTO.getData();
+                            //Start Timeline activity
+                            Intent myIntent = new Intent(context, MainActivity.class);
+                            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(myIntent);
+                            view.finishView();
+                        }
 
-                    //User not activated, cannot do login
-                    if(user.getRole() == null){
-                        messages.showError(R.string.login_activity_user_not_activated);
+                    } else { //The teamMember is created for Login, but not in users table
                         view.hideLoadingIcon();
-
-                    }else{
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(SharedPreferencesModule.PREFS_CURRENT_USER, new Gson().toJson(user));
-                        editor.commit();
-
-                        //Start Timeline activity
-                        Intent myIntent = new Intent(context, MainActivity.class);
-                        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(myIntent);
-                        view.finishView();
+                        setErrorToDisplay(new Message(R.string.login_activity_user_not_found));
                     }
-
-                }else{ //The teamMember is created for Login, but not in users table
-                    view.hideLoadingIcon();
-                    messages.showError(R.string.login_activity_user_not_found);
-                }
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+                }, this::setErrorToDisplay);
     }
 
 
@@ -90,16 +77,16 @@ public class LoginPresenter {
             authBO.resetPassword(mail, new BusinessCallback() {
                 @Override
                 public void onSuccess(ResponseDTO responseDTO) {
-                    messages.showInfo(responseDTO.getInfo());
+                    //messages.showInfo(responseDTO.getInfo()); TODO
                 }
 
                 @Override
                 public void onFailure(ResponseDTO responseDTO) {
-                    messages.showError(responseDTO.getError());
+                    //messages.showError(responseDTO.getError()); TODO
                 }
             });
         } else {
-            messages.showInfo(R.string.login_business_email_mandatory);
+            //messages.showInfo(R.string.login_business_email_mandatory); TODO
         }
     }
 

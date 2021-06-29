@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -42,6 +41,7 @@ import es.formulastudent.app.mvp.view.screen.user.dialog.CreateUserDialog;
 import es.formulastudent.app.mvp.view.screen.user.dialog.FilteringUsersDialog;
 import es.formulastudent.app.mvp.view.screen.user.recyclerview.UserListAdapter;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 import info.androidhive.fontawesome.FontTextView;
 
 
@@ -59,14 +59,19 @@ public class UserFragment extends Fragment implements UserPresenter.View, View.O
     @Inject
     LoadingDialog loadingDialog;
 
+    @Inject
+    Messages messages;
+
     private UserListAdapter userListAdapter;
     private MenuItem filterItem;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
 
+        //Observer for loading dialog
         presenter.getLoadingData().observe(this, loadingData -> {
             if(loadingData){
                 loadingDialog.show();
@@ -74,6 +79,10 @@ public class UserFragment extends Fragment implements UserPresenter.View, View.O
                 loadingDialog.hide();
             }
         });
+
+        //Observer to display errors
+        presenter.getErrorToDisplay().observe(this,
+                error -> messages.showError(error.getStringID(), error.getArgs()));
     }
 
     @Override
@@ -108,7 +117,7 @@ public class UserFragment extends Fragment implements UserPresenter.View, View.O
     private void initViews(View view){
 
         //View components
-        SwipeRefreshLayout mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         userListAdapter = new UserListAdapter(presenter.getUserItemList(), getContext(), presenter);
@@ -139,13 +148,10 @@ public class UserFragment extends Fragment implements UserPresenter.View, View.O
         }
     }
 
-
     private void requestPermissions(){
         assert getActivity() != null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[] {Manifest.permission.CAMERA}, 1);
-            }
+        if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.CAMERA}, 1);
         }
     }
 
@@ -172,6 +178,7 @@ public class UserFragment extends Fragment implements UserPresenter.View, View.O
 
     @Override
     public void refreshUserItems() {
+        mSwipeRefreshLayout.setRefreshing(false);
         userListAdapter.notifyDataSetChanged();
     }
 

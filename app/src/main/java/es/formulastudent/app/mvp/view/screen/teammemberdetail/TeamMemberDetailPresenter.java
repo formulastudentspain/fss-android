@@ -51,7 +51,6 @@ public class TeamMemberDetailPresenter extends DataConsumer implements TeamMembe
     }
 
     void checkDocuments(TeamMember teamMember) {
-
         teamMember.setCertifiedASR(true);
         teamMember.setCertifiedDriver(true);
         teamMember.setCertifiedESO(true);

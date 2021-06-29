@@ -1,6 +1,10 @@
 package es.formulastudent.app.mvp.data.business.auth;
 
+import androidx.annotation.NonNull;
+
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 
 public interface AuthBO {
 
@@ -24,8 +28,11 @@ public interface AuthBO {
      * @param name
      * @param mail
      * @param password
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void createUser(String name, String mail, String password, BusinessCallback callback);
+    void createUser(String name, String mail, String password,
+                    @NonNull OnSuccessCallback<?> onSuccessCallback,
+                    @NonNull OnFailureCallback onFailureCallback);
 
 }

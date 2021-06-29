@@ -6,9 +6,7 @@ import android.graphics.Bitmap;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.DataConsumer;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.Device;
@@ -50,29 +48,15 @@ public class UserDetailPresenter extends DataConsumer {
         editUserDialog.show(fm, "rc_endurance_create_dialog");
     }
 
-    /**
-     * Update user
-     *
-     * @param user
-     */
-    public void updateUser(final User user) {
-        userBO.editUser(user, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                messages.showInfo(responseDTO.getInfo());
-                view.setUserDetails(user);
-            }
 
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+    public void updateUser(final User user) {
+        userBO.editUser(user,
+                onSuccess -> view.setUserDetails(user),
+                this::setErrorToDisplay);
     }
 
 
     void manageDeviceAssignment(Device device) {
-
         if (Device.WALKIE.equals(device)) {
             if (view.getSelectedUser().getWalkie() == null) {
                 FragmentManager fm = view.getActivity().getSupportFragmentManager();
@@ -151,18 +135,9 @@ public class UserDetailPresenter extends DataConsumer {
         imageBO.uploadImage(bitmap, user.getID(),
                 path -> {
                     user.setPhotoUrl(path.toString());
-                    userBO.editUser(user, new BusinessCallback() {
-                        @Override
-                        public void onSuccess(ResponseDTO responseDTO) {
-                            view.updateProfilePicture(bitmap);
-                            messages.showInfo(responseDTO.getInfo());
-                        }
-
-                        @Override
-                        public void onFailure(ResponseDTO responseDTO) {
-                            messages.showError(responseDTO.getError());
-                        }
-                    });
+                    userBO.editUser(user,
+                            response -> view.updateProfilePicture(bitmap),
+                            this::setErrorToDisplay);
                 },
                 this::setErrorToDisplay
         );

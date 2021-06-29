@@ -5,12 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.inputmethod.InputMethodManager;
 
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 
 
-public class RegisterPresenter {
+public class RegisterPresenter extends DataConsumer {
 
     //Dependencies
     private View view;
@@ -39,22 +38,15 @@ public class RegisterPresenter {
         this.hideKeyboard();
 
         //Call business to auth user
-        authBO.createUser(name, mail, password, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                view.hideLoadingIcon();
-                view.createMessage(responseDTO.getInfo());
-                view.finishView();
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                view.hideLoadingIcon();
-                view.createMessage(responseDTO.getError());
-            }
+        authBO.createUser(name, mail, password,
+                response -> {
+                    view.hideLoadingIcon();
+                    view.finishView();
+                }, errorMessage -> {
+                    view.hideLoadingIcon();
+                    setErrorToDisplay(errorMessage);
         });
     }
-
 
 
 

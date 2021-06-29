@@ -56,6 +56,7 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
     private FloatingActionButton buttonAddUser;
     private EditText searchUser;
     private MenuItem filterItem;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
         super.onCreate(savedInstanceState);
 
         //Observer to display loading dialog
-        presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
+        presenter.getLoadingData().observe(this, loadingData -> {
             if(loadingData){
                 loadingDialog.show();
             }else{
@@ -72,7 +73,7 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
         });
 
         //Observer to display errors
-        presenter.getErrorToDisplay().observe(getViewLifecycleOwner(), message ->
+        presenter.getErrorToDisplay().observe(this, message ->
                 messages.showError(message.getStringID(), message.getArgs()));
     }
 
@@ -107,7 +108,7 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
 
         //Recycler view
         //View components
-        SwipeRefreshLayout mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         teamMemberListAdapter = new TeamMemberListAdapter(presenter.getUserItemList(), getContext(), presenter);
@@ -164,6 +165,7 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
 
     @Override
     public void refreshUserItems() {
+        mSwipeRefreshLayout.setRefreshing(false);
         teamMemberListAdapter.notifyDataSetChanged();
     }
 

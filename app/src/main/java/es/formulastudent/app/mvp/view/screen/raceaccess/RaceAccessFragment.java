@@ -48,6 +48,7 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
     private EventRegistersAdapter registersAdapter;
     private FloatingActionButton buttonAddRegister;
     private MenuItem filterItem;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,7 +107,7 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
     private void initViews(View view){
 
         //View components
-        SwipeRefreshLayout mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         registersAdapter = new EventRegistersAdapter(presenter.getEventRegisterList(), getContext(), presenter);
@@ -136,6 +137,7 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
 
     @Override
     public void refreshEventRegisterItems() {
+        mSwipeRefreshLayout.setRefreshing(false);
         registersAdapter.notifyDataSetChanged();
         //this.hideLoading();
     }

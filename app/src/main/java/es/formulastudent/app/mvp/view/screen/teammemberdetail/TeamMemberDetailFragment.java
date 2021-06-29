@@ -90,13 +90,18 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
 
-        presenter.getLoadingData().observe(this, loadingData -> {
+        //Observer to display loading dialog
+        presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
             if(loadingData){
                 loadingDialog.show();
             }else{
                 loadingDialog.hide();
             }
         });
+
+        //Observer to display errors
+        presenter.getErrorToDisplay().observe(getViewLifecycleOwner(), message ->
+                messages.showError(message.getStringID(), message.getArgs()));
     }
 
     @Override

@@ -45,6 +45,7 @@ public class TeamsFragment extends Fragment implements TeamsPresenter.View, Swip
     private TeamsAdapter adapter;
     private MenuItem filterItem;
     private NavController navController;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     @Override
@@ -93,7 +94,7 @@ public class TeamsFragment extends Fragment implements TeamsPresenter.View, Swip
 
     private void initViews(View view) {
         //View components
-        SwipeRefreshLayout mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         adapter = new TeamsAdapter(presenter.getTeamsList(), getContext(), presenter);
@@ -104,6 +105,7 @@ public class TeamsFragment extends Fragment implements TeamsPresenter.View, Swip
 
     @Override
     public void refreshBriefingRegisterItems() {
+        mSwipeRefreshLayout.setRefreshing(false);
         adapter.notifyDataSetChanged();
     }
 

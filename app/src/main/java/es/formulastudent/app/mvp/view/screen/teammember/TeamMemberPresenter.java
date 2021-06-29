@@ -80,7 +80,6 @@ public class TeamMemberPresenter extends DataConsumer implements RecyclerViewCli
 
     @Override
     public void recyclerViewListClicked(android.view.View v, int position) {
-
         TeamMember selectedTeamMember = filteredTeamMemberList.get(position);
         briefingBO.checkBriefingByUser(selectedTeamMember.getID(),
                 briefingDone -> view.openTeamMemberDetailFragment(selectedTeamMember, briefingDone),
