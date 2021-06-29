@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.formulastudent.app.R;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Car;
@@ -25,7 +26,7 @@ import es.formulastudent.app.mvp.data.model.Country;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
-public class AdminOpsPresenter {
+public class AdminOpsPresenter extends DataConsumer {
 
     //Dependencies
     private AdminOpsPresenter.View view;
@@ -262,12 +263,6 @@ public class AdminOpsPresenter {
          * Hide loading icon
          */
         void hideLoadingIcon();
-
-        /**
-         * Return the activity
-         * @return
-         */
-        AdminOpsActivity getActivity();
 
     }
 }

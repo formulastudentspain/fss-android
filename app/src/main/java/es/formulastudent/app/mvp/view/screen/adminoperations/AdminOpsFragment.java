@@ -1,8 +1,12 @@
 package es.formulastudent.app.mvp.view.screen.adminoperations;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
 
 import javax.inject.Inject;
 
@@ -12,9 +16,8 @@ import es.formulastudent.app.di.component.AppComponent;
 import es.formulastudent.app.di.component.DaggerAdminOpsComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.AdminOpsModule;
-import es.formulastudent.app.mvp.view.screen.general.GeneralActivity;
 
-public class AdminOpsActivity extends GeneralActivity implements View.OnClickListener, AdminOpsPresenter.View {
+public class AdminOpsFragment extends Fragment implements View.OnClickListener, AdminOpsPresenter.View {
 
     @Inject
     AdminOpsPresenter presenter;
@@ -26,15 +29,18 @@ public class AdminOpsActivity extends GeneralActivity implements View.OnClickLis
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_admin_operations);
         super.onCreate(savedInstanceState);
-
-        initViews();
-
     }
 
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_admin_operations, container, false);
+        initViews(view);
+        return view;
+    }
 
 
     /**
@@ -44,7 +50,7 @@ public class AdminOpsActivity extends GeneralActivity implements View.OnClickLis
     protected void setupComponent(AppComponent appComponent) {
         DaggerAdminOpsComponent.builder()
                 .appComponent(appComponent)
-                .contextModule(new ContextModule(this))
+                .contextModule(new ContextModule(getContext()))
                 .adminOpsModule(new AdminOpsModule(this))
                 .build()
                 .inject(this);
@@ -53,22 +59,15 @@ public class AdminOpsActivity extends GeneralActivity implements View.OnClickLis
 
 
 
-    private void initViews() {
+    private void initViews(View view) {
 
-        //Add drawer
-        addDrawer();
-        mDrawerIdentifier = 10017L;
-
-        //Add toolbar title
-        setToolbarTitle(getString(R.string.statistics_admin_operations_title));
-
-        deleteAllTeams = findViewById(R.id.deleteAllTeams);
+        deleteAllTeams = view.findViewById(R.id.deleteAllTeams);
         deleteAllTeams.setOnClickListener(this);
 
-        deleteAllDrivers = findViewById(R.id.deleteAllDrivers);
+        deleteAllDrivers = view.findViewById(R.id.deleteAllDrivers);
         deleteAllDrivers.setOnClickListener(this);
 
-        importTeamsAndDrivers = findViewById(R.id.importTeamsAndDrivers);
+        importTeamsAndDrivers = view.findViewById(R.id.importTeamsAndDrivers);
         importTeamsAndDrivers.setOnClickListener(this);
 
     }
@@ -91,31 +90,21 @@ public class AdminOpsActivity extends GeneralActivity implements View.OnClickLis
     }
 
 
+    @Override
+    public void createMessage(Integer message, Object... args) {
+
+    }
 
     @Override
     public void finishView() {
-        finish();
     }
 
     @Override
     public void showLoading() {
-        super.showLoadingDialog();
     }
 
     @Override
     public void hideLoadingIcon() {
-        super.hideLoadingDialog();
     }
 
-    @Override
-    public AdminOpsActivity getActivity() {
-        return this;
-    }
-
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        drawer.setSelection(mDrawerIdentifier, false);
-    }
 }

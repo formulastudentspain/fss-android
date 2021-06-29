@@ -35,7 +35,7 @@ import javax.inject.Inject;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
-import es.formulastudent.app.mvp.view.screen.adminoperations.AdminOpsActivity;
+import es.formulastudent.app.mvp.view.screen.adminoperations.AdminOpsFragment;
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityExitDialog;
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.screen.login.LoginActivity;
@@ -577,7 +577,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             intent = new Intent(this, StatisticsActivity.class);
 
         }else if(drawerItem.getIdentifier() == 10017) { //Admin operations
-            intent = new Intent(this, AdminOpsActivity.class);
+            intent = new Intent(this, AdminOpsFragment.class);
 
         }
 

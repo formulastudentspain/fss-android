@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToTeamMemberFragment());
                 break;
             case R.id.drawerItemAdminOperations:
-                //TODO
+                navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToAdminOpsFragment());
                 break;
             case R.id.drawerItemLogout:
                 FirebaseAuth.getInstance().signOut();

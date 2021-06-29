@@ -37,7 +37,7 @@
             android:launchMode="singleTop"/>
 
         <activity android:name=".mvp.view.screen.statistics.StatisticsActivity"/>
-        <activity android:name=".mvp.view.screen.adminoperations.AdminOpsActivity"/>
+        <activity android:name=".mvp.view.screen.adminoperations.AdminOpsFragment"/>
         <activity android:name=".mvp.view.screen.qrreader.QRReaderActivity"/>
         <activity android:name=".mvp.view.screen.conecontrolstats.ConeControlStatsActivity"/>
         <activity android:name=".mvp.view.screen.loginregister.RegisterActivity"
