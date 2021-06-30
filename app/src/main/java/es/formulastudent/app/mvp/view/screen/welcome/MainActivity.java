@@ -148,6 +148,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
+        this.lockDrawer();
+    }
+
+    public void lockDrawer(){
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    public void unlockDrawer(){
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     /**

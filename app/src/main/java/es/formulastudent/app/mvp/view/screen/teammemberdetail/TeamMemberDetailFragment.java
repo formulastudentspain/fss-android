@@ -91,7 +91,7 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
         super.onCreate(savedInstanceState);
 
         //Observer to display loading dialog
-        presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
+        presenter.getLoadingData().observe(this, loadingData -> {
             if(loadingData){
                 loadingDialog.show();
             }else{
@@ -100,7 +100,7 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
         });
 
         //Observer to display errors
-        presenter.getErrorToDisplay().observe(getViewLifecycleOwner(), message ->
+        presenter.getErrorToDisplay().observe(this, message ->
                 messages.showError(message.getStringID(), message.getArgs()));
     }
 
