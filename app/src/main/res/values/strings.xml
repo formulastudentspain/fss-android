@@ -216,6 +216,7 @@
     <string name="prescruti_confirm_time_dialog_message">Do you want to save this time?</string>
     <string name="prescruti_confirm_time_dialog_save">Save</string>
     <string name="prescruti_confirm_time_dialog_cancel">Cancel</string>
+    <string name="prescruti_error_egress_wrong_team">Wrong team</string>
 
 
     <!-- Statistics -->

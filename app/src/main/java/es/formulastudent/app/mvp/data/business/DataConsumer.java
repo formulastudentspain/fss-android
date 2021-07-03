@@ -2,7 +2,6 @@ package es.formulastudent.app.mvp.data.business;
 
 import androidx.lifecycle.MutableLiveData;
 
-import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 public abstract class DataConsumer {
@@ -30,7 +29,9 @@ public abstract class DataConsumer {
     }
 
     public void loadingData(boolean loading) {
-        loadingData.setValue(loading);
+        if(loadingData.getValue() == null || !loadingData.getValue().equals(loading)) {
+            loadingData.setValue(loading);
+        }
     }
 
     public void setErrorToDisplay(Message message){

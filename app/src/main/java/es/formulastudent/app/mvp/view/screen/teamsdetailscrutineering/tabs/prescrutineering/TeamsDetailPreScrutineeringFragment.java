@@ -144,7 +144,7 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
         if (requestCode == NFC_REQUEST_CODE) {
             if(resultCode == Activity.RESULT_OK){
                 String result = data.getStringExtra("result");
-                presenter.onNFCTagDetected(result);
+                presenter.onNFCTagDetected(result, team);
             }
 
             //Chronometer result for Egress

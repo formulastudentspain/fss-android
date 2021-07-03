@@ -42,6 +42,8 @@ public class TeamMemberBOFirebaseImpl extends DataLoader implements TeamMemberBO
                     if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                         TeamMember teamMember = new TeamMember(queryDocumentSnapshots.getDocuments().get(0));
                         onSuccessCallback.onSuccess(teamMember);
+                    } else {
+                        onSuccessCallback.onSuccess(null);
                     }
                     loadingData(false);
                     

@@ -110,17 +110,14 @@ public class RaceAccessBOFirebaseImpl extends DataLoader implements RaceAccessBO
                     teamMember.getName(), teamMember.getPhotoUrl(), registerDate, carNumber, briefingDone, type, firebaseAuth.getCurrentUser().getEmail());
         }
 
-        loadingData(true);
         firebaseFirestore.collection(type.getFirebaseTable())
                 .document(register.getID())
                 .set(register.toObjectData())
                 .addOnSuccessListener(aVoid -> {
                     onSuccessCallback.onSuccess(register);
-                    loadingData(false);
                 })
                 .addOnFailureListener(e -> {
                     onFailureCallback.onFailure(new Message(R.string.dynamic_event_messages_create_registers_error));
-                    loadingData(false);
                 });
     }
 
