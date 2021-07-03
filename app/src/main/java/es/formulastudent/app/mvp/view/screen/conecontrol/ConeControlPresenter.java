@@ -18,11 +18,14 @@ import es.formulastudent.app.mvp.data.business.mailsender.MailSender;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.data.model.ConeControlRegisterLog;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 
 public class ConeControlPresenter extends DataConsumer implements RecyclerViewClickListener {
+
+    private User loggedUser;
 
     //Cone Control Event Type
     private ConeControlEvent ccEventType;
@@ -37,12 +40,13 @@ public class ConeControlPresenter extends DataConsumer implements RecyclerViewCl
     private ListenerRegistration registration;
 
     public ConeControlPresenter(ConeControlPresenter.View view, ConeControlEvent ccEventType,
-                                ConeControlBO coneControlBO, MailSender mailSender) {
+                                ConeControlBO coneControlBO, MailSender mailSender, User loggedUser) {
         super(coneControlBO);
         this.view = view;
         this.ccEventType = ccEventType;
         this.coneControlBO = coneControlBO;
         this.mailSender = mailSender;
+        this.loggedUser = loggedUser;
     }
 
     @Override
@@ -151,6 +155,10 @@ public class ConeControlPresenter extends DataConsumer implements RecyclerViewCl
         return coneControlRegisterList;
     }
 
+
+    boolean canUserExportCones(){
+        return loggedUser.isOfficial() || loggedUser.isAdministrator();
+    }
 
 
     public interface View {

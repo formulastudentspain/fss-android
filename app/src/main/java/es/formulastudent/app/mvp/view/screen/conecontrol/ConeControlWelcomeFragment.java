@@ -74,7 +74,10 @@ public class ConeControlWelcomeFragment extends Fragment implements ConeControlP
         ConeControlWelcomeFragmentArgs args = ConeControlWelcomeFragmentArgs.fromBundle(getArguments());
         this.ccEvent = args.getConeControlEvent();
 
-        setHasOptionsMenu(true);
+        if(presenter.canUserExportCones()){ //enable option to export cones
+            setHasOptionsMenu(true);
+        }
+
         initViews(view);
         checkWritePermissions();
         return view;
