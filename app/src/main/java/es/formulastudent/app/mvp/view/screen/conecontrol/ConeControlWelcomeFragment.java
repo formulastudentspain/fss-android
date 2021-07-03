@@ -74,6 +74,7 @@ public class ConeControlWelcomeFragment extends Fragment implements ConeControlP
         ConeControlWelcomeFragmentArgs args = ConeControlWelcomeFragmentArgs.fromBundle(getArguments());
         this.ccEvent = args.getConeControlEvent();
 
+        setHasOptionsMenu(true);
         initViews(view);
         checkWritePermissions();
         return view;
