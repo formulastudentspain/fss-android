@@ -34,6 +34,7 @@ public class DrawerMenu {
     public DrawerMenuItem volunteers = DrawerMenuItem.VOLUNTEERS;
     public DrawerMenuItem teamMember = DrawerMenuItem.TEAM_MEMBER;
     public DrawerMenuItem adminOperations = DrawerMenuItem.ADMIN_OPERATIONS;
+    public DrawerMenuItem statistics = DrawerMenuItem.STATISTICS;
     public DrawerMenuItem logout = DrawerMenuItem.LOGOUT;
 
     //Titles

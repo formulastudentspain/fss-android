@@ -39,7 +39,7 @@ import es.formulastudent.app.mvp.view.screen.adminoperations.AdminOpsFragment;
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityExitDialog;
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.screen.login.LoginActivity;
-import es.formulastudent.app.mvp.view.screen.statistics.StatisticsActivity;
+import es.formulastudent.app.mvp.view.screen.statistics.StatisticsFragment;
 import es.formulastudent.app.mvp.view.screen.welcome.MainActivity;
 import info.androidhive.fontawesome.FontDrawable;
 
@@ -574,7 +574,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             intent = new Intent(this, LoginActivity.class);
 
         }else if(drawerItem.getIdentifier() == 10016){ //Statistics
-            intent = new Intent(this, StatisticsActivity.class);
+            intent = new Intent(this, StatisticsFragment.class);
 
         }else if(drawerItem.getIdentifier() == 10017) { //Admin operations
             intent = new Intent(this, AdminOpsFragment.class);

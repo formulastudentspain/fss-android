@@ -16,6 +16,7 @@ public enum DrawerMenuItem implements Serializable {
     TEAM_MEMBER(R.string.drawer_menu_staff_users_management_team_members, R.string.fa_people_carry_solid),
     VOLUNTEERS(R.string.drawer_menu_staff_users_management_volunteers, R.string.fa_smile),
     ADMIN_OPERATIONS(R.string.drawer_menu_admin_operations, R.string.fa_adjust_solid),
+    STATISTICS(R.string.drawer_menu_staff_statistics, R.string.fa_chart_bar_solid),
     LOGOUT(R.string.drawer_menu_common_logout, R.string.fa_sign_out_alt_solid),
 
     //Titles

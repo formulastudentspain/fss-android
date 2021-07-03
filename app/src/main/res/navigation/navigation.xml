@@ -67,6 +67,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_welcomeFragment_to_statistics"
+            app:destination="@id/statisticsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/briefingFragment"
@@ -267,4 +274,9 @@
         android:label="@string/drawer_menu_admin_operations"
         tools:layout="@layout/fragment_admin_operations">
     </fragment>
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="es.formulastudent.app.mvp.view.screen.statistics.StatisticsFragment"
+        android:label="@string/drawer_menu_staff_statistics"
+        tools:layout="@layout/fragment_statistics" />
 </navigation>

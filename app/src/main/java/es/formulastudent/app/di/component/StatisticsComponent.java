@@ -7,7 +7,7 @@ import dagger.Component;
 import es.formulastudent.app.di.module.activity.StatisticsModule;
 import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.screen.statistics.StatisticsActivity;
+import es.formulastudent.app.mvp.view.screen.statistics.StatisticsFragment;
 import es.formulastudent.app.mvp.view.screen.statistics.StatisticsPresenter;
 
 
@@ -15,7 +15,7 @@ import es.formulastudent.app.mvp.view.screen.statistics.StatisticsPresenter;
 @Component(modules = {StatisticsModule.class, SharedPreferencesModule.class}, dependencies = {AppComponent.class})
 public interface StatisticsComponent {
 
-    void inject(StatisticsActivity statisticsActivity);
+    void inject(StatisticsFragment statisticsFragment);
     StatisticsPresenter getMainPresenter();
     User getLoggedUser();
 }

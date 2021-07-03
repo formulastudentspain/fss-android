@@ -140,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.drawerItemAdminOperations:
                 navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToAdminOpsFragment());
                 break;
+            case R.id.drawerItemStatistics:
+                navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToStatistics());
+                break;
             case R.id.drawerItemLogout:
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(this, LoginActivity.class);
