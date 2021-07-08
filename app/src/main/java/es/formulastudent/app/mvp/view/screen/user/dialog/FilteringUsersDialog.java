@@ -75,7 +75,7 @@ public class FilteringUsersDialog extends DialogFragment {
 
         Spinner viewRoles = rootView.findViewById(R.id.roles_spinner);
 
-        List<Role> roles = new ArrayList<>(Arrays.asList(UserRole.values()));
+        List<UserRole> roles = new ArrayList<>(Arrays.asList(UserRole.values()));
         roles.add(0, null);
 
         int selectedRoleIndex = 0;
@@ -96,8 +96,7 @@ public class FilteringUsersDialog extends DialogFragment {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                UserRole role = (UserRole) rolesAdapter.getItem(position);
-                selectedRole = role;
+                selectedRole = rolesAdapter.getItem(position);
             }
 
             @Override
