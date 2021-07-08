@@ -79,6 +79,7 @@ public class UserDetailFragment extends Fragment implements UserDetailPresenter.
         user = args.getSelectedUser();
 
         initViews(view);
+        setHasOptionsMenu(true);
         return view;
     }
 
