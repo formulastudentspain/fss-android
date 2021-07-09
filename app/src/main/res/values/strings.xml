@@ -1,5 +1,7 @@
 <resources>
 
+    <!-- Commons -->
+    <string name="forbidden_required_role">Forbidden. Required role: %1$s</string>
 
     <!-- Drawer menu options -->
     <string name="drawer_menu_staff">EVENT CONTROL</string>

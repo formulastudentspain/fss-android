@@ -131,4 +131,8 @@ public class User implements Serializable {
                 || role.equals(UserRole.OFFICIAL_SCRUTINEER)
                 || role.equals(UserRole.OFFICIAL_STAFF);
     }
+
+    public boolean isRole(UserRole role){
+        return this.role.equals(role);
+    }
 }

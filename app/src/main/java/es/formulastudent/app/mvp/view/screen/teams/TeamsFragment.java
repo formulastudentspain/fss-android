@@ -26,6 +26,8 @@ import es.formulastudent.app.di.component.DaggerTeamsComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.TeamsModule;
 import es.formulastudent.app.mvp.data.model.Team;
+import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.teams.recyclerview.TeamsAdapter;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
 import es.formulastudent.app.mvp.view.utils.messages.Messages;
@@ -35,6 +37,9 @@ public class TeamsFragment extends Fragment implements TeamsPresenter.View, Swip
 
     @Inject
     TeamsPresenter presenter;
+
+    @Inject
+    User loggedUser;
 
     @Inject
     LoadingDialog loadingDialog;
@@ -128,6 +133,10 @@ public class TeamsFragment extends Fragment implements TeamsPresenter.View, Swip
 
     @Override
     public void openFeeFragment(Team team) {
+        if( !loggedUser.isAdministrator() && !loggedUser.isRole(UserRole.OFFICIAL_STAFF)){
+            messages.showError(R.string.forbidden_required_role, UserRole.OFFICIAL_STAFF.getName());
+            return;
+        }
         navController.navigate(TeamsFragmentDirections
                 .actionTeamsFragmentToTeamsDetailFeeFragment(team, team.getName()));
     }
