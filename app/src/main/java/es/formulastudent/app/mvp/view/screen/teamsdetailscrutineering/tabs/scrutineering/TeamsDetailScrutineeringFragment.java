@@ -24,6 +24,7 @@ import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.TeamsDetai
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.dialog.AddCommentDialog;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.dialog.ConfirmPassTestDialog;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.TeamsDetailFragment;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 import info.androidhive.fontawesome.FontTextView;
 
 
@@ -400,9 +401,7 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
     public boolean onLongClick(View view) {
 
         if(this.loggedUser.getRole().equals(UserRole.ADMINISTRATOR)
-                || this.loggedUser.getRole().equals(UserRole.OFFICIAL_STAFF)
-                || this.loggedUser.getRole().equals(UserRole.OFFICIAL_SCRUTINEER)
-                || this.loggedUser.getRole().equals(UserRole.OFFICIAL_MARSHALL)){
+                || this.loggedUser.isRole(UserRole.OFFICIAL_SCRUTINEER)){
 
             //Clone team and update it
             Team modifiedTeam = team.clone();
@@ -433,9 +432,11 @@ public class TeamsDetailScrutineeringFragment extends Fragment implements View.O
             }
 
             presenter.updateTeam(modifiedTeam, team);
+            return false;
 
         }
 
+        presenter.setErrorToDisplay(new Message(R.string.forbidden_required_role, UserRole.OFFICIAL_SCRUTINEER.getName()));
         return false;
     }
 }

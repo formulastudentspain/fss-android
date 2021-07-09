@@ -142,6 +142,10 @@ public class TeamsDetailScrutineeringPresenter extends DataConsumer {
                 this::setErrorToDisplay);
     }
 
+    public Messages getMessages(){
+        return messages;
+    }
+
 
 
     public interface View {
