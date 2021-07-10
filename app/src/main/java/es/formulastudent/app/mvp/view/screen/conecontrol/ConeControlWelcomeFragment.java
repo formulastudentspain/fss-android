@@ -35,8 +35,10 @@ import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.ConeControlModule;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.RaceControlRegister;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.conecontrol.recyclerview.SectorAdapter;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 
 public class ConeControlWelcomeFragment extends Fragment implements ConeControlPresenter.View, View.OnClickListener, RecyclerViewClickListener {
@@ -74,9 +76,7 @@ public class ConeControlWelcomeFragment extends Fragment implements ConeControlP
         ConeControlWelcomeFragmentArgs args = ConeControlWelcomeFragmentArgs.fromBundle(getArguments());
         this.ccEvent = args.getConeControlEvent();
 
-        if(presenter.canUserExportCones()){ //enable option to export cones
-            setHasOptionsMenu(true);
-        }
+        setHasOptionsMenu(true);
 
         initViews(view);
         checkWritePermissions();
@@ -217,7 +217,12 @@ public class ConeControlWelcomeFragment extends Fragment implements ConeControlP
         MenuItem filterItem = menu.findItem(R.id.cone_control_stats);
         filterItem.setOnMenuItemClickListener(menuItem -> {
             if(checkWritePermissions()){
-                presenter.exportConesToExcel(ccEvent);
+                if(presenter.canUserExportCones()) {
+                    presenter.exportConesToExcel(ccEvent);
+                }else{
+                    presenter.setErrorToDisplay(
+                            new Message(R.string.forbidden_required_role, UserRole.OFFICIAL_MARSHALL));
+                }
             }
             return true;
         });

@@ -19,6 +19,7 @@ import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.data.model.ConeControlRegisterLog;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
 import es.formulastudent.app.mvp.view.utils.messages.Message;
 
@@ -157,7 +158,7 @@ public class ConeControlPresenter extends DataConsumer implements RecyclerViewCl
 
 
     boolean canUserExportCones(){
-        return loggedUser.isOfficial() || loggedUser.isAdministrator();
+        return loggedUser.isRole(UserRole.OFFICIAL_MARSHALL) || loggedUser.isAdministrator();
     }
 
 
