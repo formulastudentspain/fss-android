@@ -266,8 +266,7 @@ public class RaceControlPresenter extends DataConsumer implements RecyclerViewCl
     @Override
     public void recyclerViewLongListClicked(android.view.View v, int position) {
 
-        if (loggedUser.getRole().equals(UserRole.ADMINISTRATOR) ||
-                loggedUser.getRole().equals(UserRole.OFFICIAL_MARSHALL)) {
+        if (loggedUser.isAdministrator() || loggedUser.isRole(UserRole.OFFICIAL_MARSHALL)) {
 
             RaceControlRegister register = raceControlRegisterList.get(position);
 
@@ -277,6 +276,10 @@ public class RaceControlPresenter extends DataConsumer implements RecyclerViewCl
                     .newInstance(RaceControlPresenter.this, register, rcEventType);
             createUpdatingDialog.show(fm, "rc_updating_dialog");
         }
+    }
+
+    public boolean isUserOfficial(){
+        return  this.loggedUser.isRole(UserRole.OFFICIAL_MARSHALL);
     }
 
     List<RaceControlRegister> getEventRegisterList() {

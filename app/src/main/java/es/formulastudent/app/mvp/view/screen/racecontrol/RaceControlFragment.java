@@ -1,5 +1,6 @@
 package es.formulastudent.app.mvp.view.screen.racecontrol;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -109,6 +110,7 @@ public class RaceControlFragment extends Fragment implements
                 .inject(this);
     }
 
+    @SuppressLint("RestrictedApi")
     private void initViews(View view){
         //View components
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
@@ -135,6 +137,9 @@ public class RaceControlFragment extends Fragment implements
         //Add vehicle button
         buttonAddVehicle = view.findViewById(R.id.button_add_vehicle);
         buttonAddVehicle.setOnClickListener(this);
+        if( ! presenter.isUserOfficial()){
+            buttonAddVehicle.setVisibility(View.GONE);
+        }
 
         //Round
         TextView roundTextView = view.findViewById(R.id.round_number);
