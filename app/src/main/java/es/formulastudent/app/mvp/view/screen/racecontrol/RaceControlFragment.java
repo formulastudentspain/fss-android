@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.ListenerRegistration;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -92,6 +95,9 @@ public class RaceControlFragment extends Fragment implements
 
         //Remove elevation from Action bar
         ((AppCompatActivity)getActivity()).getSupportActionBar().setElevation(0);
+
+        Objects.requireNonNull(getActivity()).getWindow()
+                .addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         initViews(view);
         return view;
@@ -193,6 +199,8 @@ public class RaceControlFragment extends Fragment implements
     @Override
     public void onStop(){
         super.onStop();
+        Objects.requireNonNull(getActivity()).getWindow()
+                .clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         registerListener.remove();
     }
 

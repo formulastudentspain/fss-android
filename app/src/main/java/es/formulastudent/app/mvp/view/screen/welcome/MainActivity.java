@@ -3,6 +3,7 @@ package es.formulastudent.app.mvp.view.screen.welcome;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.drawerItemBriefing:
                 navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToBriefingFragment());
@@ -184,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     "Disabled for safety reasons. To exit, tap on back arrow on top bar.",
                     Toast.LENGTH_LONG).show(); //TODO avoid toasts
         }else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             super.onBackPressed();
         }
     }

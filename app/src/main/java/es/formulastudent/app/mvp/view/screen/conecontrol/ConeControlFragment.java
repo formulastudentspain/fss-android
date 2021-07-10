@@ -4,13 +4,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.ListenerRegistration;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -69,9 +73,15 @@ public class ConeControlFragment extends Fragment implements ConeControlPresente
             }
         });
 
+        //Remove elevation from Action bar
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setElevation(0);
+
         //Observer to display errors
         presenter.getErrorToDisplay().observe(getViewLifecycleOwner(), message ->
                 messages.showError(message.getStringID(), message.getArgs()));
+
+        Objects.requireNonNull(getActivity()).getWindow()
+                .addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         initViews(view);
         return view;
@@ -124,6 +134,9 @@ public class ConeControlFragment extends Fragment implements ConeControlPresente
     @Override
     public void onStop(){
         super.onStop();
+
+        Objects.requireNonNull(getActivity()).getWindow()
+                .clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         //Remove realTime listener
         registerListener.remove();
