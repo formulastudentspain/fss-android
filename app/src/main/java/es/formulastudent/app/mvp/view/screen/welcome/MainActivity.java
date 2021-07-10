@@ -3,6 +3,7 @@ package es.formulastudent.app.mvp.view.screen.welcome;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -13,6 +14,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -173,4 +176,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build()
                 .inject(this);
     }
+
+    @Override
+    public void onBackPressed() {
+        if(isBackPressedCritical()){
+            Toast.makeText(this,
+                    "Disabled for safety reasons. To exit, tap on back arrow on top bar.",
+                    Toast.LENGTH_LONG).show(); //TODO avoid toasts
+        }else {
+            super.onBackPressed();
+        }
+    }
+
+    public boolean isBackPressedCritical() {
+        return Objects.requireNonNull(navController.getCurrentDestination())
+                        .getArguments().containsKey("coneControlEvent")
+                || navController.getCurrentDestination()
+                        .getArguments().containsKey("raceControlEvent");
+    }
+
 }
