@@ -38,13 +38,16 @@ import es.formulastudent.app.mvp.data.model.RaceControlRegister;
 import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.conecontrol.recyclerview.SectorAdapter;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.utils.messages.Message;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class ConeControlWelcomeFragment extends Fragment implements ConeControlPresenter.View, View.OnClickListener, RecyclerViewClickListener {
 
     @Inject
     ConeControlPresenter presenter;
+
+    @Inject
+    Messages messages;
 
     private static final int NUM_SECTORS = 7;
 
@@ -220,8 +223,7 @@ public class ConeControlWelcomeFragment extends Fragment implements ConeControlP
                 if(presenter.canUserExportCones()) {
                     presenter.exportConesToExcel(ccEvent);
                 }else{
-                    presenter.setErrorToDisplay(
-                            new Message(R.string.forbidden_required_role, UserRole.OFFICIAL_MARSHALL));
+                    messages.showError(R.string.forbidden_required_role, UserRole.OFFICIAL_MARSHALL.getName());
                 }
             }
             return true;
