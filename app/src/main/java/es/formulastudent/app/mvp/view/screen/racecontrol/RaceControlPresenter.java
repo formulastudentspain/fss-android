@@ -282,6 +282,11 @@ public class RaceControlPresenter extends DataConsumer implements RecyclerViewCl
         return  this.loggedUser.isRole(UserRole.OFFICIAL_MARSHALL);
     }
 
+    public boolean isUserAdministrator(){
+        return  this.loggedUser.isAdministrator();
+    }
+
+
     List<RaceControlRegister> getEventRegisterList() {
         return raceControlRegisterList;
     }

@@ -124,6 +124,15 @@ public class RaceControlFragment extends Fragment implements
         recyclerView.setAdapter(rcAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
+
+        //Add vehicle button
+        buttonAddVehicle = view.findViewById(R.id.button_add_vehicle);
+        buttonAddVehicle.show();
+        buttonAddVehicle.setOnClickListener(this);
+        if( !presenter.isUserOfficial() && !presenter.isUserAdministrator()){
+            buttonAddVehicle.setVisibility(View.GONE);
+        }
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
@@ -134,18 +143,16 @@ public class RaceControlFragment extends Fragment implements
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
-                    buttonAddVehicle.show();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if(presenter.isUserOfficial() || presenter.isUserAdministrator()) {
+                        buttonAddVehicle.show();
+                    }
+                }
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
 
-        //Add vehicle button
-        buttonAddVehicle = view.findViewById(R.id.button_add_vehicle);
-        buttonAddVehicle.setOnClickListener(this);
-        if( ! presenter.isUserOfficial()){
-            buttonAddVehicle.setVisibility(View.GONE);
-        }
+
 
         //Round
         TextView roundTextView = view.findViewById(R.id.round_number);
