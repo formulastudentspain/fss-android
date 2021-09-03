@@ -211,7 +211,7 @@ public class AdminOpsPresenter extends DataConsumer {
                             teamMember.setDriver(true);
                         } else if (role.trim().equals("ESO")) {
                             teamMember.setESO(true);
-                        } else if (role.trim().equals("TEAM LEADER")) {
+                        } else if (role.trim().equals("ASR")) {
                             teamMember.setASR(true);
                         }
                     }

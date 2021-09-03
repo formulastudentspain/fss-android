@@ -113,6 +113,7 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
         lastBriefing = args.getLastBriefing();
 
         initViews(view);
+        setHasOptionsMenu(true);
         return view;
     }
 

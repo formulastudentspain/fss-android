@@ -10,8 +10,8 @@ android {
         applicationId "es.formulastudent"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 14
-        versionName "1.0"
+        versionCode 21
+        versionName "2.0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -47,7 +47,7 @@ android {
         }
         dev_fss {
             dimension "version"
-            resValue "string", "app_name", "FSS_DEV"
+            resValue "string", "app_name", "Formula Student Spain"
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher"
             ]

@@ -5,7 +5,7 @@ import java.io.Serializable;
 public enum Country implements Serializable {
 
         UNITED_KINGDOM (
-                "United Kingdom",
+                "United-Kingdom",
                 "https://firebasestorage.googleapis.com/v0/b/fss-app.appspot.com/o/country_flags%2Funited-kingdom.png?alt=media&token=5f2c0536-1953-4610-9736-a81dfd195d8d"
         ),
         AUSTRIA (
@@ -55,6 +55,22 @@ public enum Country implements Serializable {
         SPAIN (
                 "Spain",
                 "https://firebasestorage.googleapis.com/v0/b/fss-app.appspot.com/o/country_flags%2Fspain.png?alt=media&token=53979ddd-e51e-4ab7-ab3a-fec4ade07c48"
+        ),
+        SLOVENIA (
+                "Slovenia",
+                "https://firebasestorage.googleapis.com/v0/b/fss-app.appspot.com/o/country_flags%2Fslovenia.png?alt=media&token=049227b4-9063-40c9-a776-785e64317320"
+        ),
+        SWEDEN (
+                "Sweden",
+                "https://firebasestorage.googleapis.com/v0/b/fss-app.appspot.com/o/country_flags%2Fsweden.png?alt=media&token=5fcee608-55d2-41ad-8b58-f3757f7e712d"
+        ),
+        UNITED_STATES (
+                "United-States-of-America",
+                "https://firebasestorage.googleapis.com/v0/b/fss-app.appspot.com/o/country_flags%2Funited-states.png?alt=media&token=c1b20388-0745-44ad-97e8-051c73925af7"
+        ),
+        CZECH_REPUBLIC (
+                "Czech-Republic",
+                "https://firebasestorage.googleapis.com/v0/b/fss-app.appspot.com/o/country_flags%2Fczech-republic.png?alt=media&token=d54efb01-1778-4b2c-a721-c40ba2d43ccb"
         );
 
         private final String name;
@@ -107,6 +123,18 @@ public enum Country implements Serializable {
 
                 }else if(name.equals(SPAIN.getName())){
                         return SPAIN;
+
+                }else if(name.equals(SLOVENIA.getName())){
+                        return SLOVENIA;
+
+                }else if(name.equals(UNITED_STATES.getName())){
+                        return UNITED_STATES;
+
+                }else if(name.equals(CZECH_REPUBLIC.getName())){
+                        return CZECH_REPUBLIC;
+
+                }else if(name.equals(SWEDEN.getName())){
+                        return SWEDEN;
                 }
                 return SPAIN;
         }
