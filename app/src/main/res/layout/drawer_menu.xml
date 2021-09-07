@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
+        <import type="android.view.View"/>
         <variable
             name="menu"
             type="es.formulastudent.app.mvp.data.model.DrawerMenu" />
@@ -22,109 +23,166 @@
 
         <include
             layout="@layout/drawer_menu_title"
+            android:visibility="@{menu.canUserSeeBriefing || menu.canUserSeeTeams ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.titleEventControl}" />
 
         <include
             android:id="@+id/drawerItemBriefing"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeBriefing ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.briefing}" />
 
         <include
             android:id="@+id/drawerItemTeams"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeTeams ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.teams}" />
 
-        <include layout="@layout/drawer_menu_divider" />
+        <include
+            android:id="@+id/dividerEventControl"
+            layout="@layout/drawer_menu_divider"
+            android:visibility="@{menu.canUserSeeBriefing || menu.canUserSeeTeams ? View.VISIBLE : View.GONE}" />
 
         <include
             layout="@layout/drawer_menu_title"
+            android:visibility="@{menu.canUserSeeRaceAccess ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.titleRaceAccess}" />
 
         <include
             android:id="@+id/drawerItemRAPracticeTrack"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeRaceAccess ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.practiceTrack}" />
 
         <include
             android:id="@+id/drawerItemRASkidpad"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeRaceAccess ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.skidpad}" />
 
         <include
             android:id="@+id/drawerItemRAAcceleration"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeRaceAccess ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.acceleration}" />
 
         <include
             android:id="@+id/drawerItemRAAutoCross"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeRaceAccess ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.autocross}" />
 
         <include
             android:id="@+id/drawerItemRAEndurance"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeRaceAccess ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.endurance}" />
 
-        <include layout="@layout/drawer_menu_divider" />
+        <include
+            android:id="@+id/dividerRA"
+            layout="@layout/drawer_menu_divider"
+            android:visibility="@{menu.canUserSeeRaceAccess ? View.VISIBLE : View.GONE}" />
 
         <include
             layout="@layout/drawer_menu_title"
+            android:visibility="@{menu.canUserSeeRaceControl ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.titleRaceControl}" />
 
         <include
             android:id="@+id/drawerItemRCSkidpad"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeRaceControl ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.skidpad}" />
 
 
         <include
             android:id="@+id/drawerItemRCAutocross"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeRaceControl ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.autocross}" />
 
         <include
             android:id="@+id/drawerItemRCEndurance"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeRaceControl ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.endurance}" />
 
-        <include layout="@layout/drawer_menu_divider" />
+        <include
+            android:id="@+id/dividerRC"
+            layout="@layout/drawer_menu_divider"
+            android:visibility="@{menu.canUserSeeRaceControl ? View.VISIBLE : View.GONE}" />
 
         <include
             layout="@layout/drawer_menu_title"
+            android:visibility="@{menu.canUserSeeConeControl ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.titleConeControl}" />
 
         <include
             android:id="@+id/drawerItemCCSkidpad"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeConeControl ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.skidpad}" />
 
         <include
             android:id="@+id/drawerItemCCAutocross"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeConeControl ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.autocross}" />
 
         <include
             android:id="@+id/drawerItemCCEndurance"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeConeControl ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.endurance}" />
 
-        <include layout="@layout/drawer_menu_divider" />
+        <include
+            android:id="@+id/dividerCC"
+            layout="@layout/drawer_menu_divider"
+            android:visibility="@{menu.canUserSeeConeControl ? View.VISIBLE : View.GONE}" />
 
         <include
             layout="@layout/drawer_menu_title"
+            android:visibility="@{menu.canUserSeeVolunteers || menu.canUserSeeTeamMembers ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.titleUserManagement}" />
 
         <include
             android:id="@+id/drawerItemUser"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeVolunteers ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.volunteers}" />
 
         <include
             android:id="@+id/drawerItemTeamMembers"
             layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeTeamMembers ? View.VISIBLE : View.GONE}"
             bind:item="@{menu.teamMember}" />
 
-        <include layout="@layout/drawer_menu_divider" />
+        <include
+            android:id="@+id/dividerUserManagement"
+            layout="@layout/drawer_menu_divider"
+            android:visibility="@{menu.canUserSeeVolunteers || menu.canUserSeeTeamMembers ? View.VISIBLE : View.GONE}" />
+
+        <include
+            layout="@layout/drawer_menu_title"
+            android:visibility="@{menu.canUserSeeAdminOperations ? View.VISIBLE : View.GONE}"
+            bind:item="@{menu.titleAdminOperations}" />
+
+        <include
+            android:id="@+id/drawerItemAdminOperations"
+            layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeAdminOperations ? View.VISIBLE : View.GONE}"
+            bind:item="@{menu.adminOperations}" />
+
+        <include
+            android:id="@+id/drawerItemStatistics"
+            layout="@layout/drawer_menu_item"
+            android:visibility="@{menu.canUserSeeAdminOperations ? View.VISIBLE : View.GONE}"
+            bind:item="@{menu.statistics}" />
+
+        <include
+            android:id="@+id/dividerAdminOperations"
+            layout="@layout/drawer_menu_divider"
+            android:visibility="@{menu.canUserSeeAdminOperations ? View.VISIBLE : View.GONE}" />
 
         <include
             android:id="@+id/drawerItemLogout"

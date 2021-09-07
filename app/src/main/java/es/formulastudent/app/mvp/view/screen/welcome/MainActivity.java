@@ -3,6 +3,8 @@ package es.formulastudent.app.mvp.view.screen.welcome;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -14,16 +16,28 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
+import javax.inject.Inject;
+
+import es.formulastudent.app.FSSApp;
 import es.formulastudent.app.R;
 import es.formulastudent.app.databinding.ActivityMainBinding;
+import es.formulastudent.app.di.component.AppComponent;
+import es.formulastudent.app.di.component.DaggerWelcomeComponent;
+import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.DrawerMenu;
 import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.login.LoginActivity;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    @Inject
+    User loggedUser;
 
     private DrawerLayout drawerLayout;
     private NavController navController;
@@ -31,9 +45,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupComponent(FSSApp.getApp().component());
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         drawerLayout = binding.drawerLayout;
-        binding.setMenu(new DrawerMenu());
+        binding.setMenu(new DrawerMenu(loggedUser));
 
         navController = Navigation.findNavController(this, R.id.myNavHostFragment);
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
@@ -47,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.drawerItemBriefing:
                 navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToBriefingFragment());
@@ -126,6 +142,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.drawerItemTeamMembers:
                 navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToTeamMemberFragment());
                 break;
+            case R.id.drawerItemAdminOperations:
+                navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToAdminOpsFragment());
+                break;
+            case R.id.drawerItemStatistics:
+                navController.navigate(WelcomeFragmentDirections.actionWelcomeFragmentToStatistics());
+                break;
             case R.id.drawerItemLogout:
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(this, LoginActivity.class);
@@ -134,5 +156,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
+        this.lockDrawer();
     }
+
+    public void lockDrawer(){
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    public void unlockDrawer(){
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    /**
+     * Inject dependencies method
+     * @param appComponent
+     */
+    protected void setupComponent(AppComponent appComponent) {
+        DaggerWelcomeComponent.builder()
+                .appComponent(appComponent)
+                .contextModule(new ContextModule(this))
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isBackPressedCritical()){
+            Toast.makeText(this,
+                    "Disabled for safety reasons. To exit, tap on back arrow on top bar.",
+                    Toast.LENGTH_LONG).show(); //TODO avoid toasts
+        }else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            super.onBackPressed();
+        }
+    }
+
+    public boolean isBackPressedCritical() {
+        return Objects.requireNonNull(navController.getCurrentDestination())
+                        .getArguments().containsKey("coneControlEvent")
+                || navController.getCurrentDestination()
+                        .getArguments().containsKey("raceControlEvent");
+    }
+
 }

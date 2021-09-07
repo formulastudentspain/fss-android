@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.general.spinneradapters.RolesSpinnerAdapter;
@@ -70,7 +69,7 @@ public class EditUserDialog extends DialogFragment {
         //Roles
         availableRoles = rootView.findViewById(R.id.create_user_role);
 
-        List<Role> roles = new ArrayList<>();
+        List<UserRole> roles = new ArrayList<>();
         int selectedRoleIndex = 0;
         int roleIndex = 0;
 

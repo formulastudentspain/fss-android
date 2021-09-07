@@ -1,6 +1,7 @@
 package es.formulastudent.app.mvp.view.screen.general.spinneradapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +15,15 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.model.Role;
+import es.formulastudent.app.mvp.data.model.UserRole;
 
-public class RolesSpinnerAdapter extends ArrayAdapter<Role> {
+public class RolesSpinnerAdapter extends ArrayAdapter<UserRole> {
 
     private Context context;
-    private List<Role> roles;
+    private List<UserRole> roles;
     private LayoutInflater inflater;
 
-    public RolesSpinnerAdapter(Context context, int textViewResourceId, List<Role> roles) {
+    public RolesSpinnerAdapter(Context context, int textViewResourceId, List<UserRole> roles) {
         super(context, textViewResourceId, roles);
         this.context = context;
         this.roles = roles;
@@ -36,7 +37,7 @@ public class RolesSpinnerAdapter extends ArrayAdapter<Role> {
     }
 
     @Override
-    public Role getItem(int position){
+    public UserRole getItem(int position){
         return roles.get(position);
     }
 
@@ -59,12 +60,16 @@ public class RolesSpinnerAdapter extends ArrayAdapter<Role> {
     private View createItemView(int position, View convertView, ViewGroup parent) {
         final View view = inflater.inflate(R.layout.activity_general_spinner, parent, false);
 
-        Role role = roles.get(position);
+        UserRole role = roles.get(position);
 
         TextView teamName = view.findViewById(R.id.spinner_value);
 
         if(role != null){
             teamName.setText(role.getName());
+
+            if(role.getName().contains("Official")){
+                teamName.setTypeface(teamName.getTypeface(), Typeface.BOLD);
+            }
         }else{
             teamName.setText("All roles");
         }

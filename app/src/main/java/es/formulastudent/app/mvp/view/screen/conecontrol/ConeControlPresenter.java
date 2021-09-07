@@ -12,20 +12,21 @@ import java.util.List;
 import java.util.Map;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.conecontrol.ConeControlBO;
 import es.formulastudent.app.mvp.data.business.mailsender.MailSender;
-import es.formulastudent.app.mvp.data.business.statistics.dto.ExportStatisticsDTO;
 import es.formulastudent.app.mvp.data.model.ConeControlEvent;
 import es.formulastudent.app.mvp.data.model.ConeControlRegister;
 import es.formulastudent.app.mvp.data.model.ConeControlRegisterLog;
-import es.formulastudent.app.mvp.data.business.DataConsumer;
+import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.utils.messages.Messages;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 
 public class ConeControlPresenter extends DataConsumer implements RecyclerViewClickListener {
+
+    private User loggedUser;
 
     //Cone Control Event Type
     private ConeControlEvent ccEventType;
@@ -34,20 +35,19 @@ public class ConeControlPresenter extends DataConsumer implements RecyclerViewCl
     private View view;
     private ConeControlBO coneControlBO;
     private MailSender mailSender;
-    private Messages messages;
 
     //Data
     private List<ConeControlRegister> coneControlRegisterList = new ArrayList<>();
     private ListenerRegistration registration;
 
     public ConeControlPresenter(ConeControlPresenter.View view, ConeControlEvent ccEventType,
-                                ConeControlBO coneControlBO, MailSender mailSender, Messages messages) {
+                                ConeControlBO coneControlBO, MailSender mailSender, User loggedUser) {
         super(coneControlBO);
         this.view = view;
         this.ccEventType = ccEventType;
         this.coneControlBO = coneControlBO;
         this.mailSender = mailSender;
-        this.messages = messages;
+        this.loggedUser = loggedUser;
     }
 
     @Override
@@ -91,18 +91,12 @@ public class ConeControlPresenter extends DataConsumer implements RecyclerViewCl
             register.setOffCourses(register.getOffCourses()+register.getCurrentOffCourseCount());
             register.setCurrentOffCourseCount(0);
 
-            coneControlBO.updateConeControlRegister(ccEventType, register, new BusinessCallback() {
-                @Override
-                public void onSuccess(ResponseDTO responseDTO) {
-                    coneControlRegisterList.get(position).setState(0);
-                    refreshList();
-                }
-
-                @Override
-                public void onFailure(ResponseDTO responseDTO) {
-                    messages.showError(responseDTO.getError());
-                }
-            });
+            coneControlBO.updateConeControlRegister(ccEventType, register,
+                    onSuccess -> {
+                        coneControlRegisterList.get(position).setState(0);
+                        refreshList();
+                    },
+                    this::setErrorToDisplay);
         }
     }
 
@@ -118,19 +112,10 @@ public class ConeControlPresenter extends DataConsumer implements RecyclerViewCl
         filters.put("round", view.getSelectedRound());
 
         //Retrieve race control registers in real-time
-        registration = coneControlBO.getConeControlRegistersRealTime(ccEventType, filters,  new BusinessCallback() {
+        registration = coneControlBO.getConeControlRegistersRealTime(ccEventType, filters,
+                this::updateEventRegisters,
+                this::setErrorToDisplay);
 
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<ConeControlRegister> results = (List<ConeControlRegister>) responseDTO.getData();
-                updateEventRegisters(results==null ? new ArrayList<>() : results);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
         return registration;
     }
 
@@ -154,34 +139,26 @@ public class ConeControlPresenter extends DataConsumer implements RecyclerViewCl
         this.view.refreshEventRegisterItems();
     }
 
+    void exportConesToExcel(ConeControlEvent ccEvent) {
+        try {
+            coneControlBO.exportConesToExcel(ccEvent,
+                    exportStatisticsDTO -> mailSender.sendMail(exportStatisticsDTO),
+                    this::setErrorToDisplay);
+        }catch (IOException e){
+            setErrorToDisplay(new Message(R.string.cone_control_excel_export_error));
+        }
+    }
+
     private void refreshList(){
         this.view.refreshEventRegisterItems();
     }
-
-
     List<ConeControlRegister> getEventRegisterList() {
         return coneControlRegisterList;
     }
 
 
-    void exportConesToExcel(ConeControlEvent ccEvent) {
-
-        try {
-            coneControlBO.exportConesToExcel(ccEvent, new BusinessCallback() {
-                @Override
-                public void onSuccess(ResponseDTO responseDTO) {
-                    ExportStatisticsDTO exportStatisticsDTO = (ExportStatisticsDTO) responseDTO.getData();
-                    mailSender.sendMail(exportStatisticsDTO);
-                }
-
-                @Override
-                public void onFailure(ResponseDTO responseDTO) {
-                    messages.showError(responseDTO.getError());
-                }
-            });
-        }catch (IOException e){
-            //TODO
-        }
+    boolean canUserExportCones(){
+        return loggedUser.isRole(UserRole.OFFICIAL_MARSHALL) || loggedUser.isAdministrator();
     }
 
 

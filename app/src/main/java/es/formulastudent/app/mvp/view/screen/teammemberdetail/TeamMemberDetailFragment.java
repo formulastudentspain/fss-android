@@ -90,6 +90,7 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
 
+        //Observer to display loading dialog
         presenter.getLoadingData().observe(this, loadingData -> {
             if(loadingData){
                 loadingDialog.show();
@@ -97,6 +98,10 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
                 loadingDialog.hide();
             }
         });
+
+        //Observer to display errors
+        presenter.getErrorToDisplay().observe(this, message ->
+                messages.showError(message.getStringID(), message.getArgs()));
     }
 
     @Override
@@ -108,6 +113,7 @@ public class TeamMemberDetailFragment extends Fragment implements TeamMemberDeta
         lastBriefing = args.getLastBriefing();
 
         initViews(view);
+        setHasOptionsMenu(true);
         return view;
     }
 

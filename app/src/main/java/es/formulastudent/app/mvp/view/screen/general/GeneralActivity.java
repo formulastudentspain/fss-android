@@ -35,11 +35,11 @@ import javax.inject.Inject;
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
-import es.formulastudent.app.mvp.view.screen.adminoperations.AdminOpsActivity;
+import es.formulastudent.app.mvp.view.screen.adminoperations.AdminOpsFragment;
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityExitDialog;
 import es.formulastudent.app.mvp.view.screen.general.dialog.GeneralActivityLoadingDialog;
 import es.formulastudent.app.mvp.view.screen.login.LoginActivity;
-import es.formulastudent.app.mvp.view.screen.statistics.StatisticsActivity;
+import es.formulastudent.app.mvp.view.screen.statistics.StatisticsFragment;
 import es.formulastudent.app.mvp.view.screen.welcome.MainActivity;
 import info.androidhive.fontawesome.FontDrawable;
 
@@ -367,7 +367,7 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
         //Staff: Admin Operations
         PrimaryDrawerItem adminOperations = new PrimaryDrawerItem()
                 .withIdentifier(10017)
-                .withName(R.string.drawer_menu_staff_admin_operations)
+                .withName(R.string.drawer_menu_admin_operations)
                 .withSelectedColor(Color.parseColor(SELECTED_DRAWER_ITEM_COLOR))
                 .withOnDrawerItemClickListener(this);
 
@@ -574,10 +574,10 @@ public class GeneralActivity extends AppCompatActivity implements Drawer.OnDrawe
             intent = new Intent(this, LoginActivity.class);
 
         }else if(drawerItem.getIdentifier() == 10016){ //Statistics
-            intent = new Intent(this, StatisticsActivity.class);
+            intent = new Intent(this, StatisticsFragment.class);
 
         }else if(drawerItem.getIdentifier() == 10017) { //Admin operations
-            intent = new Intent(this, AdminOpsActivity.class);
+            intent = new Intent(this, AdminOpsFragment.class);
 
         }
 

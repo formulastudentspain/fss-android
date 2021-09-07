@@ -37,19 +37,19 @@ public enum UserRole implements Serializable, Role {
 
         OFFICIAL_MARSHALL(
                 "Official Marshall",
-                new ArrayList<>(Collections.singletonList("Marshall")),
+                new ArrayList<>(Arrays.asList("Staff", "Scrutineer", "Marshall", "Official Marshall", "Official Scrutineer", "Official Staff")),
                 R.color.md_blue_600
         ),
 
         OFFICIAL_STAFF(
                 "Official Staff",
-                new ArrayList<>(Collections.singletonList("Staff")),
+                new ArrayList<>(Arrays.asList("Staff", "Scrutineer", "Marshall", "Official Marshall", "Official Scrutineer", "Official Staff")),
                 R.color.md_red_500
         ),
 
         OFFICIAL_SCRUTINEER(
                 "Official Scrutineer",
-                new ArrayList<>(Collections.singletonList("Scrutineer")),
+                new ArrayList<>(Arrays.asList("Staff", "Scrutineer", "Marshall", "Official Marshall", "Official Scrutineer", "Official Staff")),
                 R.color.md_orange_800
         );
 
@@ -64,7 +64,7 @@ public enum UserRole implements Serializable, Role {
                 this.color = color;
         }
 
-        public static Role getRoleByName(String name){
+        public static UserRole getRoleByName(String name){
 
                 if(ADMINISTRATOR.getName().equals(name)){
                         return  ADMINISTRATOR;

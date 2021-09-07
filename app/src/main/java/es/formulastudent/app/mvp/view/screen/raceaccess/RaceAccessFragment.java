@@ -30,6 +30,7 @@ import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.view.screen.NFCReaderActivity;
 import es.formulastudent.app.mvp.view.screen.raceaccess.recyclerview.EventRegistersAdapter;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
@@ -41,9 +42,13 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
     @Inject
     LoadingDialog loadingDialog;
 
+    @Inject
+    Messages messages;
+
     private EventRegistersAdapter registersAdapter;
     private FloatingActionButton buttonAddRegister;
     private MenuItem filterItem;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +72,19 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
             }
         });
 
+        //Observer to display loading dialog
+        presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
+            if(loadingData){
+                loadingDialog.show();
+            }else{
+                loadingDialog.hide();
+            }
+        });
+
+        //Observer to display errors
+        presenter.getErrorToDisplay().observe(getViewLifecycleOwner(), message ->
+                messages.showError(message.getStringID(), message.getArgs()));
+
         initViews(view);
         setHasOptionsMenu(true);
         presenter.retrieveRegisterList();
@@ -89,7 +107,7 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
     private void initViews(View view){
 
         //View components
-        SwipeRefreshLayout mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         registersAdapter = new EventRegistersAdapter(presenter.getEventRegisterList(), getContext(), presenter);
@@ -119,6 +137,7 @@ public class RaceAccessFragment extends Fragment implements RaceAccessPresenter.
 
     @Override
     public void refreshEventRegisterItems() {
+        mSwipeRefreshLayout.setRefreshing(false);
         registersAdapter.notifyDataSetChanged();
         //this.hideLoading();
     }

@@ -39,6 +39,7 @@ import es.formulastudent.app.mvp.view.screen.teammember.dialog.CreateEditTeamMem
 import es.formulastudent.app.mvp.view.screen.teammember.dialog.FilterTeamMembersDialog;
 import es.formulastudent.app.mvp.view.screen.teammember.recyclerview.TeamMemberListAdapter;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.View, View.OnClickListener, TextWatcher, SwipeRefreshLayout.OnRefreshListener {
 
@@ -48,17 +49,21 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
     @Inject
     LoadingDialog loadingDialog;
 
+    @Inject
+    Messages messages;
 
     private TeamMemberListAdapter teamMemberListAdapter;
     private FloatingActionButton buttonAddUser;
     private EditText searchUser;
     private MenuItem filterItem;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
         super.onCreate(savedInstanceState);
 
+        //Observer to display loading dialog
         presenter.getLoadingData().observe(this, loadingData -> {
             if(loadingData){
                 loadingDialog.show();
@@ -66,6 +71,10 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
                 loadingDialog.hide();
             }
         });
+
+        //Observer to display errors
+        presenter.getErrorToDisplay().observe(this, message ->
+                messages.showError(message.getStringID(), message.getArgs()));
     }
 
     @Override
@@ -99,7 +108,7 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
 
         //Recycler view
         //View components
-        SwipeRefreshLayout mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         teamMemberListAdapter = new TeamMemberListAdapter(presenter.getUserItemList(), getContext(), presenter);
@@ -156,6 +165,7 @@ public class TeamMemberFragment extends Fragment implements TeamMemberPresenter.
 
     @Override
     public void refreshUserItems() {
+        mSwipeRefreshLayout.setRefreshing(false);
         teamMemberListAdapter.notifyDataSetChanged();
     }
 

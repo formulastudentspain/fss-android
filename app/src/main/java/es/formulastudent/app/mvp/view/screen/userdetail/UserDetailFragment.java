@@ -45,6 +45,9 @@ public class UserDetailFragment extends Fragment implements UserDetailPresenter.
     @Inject
     LoadingDialog loadingDialog;
 
+    @Inject
+    User loggedUser;
+
     //View components
     private TextView userName;
     private ImageView userProfilePhoto;
@@ -79,6 +82,7 @@ public class UserDetailFragment extends Fragment implements UserDetailPresenter.
         user = args.getSelectedUser();
 
         initViews(view);
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -145,7 +149,9 @@ public class UserDetailFragment extends Fragment implements UserDetailPresenter.
         inflater.inflate(R.menu.menu_user_detail, menu);
         MenuItem filterItem = menu.findItem(R.id.filter_results);
         filterItem.setOnMenuItemClickListener(menuItem -> {
-            presenter.openEditUserDialog();
+            if(loggedUser.isAdministrator() || loggedUser.isOfficial()) {
+                presenter.openEditUserDialog();
+            }
             return true;
         });
     }

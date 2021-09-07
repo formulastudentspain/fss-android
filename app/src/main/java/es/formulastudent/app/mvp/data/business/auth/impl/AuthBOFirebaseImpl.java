@@ -2,18 +2,18 @@ package es.formulastudent.app.mvp.data.business.auth.impl;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.auth.AuthBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 public class AuthBOFirebaseImpl implements AuthBO {
 
@@ -62,9 +62,9 @@ public class AuthBOFirebaseImpl implements AuthBO {
     }
 
     @Override
-    public void createUser(String name, String mail, String password, final BusinessCallback callback) {
-
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void createUser(String name, String mail, String password,
+                           @NonNull OnSuccessCallback<?> onSuccessCallback,
+                           @NonNull OnFailureCallback onFailureCallback) {
 
         firebaseAuth.createUserWithEmailAndPassword(mail, password)
                 .addOnSuccessListener(authResult -> {
@@ -73,28 +73,19 @@ public class AuthBOFirebaseImpl implements AuthBO {
                     user.setName(name);
                     user.setMail(mail);
 
-                    userBO.createUser(user, new BusinessCallback() {
-                        @Override
-                        public void onSuccess(ResponseDTO responseDTO1) {
-                            firebaseAuth.signOut();
-                            responseDTO1.setInfo(R.string.login_business_create_user_success);
-                            callback.onSuccess(responseDTO1);
-                        }
-
-                        @Override
-                        public void onFailure(ResponseDTO responseDTO1) {
-                            responseDTO1.setInfo(R.string.login_business_create_user_failure);
-                            callback.onFailure(responseDTO1);
-                        }
-                    });
+                    userBO.createUser(user,
+                            response -> {
+                                firebaseAuth.signOut();
+                                onSuccessCallback.onSuccess(null);
+                            },
+                            errorMessage -> onFailureCallback.onFailure(new Message(R.string.login_business_create_user_failure)));
                 })
                 .addOnFailureListener(e -> {
                     if ("The email address is already in use by another account.".equals(e.getMessage())) {
-                        responseDTO.setError(R.string.login_business_create_user_email_existing);
+                        onFailureCallback.onFailure(new Message(R.string.login_business_create_user_email_existing));
                     } else {
-                        responseDTO.setError(R.string.login_business_create_user_failure);
+                        onFailureCallback.onFailure(new Message(R.string.login_business_create_user_failure));
                     }
-                    callback.onFailure(responseDTO);
                 });
     }
 }

@@ -6,13 +6,16 @@ import android.net.Uri;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.ByteArrayOutputStream;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.DataLoader;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.business.imageuploader.ImageBO;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 public class ImageBOFirebaseImpl extends DataLoader implements ImageBO {
 
@@ -25,14 +28,14 @@ public class ImageBOFirebaseImpl extends DataLoader implements ImageBO {
 
 
     @Override
-    public void uploadImage(Bitmap bitmap, String ID, final BusinessCallback callback) {
-
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void uploadImage(Bitmap bitmap, String ID,
+                            @NotNull OnSuccessCallback<Uri> onSuccessCallback,
+                            @NotNull OnFailureCallback onFailureCallback) {
         final StorageReference storageReference = firebaseStorage.getReference().child(ID);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] data = byteArrayOutputStream.toByteArray();
 
         storageReference.putBytes(data)
                 .addOnSuccessListener(taskSnapshot -> {
@@ -40,21 +43,14 @@ public class ImageBOFirebaseImpl extends DataLoader implements ImageBO {
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     Uri path = task.getResult();
-
-                                    responseDTO.setData(path);
-                                    responseDTO.setInfo(R.string.upload_picture_success);
-                                    callback.onSuccess(responseDTO);
-
+                                    onSuccessCallback.onSuccess(path);
                                 } else {
-                                    //on failure
-                                    responseDTO.setError(R.string.upload_picture_error);
-                                    callback.onFailure(responseDTO);
+                                    onFailureCallback.onFailure(new Message(R.string.upload_picture_error));
                                 }
                             });
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.upload_picture_error);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.upload_picture_error));
                 });
     }
 }

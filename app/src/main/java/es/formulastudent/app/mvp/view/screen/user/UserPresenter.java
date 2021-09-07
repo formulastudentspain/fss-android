@@ -3,17 +3,13 @@ package es.formulastudent.app.mvp.view.screen.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.DataConsumer;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.Role;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
 import es.formulastudent.app.mvp.view.screen.general.actionlisteners.RecyclerViewClickListener;
-import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class UserPresenter extends DataConsumer implements RecyclerViewClickListener {
@@ -22,7 +18,6 @@ public class UserPresenter extends DataConsumer implements RecyclerViewClickList
     private View view;
     private UserBO userBO;
     private TeamBO teamBO;
-    private Messages messages;
 
     //Data
     private List<User> allUsersList = new ArrayList<>();
@@ -32,12 +27,11 @@ public class UserPresenter extends DataConsumer implements RecyclerViewClickList
     private UserRole selectedRole;
 
 
-    public UserPresenter(UserPresenter.View view, UserBO userBO, TeamBO teamBO, Messages messages) {
+    public UserPresenter(UserPresenter.View view, UserBO userBO, TeamBO teamBO) {
         super(userBO, teamBO);
         this.view = view;
         this.userBO = userBO;
         this.teamBO = teamBO;
-        this.messages = messages;
     }
 
 
@@ -54,18 +48,9 @@ public class UserPresenter extends DataConsumer implements RecyclerViewClickList
 
 
     public void retrieveUsers() {
-        userBO.retrieveUsers(selectedRole, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                List<User> users = (List<User>) responseDTO.getData();
-                updateUserListItems(users);
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(R.string.team_member_get_all_error);
-            }
-        });
+        userBO.retrieveUsers(selectedRole,
+                this::updateUserListItems,
+                this::setErrorToDisplay);
     }
 
     void filterUsers(String query) {
@@ -92,20 +77,10 @@ public class UserPresenter extends DataConsumer implements RecyclerViewClickList
         view.openUserDetailFragment(selectedUser);
     }
 
-
     public void createUser(User user) {
-        userBO.createUser(user, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                retrieveUsers();
-                messages.showInfo(responseDTO.getInfo());
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                messages.showError(responseDTO.getError());
-            }
-        });
+        userBO.createUser(user,
+                onSuccess -> retrieveUsers(),
+                this::setErrorToDisplay);
     }
 
     public void setFilteringValues(UserRole selectedRole) {

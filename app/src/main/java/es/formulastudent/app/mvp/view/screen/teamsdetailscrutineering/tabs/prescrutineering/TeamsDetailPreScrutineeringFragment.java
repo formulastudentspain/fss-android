@@ -33,6 +33,7 @@ import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.dialog.Add
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.dialog.ConfirmPassTestDialog;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.TeamsDetailFragment;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.prescrutineering.recyclerview.EgressRegistersAdapter;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 import info.androidhive.fontawesome.FontTextView;
 
 
@@ -144,7 +145,7 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
         if (requestCode == NFC_REQUEST_CODE) {
             if(resultCode == Activity.RESULT_OK){
                 String result = data.getStringExtra("result");
-                presenter.onNFCTagDetected(result);
+                presenter.onNFCTagDetected(result, team);
             }
 
             //Chronometer result for Egress
@@ -189,16 +190,14 @@ public class TeamsDetailPreScrutineeringFragment extends Fragment implements Vie
 
     @Override
     public boolean onLongClick(View view) {
-        if(this.loggedUser.getRole().equals(UserRole.ADMINISTRATOR)
-                || this.loggedUser.getRole().equals(UserRole.OFFICIAL_STAFF)
-                || this.loggedUser.getRole().equals(UserRole.OFFICIAL_SCRUTINEER)
-                || this.loggedUser.getRole().equals(UserRole.OFFICIAL_MARSHALL)){
-
+        if(this.loggedUser.isAdministrator() || this.loggedUser.isRole(UserRole.OFFICIAL_SCRUTINEER)){
             Team modifiedTeam = team.clone();
             modifiedTeam.setScrutineeringPS(false);
             presenter.updateTeam(modifiedTeam, team);
+            return false;
         }
 
+        presenter.setErrorToDisplay(new Message(R.string.forbidden_required_role, UserRole.OFFICIAL_SCRUTINEER.getName()));
         return false;
     }
 }

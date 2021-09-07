@@ -1,5 +1,6 @@
 package es.formulastudent.app.mvp.view.screen.racecontrol;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -7,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.ListenerRegistration;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -29,6 +33,7 @@ import es.formulastudent.app.di.module.activity.RaceControlModule;
 import es.formulastudent.app.mvp.data.model.RaceControlEvent;
 import es.formulastudent.app.mvp.view.screen.racecontrol.recyclerview.RaceControlAdapter;
 import es.formulastudent.app.mvp.view.utils.LoadingDialog;
+import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
 public class RaceControlFragment extends Fragment implements
@@ -39,6 +44,9 @@ public class RaceControlFragment extends Fragment implements
 
     @Inject
     LoadingDialog loadingDialog;
+
+    @Inject
+    Messages messages;
 
     private String raceRound; //Round 1, Round 2 or Final
     private String rcArea;
@@ -72,6 +80,7 @@ public class RaceControlFragment extends Fragment implements
         setupComponent(FSSApp.getApp().component(), rcEvent, raceRound, rcArea);
         setHasOptionsMenu(true);
 
+        //Observer to display loading dialog
         presenter.getLoadingData().observe(getViewLifecycleOwner(), loadingData -> {
             if(loadingData){
                 loadingDialog.show();
@@ -80,8 +89,15 @@ public class RaceControlFragment extends Fragment implements
             }
         });
 
+        //Observer to display errors
+        presenter.getErrorToDisplay().observe(getViewLifecycleOwner(), message ->
+                messages.showError(message.getStringID(), message.getArgs()));
+
         //Remove elevation from Action bar
         ((AppCompatActivity)getActivity()).getSupportActionBar().setElevation(0);
+
+        Objects.requireNonNull(getActivity()).getWindow()
+                .addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         initViews(view);
         return view;
@@ -100,6 +116,7 @@ public class RaceControlFragment extends Fragment implements
                 .inject(this);
     }
 
+    @SuppressLint("RestrictedApi")
     private void initViews(View view){
         //View components
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
@@ -107,6 +124,15 @@ public class RaceControlFragment extends Fragment implements
         recyclerView.setAdapter(rcAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
+
+        //Add vehicle button
+        buttonAddVehicle = view.findViewById(R.id.button_add_vehicle);
+        buttonAddVehicle.show();
+        buttonAddVehicle.setOnClickListener(this);
+        if( !presenter.isUserOfficial() && !presenter.isUserAdministrator()){
+            buttonAddVehicle.setVisibility(View.GONE);
+        }
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
@@ -117,15 +143,16 @@ public class RaceControlFragment extends Fragment implements
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
-                    buttonAddVehicle.show();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if(presenter.isUserOfficial() || presenter.isUserAdministrator()) {
+                        buttonAddVehicle.show();
+                    }
+                }
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
 
-        //Add vehicle button
-        buttonAddVehicle = view.findViewById(R.id.button_add_vehicle);
-        buttonAddVehicle.setOnClickListener(this);
+
 
         //Round
         TextView roundTextView = view.findViewById(R.id.round_number);
@@ -179,6 +206,8 @@ public class RaceControlFragment extends Fragment implements
     @Override
     public void onStop(){
         super.onStop();
+        Objects.requireNonNull(getActivity()).getWindow()
+                .clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         registerListener.remove();
     }
 

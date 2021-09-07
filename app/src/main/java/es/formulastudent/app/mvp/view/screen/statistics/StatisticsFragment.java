@@ -3,11 +3,14 @@ package es.formulastudent.app.mvp.view.screen.statistics;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import javax.inject.Inject;
 
@@ -18,10 +21,8 @@ import es.formulastudent.app.di.component.DaggerStatisticsComponent;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.activity.StatisticsModule;
 import es.formulastudent.app.mvp.data.model.EventType;
-import es.formulastudent.app.mvp.data.model.User;
-import es.formulastudent.app.mvp.view.screen.general.GeneralActivity;
 
-public class StatisticsActivity extends GeneralActivity implements View.OnClickListener, StatisticsPresenter.View {
+public class StatisticsFragment extends Fragment implements View.OnClickListener, StatisticsPresenter.View {
 
     @Inject
     StatisticsPresenter presenter;
@@ -38,14 +39,17 @@ public class StatisticsActivity extends GeneralActivity implements View.OnClickL
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         setupComponent(FSSApp.getApp().component());
-        setContentView(R.layout.activity_statistics);
         super.onCreate(savedInstanceState);
+    }
 
-        initViews();
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_statistics, container, false);
+        initViews(view);
         checkWritePermissions();
+        return view;
     }
 
 
@@ -57,7 +61,7 @@ public class StatisticsActivity extends GeneralActivity implements View.OnClickL
     protected void setupComponent(AppComponent appComponent) {
         DaggerStatisticsComponent.builder()
                 .appComponent(appComponent)
-                .contextModule(new ContextModule(this))
+                .contextModule(new ContextModule(getContext()))
                 .statisticsModule(new StatisticsModule(this))
                 .build()
                 .inject(this);
@@ -66,38 +70,31 @@ public class StatisticsActivity extends GeneralActivity implements View.OnClickL
 
 
 
-    private void initViews() {
-
-        //Add drawer
-        addDrawer();
-        mDrawerIdentifier = 10016L;
-
-        //Add toolbar title
-        setToolbarTitle(getString(R.string.statistics_activity_title));
+    private void initViews(View view) {
 
         //Bind components
-        exportBriefing = findViewById(R.id.exportBriefing);
+        exportBriefing = view.findViewById(R.id.exportBriefing);
         exportBriefing.setOnClickListener(this);
 
-        exportPreSrutineering = findViewById(R.id.exportPreScrutineering);
+        exportPreSrutineering = view.findViewById(R.id.exportPreScrutineering);
         exportPreSrutineering.setOnClickListener(this);
 
-        exportPracticeTrack = findViewById(R.id.exportPracticeTrack);
+        exportPracticeTrack = view.findViewById(R.id.exportPracticeTrack);
         exportPracticeTrack.setOnClickListener(this);
 
-        exportSkidpad = findViewById(R.id.exportSkidPad);
+        exportSkidpad = view.findViewById(R.id.exportSkidPad);
         exportSkidpad.setOnClickListener(this);
 
-        exportAcceleration = findViewById(R.id.exportAcceleration);
+        exportAcceleration = view.findViewById(R.id.exportAcceleration);
         exportAcceleration.setOnClickListener(this);
 
-        exportAutocross = findViewById(R.id.exportAutocross);
+        exportAutocross = view.findViewById(R.id.exportAutocross);
         exportAutocross.setOnClickListener(this);
 
-        exportEndurance = findViewById(R.id.exportEndurance);
+        exportEndurance = view.findViewById(R.id.exportEndurance);
         exportEndurance.setOnClickListener(this);
 
-        exportUsers = findViewById(R.id.exportUsers);
+        exportUsers = view.findViewById(R.id.exportUsers);
         exportUsers.setOnClickListener(this);
 
     }
@@ -105,20 +102,20 @@ public class StatisticsActivity extends GeneralActivity implements View.OnClickL
 
     private void checkWritePermissions(){
         // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this,
+        if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Permission is not granted
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
             } else {
                 // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         16);
 
@@ -159,41 +156,8 @@ public class StatisticsActivity extends GeneralActivity implements View.OnClickL
 
         }else if(view.getId() == R.id.exportUsers){
             presenter.exportUsers();
-
         }
 
     }
 
-
-
-    @Override
-    public void finishView() {
-        finish();
-    }
-
-    @Override
-    public void showLoading() {
-        super.showLoadingDialog();
-    }
-
-    @Override
-    public void hideLoadingIcon() {
-        super.hideLoadingDialog();
-    }
-
-    @Override
-    public StatisticsActivity getActivity() {
-        return this;
-    }
-
-    @Override
-    public User getCurrentLoggedUser() {
-        return super.loggedUser;
-    }
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        drawer.setSelection(mDrawerIdentifier, false);
-    }
 }

@@ -5,18 +5,21 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.ConfigConstants;
 import es.formulastudent.app.mvp.data.business.DataLoader;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.OnFailureCallback;
+import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
 import es.formulastudent.app.mvp.data.business.user.UserBO;
 import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.data.model.UserRole;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 
 public class UserBOFirebaseImpl extends DataLoader implements UserBO {
 
@@ -27,9 +30,9 @@ public class UserBOFirebaseImpl extends DataLoader implements UserBO {
     }
 
     @Override
-    public void retrieveUsers(UserRole selectedRole, final BusinessCallback callback) {
-
-        final ResponseDTO responseDTO = new ResponseDTO();
+    public void retrieveUsers(UserRole selectedRole,
+                              @NotNull OnSuccessCallback<List<User>> onSuccessCallback,
+                              @NotNull OnFailureCallback onFailureCallback) {
 
         Query query = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER);
 
@@ -50,44 +53,39 @@ public class UserBOFirebaseImpl extends DataLoader implements UserBO {
                             User user = new User(document);
                             result.add(user);
                         }
-                        responseDTO.setData(result);
-                        responseDTO.setInfo(R.string.user_get_all_info);
-                        callback.onSuccess(responseDTO);
+                        onSuccessCallback.onSuccess(result);
                         loadingData(false);
                     }
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.user_get_all_error);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.user_get_all_error));
                     loadingData(false);
                 });
     }
 
     @Override
-    public void createUser(final User user, final BusinessCallback callback) {
+    public void createUser(final User user,
+                           @NotNull OnSuccessCallback<?> onSuccessCallback,
+                           @NotNull OnFailureCallback onFailureCallback) {
         final Map<String, Object> docData = user.toDocumentData();
-
-        ResponseDTO responseDTO = new ResponseDTO();
         loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER)
                 .document(user.getID())
                 .set(docData)
                 .addOnSuccessListener(aVoid -> {
-                    responseDTO.setInfo(R.string.user_create_info);
-                    callback.onSuccess(responseDTO);
+                    onSuccessCallback.onSuccess(null);
                     loadingData(false);
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.user_create_error);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.user_create_error));
                     loadingData(false);
                 });
     }
 
     @Override
-    public void retrieveUserByMail(String mail, final BusinessCallback callback) {
-        final ResponseDTO responseDTO = new ResponseDTO();
-
+    public void retrieveUserByMail(String mail,
+                                   @NotNull OnSuccessCallback<User> onSuccessCallback,
+                                   @NotNull OnFailureCallback onFailureCallback) {
         loadingData(true);
         firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER)
                 .whereEqualTo(User.MAIL, mail)
@@ -96,41 +94,37 @@ public class UserBOFirebaseImpl extends DataLoader implements UserBO {
                     //success
                     if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                         User user = new User(queryDocumentSnapshots.getDocuments().get(0));
-                        responseDTO.setData(user);
+                        onSuccessCallback.onSuccess(user);
                     }
-                    responseDTO.setInfo(R.string.user_get_by_mail_info);
-                    callback.onSuccess(responseDTO);
                     loadingData(false);
                 })
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.user_get_by_mail_error);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.user_get_by_mail_error));
                     loadingData(false);
                 });
     }
 
     @Override
-    public void editUser(final User user, final BusinessCallback callback) {
+    public void editUser(final User user, @NotNull OnSuccessCallback<?> onSuccessCallback,
+                         @NotNull OnFailureCallback onFailureCallback) {
 
-        final ResponseDTO responseDTO = new ResponseDTO();
-        final DocumentReference registerReference = firebaseFirestore.collection(ConfigConstants.FIREBASE_TABLE_USER).document(user.getID());
+        final DocumentReference registerReference = firebaseFirestore
+                .collection(ConfigConstants.FIREBASE_TABLE_USER)
+                .document(user.getID());
 
         loadingData(true);
         registerReference.get()
                 .addOnSuccessListener(documentSnapshot -> registerReference.update(user.toDocumentData())
                         .addOnSuccessListener(aVoid -> {
-                            responseDTO.setInfo(R.string.user_update_info);
-                            callback.onSuccess(responseDTO);
+                            onSuccessCallback.onSuccess(null);
                             loadingData(false);
                         })
                         .addOnFailureListener(e -> {
-                            responseDTO.setError(R.string.user_update_error);
-                            callback.onFailure(responseDTO);
+                            onFailureCallback.onFailure(new Message(R.string.user_update_error));
                             loadingData(false);
                         }))
                 .addOnFailureListener(e -> {
-                    responseDTO.setError(R.string.user_update_error);
-                    callback.onFailure(responseDTO);
+                    onFailureCallback.onFailure(new Message(R.string.user_update_error));
                     loadingData(false);
                 });
     }

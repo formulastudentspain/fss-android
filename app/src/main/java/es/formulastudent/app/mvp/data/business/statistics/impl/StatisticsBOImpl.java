@@ -19,7 +19,6 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import es.formulastudent.app.R;
@@ -191,126 +190,115 @@ public class StatisticsBOImpl extends DataLoader implements StatisticsBO {
 
     @Override
     public void exportUsers(final BusinessCallback businessCallback) throws IOException {
+        AssetManager assetManager = context.getAssets();
+        final InputStream is = assetManager.open("template_export_fss.xls");
 
-        AssetManager mngr = context.getAssets();
-        final InputStream is = mngr.open("template_export_fss.xls");
+        teamMemberBO.retrieveTeamMembers(null,
+                teamMembers -> {
+                    ResponseDTO responseDTOExport = new ResponseDTO();
 
+                    try {
+                        Workbook wb = new HSSFWorkbook(is);
+                        Sheet sheet = wb.getSheetAt(0);
+                        wb.setSheetName(0, "Users");
 
-        teamMemberBO.retrieveTeamMembers(null, new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-                ResponseDTO responseDTOExport = new ResponseDTO();
-
-                List<TeamMember> listToExport = (List<TeamMember>) responseDTO.getData();
-
-                try {
-                    Workbook wb = new HSSFWorkbook(is);
-                    Sheet sheet = wb.getSheetAt(0);
-                    wb.setSheetName(0, "Users");
-
-                    //HEADERS
-
-                    //MAIL
-                    Row row = sheet.createRow(4);
-                    Cell cell = row.createCell(0);
-                    cell.setCellValue("MAIL");
-
-                    //NAME
-                    cell = row.createCell(1);
-                    cell.setCellValue("NAME");
-
-                    //ROLE
-                    cell = row.createCell(2);
-                    cell.setCellValue("ROLE");
-
-                    //NFC TAG
-                    cell = row.createCell(3);
-                    cell.setCellValue("NFC TAG");
-
-                    //TEAM
-                    cell = row.createCell(4);
-                    cell.setCellValue("TEAM");
-
-                    //TEAM
-                    cell = row.createCell(5);
-                    cell.setCellValue("CAR NUMBER");
-
-
-                    /*
-                        Test Data Values
-                    */
-                    int rowNum = 4;
-                    int cellNum;
-
-                    for (TeamMember teamMember : listToExport) {
-
-                        //Init values
-                        cellNum = 0;
-                        row = sheet.createRow(++rowNum);
+                        //HEADERS
 
                         //MAIL
-                        cell = row.createCell(cellNum);
-                        cell.setCellValue(teamMember.getMail() == null ? "" : teamMember.getMail());
+                        Row row = sheet.createRow(4);
+                        Cell cell = row.createCell(0);
+                        cell.setCellValue("MAIL");
 
                         //NAME
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(teamMember.getName() == null ? "" : teamMember.getName());
+                        cell = row.createCell(1);
+                        cell.setCellValue("NAME");
 
                         //ROLE
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(teamMember.getRole() == null ? "" : teamMember.getRole());
+                        cell = row.createCell(2);
+                        cell.setCellValue("ROLE");
 
                         //NFC TAG
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(teamMember.getNFCTag() == null ? "" : teamMember.getNFCTag());
+                        cell = row.createCell(3);
+                        cell.setCellValue("NFC TAG");
 
                         //TEAM
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(teamMember.getTeam() == null ? "" : teamMember.getTeam());
+                        cell = row.createCell(4);
+                        cell.setCellValue("TEAM");
 
-                        //CAR NUMBER
-                        cell = row.createCell(++cellNum);
-                        cell.setCellValue(teamMember.getTeam() == null ? "" : teamMember.getTeam());
+                        //TEAM
+                        cell = row.createCell(5);
+                        cell.setCellValue("CAR NUMBER");
+
+
+                        /* Test Data Values */
+                        int rowNum = 4;
+                        int cellNum;
+
+                        for (TeamMember teamMember : teamMembers) {
+
+                            //Init values
+                            cellNum = 0;
+                            row = sheet.createRow(++rowNum);
+
+                            //MAIL
+                            cell = row.createCell(cellNum);
+                            cell.setCellValue(teamMember.getMail() == null ? "" : teamMember.getMail());
+
+                            //NAME
+                            cell = row.createCell(++cellNum);
+                            cell.setCellValue(teamMember.getName() == null ? "" : teamMember.getName());
+
+                            //ROLE
+                            cell = row.createCell(++cellNum);
+                            cell.setCellValue(teamMember.getRole() == null ? "" : teamMember.getRole());
+
+                            //NFC TAG
+                            cell = row.createCell(++cellNum);
+                            cell.setCellValue(teamMember.getNFCTag() == null ? "" : teamMember.getNFCTag());
+
+                            //TEAM
+                            cell = row.createCell(++cellNum);
+                            cell.setCellValue(teamMember.getTeam() == null ? "" : teamMember.getTeam());
+
+                            //CAR NUMBER
+                            cell = row.createCell(++cellNum);
+                            cell.setCellValue(teamMember.getTeam() == null ? "" : teamMember.getTeam());
+                        }
+
+                        //Get File Name
+                        DateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                        String nameFile = "Export" + "_" + sdf.format(timestamp);
+
+                        //Create Directory
+                        String rootDirectoryName = Environment.getExternalStorageDirectory() + "";
+                        File subDirectory = new File(rootDirectoryName, "FSS/USERS");
+                        subDirectory.mkdirs();
+
+                        //Create File
+                        OutputStream stream = new FileOutputStream(rootDirectoryName + "/" + "FSS/USERS" + "/" + nameFile + ".xls");
+
+                        wb.write(stream);
+                        stream.close();
+                        wb.close();
+
+                        ExportStatisticsDTO exportStatisticsDTO = new ExportStatisticsDTO();
+                        exportStatisticsDTO.setExportDate(Calendar.getInstance().getTime());
+                        exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/" + "FSS/USERS" + "/" + nameFile + ".xls");
+
+                        responseDTOExport.setData(exportStatisticsDTO);
+
+                        responseDTOExport.setInfo(R.string.statistics_info_exporting_users);
+                        businessCallback.onSuccess(responseDTOExport);
+
+                    } catch (IOException e) {
+                        responseDTOExport.setError(R.string.statistics_error_exporting_users);
+                        businessCallback.onFailure(responseDTOExport);
                     }
-
-
-                    //Get File Name
-                    DateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US);
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    String nameFile = "Export" + "_" + sdf.format(timestamp);
-
-                    //Create Directory
-                    String rootDirectoryName = Environment.getExternalStorageDirectory() + "";
-                    File subDirectory = new File(rootDirectoryName, "FSS/USERS");
-                    subDirectory.mkdirs();
-
-                    //Create File
-                    OutputStream stream = new FileOutputStream(rootDirectoryName + "/" + "FSS/USERS" + "/" + nameFile + ".xls");
-
-                    wb.write(stream);
-                    stream.close();
-                    wb.close();
-
-                    ExportStatisticsDTO exportStatisticsDTO = new ExportStatisticsDTO();
-                    exportStatisticsDTO.setExportDate(Calendar.getInstance().getTime());
-                    exportStatisticsDTO.setFullFilePath(rootDirectoryName + "/" + "FSS/USERS" + "/" + nameFile + ".xls");
-
-                    responseDTOExport.setData(exportStatisticsDTO);
-
-                    responseDTOExport.setInfo(R.string.statistics_info_exporting_users);
-                    businessCallback.onSuccess(responseDTOExport);
-
-                } catch (IOException e) {
-                    responseDTOExport.setError(R.string.statistics_error_exporting_users);
-                    businessCallback.onFailure(responseDTOExport);
-                }
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-                responseDTO.setError(R.string.statistics_error_exporting_users);
-                businessCallback.onFailure(responseDTO);
-            }
-        });
+                }, errorMessage -> {
+                    //responseDTO.setError(R.string.statistics_error_exporting_users);
+                    //businessCallback.onFailure(responseDTO);
+                    //TODO
+                });
     }
 }

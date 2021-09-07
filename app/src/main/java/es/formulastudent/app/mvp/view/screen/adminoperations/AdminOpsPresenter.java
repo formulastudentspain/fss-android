@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.formulastudent.app.R;
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
-import es.formulastudent.app.mvp.data.business.ResponseDTO;
+import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.team.TeamBO;
 import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
 import es.formulastudent.app.mvp.data.model.Car;
@@ -27,7 +26,7 @@ import es.formulastudent.app.mvp.data.model.Country;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.data.model.TeamMember;
 
-public class AdminOpsPresenter {
+public class AdminOpsPresenter extends DataConsumer {
 
     //Dependencies
     private AdminOpsPresenter.View view;
@@ -44,18 +43,11 @@ public class AdminOpsPresenter {
     }
 
     public void deleteAllDrivers() {
-        teamMemberBO.deleteAllTeamMembers(new BusinessCallback() {
-            @Override
-            public void onSuccess(ResponseDTO responseDTO) {
-
-            }
-
-            @Override
-            public void onFailure(ResponseDTO responseDTO) {
-
-            }
+        teamMemberBO.deleteAllTeamMembers(response -> {
+            //TODO
+        }, errorMessage -> {
+            //TODO
         });
-
     }
 
     public void deleteAllTeams() {
@@ -170,22 +162,19 @@ public class AdminOpsPresenter {
     }
 
 
-    private void createDrivers(Map<String, Team> teams){
-
+    private void createDrivers(Map<String, Team> teams) {
         List<TeamMember> teamMembers = new ArrayList<>();
 
         try {
-
             AssetManager mngr = context.getAssets();
             final InputStream is = mngr.open("fss_info.xls");
 
             Workbook wb = new HSSFWorkbook(is);
             Sheet sheet = wb.getSheetAt(0);
 
-
             //Get all teams and information
             int index = 1;
-            while(sheet.getRow(index) != null){
+            while (sheet.getRow(index) != null) {
 
                 TeamMember teamMember = new TeamMember();
 
@@ -206,24 +195,23 @@ public class AdminOpsPresenter {
 
                 //TeamMember mail
                 Cell cellUserMail = row.getCell(3);
-                if(cellUserMail == null){
+                if (cellUserMail == null) {
                     teamMember.setMail("");
-                }else{
+                } else {
                     String userMail = cellUserMail.getStringCellValue();
                     teamMember.setMail(userMail);
                 }
 
-
                 //TeamMember role
                 Cell cellRole = row.getCell(4);
-                if(cellRole != null){
+                if (cellRole != null) {
                     String[] roles = cellRole.getStringCellValue().split("/");
-                    for(String role: roles){
-                        if(role.trim().equals("DRIVER")){
+                    for (String role : roles) {
+                        if (role.trim().equals("DRIVER")) {
                             teamMember.setDriver(true);
-                        }else if(role.trim().equals("ESO")){
+                        } else if (role.trim().equals("ESO")) {
                             teamMember.setESO(true);
-                        }else if(role.trim().equals("TEAM LEADER")){
+                        } else if (role.trim().equals("ASR")) {
                             teamMember.setASR(true);
                         }
                     }
@@ -231,32 +219,25 @@ public class AdminOpsPresenter {
 
                 //Profile image
                 teamMember.setPhotoUrl(context.getString(R.string.default_image_url));
-
                 teamMembers.add(teamMember);
-
                 index++;
             }
 
             //Save all teamMembers
-            for(TeamMember teamMember : teamMembers){
+            for (TeamMember teamMember : teamMembers) {
+                teamMemberBO.createTeamMember(teamMember,
+                        response -> {
+                            //TODO
+                        },
+                        errorMessage -> {
+                            //TODO
 
-                teamMemberBO.createTeamMember(teamMember, new BusinessCallback() {
-                    @Override
-                    public void onSuccess(ResponseDTO responseDTO) {
-
-                    }
-
-                    @Override
-                    public void onFailure(ResponseDTO responseDTO) {
-
-                    }
-                });
+                        });
             }
-
         } catch (IOException e) {
             e.printStackTrace();
+            //TODO
         }
-
     }
 
 
@@ -282,12 +263,6 @@ public class AdminOpsPresenter {
          * Hide loading icon
          */
         void hideLoadingIcon();
-
-        /**
-         * Return the activity
-         * @return
-         */
-        AdminOpsActivity getActivity();
 
     }
 }

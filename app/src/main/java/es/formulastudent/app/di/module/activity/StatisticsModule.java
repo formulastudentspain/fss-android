@@ -6,12 +6,12 @@ import dagger.Module;
 import dagger.Provides;
 import es.formulastudent.app.di.module.ContextModule;
 import es.formulastudent.app.di.module.business.BusinessModule;
+import es.formulastudent.app.di.module.business.SharedPreferencesModule;
 import es.formulastudent.app.mvp.data.business.statistics.StatisticsBO;
-import es.formulastudent.app.mvp.data.business.team.TeamBO;
-import es.formulastudent.app.mvp.data.business.teammember.TeamMemberBO;
+import es.formulastudent.app.mvp.data.model.User;
 import es.formulastudent.app.mvp.view.screen.statistics.StatisticsPresenter;
 
-@Module(includes = {ContextModule.class, BusinessModule.class})
+@Module(includes = {ContextModule.class, BusinessModule.class, SharedPreferencesModule.class})
 public class StatisticsModule {
 
     private StatisticsPresenter.View view;
@@ -26,8 +26,10 @@ public class StatisticsModule {
     }
 
     @Provides
-    public StatisticsPresenter providePresenter(StatisticsPresenter.View categoryView, Context context, StatisticsBO statisticsBO, TeamBO teamBO, TeamMemberBO teamMemberBO) {
-        return new StatisticsPresenter(categoryView, context, statisticsBO, teamBO, teamMemberBO);
+    public StatisticsPresenter providePresenter(StatisticsPresenter.View categoryView,
+                                                Context context, StatisticsBO statisticsBO,
+                                                User loggedUser) {
+        return new StatisticsPresenter(categoryView, context, statisticsBO, loggedUser);
     }
 
 

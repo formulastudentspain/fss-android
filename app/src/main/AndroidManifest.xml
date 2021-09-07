@@ -17,7 +17,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/LoginStyle"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        android:requestLegacyExternalStorage="true">
 
         <activity
             android:name=".mvp.view.screen.login.LoginActivity"
@@ -36,10 +37,9 @@
             android:name=".mvp.view.screen.egresschrono.EgressChronoActivity"
             android:launchMode="singleTop"/>
 
-        <activity android:name=".mvp.view.screen.statistics.StatisticsActivity"/>
-        <activity android:name=".mvp.view.screen.adminoperations.AdminOpsActivity"/>
+        <activity android:name=".mvp.view.screen.statistics.StatisticsFragment"/>
+        <activity android:name=".mvp.view.screen.adminoperations.AdminOpsFragment"/>
         <activity android:name=".mvp.view.screen.qrreader.QRReaderActivity"/>
-        <activity android:name=".mvp.view.screen.conecontrolstats.ConeControlStatsActivity"/>
         <activity android:name=".mvp.view.screen.loginregister.RegisterActivity"
             android:theme="@style/LoginStyle">
         </activity>

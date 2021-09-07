@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.formulastudent.app.R;
 import es.formulastudent.app.mvp.data.business.BusinessCallback;
 import es.formulastudent.app.mvp.data.business.DataConsumer;
 import es.formulastudent.app.mvp.data.business.ResponseDTO;
@@ -20,6 +21,7 @@ import es.formulastudent.app.mvp.data.model.EventType;
 import es.formulastudent.app.mvp.data.model.PreScrutineeringRegister;
 import es.formulastudent.app.mvp.data.model.Team;
 import es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.tabs.TeamsDetailFragment;
+import es.formulastudent.app.mvp.view.utils.messages.Message;
 import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 
@@ -95,13 +97,17 @@ public class TeamsDetailScrutineeringPresenter extends DataConsumer {
      * Retrieve user by NFC tag after read
      * @param tag
      */
-    public void onNFCTagDetected(String tag) {
+    public void onNFCTagDetected(String tag, Team team) {
         teamMemberBO.retrieveTeamMemberByNFCTag(tag,
                 teamMember -> {
-                    //The driver can run, create the register
-                    raceAccessBO.createRegister(teamMember, teamMember.getCarNumber(), null, EventType.PRE_SCRUTINEERING,
-                            register -> createEgressRegister((PreScrutineeringRegister)register),
-                            this::setErrorToDisplay);
+                    if(teamMember.getTeam().contains(team.getName())){
+                        //The driver can run, create the register
+                        raceAccessBO.createRegister(teamMember, teamMember.getCarNumber(), null, EventType.PRE_SCRUTINEERING,
+                                register -> createEgressRegister((PreScrutineeringRegister)register),
+                                this::setErrorToDisplay);
+                    } else {
+                     this.setErrorToDisplay(new Message(R.string.prescruti_error_egress_wrong_team));
+                    }
                 }, this::setErrorToDisplay);
     }
 
@@ -134,6 +140,10 @@ public class TeamsDetailScrutineeringPresenter extends DataConsumer {
         raceAccessBO.updatePreScrutineeringRegister(registerID, milliseconds,
                 response -> retrieveEgressRegisterList(),
                 this::setErrorToDisplay);
+    }
+
+    public Messages getMessages(){
+        return messages;
     }
 
 

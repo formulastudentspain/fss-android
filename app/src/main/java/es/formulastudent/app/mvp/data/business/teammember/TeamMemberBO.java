@@ -2,7 +2,8 @@ package es.formulastudent.app.mvp.data.business.teammember;
 
 import org.jetbrains.annotations.NotNull;
 
-import es.formulastudent.app.mvp.data.business.BusinessCallback;
+import java.util.List;
+
 import es.formulastudent.app.mvp.data.business.DataLoader;
 import es.formulastudent.app.mvp.data.business.OnFailureCallback;
 import es.formulastudent.app.mvp.data.business.OnSuccessCallback;
@@ -21,39 +22,54 @@ public interface TeamMemberBO extends DataLoader.Consumer{
                                     @NotNull OnSuccessCallback<TeamMember> onSuccessCallback,
                                     @NotNull OnFailureCallback onFailureCallback);
 
-
     /**
      * Retrieve all team member
      * @param selectedTeam
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void retrieveTeamMembers(Team selectedTeam, BusinessCallback callback);
+    void retrieveTeamMembers(Team selectedTeam,
+                             @NotNull OnSuccessCallback<List<TeamMember>> onSuccessCallback,
+                             @NotNull OnFailureCallback onFailureCallback);
 
 
     /**
      * Create team member
      * @param teamMember
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void createTeamMember(TeamMember teamMember, BusinessCallback callback);
+    void createTeamMember(TeamMember teamMember,
+                          @NotNull OnSuccessCallback<?> onSuccessCallback,
+                          @NotNull OnFailureCallback onFailureCallback);
+
 
     /**
      * Method to delete all team members
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void deleteAllTeamMembers(BusinessCallback callback);
+    void deleteAllTeamMembers(@NotNull OnSuccessCallback<?> onSuccessCallback,
+            @NotNull OnFailureCallback onFailureCallback);
+
 
     /**
      * Method to get the team members register by a team (max. 6)
      * @param teamID
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void getRegisteredTeamMemberByTeamId(String teamID, BusinessCallback callback);
+    void getRegisteredTeamMemberByTeamId(String teamID,
+                                         @NotNull OnSuccessCallback<List<TeamMember>> onSuccessCallback,
+                                         @NotNull OnFailureCallback onFailureCallback);
+
 
     /**
      * Method to update the team member
      * @param teamMember
-     * @param callback
+     * @param onSuccessCallback
+     * @param onFailureCallback
      */
-    void updateTeamMember(TeamMember teamMember, BusinessCallback callback);
+    void updateTeamMember(TeamMember teamMember, @NotNull OnSuccessCallback<?> onSuccessCallback,
+                          @NotNull OnFailureCallback onFailureCallback);
 }

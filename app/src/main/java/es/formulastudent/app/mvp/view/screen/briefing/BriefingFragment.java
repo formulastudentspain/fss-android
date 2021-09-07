@@ -60,6 +60,7 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
     private TeamsSpinnerAdapter teamsAdapter;
     private FloatingActionButton buttonAddRegister;
     private Spinner teamsSpinner;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     @Override
@@ -99,7 +100,7 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
     }
 
     private void initViews(View view){
-        SwipeRefreshLayout mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         registersAdapter = new BriefingRegistersAdapter(presenter.getBriefingRegisterList(), getContext(), presenter);
@@ -116,8 +117,9 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
 
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     buttonAddRegister.show();
+                }
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
@@ -156,6 +158,7 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
 
     @Override
     public void refreshBriefingRegisterItems() {
+        mSwipeRefreshLayout.setRefreshing(false);
         registersAdapter.notifyDataSetChanged();
     }
 
