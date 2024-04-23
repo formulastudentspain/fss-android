@@ -7,9 +7,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
-        classpath 'com.google.gms:google-services:4.2.0' // google-services plugin
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.2.1"
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.google.gms:google-services:4.3.10' // google-services plugin
+        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.4.1'
     }
 }
 
