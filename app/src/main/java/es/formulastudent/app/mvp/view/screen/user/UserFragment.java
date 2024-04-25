@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -47,8 +49,6 @@ import info.androidhive.fontawesome.FontTextView;
 
 public class UserFragment extends Fragment implements UserPresenter.View, View.OnClickListener,
         TextWatcher, SwipeRefreshLayout.OnRefreshListener{
-
-    private final static int QR_REQUEST_CODE_SEARCH = 2;
 
     @Inject
     UserPresenter presenter;
@@ -138,15 +138,14 @@ public class UserFragment extends Fragment implements UserPresenter.View, View.O
         qrCodeReaderButton.setOnClickListener(this);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == QR_REQUEST_CODE_SEARCH){
-            if(resultCode == Activity.RESULT_OK){
-                String result = data.getStringExtra("result");
-                //TODO hacer algo con el QR code encontrado
-            }
-        }
-    }
+    private ActivityResultLauncher<Intent> qrCodeResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    //TODO hacer algo con el QR code encontrado
+                }
+            });
 
     private void requestPermissions(){
         assert getActivity() != null;
@@ -194,10 +193,9 @@ public class UserFragment extends Fragment implements UserPresenter.View, View.O
 
     @Override
     public void openQRCodeReader(){
-        Intent i = new Intent(getContext(), QRReaderActivity.class);
-        startActivityForResult(i, QR_REQUEST_CODE_SEARCH);
+        Intent intent = new Intent(getContext(), QRReaderActivity.class);
+        qrCodeResultLauncher.launch(intent);
     }
-
 
     @Override
     public void showCreateUserDialog() {

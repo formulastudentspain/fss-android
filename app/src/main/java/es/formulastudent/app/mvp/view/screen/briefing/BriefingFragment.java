@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,8 +46,6 @@ import es.formulastudent.app.mvp.view.utils.messages.Messages;
 
 public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedChangeListener,
         BriefingPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
-
-    private static final int NFC_REQUEST_CODE = 101;
 
     @Inject
     BriefingPresenter presenter;
@@ -162,28 +162,23 @@ public class BriefingFragment extends Fragment implements ChipGroup.OnCheckedCha
         registersAdapter.notifyDataSetChanged();
     }
 
+    private ActivityResultLauncher<Intent> NFCReaderResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    int a = 0;
+                    //presenter.onNFCTagDetected(data);
+                }
+            });
 
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_add_briefing_register){
-            Intent i = new Intent(getContext(), NFCReaderActivity.class);
-            startActivityForResult(i, NFC_REQUEST_CODE);
+            Intent intent = new Intent(getContext(), NFCReaderActivity.class);
+            NFCReaderResultLauncher.launch(intent);
         }
     }
-
-    @Override
-     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        //NFC reader
-        if (requestCode == NFC_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                String result = data.getStringExtra("result");
-                presenter.onNFCTagDetected(result);
-            }
-        }
-    }
-
 
     @Override
     public void onCheckedChanged(ChipGroup chipGroup, int selectedChipId) {
