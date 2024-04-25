@@ -49,7 +49,7 @@ public class NFCReaderActivity extends GeneralActivity {
     public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity, activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        final PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         adapter.enableForegroundDispatch(activity, pendingIntent, null, null);
     }
 
