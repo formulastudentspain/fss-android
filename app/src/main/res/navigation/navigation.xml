@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.welcome.WelcomeFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.welcome.WelcomeFragment"
         android:label="Formula Student Spain"
         tools:layout="@layout/fragment_welcome">
         <action
@@ -77,12 +77,12 @@
     </fragment>
     <fragment
         android:id="@+id/briefingFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.briefing.BriefingFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.briefing.BriefingFragment"
         android:label="@string/drawer_menu_staff_briefing"
         tools:layout="@layout/fragment_briefing" />
     <fragment
         android:id="@+id/teamsFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.teams.TeamsFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.teams.TeamsFragment"
         android:label="@string/drawer_menu_teams"
         tools:layout="@layout/fragment_teams">
         <action
@@ -102,43 +102,43 @@
     </fragment>
     <fragment
         android:id="@+id/teamsDetailScrutineeringFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.teamsdetailscrutineering.TeamsDetailScrutineeringFragment"
         android:label="{selectedTeamName}"
         tools:layout="@layout/fragment_teams_detail_scrutineering">
         <argument
             android:name="selectedTeam"
-            app:argType="es.formulastudent.app.mvp.data.model.Team" />
+            app:argType="code.formulastudentspain.app.mvp.data.model.Team" />
         <argument
             android:name="selectedTeamName"
             app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/teamsDetailFeeFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.teamsdetailfee.TeamsDetailFeeFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.teamsdetailfee.TeamsDetailFeeFragment"
         android:label="{selectedTeamName}"
         tools:layout="@layout/fragment_teams_detail_fee">
         <argument
             android:name="selectedTeam"
-            app:argType="es.formulastudent.app.mvp.data.model.Team" />
+            app:argType="code.formulastudentspain.app.mvp.data.model.Team" />
         <argument
             android:name="selectedTeamName"
             app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/raceAccessFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.raceaccess.RaceAccessFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.raceaccess.RaceAccessFragment"
         android:label="Race Access: {eventTypeName}"
         tools:layout="@layout/fragment_race_access">
         <argument
             android:name="eventType"
-            app:argType="es.formulastudent.app.mvp.data.model.EventType" />
+            app:argType="code.formulastudentspain.app.mvp.data.model.EventType" />
         <argument
             android:name="eventTypeName"
             app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/raceControlWelcomeFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.racecontrol.RaceControlWelcomeFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.racecontrol.RaceControlWelcomeFragment"
         android:label="{eventName}"
         tools:layout="@layout/fragment_race_control_welcome">
         <action
@@ -151,19 +151,19 @@
             app:popExitAnim="@anim/slide_out_right"/>
         <argument
             android:name="raceControlEvent"
-            app:argType="es.formulastudent.app.mvp.data.model.RaceControlEvent" />
+            app:argType="code.formulastudentspain.app.mvp.data.model.RaceControlEvent" />
         <argument
             android:name="eventName"
             app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/raceControlFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.racecontrol.RaceControlFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.racecontrol.RaceControlFragment"
         android:label="{eventName}"
         tools:layout="@layout/fragment_race_control">
         <argument
             android:name="raceControlEvent"
-            app:argType="es.formulastudent.app.mvp.data.model.RaceControlEvent" />
+            app:argType="code.formulastudentspain.app.mvp.data.model.RaceControlEvent" />
         <argument
             android:name="raceControlRound"
             app:argType="string"
@@ -178,7 +178,7 @@
     </fragment>
     <fragment
         android:id="@+id/coneControlWelcomeFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.conecontrol.ConeControlWelcomeFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.conecontrol.ConeControlWelcomeFragment"
         android:label="{eventName}"
         tools:layout="@layout/fragment_cone_control_welcome">
         <action
@@ -191,19 +191,19 @@
             app:popExitAnim="@anim/slide_out_right"/>
         <argument
             android:name="coneControlEvent"
-            app:argType="es.formulastudent.app.mvp.data.model.ConeControlEvent" />
+            app:argType="code.formulastudentspain.app.mvp.data.model.ConeControlEvent" />
         <argument
             android:name="eventName"
             app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/coneControlFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.conecontrol.ConeControlFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.conecontrol.ConeControlFragment"
         android:label="{eventName}"
         tools:layout="@layout/fragment_cone_control">
         <argument
             android:name="coneControlEvent"
-            app:argType="es.formulastudent.app.mvp.data.model.ConeControlEvent" />
+            app:argType="code.formulastudentspain.app.mvp.data.model.ConeControlEvent" />
         <argument
             android:name="selectedRound"
             app:argType="string"
@@ -217,7 +217,7 @@
     </fragment>
     <fragment
         android:id="@+id/userFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.user.UserFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.user.UserFragment"
         android:label="@string/drawer_menu_staff_users_management_volunteers"
         tools:layout="@layout/fragment_user">
         <action
@@ -230,19 +230,19 @@
     </fragment>
     <fragment
         android:id="@+id/userDetailFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.userdetail.UserDetailFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.userdetail.UserDetailFragment"
         android:label="{userName}"
         tools:layout="@layout/fragment_user_detail">
         <argument
             android:name="selectedUser"
-            app:argType="es.formulastudent.app.mvp.data.model.User" />
+            app:argType="code.formulastudentspain.app.mvp.data.model.User" />
         <argument
             android:name="userName"
             app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/teamMemberFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.teammember.TeamMemberFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.teammember.TeamMemberFragment"
         android:label="@string/activity_team_members_title"
         tools:layout="@layout/fragment_team_member">
         <action
@@ -255,12 +255,12 @@
     </fragment>
     <fragment
         android:id="@+id/teamMemberDetailFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.teammemberdetail.TeamMemberDetailFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.teammemberdetail.TeamMemberDetailFragment"
         android:label="{teamMemberName}"
         tools:layout="@layout/fragment_team_member_detail">
         <argument
             android:name="teamMember"
-            app:argType="es.formulastudent.app.mvp.data.model.TeamMember" />
+            app:argType="code.formulastudentspain.app.mvp.data.model.TeamMember" />
         <argument
             android:name="lastBriefing"
             app:argType="boolean" />
@@ -270,13 +270,13 @@
     </fragment>
     <fragment
         android:id="@+id/adminOperationsFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.adminoperations.AdminOpsFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.adminoperations.AdminOpsFragment"
         android:label="@string/drawer_menu_admin_operations"
         tools:layout="@layout/fragment_admin_operations">
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="es.formulastudent.app.mvp.view.screen.statistics.StatisticsFragment"
+        android:name="code.formulastudentspain.app.mvp.view.screen.statistics.StatisticsFragment"
         android:label="@string/drawer_menu_staff_statistics"
         tools:layout="@layout/fragment_statistics" />
 </navigation>

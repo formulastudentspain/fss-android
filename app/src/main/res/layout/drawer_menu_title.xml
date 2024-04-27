@@ -4,7 +4,7 @@
     <data>
         <variable
             name="item"
-            type="es.formulastudent.app.mvp.data.model.DrawerMenuItem" />
+            type="code.formulastudentspain.app.mvp.data.model.DrawerMenuItem" />
     </data>
 
     <TextView

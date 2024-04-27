@@ -6,7 +6,7 @@
     <data>
         <variable
             name="menu"
-            type="es.formulastudent.app.mvp.data.model.DrawerMenu" />
+            type="code.formulastudentspain.app.mvp.data.model.DrawerMenu" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout

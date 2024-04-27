@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@mipmap/login_wallpaper"
     android:orientation="vertical"
-    tools:context=".mvp.view.screen.login.LoginActivity">
+    tools:context="code.formulastudentspain.app.mvp.view.screen.login.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

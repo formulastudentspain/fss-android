@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/md_grey_100"
     android:orientation="vertical"
-    tools:context=".mvp.view.screen.welcome.MainActivity">
+    tools:context="code.formulastudentspain.app.mvp.view.screen.welcome.MainActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

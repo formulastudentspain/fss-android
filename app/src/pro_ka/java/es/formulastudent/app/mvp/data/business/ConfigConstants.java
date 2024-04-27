@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.data.business;
+package code.formulastudentspain.app.mvp.data.business;
 
 public class ConfigConstants {
 

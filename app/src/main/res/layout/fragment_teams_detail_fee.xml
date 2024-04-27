@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/md_white_1000"
-    tools:context=".mvp.view.screen.welcome.MainActivity">
+    tools:context="code.formulastudentspain.app.mvp.view.screen.welcome.MainActivity">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"

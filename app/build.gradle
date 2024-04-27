@@ -7,7 +7,7 @@ android {
         enabled = true
     }
     defaultConfig {
-        applicationId "es.formulastudent"
+        applicationId "code.formulastudentspain"
         minSdkVersion 24
         targetSdkVersion 34
         versionCode 1

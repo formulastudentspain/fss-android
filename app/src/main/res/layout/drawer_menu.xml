@@ -4,7 +4,7 @@
         <import type="android.view.View"/>
         <variable
             name="menu"
-            type="es.formulastudent.app.mvp.data.model.DrawerMenu" />
+            type="code.formulastudentspain.app.mvp.data.model.DrawerMenu" />
     </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

@@ -1,4 +1,4 @@
-package es.formulastudent.app.mvp.data.model;
+package code.formulastudentspain.app.mvp.data.model;
 
 import java.io.Serializable;
 
